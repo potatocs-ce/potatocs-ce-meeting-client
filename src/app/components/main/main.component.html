@@ -1,0 +1,26 @@
+<div [hidden]="!deviceCheckMode" class="realTime_container">
+    <div class="header_container">
+        <app-header></app-header>
+    </div>
+
+    <div [ngClass]="{'toggle': toggle === true}" class="sidebar_container">
+        <app-sidebar></app-sidebar>
+    </div>
+
+    <div [ngClass]="{'whiteBoardMode': whiteBoardMode === true}" [ngClass]="{'toggle': toggle === true}"
+        class="right_sidebar_container">
+        <app-right-sidebar></app-right-sidebar>
+    </div>
+
+    <div [hidden]="whiteBoardMode" class="webRtc_container">
+        <app-web-rtc></app-web-rtc>
+    </div>
+    <div [hidden]="!whiteBoardMode" class="whiteboard_container">
+        <app-white-board></app-white-board>
+    </div>
+
+    <notifier-container></notifier-container>
+</div>
+<div *ngIf="!deviceCheckMode" class="realTime_container">
+    <app-device-check></app-device-check>
+</div>

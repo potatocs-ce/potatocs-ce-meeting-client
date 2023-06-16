@@ -1,0 +1,28 @@
+<!-- <h4> My Video </h4>
+<video #localVideo id="localVideo" autoplay playsinline [srcObject]="localStream$|async" width="320"></video>
+ -->
+<script src="https://cdn.WebRTC-Experiment.com/getScreenId.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+<div #container id="container"></div>
+<div #call id="call" fxLayout="row" fxLayoutAlign="center end" style="position: relative">
+    <div #video id="video" class="video">
+
+        <!-- 비디오 -->
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <div #participants id="participants" fxLayout="row" fxLayoutAlign="none center" class="videoOverlay_wrap"
+                [dragScroll]="dragOn">
+            </div>
+        </div>
+
+
+        <!-- 비디오 오버레이 숨기기 / 보이기 버튼 -->
+        <div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === true}" (click)="hiddenVideo()" >
+            <mat-icon class="videohidden_button">arrow_forward</mat-icon>
+        </div>
+
+        <div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === false}" (click)="visibleVideo()">
+            <mat-icon class="visibleVideo_button">arrow_back</mat-icon>
+        </div>
+    </div>
+</div>

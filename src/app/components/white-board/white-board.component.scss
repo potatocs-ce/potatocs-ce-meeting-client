@@ -1,0 +1,184 @@
+$sidebar-width: 171px;
+$thumbnail-width : 150px;
+$navbar-height: 126px;
+$sidebarContainer-Width: 97px;
+
+// .whiteBoard-container {
+//     position: relative;
+//     margin: 0;
+//     padding: 0;
+//     background-color: #eee;
+// }
+
+.navbar_container {
+    position: fixed;
+    top: 0;
+    z-index: 49;
+    width: 100%;
+    height: 0;
+    
+    *:focus {
+        outline: none
+    }
+}
+
+.sidebar_container {
+    margin-left: 100px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: $navbar-height;
+    z-index: 48; //dialog보다는 작게...
+    background-color: white;
+    width: $sidebar-width;
+    //background: lightgray;
+
+    box-shadow: 4px 4px 14px -1px rgba(20, 0, 20, 0.2);
+    overflow: hidden;
+
+    // height: calc(100vh - #{$navbar-height});
+    height: 100vh;
+
+    background-color: white;
+
+    overflow: hidden;
+    //transition: all 0.2s ease-in-out;
+    // box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+
+.comclass_container {
+    display: block;
+    margin: 0;
+    // min-width: 1180px;
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    //click시 파란색 outline 방지.
+    *:focus {
+        outline: none
+    }
+
+    // padding-left: $sidebar-width // 원본
+    // padding-top:$navbar-height; // 원본
+    padding-left: $sidebar-width + $sidebarContainer-Width; // fitToWidth 관련 
+    padding-top:$navbar-height;
+    margin: 0 300px 0 auto;
+
+
+    .comclass-main {
+        height: calc(100vh - #{$navbar-height});
+        // height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        // margin-right: 15%;
+
+        .fabs_container {
+            position: absolute;
+            right: 5%;
+        }
+
+        background: rgb(247, 245, 245);
+    }
+
+}
+
+
+// fitToWidth 관련 
+.comclass_container {
+  overflow: scroll;
+  /* IE scroll 숨김 */
+  -ms-overflow-style: none;
+  overflow:auto;
+}
+.comclass_container::-webkit-scrollbar { 
+  display: none;
+  width: 0 !important;
+}
+
+.videoOverlay_wrap {
+
+    .videoOverlay_button {
+        position: relative;
+        /* bottom: 55px; */
+        /* right: 25px; */
+        transform: scale(1);
+        border-radius: 50%;
+        background-color: #b2b2b2;
+        line-height: 0;
+        color: white;
+        margin-right: 20px;
+    }
+    
+    .videoOverlay_button:hover {
+        cursor: pointer;
+        background-color: #3f51b5;
+    }
+    
+    
+}
+
+
+.visibleVideo_button {
+    background-color: #b2b2b2;
+    color: white;
+    border-radius: 50%;
+    // position: fixed;
+    // bottom: 50px;
+    // right: 315px;
+    transform: scale(1);     
+
+}
+
+
+.visibleVideo_button:hover {
+    cursor: pointer;
+    background-color: #3f51b5;
+}
+
+
+
+.hiddenVideoMode {
+    display: none;
+}
+
+
+@media screen and (max-width: 780px) {
+    
+    .app-board-canvas {
+        width: 100%;
+    }
+
+    .sidebar_container {
+        margin-left: 0px;
+        padding-top: 148px;
+        z-index: 48;
+        width: 60px;
+
+
+        
+    }
+
+    .comclass_container {
+        
+        margin: 0 !important;
+        padding-left: 60px;
+        padding-top: 146px;
+
+        
+    }
+
+    .comclass-main {
+        // overflow-y: hidden;
+        width: 100% !important;
+        justify-content: unset;
+        height: calc(100vh - 146px) !important;
+    }
+
+}
+

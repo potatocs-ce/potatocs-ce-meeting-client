@@ -1,0 +1,24 @@
+<!-- Thumbnail -->
+<button mat-raised-button style="width: 100%;" (click)="backToFileList()">
+    <div class="pdfBtn">
+        <mat-icon>chevron_left</mat-icon> 
+        <span>Doc. List</span> 
+    </div>
+  </button>
+<div class="thumbnail-container">
+  <div class="thumb-item" *ngFor="let thumb_ of thumbArray; let i = index" (click)="clickThumb(i+1)">
+    <!-- thumbnail 배경 image -->
+    <img #thumb id="thumb_{{i+1}}" class="thumbBg" width="{{thumb_.width}}" height="{{thumb_.height}}">
+    <!-- thumbnail 판서 canvas -->
+    <canvas #thumbCanvas  class="thumbCanvas" width="{{thumb_.width}}" height="{{thumb_.height}}">
+    </canvas>
+
+    <div class="page-number">
+      <span>{{i+1}}</span>
+    </div>
+    <div class="thumb-window-container" *ngIf="currentPageNum === i+1">
+      <div #thumbWindow id="thumb-window" [ngStyle]="{'width':thumbWindowSize.width, 'height':thumbWindowSize.height}">
+      </div>
+    </div>
+  </div>
+</div>

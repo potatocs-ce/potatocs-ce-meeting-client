@@ -1,0 +1,28 @@
+<div class="enlistedMembers" [ngClass]="{'whiteBoardMode': whiteBoardMode === true}">
+    <ul>
+        <li class="enlistedMember_wrap" *ngFor="let currentMember of currentMembers; let i = index">
+            <div>
+                <span [ngClass]="currentMember.online ? 'online': 'offline'" class="enlistedMember_name"
+                    #enlistedMember_span>{{currentMember.name}}</span>
+                <span
+                    [ngClass]="(currentMember.online == true && currentMember.role == 'Presenter' ) ? 'presenter': 'participant'"
+                    *ngIf="currentMember.online == true" class="role">{{currentMember.role}}</span>
+            </div>
+
+            <button [ngClass]="{'meetingStatus': meetingStatus === true}" mat-button [matMenuTriggerFor]="menuRef"
+                *ngIf="currentMember.member_id==userId">
+                <mat-icon class="settingIcon">more_vert</mat-icon>
+            </button>
+            <mat-menu #menuRef="matMenu" class="menuCustomize">
+                <div fxFlex fxLayout="row">
+                    <div (click)="chooseRole('Presenter', i)">
+                        <button mat-menu-item>Presenter</button>
+                    </div>
+                    <div (click)="chooseRole('Participant', i)">
+                        <button mat-menu-item>Participant</button>
+                    </div>
+                </div>
+            </mat-menu>
+        </li>
+    </ul>
+</div>

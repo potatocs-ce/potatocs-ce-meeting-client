@@ -1,0 +1,63 @@
+.nav{
+    ul {
+        list-style: none;
+        
+        li {
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+    }
+    padding-top: 50px;
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+.mat-icon-button:hover  {
+    outline: 2px solid #3d6cec;
+}
+
+.icon {
+    font-size: 36px;
+}
+
+
+/*  cursor: not-allowed와 pointer-events:none은 
+    한 곳에서 사용 못하기 때문에  
+    부모에게는 커서 모양, 자식에게는 클릭 기능 제한
+*/
+.wrap {
+    cursor : not-allowed;
+}
+
+.participant {
+    /* 클릭 불가능 none */
+    pointer-events : none;
+}
+
+
+.whiteBoardMode1 {
+    padding-top: 56px;
+}
+
+
+
+@media screen and (max-width: 780px) {
+    
+    // 왼쪽 사이드 바
+    .menu-items {
+        padding: 10px;
+    }
+
+    .whiteBoardMode1 {
+        padding-top: 56px;
+    }
+
+    .shareBtn {
+        /* 클릭 불가능 none */
+        display: none;
+    }
+}
+
+

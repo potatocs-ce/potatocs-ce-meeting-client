@@ -1,0 +1,38 @@
+.card-container {
+	height:100vh;
+	background: rgba(236, 236, 236, 0.9);
+}
+
+.example-form {
+	width: 300px;
+  }
+  
+.example-full-width {
+	width: 100%;
+}
+
+.cardSubTitle {
+	color: rgb(170, 170, 170);
+	margin-bottom: 20px;
+	font-size: 16px;
+}
+
+.signinBtn {
+	background-color: rgba(23, 133, 23, 0.8);
+	color: #fff
+}
+
+// ::ng-deep .mat-focused .mat-form-field-label {
+// 	/*change color of label*/
+// 	color: green !important;
+// }
+  
+// ::ng-deep.mat-form-field-underline {
+// 	/*change color of underline*/
+// 	background-color: green !important;
+// } 
+  
+// ::ng-deep.mat-form-field-ripple {
+//    /*change color of underline when focused*/
+//    background-color: green !important;;
+// }

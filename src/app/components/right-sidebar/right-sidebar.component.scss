@@ -1,0 +1,85 @@
+.right_sidebar_container {
+    z-index: 48;
+    margin: 0;
+    position: fixed;
+    right: 0;
+    background-color: white;
+    width: 300px;
+    box-shadow: 4px 4px 14px -1px rgba(20, 0, 20, 0.2);
+    overflow: hidden;
+    height: 100vh;
+
+
+}
+
+
+
+::ng-deep .mat-tab-header-pagination-before,
+.mat-tab-header-rtl {
+    display: none !important;
+}
+
+::ng-deep .mat-tab-header-pagination-after,
+.mat-tab-header-rtl {
+    display: none !important;
+}
+
+
+.mat-tab-links {
+    flex-flow: wrap;
+    overflow: auto;
+}
+
+.mat-tab-header {
+    display: none;
+}
+
+.whiteBoardMode {
+    padding-top: 123px;
+    width: 300px;
+
+    .enlistedMembers {
+        height: calc(100vh - 156px);
+    }
+
+
+    ul {
+        padding: 0;
+        height: calc(100vh - 170px);
+        overflow-y: scroll;
+    }
+}
+
+
+@media screen and (max-width: 780px) {
+    .right_sidebar_container {
+        z-index: 48;
+        margin: 0;
+        position: fixed;
+        right: 0;
+        top: 57px;
+        background-color: white;
+        width: 300px;
+        box-shadow: 4px 4px 14px -1px rgba(20, 0, 20, 0.2);
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    .chatContainer {
+        height: calc(100vh - 265px);
+        overflow: auto;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .whiteBoardMode {
+        padding-top: 0px;
+        z-index: 50;
+    }
+}
+
+::ng-deep .mat-tab-label {
+    @media screen and (max-width: 780px) {
+        min-width: 150px !important;
+    }
+}

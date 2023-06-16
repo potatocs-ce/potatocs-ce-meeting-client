@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Bitrate Setting</h1>
+
+<form [formGroup]="changebitrateForm" (ngSubmit)="onSubmit()">
+  <mat-radio-group class="example-radio-group" name="favoriteSeason" formControlName="bitrate">
+    <mat-radio-button class="example-radio-button" *ngFor="let bitrate of bitrates  let i = index" [value]="bitrate" [checked]="bitrate === 0">
+      {{bitrate}}
+    </mat-radio-button>
+  </mat-radio-group>
+
+  
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">submit</button>
+    <button mat-button (click)="onNoClick()">cancel</button>
+  </div>
+</form>
+
+

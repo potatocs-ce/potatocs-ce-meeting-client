@@ -1,0 +1,213 @@
+.chatAllBorder {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    // height:calc(100vh - 300px)
+}
+
+.chatContainer {
+    height: calc(100vh - 270px);
+    overflow: auto;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.chatInMeeting {
+
+    padding: 10px;
+    border: gray;
+}
+
+.chatContainer::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+.chatContainer::-webkit-scrollbar {
+    width: 8px;
+    background-color: #F5F5F5;
+}
+
+.chatContainer::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #bebebe;
+    border: 1px solid #e2e2e2;
+}
+
+.textFormContainer {
+    position: relative;
+}
+
+
+.deleteChatBtn {
+    bottom: 8px;
+}
+
+.buttonCover .settingIcon {
+    visibility: hidden;
+}
+
+.buttonCover:hover .settingIcon {
+    visibility: visible;
+}
+
+.chatInMeeting .settingIcon {
+    float: right;
+    visibility: hidden;
+}
+
+.chatInMeeting:hover .settingIcon {
+    float: right;
+    visibility: visible;
+}
+
+
+.chatting {
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 10px;
+    max-width: 300px;
+    min-height: 30px;
+    padding: 12px;
+    margin: 12px 0px;
+}
+
+.myChat {
+    background-color: rgb(222, 240, 252);
+    border: 1px solid gray;
+    border-radius: 10px;
+    max-width: 250px;
+    min-height: 30px;
+    padding: 12px;
+    margin: 14px 0px 0px 30px;
+}
+
+.participantChat {
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 10px;
+    max-width: 250px;
+    min-height: 30px;
+    padding: 12px;
+    margin: 14px 30px 0px 0px;
+}
+
+.chatting_charMember_name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.chatting_createdAt {
+    color: gray;
+    font-size: 12px;
+}
+
+.chatContent {
+    padding: 8px 0px 0px 12px;
+    white-space: pre-line;
+    word-break: break-all;
+}
+
+.chatting_inner {
+    justify-content: space-between;
+}
+
+.chattingContainer {
+    margin: 10px 10px 0;
+    width: 285px;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 3px;
+    // position: fixed;
+    // bottom: 10px;
+}
+
+.mat-button {
+    float: right;
+}
+
+
+
+/////////////////
+.chatInput {
+    font-size: 13px;
+    flex-shrink: 0;
+    position: relative;
+    border: white;
+    margin-top: 10px;
+    margin-left: 10px;
+    align-content: center;
+    width: 94%;
+    min-height: 80px;
+}
+
+.chatSendBtn {
+    position: absolute;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-right: 0;
+    justify-content: right;
+    right: 0px;
+    bottom: 0px;
+}
+
+.textarea-style {
+    position: relative;
+    resize: none;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-family: "Noto Sans", "Roboto", "Helvetica Neue", sans-serif;
+    overflow: hidden;
+    width: 100%;
+    height: 130px;
+    overflow-wrap: break-word;
+}
+
+.maxHEditted_1 {
+    min-height: 620px;
+    max-height: 620px;
+}
+
+.maxHEditted_2 {
+    max-height: 187px;
+}
+
+.chat-checkBox {
+    padding-left: 16px;
+}
+
+.whiteBoardMode {
+    width: 300px;
+    height: calc(100vh - 350px);
+}
+
+
+/*  cursor: not-allowed와 pointer-events:none은 
+    한 곳에서 사용 못하기 때문에  
+    부모에게는 커서 모양, 자식에게는 클릭 기능 제한
+*/
+.wrap {
+    cursor: not-allowed;
+}
+
+.participant {
+    /* 클릭 불가능 none */
+    pointer-events: none;
+}
+
+
+
+@media screen and (max-width: 780px) {
+
+    // .chattingContainer {
+    //     position: relative !important;
+    // }
+
+    .chatContainer {
+        height: calc(100vh - 270px);
+        overflow: auto;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+}

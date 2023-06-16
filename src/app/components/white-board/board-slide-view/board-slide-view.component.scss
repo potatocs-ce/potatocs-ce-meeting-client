@@ -1,0 +1,142 @@
+.thumbnail-container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 36px); // 36: button height
+
+
+    .thumb-item {
+        text-align: center;
+        margin-top: 20px;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+        border: 1px solid #ccc;
+        line-height: 0;
+        padding: 5px;
+
+        &.select {
+            border: 2px solid #555;
+            box-shadow: 11px 11px 14px -9px rgb(36, 32, 32);
+        }
+
+        .thumbBg {
+            z-index: 3;
+            border: 1px solid rgb(83, 83, 83);
+        }
+
+        .thumbCanvas {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            z-index: 4;
+            background-color: transparent;
+        }
+
+        .thumbBg {
+            //width: $thumbnail-width;
+            //height:80px;
+            background-color: #ffffff;
+            // display: inline;
+        }
+
+        .page-number {
+            display: flex;
+            right: 0;
+            position: absolute;
+            bottom: 0;
+            justify-content: center;
+            align-items: center;
+            width: 22px;
+            height: 22px;
+            border: 2px solid white;
+            border-radius: 50%;
+            background-color: #3f51b5;
+            color: yellow;
+            z-index: 5;
+
+            span {
+                font-size: 12px;
+            }
+        }
+
+    }
+
+    .thumb-window-container {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+
+        #thumb-window {
+            border: 1px solid #bbb;
+            background-color: rgba(33, 150, 243, 0.1);
+            position: absolute;
+            left: 0px;
+            top: 0;
+        }
+    }   
+}
+
+.pdfBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thumbnail-container::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+@media screen and (max-width: 780px) {
+
+    .pdfBtn {
+        text-align: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .thumbBg {
+        width: 45px;
+        height: 45px;
+    }
+    .thumbnail-container {
+        padding-bottom: 30px;
+        .thumb-item {
+            width: 60px;
+
+            p {
+                width: 40px;
+                font-size: 9px;
+                word-break: break-all;
+            }
+        }
+    }
+
+    .mat-raised-button {
+        font-size: 10px;
+        padding: 0;
+
+        .mat-icon {
+            font-size: 20px;
+        }
+    }
+
+    .thumbCanvas {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    #thumb-window {
+        position: absolute;
+        left: 2px;
+        top: 0px;
+        max-width: 45px !important;
+        max-height: 45px !important;
+    }
+}

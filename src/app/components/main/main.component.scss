@@ -1,0 +1,104 @@
+.realTime_container {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background-color: #eee;
+}
+
+.header_container {
+    position: fixed;
+    top: 0;
+    z-index: 51;
+    width: 100%;
+
+    *:focus {
+        outline: none
+    }
+}
+
+.sidebar_container {
+    position: fixed;  
+    background-color: white;
+    width: 100px;
+    z-index: 1;
+    box-shadow: 4px 4px 14px -1px rgba(20, 0, 20, 0.2);
+    overflow: hidden;
+    height: 100vh;
+}
+
+
+
+
+.webRtc_container {
+    // position: relative;
+    margin: 56px 0 0 100px;
+    width: calc(100% - 400px);
+    height: calc(100vh - 56px);
+
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+
+    //click시 파란색 outline 방지.
+    *:focus {
+        outline: none
+    }    
+}
+
+
+//click시 파란색 outline 방지.
+*:focus {
+    outline: none
+}
+
+
+
+@media screen and (max-width: 780px) {
+    .realTime_container {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        background-color: #282828;
+    }
+
+    .webRtc_container {
+        // margin: 0 0;
+        // height: 100vh;
+        -khtml-user-select: none;
+        -o-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    // 왼쪽 사이드 바
+    .sidebar_container {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.1s linear;
+        width: 60px;
+        z-index: 50;
+    }
+    
+    // 오른쪽 사이드 바
+    .right_sidebar_container {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.1s linear;
+        z-index: 48;
+    }
+
+    .toggle {
+        visibility: visible;
+        opacity: 1;
+    }
+    
+}
+
+
+
+
+

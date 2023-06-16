@@ -1,0 +1,59 @@
+<mat-toolbar class="mat-elevation-z10" color="primary" fxLayout="row">
+
+	<div>
+		<span class="material-icons-outlined" (click)="toggle()">
+			<mat-icon>{{toggleIcon}}</mat-icon> 
+		</span>
+	</div>
+	
+	<div class="toolbarIcon" fxFlex fxLayout="row">
+
+        <div class="btnContent">
+            <!-- Mice mute On/Off -->
+            <button *ngIf="muteIcon == 'mic'" class="btn" mat-icon-button #muteBtn (click)="handleMuteClick()">
+                <mat-icon>{{muteIcon}}</mat-icon>
+            </button>
+            <button *ngIf="muteIcon == 'mic_off'" class="btn" mat-icon-button #muteBtn (click)="handleMuteClick()">
+                <mat-icon>{{muteIcon}}</mat-icon>
+            </button>
+
+    
+    
+            <!-- Camera On/Off -->
+            <button *ngIf="cameraIcon == 'videocam_on'" class="btn" mat-icon-button #cameraBtn (click)="handleCameraClick()">
+                <mat-icon>{{cameraIcon}}</mat-icon>
+            </button>
+            <button *ngIf="cameraIcon == 'videocam_off'" class="btn" mat-icon-button #cameraBtn (click)="handleCameraClick()">
+                <mat-icon>{{cameraIcon}}</mat-icon>
+            </button>
+        </div>
+
+		
+
+   
+        <button class="exitBtn btn" mat-icon-button (click)="meetingExit()">
+            <mat-icon>logout</mat-icon>
+        </button>
+     
+
+
+		<!-- <div ngIf="!cameraOff">
+			<mat-icon  class="btn" mat-icon-button #cameraBtn (click)="handleCameraClick()">videocam_off</mat-icon>
+		</div> -->
+
+
+		<!-- <mat-icon>videocam_off</mat-icon> -->
+
+
+
+		<!-- bitrate �κ�-->
+		<!-- <button class="btn" mat-icon-button #bitrateBtn (click)="openDialog()">	
+			<mat-icon>settings</mat-icon>
+		</button> -->
+
+
+		
+	</div>
+
+
+</mat-toolbar>

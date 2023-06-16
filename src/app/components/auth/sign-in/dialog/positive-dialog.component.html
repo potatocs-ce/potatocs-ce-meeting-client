@@ -1,0 +1,19 @@
+<div class="dialogContainer">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+        <div>
+            <mat-icon class="ok-icon">check_circle</mat-icon>
+        </div>
+
+        <div class="makingSure">
+            Awesome!
+        </div>
+
+        <div class="confirm-content">
+            {{ data.content}}
+        </div>
+    
+        <div class="okBtnBox" fxLayout="column">
+            <button mat-raised-button class="okBtn" (click)="closeModal()">OK</button>
+        </div>
+    </div>
+</div>

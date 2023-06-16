@@ -1,0 +1,38 @@
+<div class="chatAllBorder">
+    <div [ngClass]="{'whiteBoardMode': whiteBoardMode === true}" class="chatContainer" #target
+        [scrollTop]="target.scrollHeight">
+        <div class="chatInMeeting" *ngFor="let item of chatInMeeting">
+            <!-- <button mat-button class="deleteChatBtn"  (click)="deleteChat(item._id)" *ngIf="item.userId==userId">
+                <mat-icon class="settingIcon ">close</mat-icon>
+            </button>    -->
+            <div [ngClass]="item.userId==userId ? 'myChat' : 'participantChat'">
+                <div class="chatting_inner" *ngIf="item.chatMember" fxLayout="row">
+                    <div class="chatting_charMember_name">
+                        {{ item.chatMember }}
+                    </div>
+                    <div class="chatting_createdAt">
+                        {{ item.createdAt | date: 'YYYY-MM-dd hh:mm'}}
+                    </div>
+                </div>
+                <div class="chatContent">
+                    {{ item.chatContent }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="textFormContainer" [ngClass]="(myRole == 'Participant') && (meetingStatus == 'Close') ? 'wrap': '' ">
+        <form #f="ngForm" [ngClass]="(myRole == 'Participant') && (meetingStatus == 'Close') ? 'participant': '' "
+            (ngSubmit)="f.form.valid && createChat()" (keyup.enter)="createChat()" novalidate class="submit-form">
+            <div class="chattingContainer">
+                <div class="chatInput">
+                    <textarea class="textarea-style" type="text" [(ngModel)]="chatContent" name="first"
+                        required></textarea>
+                    <button class="chatSendBtn" [disabled]="!f.form.valid" mat-stroked-button>send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- <mat-checkbox class="chat-checkBox" color="primary">댓글만 보기</mat-checkbox> -->
+</div>

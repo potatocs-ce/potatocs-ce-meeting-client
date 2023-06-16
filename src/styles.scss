@@ -1,0 +1,583 @@
+//click시 파란색 outline 방지.
+*:focus {
+    outline: none;
+}
+
+body {
+    touch-action: manipulation;
+    overflow: hidden;
+}
+
+
+ul {
+    list-style: none
+}
+
+#header {
+    margin: 0 auto;
+    max-width: 1080px;
+    padding: 10rem 1rem;
+    text-align: center;
+}
+
+#container {
+    width: 100%;
+}
+
+
+#call {
+    // position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #282828;
+    margin: 0;
+}
+
+
+video {
+    width: 100%;
+}
+
+
+
+////////////////// webRTC participants ///////////////////
+#participants {
+    bottom: 0%;
+    overflow: auto;
+    max-width: 600px;
+
+}
+
+#participants::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#participants::-webkit-scrollbar-thumb {
+    background: linear-gradient(#bfc8e1, #bfc8e1);
+    border-radius: 5px;
+}
+
+#participants::-webkit-scrollbar-track {
+    background: grey;
+    border-radius: 5px;
+}
+
+#participants::-webkit-scrollbar-corner {
+    background: #282828;
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+///////////////// big video/////////////////////
+.bigvideo {
+    z-index: 1;
+}
+
+.bigvideo:hover {
+    cursor: default;
+}
+
+.bigvideo>video {
+    position: fixed;
+    width: calc(100vw - 414px);
+    height: calc(100vh - 66px); // 비디오 오버레이 스크롤 바 안보이는 이슈 때문에 height 56px 에서 +10 더함.
+    top: 56px;
+    left: 107px;
+
+    ////////// 비디오 좌우반전////////////
+    // transform: rotateY(180deg);
+    // -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    // -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+.bigvideo>p {
+    position: fixed;
+    // color: #fffb00;
+    color: #fff;
+    background-color: #424242;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 12px;
+    top: 80px;
+    left: 40%;
+    width: 100%;
+    max-width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+
+
+/////////////////// small video ///////////////////////
+.smallvideo {
+    z-index: 100;
+    width: 150px;
+}
+
+.smallvideo>video {
+    height: 113px;
+    width: 150px;
+    border: 1px solid white;
+}
+
+.smallvideo>p {
+    position: absolute;
+    bottom: 7px;
+    margin: 0;
+    color: #fff;
+    background-color: rgba(66, 66, 66, 0.7);
+    border-radius: 15px;
+    padding: 2px;
+    font-size: 12px;
+    margin: 0;
+    width: 100%;
+    max-width: 150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+
+
+
+////////////////////////////////////////////////////
+.onLine {
+    color: rgb(70, 113, 255);
+    font-weight: 800;
+}
+
+.offLine {
+    color: rgb(133, 131, 131);
+    font-weight: 100;
+}
+
+////////////////////////////////////////////////////
+
+
+
+///////////////// 화이트보드 비디오 오버레이 컨테이너 ///////////////
+.videoOverlay_container {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    /* z-index: 9999; */
+    transform: translate(-50%, -4%);
+    max-width: 600px;
+    overflow: auto;
+    // margin-left: 271px;
+}
+
+.videoOverlay_container::-webkit-scrollbar {
+    width: 10px;
+    height: 10px
+}
+
+.videoOverlay_container::-webkit-scrollbar-thumb {
+    background: linear-gradient(#bfc8e1, #bfc8e1);
+    border-radius: 5px;
+}
+
+.videoOverlay_container::-webkit-scrollbar-track {
+    background: grey;
+    border-radius: 5px;
+}
+
+.videoOverlay_container::-webkit-scrollbar-corner {
+    background: #282828;
+}
+
+////////////////////////////////////////////////////////////
+
+
+
+///////////////// 화이트보드 비디오 내 로컬 비디오 오버레이 ///////////////
+.videoOverlay {
+    pointer-events: none;
+}
+
+.videoOverlay>video {
+    height: 113px;
+    width: 150px;
+    border: 1px solid white;
+}
+
+.videoOverlay>p {
+    position: absolute;
+    bottom: 7px;
+    margin: 0;
+    color: #fff;
+    background-color: rgba(66, 66, 66, 0.7);
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 12px;
+    width: 100%;
+    max-width: 151px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+/////////// 화이트보드 비디오 상대방 비디오 오버레이 //////////////////
+.receiveVideoOverlay {
+    pointer-events: none;
+}
+
+.receiveVideoOverlay>video {
+    height: 113px;
+    width: 150px;
+    border: 1px solid white;
+}
+
+.receiveVideoOverlay>p {
+    position: absolute;
+    bottom: 7px;
+    margin: 0;
+    color: #fff;
+    background-color: rgba(66, 66, 66, 0.7);
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 12px;
+    width: 100%;
+    max-width: 151px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: center;
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+/////////// 비디오 숨김 / 보이기 버튼 //////////////////
+.videohidden_button {
+    z-index: 101;
+    background-color: #b2b2b2;
+    color: white;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 50px;
+    right: 315px;
+    transform: scale(1);
+}
+
+.videohidden_button:hover {
+    cursor: pointer;
+    background-color: #3f51b5;
+}
+
+
+.visibleVideo_button {
+    background-color: #b2b2b2;
+    color: white;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 50px;
+    right: 315px;
+    transform: scale(1);
+
+}
+
+
+.visibleVideo_button:hover {
+    cursor: pointer;
+    background-color: #3f51b5;
+}
+
+.hiddenVideo {
+    display: none;
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+/* BUTTONS */
+
+.button {
+    display: inline-block;
+    padding: 11px 16px 10px;
+    margin-right: 4px;
+    background: none;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    opacity: 1;
+    -webkit-transition: background-color .2s ease;
+    transition: background-color .2s ease;
+}
+
+.button--primary {
+    background-color: #2B90D9;
+    color: #FFF;
+}
+
+.button--primary:hover,
+.button--primary:focus,
+.button--primary:active {
+    background-color: #2273AD;
+}
+
+.button--secondary {
+    background-color: #DDD;
+    color: #333;
+}
+
+.button--secondary:hover,
+.button--secondary:focus,
+.button--secondary:active {
+    background-color: #CACACA;
+}
+
+////////////////////////////////////////
+
+
+//////////////////// snackBar //////////////////////
+.entered-snackbar {
+    color: white;
+}
+
+.entered-snackbar button {
+    color: rgb(1, 132, 255);
+}
+
+.left-snackbar {
+    color: white;
+}
+
+.left-snackbar button {
+    color: rgb(255, 92, 92);
+}
+
+
+////////////////////////////////////////////////////
+
+
+//////////////////// spinner //////////////////////
+.mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke: rgb(255, 58, 58);
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+@media screen and (max-width: 780px) {
+
+
+    #participants {
+        max-width: 182px;
+        left: 42%;
+    }
+
+
+    ///////////////// big video/////////////////////
+    .bigvideo:hover {
+        cursor: default;
+    }
+
+    .bigvideo {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 25px;
+        left: 0%;
+    }
+
+    .bigvideo>video {
+        width: 100vw;
+        height: 100%;
+        top: 25px;
+        left: 0%;
+
+    }
+
+    .bigvideo>p {
+        position: fixed;
+        // color: #fffb00;
+        color: #fff;
+        background-color: #424242;
+        border-radius: 15px;
+        padding: 5px;
+        font-size: 12px;
+        top: 80px;
+        left: 30%;
+        width: 100%;
+        max-width: 151px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    ////////////////////////////////////////////////////
+
+
+    /////////////////// small video ///////////////////////
+    .smallvideo {
+        z-index: 2;
+        width: 182px;
+    }
+
+    .smallvideo>video {
+        height: 70px;
+        width: 91px;
+        border: 1px solid white;
+    }
+
+    .smallvideo>p {
+        position: absolute;
+        bottom: 7px;
+        margin: 0;
+        color: #fff;
+        background-color: rgba(66, 66, 66, 0.7);
+        border-radius: 15px;
+        padding: 2px;
+        font-size: 12px;
+        margin: 0;
+        width: 100%;
+        max-width: 91px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    ////////////////////////////////////////////////////
+
+
+    ///////////////// 화이트보드 비디오 오버레이 컨테이너 ///////////////
+    .videoOverlay_container {
+        display: flex;
+        flex-direction: row;
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        /* z-index: 9999; */
+        transform: translate(-37%, -4%);
+        max-width: 182px;
+        overflow: auto;
+
+    }
+
+    .videoOverlay_wrap {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        bottom: 0px;
+        // left: 40%;
+        overflow: auto;
+    }
+
+    .videoOverlay_button {
+        display: none;
+    }
+
+
+    .videoOverlay>video {
+        width: 91px;
+        height: 70px;
+    }
+
+    .videoOverlay>p {
+        position: absolute;
+        bottom: 7px;
+        margin: 0;
+        color: #fff;
+        background-color: rgba(66, 66, 66, 0.7);
+        border-radius: 15px;
+        padding: 2px;
+        font-size: 12px;
+        margin: 0;
+        width: 100%;
+        max-width: 91px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: center;
+    }
+
+
+    .receiveVideoOverlay>video {
+        width: 91px;
+        height: 70px;
+    }
+
+    .receiveVideoOverlay>p {
+        position: absolute;
+        bottom: 7px;
+        margin: 0;
+        color: #fff;
+        background-color: rgba(66, 66, 66, 0.7);
+        border-radius: 15px;
+        padding: 2px;
+        font-size: 12px;
+        margin: 0;
+        width: 100%;
+        max-width: 91px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    ////////////////////////////////////////////////////////////
+
+
+    ///////////////// 비디오 숨김 / 보이기 버튼 /////////////////////
+    .videohidden_button {
+        z-index: 101;
+        background-color: #b2b2b2;
+        color: white;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        transform: scale(1);
+    }
+
+    .visibleVideo_button {
+        z-index: 101;
+        background-color: #b2b2b2;
+        color: white;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 40px;
+        right: 20px;
+        transform: scale(1);
+    }
+
+    ////////////////////////////////////////////////////
+
+}

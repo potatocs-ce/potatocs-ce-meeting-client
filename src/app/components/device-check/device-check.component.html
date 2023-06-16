@@ -1,0 +1,144 @@
+<div class="card-container" fxLayoutAlign="center center" fxLayout="column">
+    <mat-card class="deviceSetContent">
+        <header class="device_set_header">
+            <h4>Device test</h4>
+            <p class="device_header_tx">Please check the status of the camera, microphone, and audio.</p>
+        </header>
+        <section class="deviceSetBody">
+
+            <!-- 카메라 -->
+            <div class="cameraRec">
+                <h6 class="titleRec cam">Camera</h6>
+                <div class="contentRec">
+                    <div class="deviceList camera">
+                        <select class="selectBox ellipsis" [(ngModel)]="selectedVideoDevice" (ngModelChange)="selectDevice()">
+                            <option class="deviceItem ellipsis" *ngFor="let videoDevice of videoDevices" [ngValue]="videoDevice">{{videoDevice?.label}}</option>
+                        </select>
+                    </div>
+                    <div class="device_play" data-audio-volume="0" data-video-status="playing">
+                        <!-- <div class="video">
+                            <video #video autoplay="" muted=""></video>
+                        </div> -->
+
+                        <div class="video">
+                            <video #video autoplay loop muted playsinline [srcObject]="localStream$|async"></video>
+                        </div>
+
+
+                        <!-- 카메라 On / Off -->
+                        <section class="example-section txRec">
+                            <!-- <mat-checkbox class="example-margin selectBox ellipsis" [(ngModel)]="isChecked" (change)="checkValue(isChecked?cameraOff : cameraOn)">Click to turn off the camera!</mat-checkbox> -->
+
+                            <mat-checkbox class="camera desc video-playing-desc subTx camera"  [(ngModel)]="isChecked" (change)="checkValue(isChecked?cameraOff : cameraOn)"> <p>Click to turn off the camera.</p> </mat-checkbox>
+                        </section>
+                        
+
+                        <div class="txRec ">
+                            <div class="desc video-none-playing-desc error">
+                                <p *ngIf="videoDevices?.length < 1" class="subTx camera">❌ A webcam device is not exists.</p>
+                                <p *ngIf="!videoDevices[0]?.label && videoDevices[0]?.kind == 'videoinput'" class="subTx camera">❌ A webcam device is not allowed</p>
+                            </div>
+                            <p *ngIf="videoDevices?.length >= 1 && (videoDevices[0]?.label && videoDevices[0]?.kind == 'videoinput')" class="desc video-playing-desc">✅ A camera video is working normally.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 마이크 -->
+            <div class="micRec">
+                <h6 class="titleRec mic">Microphone</h6>
+
+                <div class="contentRec">
+                    <div class="device-play" data-audio-volume="0" data-video-status="playing">
+                        <div class="deviceList mic">
+                            <select class="selectBox ellipsis" #miceDeivce [(ngModel)]="selectedMiceDevice" (ngModelChange)="selectDevice()">
+                                <option class="deviceItem ellipsis" *ngFor="let miceDevice of miceDevices" [ngValue]="miceDevice">
+                                    {{miceDevice?.label}}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- txRec 오디오 스트림바 -->
+                                           
+                        <!-- <div class="txRec">
+
+                            <div id="instant">
+                                <div class="label">Sound Input:</div>
+                                <meter high="0.25" max="1" value="0" id="instantMeter"></meter>
+                                <div class="value"></div>
+                            </div>
+                            <div class="desc error">
+                                <p class="subTx camera" *ngIf="miceDevices?.length < 1 ">❌ A microphone device is not exists.</p>
+                                <p class="subTx camera" *ngIf="!miceDevices[0]?.label && miceDevices[0]?.kind == 'audioinput'">❌ A microphone device is not allowed</p>
+                            </div>
+
+                            
+                            <p *ngIf="(miceDevices?.length >= 1) && (miceDevices[0]?.label && miceDevices[0]?.kind == 'audioinput')" class="desc volume-desc">
+                                ✅ The microphone device is being detected.
+                            </p>
+                        </div> -->
+                       
+                            <!-- <div class="audio">
+                                <div class="audioinput-volume">
+                                    <div class="volume">
+                                        <p class="gauge" style="height: 7.90625%;">&nbsp;</p>
+                                        <p class="icoMic"></p>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 스피커 -->
+            <div class="speakerRec">
+                <h6 class="titleRec speaker">Audio</h6>
+                <div class="contentRec">
+                    <div class="device-play" data-audio-volume="0" data-video-status="playing">
+                        <div class="deviceList">
+                            <select class="selectBox ellipsis" [(ngModel)]="selectedSpeakerDevice" (ngModelChange)="selectDevice()">
+                                <option class="deviceItem ellipsis" *ngFor="let speakerDevice of speakerDevices" [ngValue]="speakerDevice">{{speakerDevice?.label}}</option>
+                            </select>
+                        </div>
+
+                        <div class="txRec">
+                            <div class="desc error">
+                                <p class="subTx camera" *ngIf="speakerDevices?.length < 1 ">❌ An audio device is not exits</p>
+                                <p class="subTx camera" *ngIf="this.browserInfo?.name == 'Opera' && this.browserInfo?.name !== 'Edge' && this.browserInfo?.name !== 'Chrome' ">❌ This browser is not supported</p>
+                            </div>
+                            <p class="desc volume-desc" *ngIf="speakerDevices?.length >= 1 ">
+                                🔵 Please check if the sound is coming from the audio you set.
+                            </p>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 브라우저 정보 -->
+            <div class="browserRec" data-type="chrome">
+                <h6 class="titleRec">Browser information</h6>
+                <div class="contentRec browserData">
+                    <!-- 최신 브라우저 일때 -->
+                    <div class="browserInfo chrome">
+                        <p class="browserTx">{{ browserInfo.name }} {{ browserInfo.version }}</p>
+                    </div>
+                </div>
+                <div class="browserTest">
+                    <p >🔈 The live meeting in Mac system is under testing.</p>
+                </div>
+            </div>
+            
+
+            <footer class="btnsRec">
+                <button class="btnConfirm" mat-raised-button color="primary" (click)="joinMeetingRoom()"> Join</button>
+			</footer>
+            
+        </section>
+    </mat-card>
+</div>
+
+

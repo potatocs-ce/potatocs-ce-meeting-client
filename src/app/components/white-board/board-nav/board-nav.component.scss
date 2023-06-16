@@ -1,0 +1,353 @@
+.comclass-nav {
+    margin-left: 100px;
+    margin-top: 56px;
+    margin-bottom: 0px !important;
+    background-color: #2d2f5f;
+    border-radius: 0px !important;
+    height: 70px;
+    min-width: 1024px; //ipad portrait
+
+    .main-nav {
+        width: 88%;
+    }
+
+    // icon size
+    .mat-icon {
+      font-size:40px;
+    }
+
+    .class-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 70px;
+        width: 150px;
+        margin-right: 10px;
+
+        .class-name {
+            font-size: 18px;
+            color: #eee;
+            width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            color: lightgray;
+            cursor: pointer;
+        }
+    }
+
+
+
+    //click시 파란색 outline 방지.
+    *:focus {
+        outline: none
+    }
+
+    .drawing-config {
+        background-color: #46465e;
+        height: 69px;
+        display: flex;
+        width: 40%;
+        // max-width: 600px;
+        // min-width: 400px;
+
+
+        .color-set,
+        .width-set {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            flex: 1 1 auto;
+        }
+
+        .color-set {
+            width: 60%;
+            margin-left: 20px;
+
+            div {
+                display: flex;
+                height: 69px;
+
+                i {
+                    font-size: 22px;
+                }
+
+                i:before {
+                    background-color: #333;
+                    padding: 1px;
+                    border-radius: 50%;
+                }
+            }
+
+            div:first-child, div:nth-child(4) {
+                i:before {
+                    background-color: lightgray;
+                    padding: 1px;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        .width-set {
+            width: 40%;
+            // margin-left:10px;
+            margin-right: 10px;
+            color: #eee;
+
+            div {
+                display: flex;
+                height: 69px;
+            }
+
+            div:first-child i {
+                font-size: 20px;
+            }
+
+            div:nth-child(2) i {
+                font-size: 30px;
+            }
+
+            div:last-child i {
+                font-size: 40px;
+            }
+        }
+
+        i {
+            cursor: pointer;
+            margin: auto;
+            // margin-left:10px;
+            // margin-right:10px;
+        }
+
+    }
+
+    .tool-items {
+
+        width: 40%;
+        // max-width: 500px;
+        // min-width: 350px;
+
+        .tool-set {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+
+            margin-left: 10px;
+            margin-right: 10px;
+            color: lightgray;
+
+            // div {
+            // display:flex;
+            // height:69px;
+            // width:70px;
+            // }
+
+            button {
+                // display: flex;
+                height: 70px;
+                min-width: 70px;
+                padding: 0;
+                margin: 0;
+                background-color:transparent;
+                border: 0;
+                color: white;
+                :hover{
+                    color: rgb(255, 255, 0);
+                }
+            }
+
+            mat-icon.active {
+              color:yellow;
+            }
+
+            // i {
+            //     cursor: pointer;
+            //     margin: auto;
+            //     font-size: 30px;
+            //     color: lightgray;
+            // }
+
+            // i.active {
+            //     color: #e0e05c;
+            // }
+
+            // i.sync {
+            //     color: #8bc34a;
+            // }
+
+
+        }
+
+    }
+
+    .exit-item {
+        i {
+            color: lightgray;
+            font-size: 40px;
+            padding-top: 15px;
+            cursor: pointer;
+        }
+
+        i.active {
+            color: #e0e05c;
+        }
+
+
+    }
+
+
+    /*
+    Comclass navbar
+    */
+
+    .navbar-nav {
+        flex-direction: unset;
+    }
+
+    .navbar-header,
+    .navbar-nav {
+        float: left;
+        margin: 0;
+        list-style: none;
+    }
+
+    .navbar-right {
+        float: right;
+    }
+
+    .navbar-nav li {
+        float: left;
+    }
+
+    a:not(.current):hover {
+        background-color: #2d2f5f;
+        color: black;
+    }
+
+    .comclassExit {
+        margin-right: 5px;
+    }
+
+}
+
+.navbar {
+    padding: 0px;
+}
+
+
+/*  cursor: not-allowed와 pointer-events:none은 
+    한 곳에서 사용 못하기 때문에  
+    부모에게는 커서 모양, 자식에게는 클릭 기능 제한
+*/
+.wrap {
+    cursor : not-allowed;
+}
+
+.participant {
+    /* 클릭 불가능 none */
+    pointer-events : none;
+}
+
+
+.cdk-overlay-pane {
+    width: 136px;
+}
+
+// icon
+mat-icon.active {
+    color:yellow;
+}
+
+ic-icon.active {
+    color:yellow;
+}
+
+
+
+@media screen and (max-width: 780px) {
+
+    
+
+    .comclass-nav {
+        margin-left: 0;
+        margin-top: 56px;
+        margin-bottom: 0px !important;
+        background-color: #2d2f5f;
+        border-radius: 0px !important;
+        z-index: 50;
+        width: 100%;
+    }
+
+    .navbar-nav li {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    
+
+    .container-fluid {
+        // display: flex;
+        // padding: 0;
+
+        display: flex;
+        padding: 0;
+        width: 100vh;
+        margin: 0;
+        
+        ul {
+            width: 100vw;
+        }
+ 
+        .class-info_wrap {
+            display: none;
+        }
+
+        .drawing-config {
+            display: flex;
+            width: 100vw;
+            height: 45px;
+
+            .color-set {
+                width: 50%;
+                height: 45px;
+                margin: 0;
+            }          
+
+            .width-set {
+                width: 50px;
+                height: 46px;
+                margin: 0;
+            }
+        }
+
+        .tool-items { 
+            justify-content: space-around;
+            width: 100vw;
+            background-color: #2d2f5f;
+            height: 45px;
+            min-width: 48px;
+            
+            .mat-icon {
+                font-size: 28px;
+            }
+
+            .tool-set {
+                margin-left: 14px;
+                height: 45px;
+                min-width: 48px;
+
+                button {
+                    height: 70px;
+                    min-width: 50px;
+                }
+            }  
+        }
+
+    }
+    
+}

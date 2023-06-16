@@ -1,0 +1,64 @@
+<div class="whiteBoard-container">
+
+	<!----------------------------------------------------------------
+		board-nav
+	--------------------------------------------------------------- -->
+	<div class="navbar_container">
+		<app-board-nav></app-board-nav>
+	</div>
+
+	<!----------------------------------------------------------------
+		board-slide-view
+	--------------------------------------------------------------- -->
+	<div class="sidebar_container">
+		<app-board-file-view [hidden] = "leftSideView != 'fileList'" (newLocalDocumentFile)="onDocumentOpened($event)" ></app-board-file-view>
+
+    <app-board-slide-view [hidden] ="leftSideView !='thumbnail'" ></app-board-slide-view>
+
+	</div>
+
+	<!----------------------------------------------------------------
+		board-canvas
+	--------------------------------------------------------------- -->
+	<div class="comclass_container">
+		<div class="comclass-main">
+			<app-board-canvas class="app-board-canvas"></app-board-canvas>
+
+			<!------------------------------------------
+				Floating Fab buttons
+				- zoom
+				- blind
+				- replay
+			------------------------------------------ -->
+			<div class="fabs_container">
+				<app-board-fabs></app-board-fabs>
+			</div>
+		</div>
+	</div>
+
+	<!----------------------------------------------------------------
+		board-fabs
+	--------------------------------------------------------------- -->
+
+	<div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === true}">
+		<div  id="videoOverlay_container" [ngStyle]="{'visibility': hiddenVideoMode === false ? 'visible' : 'hidden'}" class="videoOverlay_container" [dragScroll]="dragOn">
+		</div>
+	</div>
+
+    <!-- <div id="videoOverlay_container" class="videoOverlay_container" [dragScroll]="dragOn">
+		</div> -->
+
+
+
+    <div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === true}" (click)="hiddenVideo()" >
+        <mat-icon class="visibleVideo_button">arrow_forward</mat-icon>
+    </div>
+
+
+    <div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === false}" (click)="visibleVideo()" >
+        <mat-icon class="visibleVideo_button">arrow_back</mat-icon>
+    </div>
+    
+
+</div>
+

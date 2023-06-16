@@ -1,0 +1,19 @@
+<div class="dialogContainer">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+        <div>
+            <mat-icon class="negative-icon">cancel</mat-icon>
+        </div>
+
+        <div class="makingSure">
+            Error!
+        </div>
+
+        <div class="confirm-content">
+            {{ data.content}}
+        </div>
+    
+        <div class="ngOkBtnBox" fxLayout="column">
+            <button mat-raised-button class="ngOkBtn" (click)="closeModal()">OK</button>
+        </div>
+    </div>
+</div>

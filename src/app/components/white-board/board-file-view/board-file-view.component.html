@@ -1,0 +1,34 @@
+<!-- <button mat-raised-button>Basic</button> -->
+
+<div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+    <button mat-raised-button style="width: 100%;" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+        (click)="pdfInput.click()">
+        <div class="pdfBtn">
+            <mat-icon>file_open</mat-icon> 
+            <span>Open File</span>
+        </div>
+        <input #pdfInput type="file" (click)="$event.target.value = null" (change)="handleUploadFileChanged($event)"
+            style="display:none;" accept=".pdf" />
+    </button>
+</div>
+
+
+<!-- File list -->
+
+<div class="thumbnail-container">
+    <div class="thumb-item" *ngFor="let thumb of documentInfo ; let i = index;" (click)="clickPdf(thumb._id)">
+        <!-- <button mat-button class="deleteChatBtn" (click)="deleteChat(item._id, item.replyId)" *ngIf="item.chatMemberId==userId"></button> -->
+
+        <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+            <button [ngClass]="myRole == 'Participant' ? 'participant': '' " *ngIf="i > 0 && myRole == 'Presenter'" mat-button class="deleteChatBtn" (click)="deletePdf(thumb._id)">
+                <mat-icon  class="settingIcon ">close</mat-icon>
+            </button>
+        </div>
+        <!-- thumbnail 배경 image : File 목록에서는 고정크기 사용 -->
+        <img #thumb id="thumb{{i+1}}" class="thumbBg" width="150" height="100">
+
+        <p class="page-number">({{thumb.currentPage }} / {{thumb.numPages}})</p>
+        <p class="file-name">{{thumb.fileName }}</p>
+
+    </div>
+</div>

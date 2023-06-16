@@ -1,0 +1,73 @@
+ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+
+    li {
+        padding: 0 15px;
+    }
+}
+.btn {
+    margin: 0 50px;
+    font-size: 30px;
+    color: white;
+    line-height: 0;
+
+    //click시 파란색 outline 방지.
+}
+
+button {
+    :focus {
+        outline: none
+    }
+}
+
+.toolbarIcon {
+    font-size: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+
+    .mat-icon-button:hover  {
+        outline: 2px solid white;
+    }
+}
+
+
+.mat-elevation-z10 {
+    z-index: 100;
+    height: 56px;
+}
+
+
+.material-icons-outlined{
+    display: none;
+}
+
+.exitBtn {
+    position: fixed;
+    right: 0;
+}
+
+
+@media screen and (max-width: 780px) {
+    .material-icons-outlined{
+        display: block;
+    }
+
+    .material-icons-outlined > mat-icon {
+        line-height: 40px;
+    }
+
+    
+    .btnContent > .btn {
+        margin: 0 30px;
+    }
+
+    .exitBtn {
+        margin: 0;
+    }
+}

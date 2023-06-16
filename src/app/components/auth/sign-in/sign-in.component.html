@@ -1,0 +1,46 @@
+<div class="card-container" fxLayoutAlign="center center" fxLayout="column">
+	<mat-card class="cardBox">
+		<mat-card-header fxLayoutAlign="center center" fxLayout="column">
+			<div>
+				<img src="assets/logo/logo-title2-rm.png" alt="">
+			</div>
+			<div>
+				<mat-card-title>
+					Welcome
+				</mat-card-title>
+			</div>
+			<div class="cardSubTitle">
+				Sign in with your credentials below
+			</div>
+		</mat-card-header>
+		<mat-card-content>
+			<form #signInForm="ngForm" class="example-form" (ngSubmit)="(signInForm.form.valid) && signIn()">
+				<mat-form-field class="example-full-width">
+					<input matInput 
+						type="text" 
+						placeholder="E-Mail" 
+						[(ngModel)]="signInFormData.email" 
+						name="email" 
+						spellcheck="false" 
+						pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+						required>
+				</mat-form-field>
+
+				<mat-form-field class="example-full-width">
+					<input matInput 
+						type="password" 
+						placeholder="Password"
+						[(ngModel)]="signInFormData.password" 
+						name="password" 
+						minlength="4" 
+						maxlength="15"
+						required>
+				</mat-form-field>
+			  
+				<div fxLayoutAlign="center" fxLayout="column wrap">
+					<button type="submit" mat-raised-button class="signinBtn" [disabled]="!signInForm.form.valid">SIGN IN</button>
+				</div>
+			</form>
+		</mat-card-content>
+	</mat-card>
+</div>

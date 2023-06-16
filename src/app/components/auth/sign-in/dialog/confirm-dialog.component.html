@@ -1,0 +1,21 @@
+
+<div class="dialogContainer">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+        <div>
+            <mat-icon class="confirm-icon">help_outline</mat-icon>
+        </div>
+
+        <div class="makingSure">
+            Are you sure?
+        </div>
+
+        <div class="confirm-content">
+            {{ data.content}}
+        </div>
+    
+        <div class="btnBox" fxLayout="row" fxLayoutGap="20px">
+            <button mat-raised-button class="confirmBtn" [mat-dialog-close]="true">Confirm</button>
+            <button mat-raised-button class="cancelBtn" [mat-dialog-close]="false">Cancel</button>
+        </div>
+    </div>
+</div>

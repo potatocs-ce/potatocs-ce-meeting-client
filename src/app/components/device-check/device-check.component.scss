@@ -1,0 +1,238 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, button, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video, select, keygen, xmp, plaintext, listing {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-size: 100%;
+    font-family: 'Lato','Noto Sans KR','Malgun Gothic','Helvetica Neue',Helvetica,Arial,sans-serif;
+    line-height: 1;
+    vertical-align: baseline;
+}
+
+.card-container {
+    height: 100vh;
+    background: linear-gradient(#e8edff,#fff2f9);
+}
+
+mat-card {
+    width: 520px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+}
+
+.device_set_header {
+    border-bottom: 2px solid #333;
+    padding-bottom: 18px;
+}
+
+.device_set_header h4 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.device_set_header .device_header_tx {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.cameraRec {
+    position: relative;
+}
+
+.titleRec, .cam{
+    position: relative;
+    padding-bottom: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    margin: 0;
+}
+
+.networkRec, .cameraRec, .micRec, .speakerRec, .browserRec {
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+}
+
+.cameraRec .contentRec {
+    min-height: 90px;
+}
+
+.deviceList.camera {
+    min-height: 35px;
+    padding-right: 180px;
+}
+
+.deviceList .selectBox {
+    // -webkit-appearance: none;
+    // appearance: none;
+    width: 100%;
+    padding: 8px 30px 8px 12px;
+    background-size: auto 40%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 1.6;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: .2s ease-out;
+}
+
+.device_play .video{
+    position: absolute;
+    top: 50px;
+    right: 0;
+    box-sizing: border-box;
+    width: 160px;
+    height: 90px;
+    border-radius: 2px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+    overflow: hidden;
+}
+
+.device_play .video video {
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
+}
+
+video {
+    // background-color: black;
+}
+
+.txRec {
+    min-height: 20px;
+    padding-top: 10px;
+}
+
+.desc {
+    position: relative;
+    padding: 0 10px 0 16px;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.desc .error .tx {
+    font-size: .75rem;
+    color: #f06;
+    letter-spacing: -0.5px;
+    line-height: 1.6;
+}
+
+.desc.video-playing-desc, .desc.volume-desc {
+    color: #11b38d;
+}
+
+
+.browserRec {
+    position: relative;
+}
+
+.titleRec {
+    position: relative;
+    padding-bottom: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.browserData {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    width: 100%;
+}
+
+.browserInfo .browserTx {
+    text-align: right;
+    font-size: 15px;
+    letter-spacing: .4px;
+}
+
+.browserTest {
+    text-align: center;
+}
+
+.browserTest > p {
+    font-size: 12px;
+    color: rgb(252, 18, 18);
+}
+
+.btnsRec {
+    border-top: 1px solid #333;
+    padding-top: 24px;
+    text-align: center;
+}
+
+.btnsRec .btnConfirm {
+    display: inline-block;
+    height: 44px;
+    padding: 0 40px;
+    background-color: #09f;
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+    border: 0;
+    outline: 0;
+    line-height: 44px;
+    border-radius: 4px;
+}
+
+
+@media screen and (max-width: 780px) {
+    mat-card {
+        width: 100%;
+        height: 100%;
+        padding: 30px;
+        border-radius: 10px;
+        background-color: white;
+        color: black;
+    }
+
+    // display none
+    .browserRec {
+        display: none;
+    }
+
+    .device_play .video{
+        position: absolute;
+        top: 20px;
+        right: 0;
+        box-sizing: border-box;
+        width: 160px;
+        height: 90px;
+        border-radius: 2px;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+        overflow: hidden;
+    }
+
+}
+
+
+div#meters > div {
+    margin: 0 0 1em 0;
+  }
+  
+  div#meters div.label {
+    display: inline-block;
+    font-weight: 400;
+    margin: 0 0.5em 0 0;
+    width: 3.5em;
+  }
+  
+  div#meters div.value {
+    display: inline-block;
+  }
+  
+  meter {
+    width: 100%;
+  }
+  
+  meter#instant {
+  color: #0f9d58;
+  }

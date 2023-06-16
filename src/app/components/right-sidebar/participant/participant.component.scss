@@ -1,0 +1,133 @@
+.enlistedMembers {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    z-index: 48;
+
+    ul {
+        padding: 0;
+        height: calc(100vh - 104px);
+        overflow-y: scroll;
+    }
+
+
+
+    .ul::-webkit-scrollbar-track {
+        background-color: #F5F5F5;
+    }
+
+    .ul::-webkit-scrollbar {
+        width: 8px;
+        background-color: #F5F5F5;
+    }
+
+    .ul::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #bebebe;
+        border: 1px solid #e2e2e2;
+    }
+}
+
+.whiteBoardMode {
+    height: calc(100vh - 156px);
+}
+
+
+
+.enlistedMember_wrap {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 5px 15px 5px 20px;
+    height: 50px;
+}
+
+.enlistedMember_wrap>div>span {
+    line-height: 40px;
+    vertical-align: middle;
+}
+
+.enlistedMember_name {
+    font-size: 12px;
+}
+
+.role {
+    margin-left: 10px;
+    padding: 4px 5px;
+    border-radius: 4px;
+    background-color: white;
+    border: 1px solid #666;
+    font-size: 11px;
+    font-weight: normal;
+    color: #333;
+}
+
+.user_role_wrap {
+    text-align: center;
+}
+
+
+.user_role_wrap>ul {
+    text-align: center;
+    display: none;
+    position: relative;
+    top: 10px;
+    right: 0;
+    box-shadow: 4px 10px 30px rgb(0 0 0 / 10%);
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: default;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.user_role_wrap>ul>li {
+    display: inline-block;
+    text-align: center;
+    width: 60px;
+    height: 36px;
+    border-right: 1px solid #eee;
+    line-height: 36px
+}
+
+.user_role_wrap>ul>li:hover {
+    background-color: #f4f4f4;
+    font-weight: 500;
+    color: #333;
+}
+
+.user_role {
+    font-size: 12px;
+}
+
+.settingIcon {
+    position: absolute;
+    right: 15px;
+    line-height: 0;
+}
+
+.settingIcon:hover {
+    cursor: pointer;
+}
+
+.online {
+    color: rgb(70, 113, 255);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.offline {
+    color: rgb(133, 131, 131);
+    font-size: 12px;
+    font-weight: 100;
+}
+
+.presenter {
+    color: rgb(255, 153, 70);
+}
+
+.meetingStatus {
+    display: none;
+}
