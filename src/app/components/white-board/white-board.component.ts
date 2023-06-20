@@ -44,6 +44,7 @@ export class WhiteBoardComponent implements OnInit {
     private unsubscribe$ = new Subject<void>();
     private socket;
     private meetingId;
+    private userId: string;
     id;
     mobileWidth: any;
     currentMembersCount: any;
@@ -80,10 +81,12 @@ export class WhiteBoardComponent implements OnInit {
         // 문서, 판서 data store update
 
         this.meetingInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), pluck('_id'))
+            .pipe(takeUntil(this.unsubscribe$))
             .subscribe((meetingId) => {
                 if (meetingId) {
-                    this.meetingId = meetingId;
+                    console.log("meetingId:", meetingId)
+                    this.meetingId = meetingId?._id;
+                    this.userId = meetingId?.userData?._id
                     this.updateDocuments();
                 }
             });
@@ -144,13 +147,14 @@ export class WhiteBoardComponent implements OnInit {
         // 새로운 판서 Event local 저장 + 서버 전송
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
             const pageInfo = this.viewInfoService.state.pageInfo;
+            const drawingEvent = { ...data, userId: this.userId }
             // local Store 저장
             if (data.tool.type != 'pointer') {
-                this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, data);
+                this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, drawingEvent);
             }
 
             const newDataEvent = {
-                drawingEvent: data,
+                drawingEvent,
                 docId: pageInfo.currentDocId,
                 docNum: pageInfo.currentDocNum,
                 pageNum: pageInfo.currentPage

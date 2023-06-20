@@ -87,7 +87,7 @@ export class ParticipantComponent implements OnInit {
     }
 
 
-    ngOnDestory(): void {
+    ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }
