@@ -133,6 +133,31 @@
                         </button> -->
                     </mat-menu>
 
+
+                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+                            (click)="changeTool('line');" mat-icon-button mat-button [matMenuTriggerFor]="shapeMemu1">
+                            <!-- <mat-icon
+                            [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''">
+                            star_border_purple500 </mat-icon> -->
+                            <!-- interests -->
+                            <ic-icon [icon]="shapeOutlineIcon" [width]="40" [height]="40"
+                                [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''"></ic-icon>
+                        </button>
+                    </div>
+
+
+                    <!-- 사용자별 판서모드 진행중.. -->
+                    <mat-menu #shapeMemu1="matMenu" class="menuCustomize">
+                        <div fxFlex fxLayout="column">
+
+                            <div *ngFor="let member of members">
+                                <span>{{member.name}}</span>
+
+                            </div>
+                        </div>
+                    </mat-menu>
+
                     <!-- <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
                         <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
                             (click)="changeTool('textarea');" mat-icon-button>

@@ -17,6 +17,8 @@ import { SocketService } from 'src/@wb/services/socket/socket.service';
 import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
+import { MeetingInfoService } from 'src/@wb/store/meeting-info.service';
+import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
 
 
@@ -42,13 +44,14 @@ export class BoardNavComponent implements OnInit {
     currentPage: any;
     currentDocId: string;
     private socket;
-    
+    members
 
-     // iconify TEST //////////////////////
+
+    // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
     markerIcon = markerIcon;
-  //////////////////////////////////////
+    //////////////////////////////////////
 
     // Width: 3단계 설정
     widthSet = CANVAS_CONFIG.widthSet;
@@ -76,6 +79,8 @@ export class BoardNavComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private apiService: ApiService,
         private socketService: SocketService,
+        private meetingInfoService: MeetingInfoService,
+        private selectedViewInfoService: SelectedViewInfoService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -124,6 +129,18 @@ export class BoardNavComponent implements OnInit {
             }
 
         })
+
+
+        // 실시간으로 meeitngInfo를 바라보고 있다.
+        this.meetingInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$)).subscribe((meetingInfo) => {
+                if (meetingInfo) {
+                    console.log('[[ meetingInfo ]]', meetingInfo.enlistedMembers)
+
+                    this.members = meetingInfo.enlistedMembers
+
+                }
+            });
     }
 
 
@@ -162,10 +179,10 @@ export class BoardNavComponent implements OnInit {
         if (editInfo.mode != 'draw') return;
 
         // textarea 모드거나 text모드 상태에서 width를 수정하면 같이 바뀥다.
-        if(editInfo.tool == 'text' || editInfo.tool == 'textarea'){
+        if (editInfo.tool == 'text' || editInfo.tool == 'textarea') {
             editInfo.toolsConfig['text'].width = width;
             editInfo.toolsConfig['textarea'].width = width;
-          } else {
+        } else {
             const tool = editInfo.tool; // tool: 'pen', 'eraser', 'shape'
             editInfo.toolsConfig[tool].width = width;
         }
@@ -182,10 +199,10 @@ export class BoardNavComponent implements OnInit {
     async changeTool(tool) {
         // console.log(tool)
         const editInfo = Object.assign({}, this.editInfoService.state);
-        
+
 
         if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
-            if(confirm("Do you want to delete all drawings on the current page?")){
+            if (confirm("Do you want to delete all drawings on the current page?")) {
                 const data = {
                     docId: this.currentDocId,
                     currentDocNum: this.currentDocNum,
