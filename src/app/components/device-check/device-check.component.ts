@@ -34,7 +34,7 @@ export class DeviceCheckComponent implements OnInit {
 
     browserInfo: any;
     browserVersion: any;
-    soundMeterInterval:any;
+    soundMeterInterval: any;
     localStream$;
     soundLevel: any;
     private unsubscribe$ = new Subject<void>();
@@ -58,19 +58,19 @@ export class DeviceCheckComponent implements OnInit {
         this.meetingId = this.route.snapshot.params['id'];
 
         this.video = this.videoRef.nativeElement;
-        
+
         // 브라우저 체크
         this.browserCheck();
-        
+
         // 웹캠으로 부터 스트림 추출
         this.getLocalMediaStream();
-        
+
         // 컴퓨터에 연결된 장치 목록
         this.deviceCheck();
-        
+
         // 오디오 스트림 바
         this.extractAudioStream();
-        
+
         // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 수정
         this.deviceChangeCheck();
     }
@@ -256,30 +256,30 @@ export class DeviceCheckComponent implements OnInit {
             .then(res => this.handleSuccess(res))
             .then(result => this.deviceCheck())
             .catch(error => this.handleError(error));
-            
+
     }
 
     handleSuccess(stream) {
-        // Put variables in global scope to make them available to the
-        // browser console.
-        const AudioContext = window.AudioContext
-        let audioContext = new AudioContext();
+        // Put variables in global scope to make them available to the browser console.
+        const AudioContext = window.AudioContext; // Add vendor prefixes for cross-browser support
+        const audioContext = new AudioContext();
         const soundMeter = new SoundMeter(audioContext);
-        
+
         const that = this;
         soundMeter.connectToSource(stream, function (e) {
-
             if (e) {
                 alert(e);
                 return;
             }
             that.soundMeterInterval = setInterval(() => {
-                (<HTMLInputElement>document.getElementById("instantMeter")).value = soundMeter.slow.toFixed(2);
+                const instantMeter = document.getElementById("instantMeter") as HTMLInputElement;
+                if (instantMeter) {
+                    instantMeter.value = soundMeter.slow.toFixed(2);
+                }
             }, 10);
         });
-
-        
     }
+
 
     handleError(error) {
         console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
@@ -339,7 +339,7 @@ export class DeviceCheckComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-    
+
     }
 }
 
