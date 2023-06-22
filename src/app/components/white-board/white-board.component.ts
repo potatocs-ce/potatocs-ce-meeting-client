@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { pluck, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, pluck, takeUntil } from 'rxjs/operators';
 
 import { ApiService } from 'src/@wb/services/apiService/api.service';
 import { SocketService } from 'src/@wb/services/socket/socket.service';
@@ -16,6 +16,7 @@ import { ViewInfoService } from 'src/@wb/store/view-info.service';
 import { PdfStorageService } from 'src/@wb/storage/pdf-storage.service';
 import { DrawStorageService } from 'src/@wb/storage/draw-storage.service';
 import { DataStorageService } from 'src/app/services/dataStorage/data-storage.service';
+import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
 
 
@@ -52,6 +53,9 @@ export class WhiteBoardComponent implements OnInit {
     // Left Side Bar
     leftSideView;
 
+    private isSelectedViewMode: boolean; // 사용자 판서 모드
+    private selectedUserId: string; // 사용자 판서 모드 시 선택된 사용자
+
     constructor(
         private apiService: ApiService,
         private meetingInfoService: MeetingInfoService,
@@ -64,6 +68,8 @@ export class WhiteBoardComponent implements OnInit {
         private zoomService: ZoomService,
         private socketService: SocketService,
         private dataStorageService: DataStorageService,
+        private selectedViewInfoService: SelectedViewInfoService,
+
     ) {
         this.socket = this.socketService.socket;
     }
@@ -137,6 +143,19 @@ export class WhiteBoardComponent implements OnInit {
             });
         ///////////////////////////////////////////////////////
 
+        /**
+                 * -----------------------------------------------------------------------
+                 * 사용자 별 판서모드로 전환되면 드로잉을 싹 지우고 선택한 사용자가 그린걸로 싹 다 바꿈
+                 */
+        this.selectedViewInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
+            .subscribe((selectedViewInfo) => {
+                this.isSelectedViewMode = selectedViewInfo.isSelectedViewMode
+                this.selectedUserId = selectedViewInfo.selectedUserId
+            });
+
+        // -----------------------------------------------------------------------
+
         // 현재 접속 중인 참여자 수 구하기
         this.eventBusService.on("currentMembersCount", this.unsubscribe$, (data) => {
             console.log(data)
@@ -147,7 +166,13 @@ export class WhiteBoardComponent implements OnInit {
         // 새로운 판서 Event local 저장 + 서버 전송
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
             const pageInfo = this.viewInfoService.state.pageInfo;
-            const drawingEvent = { ...data, userId: this.userId }
+
+            let drawingEvent = { ...data, userId: this.userId }
+
+            if (this.isSelectedViewMode) {
+                drawingEvent = { ...data, userId: this.selectedUserId }
+            }
+
             // local Store 저장
             if (data.tool.type != 'pointer') {
                 this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, drawingEvent);

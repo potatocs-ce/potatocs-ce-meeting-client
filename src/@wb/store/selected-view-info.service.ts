@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store } from './store';
 
-class SelectedViewInfo {
-    selectedViewMode: Boolean = false;
+class InitSelectedViewInfo {
+    isSelectedViewMode: Boolean = false;
     selectedUserId: string = '';
 }
 
@@ -17,7 +17,7 @@ class SelectedViewInfo {
 export class SelectedViewInfoService extends Store<any> {
 
     constructor() {
-        super(new SelectedViewInfo);
+        super(new InitSelectedViewInfo());
     }
 
     setSelectedViewInfo(selectedViewInfo): void {

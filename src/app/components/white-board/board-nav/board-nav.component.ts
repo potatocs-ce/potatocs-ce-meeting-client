@@ -21,7 +21,6 @@ import { MeetingInfoService } from 'src/@wb/store/meeting-info.service';
 import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
 
-
 @Component({
     selector: 'app-board-nav',
     templateUrl: './board-nav.component.html',
@@ -45,7 +44,6 @@ export class BoardNavComponent implements OnInit {
     currentDocId: string;
     private socket;
     members
-
 
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
@@ -141,6 +139,9 @@ export class BoardNavComponent implements OnInit {
 
                 }
             });
+
+
+
     }
 
 
@@ -238,4 +239,36 @@ export class BoardNavComponent implements OnInit {
         this.editInfoService.setEditInfo(editInfo);
     }
 
+    /**
+     * 사용자별 판서 모드
+     * 판서모드일 경우 버튼 클릭 시 판서모드를 false
+     * 판서모드가 아닐 경우 버튼을 누르고 사용자를 선택해야 true로 바뀜
+     * @param mode : 는 선택한 사용자 Id
+     */
+    changeSeletedViewMode() {
+        console.log('사용자 별 판서모드 :', this.selectedViewInfoService.state.isSelectedViewMode)
+        if (this.selectedViewInfoService.state.isSelectedViewMode) {
+            console.log('왜 안보임?')
+            const selectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+            selectedViewInfo.isSelectedViewMode = false;
+            this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+            console.log('사용자 별 판서모드 false로 변경:', this.selectedViewInfoService.state.isSelectedViewMode)
+        }
+    }
+
+    /**
+     * 사용자별 판서 모드
+     * seletedViewMode 사용자 선택
+     * @param mode : 는 선택한 사용자 Id
+     */
+    changeSeletedUser(memberId) {
+        const selectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+        if (!this.selectedViewInfoService.state.isSelectedViewMode) {
+            selectedViewInfo.isSelectedViewMode = true;
+            selectedViewInfo.selectedUserId = memberId
+            this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+            console.log(this.selectedViewInfoService.state)
+        }
+
+    }
 }

@@ -3,6 +3,7 @@ import { PdfStorageService } from '../../storage/pdf-storage.service';
 import { CANVAS_CONFIG } from '../../config/config';
 import { DrawingService } from '../drawing/drawing.service';
 import { DrawStorageService } from '../../storage/draw-storage.service';
+import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
 
 
@@ -15,7 +16,8 @@ export class RenderingService {
     constructor(
         private pdfStorageService: PdfStorageService,
         private drawingService: DrawingService,
-        private drawStorageService: DrawStorageService
+        private drawStorageService: DrawStorageService,
+        private selectedViewInfoService: SelectedViewInfoService,
     ) { }
 
     isPageRendering = false;
@@ -74,14 +76,23 @@ export class RenderingService {
      * @param {number} pageNum 페이지 번호
      * @param {Object} data drawing data (tool, timediff, points)
      */
-    renderThumbBoard(thumbCanvas, docNum, pageNum) {
+    renderThumbBoard(thumbCanvas, docNum, pageNum, isSelectedViewMode, selectedUserId) {
         let drawingEvents = this.drawStorageService.getDrawingEvents(docNum, pageNum);
 
+        // 사용자별 판서 모드 일 경우 선택된 사용자의 드로우 이벤트만 남김.
+        if (isSelectedViewMode) {
+            drawingEvents = { ...drawingEvents, drawingEvent: drawingEvents?.drawingEvent.filter((x) => x.userId === selectedUserId) }
+
+            // 사용자별 판서에 드로우 이벤트가 없으면 그냥 지워
+            if (drawingEvents?.drawingEvent?.length === 0) {
+                const thumbCtx = thumbCanvas.getContext('2d');
+                thumbCtx.clearRect(0, 0, thumbCanvas.width, thumbCanvas.height);
+                thumbCtx.save();
+            }
+        }
+
         // 해당 page의 drawing 정보가 있는 경우
-        if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
-            // console.log('drawingEvents-----------', drawingEvents?.drawingEvent)
-            // console.log(thumbCanvas)
-            // console.log(pageNum, docNum)
+        if (drawingEvents?.drawingEvent?.length > 0) {
             const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
             const scale = thumbCanvas.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
 
@@ -98,6 +109,7 @@ export class RenderingService {
             thumbCtx.restore();
         }
     }
+
 
     /**
      * Main Board의 Background rendering
@@ -137,9 +149,11 @@ export class RenderingService {
      */
     renderBoard(targetCanvas, zoomScale, drawingEvents) {
         console.log('>> render Board: ', drawingEvents?.drawingEvent)
-        // if(seletedViewMode && selectUserId){
-        //     drawingEvents?.drawingEvent.filter((event)=>event.userId === selectUserId)
+        // console.log('select:', this.selectedViewInfoService.state.isSelectedViewMode)
+        // if (this.selectedViewInfoService.state.isSelectedViewMode) {
+        //     drawingEvents?.drawingEvent.filter((event) => event.userId === this.selectedViewInfoService.state.selectedUserId)
         // }
+
         const targetCtx = targetCanvas.getContext('2d');
         const scale = zoomScale || 1;
         targetCtx.clearRect(0, 0, targetCanvas.width / scale, targetCanvas.height / scale);

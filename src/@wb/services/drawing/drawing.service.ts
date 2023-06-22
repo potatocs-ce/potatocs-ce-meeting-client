@@ -779,7 +779,6 @@ export class DrawingService {
      *
      */
     async rxDrawing(data, sourceCanvas, targetCanvas, scale, docNum, pageNum) {
-        console.log('rxDrawing---------------------------------------------')
         const tmpData = {
             data,
             sourceCanvas,

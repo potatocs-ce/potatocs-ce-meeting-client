@@ -17,6 +17,7 @@ import { DrawStorageService } from 'src/@wb/storage/draw-storage.service';
 
 import { ViewInfoService } from 'src/@wb/store/view-info.service';
 import { EditInfoService } from 'src/@wb/store/edit-info.service';
+import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
 
 
@@ -44,6 +45,10 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
 
     private currentDocNum: any;
     private currentPage: any;
+    private zoomScale: any;
+
+    private isSelectedViewMode: boolean;
+    private selectedUserId: string;
 
     // preRendering을 위한 변수
     prevViewInfo; //'fileList', 'thumbnail';
@@ -83,6 +88,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         private renderer: Renderer2,
         private drawStorageService: DrawStorageService,
         private drawingService: DrawingService,
+        private selectedViewInfoService: SelectedViewInfoService,
 
     ) {
         this.canvasClearBoardA$ = this.canvasService.getClearBoardA$();
@@ -114,6 +120,8 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
                 console.log(pageInfo)
                 this.currentDocNum = pageInfo.currentDocNum;
                 this.currentPage = pageInfo.currentPage;
+                this.zoomScale = pageInfo.zoomScale
+
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
@@ -176,6 +184,20 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
 
         //////////////////////////////////////////////////
 
+        /**
+         * -----------------------------------------------------------------------
+         * 사용자 별 판서모드로 전환되면 드로잉을 싹 지우고 선택한 사용자가 그린걸로 싹 다 바꿈
+         */
+        this.selectedViewInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
+            .subscribe((selectedViewInfo) => {
+                this.isSelectedViewMode = selectedViewInfo.isSelectedViewMode
+                this.selectedUserId = selectedViewInfo.selectedUserId
+                this.pageRender(this.currentDocNum, this.currentPage, this.zoomScale);
+
+            });
+
+        // -----------------------------------------------------------------------
 
         /////////////////////////////////////
         // 다른 참가자가 draw event를 발생시켰을때의 Listener
@@ -187,7 +209,18 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
             const pageNum = pageInfo.currentPage;
             const zoomScale = pageInfo.zoomScale;
 
-            console.log(data.drawingEvent)
+            // console.log('isSelectedViewMode', this.isSelectedViewMode)
+            // console.log('data.drawingEvent.userId', data.drawingEvent.userId)
+            // console.log('this.selectedUserId', this.selectedUserId)
+
+            /**
+             * 사용자 별 판서모드 일 경우
+             * 선택된 유저 아이디것만 보여주기
+             */
+            // if (this.isSelectedViewMode && (data.drawingEvent.userId === this.selectedUserId)) {
+            //     return
+            // }
+
             if (docNum == data.docNum && pageNum == data.pageNum) {
                 if (data.drawingEvent.tool.type == 'pointer') {
                     this.drawingService.rxPointer(data.drawingEvent, this.rxCoverCanvas, this.teacherCanvas, zoomScale, docNum, pageNum);
@@ -322,8 +355,13 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         console.log('>>> page Render! [background and board] + addEventHandler');
 
         // board rendering
-        const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
-        // console.log(drawingEvents)
+        let drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
+        console.log(this.isSelectedViewMode)
+
+        if (this.isSelectedViewMode) {
+            drawingEvents = { ...drawingEvents, drawingEvent: drawingEvents?.drawingEvent.filter((x) => x.userId === this.selectedUserId) }
+        }
+
         this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
 
         // PDF Rendering
