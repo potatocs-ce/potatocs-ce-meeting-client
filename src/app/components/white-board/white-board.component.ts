@@ -167,11 +167,12 @@ export class WhiteBoardComponent implements OnInit {
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
             const pageInfo = this.viewInfoService.state.pageInfo;
 
-            let drawingEvent = { ...data, userId: this.userId }
+            const drawingEvent = { ...data, userId: this.userId }
+            // let drawingEvent = { ...data, userId: this.userId }
 
-            if (this.isSelectedViewMode) {
-                drawingEvent = { ...data, userId: this.selectedUserId }
-            }
+            // if (this.isSelectedViewMode) {
+            //     drawingEvent = { ...data, userId: this.selectedUserId }
+            // }
 
             // local Store 저장
             if (data.tool.type != 'pointer') {

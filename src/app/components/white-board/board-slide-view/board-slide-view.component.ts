@@ -69,7 +69,7 @@ export class BoardSlideViewComponent implements OnInit {
     stopRendering = false;
 
     isSelectedViewMode: Boolean; // 사용자별 판서모드
-    selectedUserId: string; // 사용자별 판서에 선택된 사용자
+    selectedUserInfo // 사용자별 판서에 선택된 사용자
     leftSideView: string // 썸네일 모드면 썸네일 그리기
 
     @ViewChildren('thumb') thumRef: QueryList<ElementRef> // 부모 thumb-item 안에 자식 element
@@ -111,13 +111,13 @@ export class BoardSlideViewComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((selectedViewInfo) => {
                 this.isSelectedViewMode = selectedViewInfo.isSelectedViewMode
-                this.selectedUserId = selectedViewInfo.selectedUserId
-                const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
+                this.selectedUserInfo = selectedViewInfo.selectedUserInfo
+                const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1]?.numPages;
                 // Thumbnail Mode로 전환된 경우 Thumbnail Rendering
                 if (this.leftSideView == 'thumbnail') {
                     this.stopRendering = false;
                     for (let i = 0; i < numPages; i++) {
-                        this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, this.isSelectedViewMode, this.selectedUserId);
+                        this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, this.isSelectedViewMode, this.selectedUserInfo);
                         // 그리는 중 docList로 변경된 경우
                         if (this.stopRendering) {
                             i = numPages;
@@ -202,9 +202,19 @@ export class BoardSlideViewComponent implements OnInit {
 
         // 다른 사람이 그린 Event thumbnail에 그리기
         this.eventBusService.on('receive:drawEvent', this.unsubscribe$, async (data) => {
-            // data = (data || '');
-            // console.log(data)
-            // console.log(data.drawingEvent);
+
+            /**
+             * 사용자별 판서 이벤트
+             * 다른 참가자가 드로우 이벤트를 발생해도
+             * 내가 가진 사용자별 판서에서 선택되지 않으면 그냥 return 한다.
+             */
+            for (let i = 0; i < this.selectedUserInfo.length; i++) {
+                if ((data.drawingEvent.userId === this.selectedUserInfo[i]?.selectedUserId)
+                    && !this.selectedUserInfo[i].isSelected) {
+                    return
+                }
+            }
+
             this.drawThumbRx(data);
         });
 
@@ -334,7 +344,7 @@ export class BoardSlideViewComponent implements OnInit {
         for (let i = 0; i < numPages; i++) {
             await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
 
-            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, this.isSelectedViewMode, this.selectedUserId);
+            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, this.isSelectedViewMode, this.selectedUserInfo);
 
             // 그리는 중 docList로 변경된 경우
             if (this.stopRendering) {

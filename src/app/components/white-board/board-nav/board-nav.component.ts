@@ -20,7 +20,6 @@ import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
 import { MeetingInfoService } from 'src/@wb/store/meeting-info.service';
 import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
-
 @Component({
     selector: 'app-board-nav',
     templateUrl: './board-nav.component.html',
@@ -43,7 +42,8 @@ export class BoardNavComponent implements OnInit {
     currentPage: any;
     currentDocId: string;
     private socket;
-    members
+    members; // 참가자 정보를 select 창에 맞게 가공
+    private enlistedMembers; // 참가자 정보
 
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
@@ -131,11 +131,28 @@ export class BoardNavComponent implements OnInit {
 
         // 실시간으로 meeitngInfo를 바라보고 있다.
         this.meetingInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$)).subscribe((meetingInfo) => {
+            .pipe(takeUntil(this.unsubscribe$)).subscribe(async (meetingInfo) => {
                 if (meetingInfo) {
-                    console.log('[[ meetingInfo ]]', meetingInfo.enlistedMembers)
+                    // 미팅 참가자들을 가져와 사용자별 판서 모드에 사용되는 html DOM으로 사용
+                    this.members = meetingInfo.enlistedMembers.map(x => {
+                        return {
+                            _id: x._id,
+                            isSelected: true,
+                            name: x.name
+                        }
+                    })
 
-                    this.members = meetingInfo.enlistedMembers
+                    // 미팅 참가자를 이용해 사용자별 판서 모드 상태관리
+                    const selectedViewInfo = {
+                        ...this.selectedViewInfoService.state,
+                        isSelectedViewMode: false,
+                        selectedUserInfo: await this.members.map(x => {
+                            return { isSelected: true, selectedUserId: x._id }
+                        })
+                    }
+
+                    this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+
 
                 }
             });
@@ -241,34 +258,44 @@ export class BoardNavComponent implements OnInit {
 
     /**
      * 사용자별 판서 모드
-     * 판서모드일 경우 버튼 클릭 시 판서모드를 false
-     * 판서모드가 아닐 경우 버튼을 누르고 사용자를 선택해야 true로 바뀜
-     * @param mode : 는 선택한 사용자 Id
+     * ALL 클릭 시 사용자별 판서모드는 false가 되고
+     * 사용자 별 판서 전체가 true로 바뀜
      */
     changeSeletedViewMode() {
-        console.log('사용자 별 판서모드 :', this.selectedViewInfoService.state.isSelectedViewMode)
         if (this.selectedViewInfoService.state.isSelectedViewMode) {
-            console.log('왜 안보임?')
-            const selectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
-            selectedViewInfo.isSelectedViewMode = false;
+            // All 버튼 클릭 시 사용자별 판서 모드로 사용되는 DOM 요소들 전부 true로 바꿈
+            this.members = this.members.map(x => { return { ...x, isSelected: true } })
+
+            // All 버튼 클릭 시 사용자별 판서 모드는 false가 되고 사용되는 상태들을 true로 바꿈
+            const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+            const selectedViewInfo = {
+                ...getSelectedViewInfo,
+                isSelectedViewMode: false,
+                selectedUserInfo: getSelectedViewInfo.selectedUserInfo.map((x) => { return { ...x, isSelected: true } })
+            }
             this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
-            console.log('사용자 별 판서모드 false로 변경:', this.selectedViewInfoService.state.isSelectedViewMode)
         }
     }
 
     /**
      * 사용자별 판서 모드
      * seletedViewMode 사용자 선택
-     * @param mode : 는 선택한 사용자 Id
+     * @param memberId : 는 선택한 사용자 Id
      */
-    changeSeletedUser(memberId) {
-        const selectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
-        if (!this.selectedViewInfoService.state.isSelectedViewMode) {
-            selectedViewInfo.isSelectedViewMode = true;
-            selectedViewInfo.selectedUserId = memberId
-            this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
-            console.log(this.selectedViewInfoService.state)
-        }
+    async updateSeletedUser(memberId) {
+        const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
 
+        const selectedViewInfo = {
+            ...getSelectedViewInfo,
+            isSelectedViewMode: true,
+            selectedUserInfo: getSelectedViewInfo.selectedUserInfo.map((x) => {
+                if (x.selectedUserId === memberId) {
+                    return { ...x, isSelected: !x.isSelected }
+                }
+                return x
+            })
+        }
+        this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
     }
+
 }

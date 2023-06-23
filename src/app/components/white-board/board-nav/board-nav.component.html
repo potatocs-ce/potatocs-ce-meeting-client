@@ -135,9 +135,8 @@
 
 
                     <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
-                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
-                            (click)="changeSeletedViewMode();" mat-icon-button mat-button
-                            [matMenuTriggerFor]="shapeMemu1">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button
+                            mat-button [matMenuTriggerFor]="shapeMemu1">
                             <!-- <mat-icon
                             [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''">
                             star_border_purple500 </mat-icon> -->
@@ -151,21 +150,18 @@
                     <!-- 사용자별 판서모드 진행중.. -->
                     <mat-menu #shapeMemu1="matMenu" class="menuCustomize">
                         <div fxFlex fxLayout="column">
+                            <div (click)="changeSeletedViewMode();">
+                                ALL
+                            </div>
                             <div *ngFor="let member of members">
-                                <div (click)="changeSeletedUser(member._id);">
+                                <mat-checkbox [(ngModel)]="member.isSelected"
+                                    (ngModelChange)="updateSeletedUser(member._id)">
                                     {{member.name}}
-                                </div>
+                                </mat-checkbox>
                             </div>
                         </div>
                     </mat-menu>
 
-                    <!-- <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
-                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
-                            (click)="changeTool('textarea');" mat-icon-button>
-                            
-                            <mat-icon [ngClass]="(currentTool == 'textarea') && (mode == 'draw')?'active':''"> title </mat-icon>
-                        </button>
-                    </div> -->
 
                 </div>
             </li>

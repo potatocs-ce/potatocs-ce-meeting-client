@@ -76,12 +76,18 @@ export class RenderingService {
      * @param {number} pageNum 페이지 번호
      * @param {Object} data drawing data (tool, timediff, points)
      */
-    renderThumbBoard(thumbCanvas, docNum, pageNum, isSelectedViewMode, selectedUserId) {
+    renderThumbBoard(thumbCanvas, docNum, pageNum, isSelectedViewMode, selectedUserInfo) {
         let drawingEvents = this.drawStorageService.getDrawingEvents(docNum, pageNum);
 
         // 사용자별 판서 모드 일 경우 선택된 사용자의 드로우 이벤트만 남김.
         if (isSelectedViewMode) {
-            drawingEvents = { ...drawingEvents, drawingEvent: drawingEvents?.drawingEvent.filter((x) => x.userId === selectedUserId) }
+            drawingEvents = {
+                ...drawingEvents, drawingEvent: drawingEvents?.drawingEvent.filter(e => {
+                    return selectedUserInfo.some(x => {
+                        if ((e.userId === x.selectedUserId) && x.isSelected === true) return e
+                    });
+                })
+            }
 
             // 사용자별 판서에 드로우 이벤트가 없으면 그냥 지워
             if (drawingEvents?.drawingEvent?.length === 0) {

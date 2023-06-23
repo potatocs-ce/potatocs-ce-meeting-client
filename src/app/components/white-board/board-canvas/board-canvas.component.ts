@@ -48,7 +48,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
     private zoomScale: any;
 
     private isSelectedViewMode: boolean;
-    private selectedUserId: string;
+    private selectedUserInfo: any//Array<SeletcedUserInfo>;
 
     // preRendering을 위한 변수
     prevViewInfo; //'fileList', 'thumbnail';
@@ -192,7 +192,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((selectedViewInfo) => {
                 this.isSelectedViewMode = selectedViewInfo.isSelectedViewMode
-                this.selectedUserId = selectedViewInfo.selectedUserId
+                this.selectedUserInfo = selectedViewInfo.selectedUserInfo
                 this.pageRender(this.currentDocNum, this.currentPage, this.zoomScale);
 
             });
@@ -209,17 +209,18 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
             const pageNum = pageInfo.currentPage;
             const zoomScale = pageInfo.zoomScale;
 
-            // console.log('isSelectedViewMode', this.isSelectedViewMode)
-            // console.log('data.drawingEvent.userId', data.drawingEvent.userId)
-            // console.log('this.selectedUserId', this.selectedUserId)
-
             /**
-             * 사용자 별 판서모드 일 경우
-             * 선택된 유저 아이디것만 보여주기
+             * 사용자별 판서 이벤트
+             * 다른 참가자가 드로우 이벤트를 발생해도
+             * 내가 가진 사용자별 판서에서 선택되지 않으면 그냥 return 한다.
              */
-            // if (this.isSelectedViewMode && (data.drawingEvent.userId === this.selectedUserId)) {
-            //     return
-            // }
+            for (let i = 0; i < this.selectedUserInfo.length; i++) {
+                if ((data.drawingEvent.userId === this.selectedUserInfo[i]?.selectedUserId)
+                    && !this.selectedUserInfo[i].isSelected) {
+                    return
+                }
+            }
+
 
             if (docNum == data.docNum && pageNum == data.pageNum) {
                 if (data.drawingEvent.tool.type == 'pointer') {
@@ -356,10 +357,15 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
 
         // board rendering
         let drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
-        console.log(this.isSelectedViewMode)
 
         if (this.isSelectedViewMode) {
-            drawingEvents = { ...drawingEvents, drawingEvent: drawingEvents?.drawingEvent.filter((x) => x.userId === this.selectedUserId) }
+            drawingEvents = {
+                ...drawingEvents, drawingEvent: drawingEvents?.drawingEvent.filter(e => {
+                    return this.selectedUserInfo.some(x => {
+                        if ((e.userId === x.selectedUserId) && x.isSelected === true) return e
+                    });
+                })
+            }
         }
 
         this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);

@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Store } from './store';
 
+export class SeletcedUserInfo {
+    selectedUserId: string = "";
+    isSelected: Boolean = true;
+}
+
 class InitSelectedViewInfo {
     isSelectedViewMode: Boolean = false;
-    selectedUserId: string = '';
+    selectedUserInfo: Array<SeletcedUserInfo> = [];
 }
 
 /**
