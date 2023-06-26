@@ -134,11 +134,11 @@
                     </mat-menu>
 
 
-                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                    <div class="menu-wrapper" [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
                         <button class="filter-btn" type="button"
                             [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button mat-button
                             [matMenuTriggerFor]="shapeMemu1">
-                            <mat-icon matSuffix>how_to_reg</mat-icon>
+                            <mat-icon matSuffix [ngClass]="isChecked ? '' :'active'">how_to_reg</mat-icon>
                         </button>
                         <!-- <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button
                             mat-button [matMenuTriggerFor]="shapeMemu1">
