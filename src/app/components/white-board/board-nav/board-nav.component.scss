@@ -349,5 +349,9 @@ ic-icon.active {
         }
 
     }
-    
+}
+
+
+::ng-deep .mat-menu-content {
+    padding: 20px;
 }
