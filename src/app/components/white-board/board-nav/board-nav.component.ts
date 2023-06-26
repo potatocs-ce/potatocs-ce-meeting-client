@@ -46,7 +46,7 @@ export class BoardNavComponent implements OnInit {
     private enlistedMembers; // 참가자 정보
 
 
-    isChecked;
+    isChecked = true;
 
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
@@ -265,20 +265,8 @@ export class BoardNavComponent implements OnInit {
      * 사용자 별 판서 전체가 true로 바뀜
      */
     changeSeletedViewMode() {
-        if (this.isChecked) {
+        if (this.selectedViewInfoService.state.isSelectedViewMode) {
             // All 버튼 클릭 시 사용자별 판서 모드로 사용되는 DOM 요소들 전부 true로 바꿈
-            this.members = this.members.map(x => { return { ...x, isSelected: false } })
-            // All 버튼 클릭 시 사용자별 판서 모드는 false가 되고 사용되는 상태들을 true로 바꿈
-            const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
-            const selectedViewInfo = {
-                ...getSelectedViewInfo,
-                isSelectedViewMode: true,
-                selectedUserInfo: this.members
-            }
-            this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
-            this.isChecked = false
-
-        } else {
             this.members = this.members.map(x => { return { ...x, isSelected: true } })
 
             // All 버튼 클릭 시 사용자별 판서 모드는 false가 되고 사용되는 상태들을 true로 바꿈
@@ -289,23 +277,29 @@ export class BoardNavComponent implements OnInit {
                 selectedUserInfo: this.members
             }
             this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+            this.isChecked = false;
+        } else {
+            this.members = this.members.map(x => { return { ...x, isSelected: false } })
+
+            // All 버튼 클릭 시 사용자별 판서 모드는 false가 되고 사용되는 상태들을 true로 바꿈
+            const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+            const selectedViewInfo = {
+                ...getSelectedViewInfo,
+                isSelectedViewMode: true,
+                selectedUserInfo: this.members
+            }
+            this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
             this.isChecked = true;
         }
-
-        console.log('-------------------------------')
-        console.log('ALL Button isSelectedViewMode:', this.isChecked)
-        console.log('-------------------------------')
-        // this.isSelectedViewMode checkbox 체크 변경
-
-
     }
-
     /**
      * 사용자별 판서 모드
      * seletedViewMode 사용자 선택
      * @param memberId : 는 선택한 사용자 Id
      */
     async updateSeletedUser(memberId) {
+
+
         const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
 
         const selectedViewInfo = {
@@ -335,5 +329,6 @@ export class BoardNavComponent implements OnInit {
         console.log('Select Button isSelectedViewMode:', this.isChecked)
         console.log('-------------------------------')
     }
+
 
 }
