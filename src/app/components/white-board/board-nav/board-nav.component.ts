@@ -46,7 +46,7 @@ export class BoardNavComponent implements OnInit {
     private enlistedMembers; // 참가자 정보
 
 
-    isSelectedViewMode = false;
+    isChecked = true;
 
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
@@ -276,7 +276,7 @@ export class BoardNavComponent implements OnInit {
                 selectedUserInfo: this.members
             }
             this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
-            this.isSelectedViewMode = true;
+            this.isChecked = false;
         } else {
             this.members = this.members.map(x => { return { ...x, isSelected: false } })
 
@@ -288,13 +288,8 @@ export class BoardNavComponent implements OnInit {
                 selectedUserInfo: this.members
             }
             this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
-            this.isSelectedViewMode = false;
+            this.isChecked = true;
         }
-
-        console.log('------------2번 실행됨-------------------')
-        // this.isSelectedViewMode checkbox 체크 변경
-
-
     }
 
     /**
@@ -303,6 +298,8 @@ export class BoardNavComponent implements OnInit {
      * @param memberId : 는 선택한 사용자 Id
      */
     async updateSeletedUser(memberId) {
+
+
         const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
 
         const selectedViewInfo = {
@@ -315,7 +312,10 @@ export class BoardNavComponent implements OnInit {
                 return x
             })
         }
-        this.isSelectedViewMode = true;
+
+
+        this.isChecked = false;
+
         /**
          * 만약 ALL을 누르지 않고 모든 사람들을 체크할 경우
          * isSelectedViewMode를 false로
@@ -323,10 +323,11 @@ export class BoardNavComponent implements OnInit {
         const isCheckALLMod = selectedViewInfo.selectedUserInfo.every(x => { return x.isSelected })
         if (isCheckALLMod) {
             selectedViewInfo.isSelectedViewMode = false
-            this.isSelectedViewMode = false;
+            this.isChecked = true;
         }
 
         this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
     }
+
 
 }
