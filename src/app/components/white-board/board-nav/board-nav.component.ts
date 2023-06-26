@@ -295,6 +295,16 @@ export class BoardNavComponent implements OnInit {
                 return x
             })
         }
+
+        /**
+         * 만약 ALL을 누르지 않고 모든 사람들을 체크할 경우
+         * isSelectedViewMode를 false로
+         */
+        const isCheckALLMod = selectedViewInfo.selectedUserInfo.every(x => { return x.isSelected })
+        if (isCheckALLMod) {
+            selectedViewInfo.isSelectedViewMode = false
+        }
+
         this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
     }
 

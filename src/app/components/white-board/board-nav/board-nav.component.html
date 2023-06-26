@@ -149,7 +149,7 @@
 
                     <!-- 사용자별 판서모드 진행중.. -->
                     <mat-menu #shapeMemu1="matMenu" class="menuCustomize">
-                        <div fxFlex fxLayout="column">
+                        <div fxFlex fxLayout="column" (click)="$event.stopPropagation();">
                             <div (click)="changeSeletedViewMode();">
                                 ALL
                             </div>
