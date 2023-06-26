@@ -135,15 +135,20 @@
 
 
                     <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
-                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button
+                        <button class="filter-btn" type="button"
+                            [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button mat-button
+                            [matMenuTriggerFor]="shapeMemu1">
+                            <mat-icon matSuffix>how_to_reg</mat-icon>
+                        </button>
+                        <!-- <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button
                             mat-button [matMenuTriggerFor]="shapeMemu1">
-                            <!-- <mat-icon
+                            <mat-icon
                             [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''">
-                            star_border_purple500 </mat-icon> -->
-                            <!-- interests -->
+                            star_border_purple500 </mat-icon>
+                            interests
                             <ic-icon [icon]="shapeOutlineIcon" [width]="40" [height]="40"
                                 [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''"></ic-icon>
-                        </button>
+                        </button> -->
                     </div>
 
 
