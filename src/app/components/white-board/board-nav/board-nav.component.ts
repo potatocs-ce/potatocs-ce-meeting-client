@@ -45,6 +45,9 @@ export class BoardNavComponent implements OnInit {
     members; // 참가자 정보를 select 창에 맞게 가공
     private enlistedMembers; // 참가자 정보
 
+
+    isSelectedViewMode = false;
+
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
@@ -150,7 +153,6 @@ export class BoardNavComponent implements OnInit {
                             return { isSelected: true, selectedUserId: x._id }
                         })
                     }
-
                     this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
 
 
@@ -271,10 +273,28 @@ export class BoardNavComponent implements OnInit {
             const selectedViewInfo = {
                 ...getSelectedViewInfo,
                 isSelectedViewMode: false,
-                selectedUserInfo: getSelectedViewInfo.selectedUserInfo.map((x) => { return { ...x, isSelected: true } })
+                selectedUserInfo: this.members
             }
             this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+            this.isSelectedViewMode = true;
+        } else {
+            this.members = this.members.map(x => { return { ...x, isSelected: false } })
+
+            // All 버튼 클릭 시 사용자별 판서 모드는 false가 되고 사용되는 상태들을 true로 바꿈
+            const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+            const selectedViewInfo = {
+                ...getSelectedViewInfo,
+                isSelectedViewMode: true,
+                selectedUserInfo: this.members
+            }
+            this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+            this.isSelectedViewMode = false;
         }
+
+        console.log('------------2번 실행됨-------------------')
+        // this.isSelectedViewMode checkbox 체크 변경
+
+
     }
 
     /**
@@ -295,6 +315,17 @@ export class BoardNavComponent implements OnInit {
                 return x
             })
         }
+        this.isSelectedViewMode = true;
+        /**
+         * 만약 ALL을 누르지 않고 모든 사람들을 체크할 경우
+         * isSelectedViewMode를 false로
+         */
+        const isCheckALLMod = selectedViewInfo.selectedUserInfo.every(x => { return x.isSelected })
+        if (isCheckALLMod) {
+            selectedViewInfo.isSelectedViewMode = false
+            this.isSelectedViewMode = false;
+        }
+
         this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
     }
 

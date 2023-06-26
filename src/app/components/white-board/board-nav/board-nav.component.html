@@ -148,10 +148,13 @@
 
 
                     <!-- 사용자별 판서모드 진행중.. -->
-                    <mat-menu #shapeMemu1="matMenu" class="menuCustomize">
-                        <div fxFlex fxLayout="column">
+                    <mat-menu #shapeMemu1="matMenu">
+                        <div fxFlex fxLayout="column" (click)="$event.stopPropagation();">
                             <div (click)="changeSeletedViewMode();">
+                            <mat-checkbox  [(ngModel)]="!isSelectedViewMode" color="primary">
                                 ALL
+                            </mat-checkbox>
+                                
                             </div>
                             <div *ngFor="let member of members">
                                 <mat-checkbox [(ngModel)]="member.isSelected"
@@ -161,8 +164,6 @@
                             </div>
                         </div>
                     </mat-menu>
-
-
                 </div>
             </li>
         </ul>
