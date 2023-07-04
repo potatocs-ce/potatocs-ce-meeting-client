@@ -7,15 +7,17 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { AppRoutingModule } from './app-routing.module';
 import { DialogModule } from './components/auth/sign-in/dialog/dialog.module';
 
-
 import { AppComponent } from './app.component';
 import { MainComponent } from './components/main/main.component';
 
 import { WebRTCComponent } from './components/web-rtc/web-rtc.component';
-import { DialogUpdateBitrateComponent, HeaderComponent } from './components/header/header.component';
+import {
+  DialogUpdateBitrateComponent,
+  HeaderComponent,
+} from './components/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { SidebarComponent } from './components/sidebar/sidebar.component'; 
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { WhiteBoardComponent } from './components/white-board/white-board.component';
 import { BoardNavComponent } from './components/white-board/board-nav/board-nav.component';
 import { BoardSlideViewComponent } from './components/white-board/board-slide-view/board-slide-view.component';
@@ -46,58 +48,54 @@ import { ParticipantComponent } from './components/right-sidebar/participant/par
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 // import { WhiteBoardModule } from './components/white-board/white-board.module';
 
-
-
 export function tokenGetter() {
-	return localStorage.getItem(ENV.tokenName);
+  return localStorage.getItem(ENV.tokenName);
 }
-
 
 /**
  * Custom angular notifier options
  */
- const customNotifierOptions: NotifierOptions = {
+const customNotifierOptions: NotifierOptions = {
   position: {
-        horizontal: {
-            position: 'right',
-            distance: 12
-        },
-        vertical: {
-            position: 'bottom',
-            distance: 12,
-            gap: 10
-        }
+    horizontal: {
+      position: 'right',
+      distance: 12,
+      gap: 15,
     },
+    vertical: {
+      position: 'bottom',
+      distance: 12,
+      gap: 10,
+    },
+  },
   theme: 'material',
   behaviour: {
     autoHide: 5000,
     onClick: 'hide',
     onMouseover: 'pauseAutoHide',
     showDismissButton: true,
-    stacking: 4
+    stacking: 4,
   },
   animations: {
     enabled: true,
     show: {
       preset: 'slide',
       speed: 300,
-      easing: 'ease'
+      easing: 'ease',
     },
     hide: {
       preset: 'fade',
       speed: 300,
       easing: 'ease',
-      offset: 50
+      offset: 50,
     },
     shift: {
       speed: 300,
-      easing: 'ease'
+      easing: 'ease',
     },
-    overlap: 150
-  }
+    overlap: 150,
+  },
 };
-
-
 
 @NgModule({
   declarations: [
@@ -138,14 +136,11 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        disallowedRoutes: [
-          '/apim/v1/auth/sign-in',
-        ]
-      }
+        disallowedRoutes: ['/apim/v1/auth/sign-in'],
+      },
     }),
-
   ],
   providers: [SignInGuard, MeetingGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

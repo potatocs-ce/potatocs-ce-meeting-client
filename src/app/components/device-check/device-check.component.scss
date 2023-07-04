@@ -149,19 +149,6 @@ mat-card {
 
 .cameraRec .contentRec {
   min-height: 90px;
-
-  width: 100%;
-  padding: 8px 30px 8px 12px;
-  background-size: auto 40%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 12px;
-  letter-spacing: 0;
-  line-height: 1.6;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: 0.2s ease-out;
 }
 
 .deviceList.camera {
