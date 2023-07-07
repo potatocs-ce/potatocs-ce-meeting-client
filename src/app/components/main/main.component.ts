@@ -19,9 +19,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  miceDevices: any = [];
-  videoDevices: any = [];
-  speakerDevices: any = [];
   id;
   meetingId: any; // 회의 Object_id
   meetingData: any; // 회의와 참가자 정보
