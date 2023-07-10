@@ -36,13 +36,6 @@ export class ApiService {
     );
   }
 
-  downloadDocument(formData, meetingId) {
-    console.log('[API] -----> post: upload New Local Document');
-    return this.http.post(
-      this.URL + 'whiteBoard' + `/upload/${meetingId}`,
-      formData
-    );
-  }
   getPdfFile(_id) {
     console.log('[API] -----> get: document');
     return this.http.get(this.URL + 'whiteBoard' + `/document/` + _id, {
