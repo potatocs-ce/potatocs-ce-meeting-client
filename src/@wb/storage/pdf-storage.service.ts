@@ -20,10 +20,6 @@ export class PdfStorageService {
     this._pdfVarArray = pdfVarArray;
   }
 
-  setPdfVarList(pdfVarList) {
-    this._pdfVarArray = pdfVarList;
-  }
-
   getPdfLength() {
     return this._pdfVarArray.length;
   }
