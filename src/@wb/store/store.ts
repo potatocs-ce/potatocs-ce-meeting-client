@@ -16,8 +16,4 @@ export class Store<T> {
   setState(nextState: T): void {
     this._state$.next(nextState);
   }
-
-  getState(nextState: T): void {
-    this._state$.next(nextState);
-  }
 }

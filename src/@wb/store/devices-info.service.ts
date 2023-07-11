@@ -2,18 +2,24 @@ import { Injectable } from '@angular/core';
 import { Store } from './store';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class DevicesInfoService extends Store<any> {
+  constructor() {
+    super({});
+  }
 
-	constructor() {
-		super({});
-	}
-
-  setDevicesInfo(DeviceInf : any) : void {
+  setDevicesInfo(DeviceInf: any): void {
     this.setState({
-      ...this.state, ...DeviceInf
+      ...this.state,
+      ...DeviceInf,
     });
   }
 
+  updateDevicesInfo(DeviceInf: any): void {
+    this.setState({
+      ...this.state,
+      ...DeviceInf,
+    });
+  }
 }
