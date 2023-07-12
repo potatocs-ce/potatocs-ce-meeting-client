@@ -15,11 +15,4 @@ export class DevicesInfoService extends Store<any> {
       ...DeviceInf,
     });
   }
-
-  updateDevicesInfo(DeviceInf: any): void {
-    this.setState({
-      ...this.state,
-      ...DeviceInf,
-    });
-  }
 }

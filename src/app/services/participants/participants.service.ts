@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ParticipantsService {
   // 스트림. 스트림은 업로드된 정보를 저장하는곳.
@@ -19,22 +19,25 @@ export class ParticipantsService {
   private videoSubject = new BehaviorSubject({});
   video = this.videoSubject.asObservable();
 
-  constructor() { }
+  constructor() {}
 
-
-  updateParticipants(data){
+  updateParticipants(data) {
     this.participantsSubject.next(data);
   }
 
-  updateUserName(userName){
+  updateUserName(userName) {
     this.participantsSubject.next(userName);
   }
 
-  updateScreenStream(screenStream){
+  updateScreenStream(screenStream) {
     this.screenStreamSubject.next(screenStream);
   }
 
-  updateMyVideo(video){
+  updateMyVideo(video) {
     this.videoSubject.next(video);
+  }
+
+  updateVideoStrem(video) {
+    this.videoStreamSubject.next(video);
   }
 }
