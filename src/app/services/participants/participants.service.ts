@@ -36,8 +36,4 @@ export class ParticipantsService {
   updateMyVideo(video) {
     this.videoSubject.next(video);
   }
-
-  updateVideoStrem(video) {
-    this.videoStreamSubject.next(video);
-  }
 }
