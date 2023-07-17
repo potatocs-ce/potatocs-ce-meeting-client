@@ -18,18 +18,4 @@ export class DataStorageService {
     // console.log('updatedData', profileData);
     this.meetingIdDataSubject.next(data);
   }
-
-  postMeetingId(data: any) {
-    // 스트림을 마지막 곳에 업데이트
-    // next는 스트림의 마지막 곳에 넣는다.
-    // console.log('updatedData', profileData);
-    this.meetingIdDataSubject.next(data);
-  }
-
-  deleteMeetingId(data: any) {
-    // 스트림을 마지막 곳에 업데이트
-    // next는 스트림의 마지막 곳에 넣는다.
-    // console.log('updatedData', profileData);
-    this.meetingIdDataSubject.next(data);
-  }
 }
