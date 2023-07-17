@@ -84,10 +84,9 @@ export class DeviceCheckComponent implements OnInit {
     // https://levelup.gitconnected.com/share-your-screen-with-webrtc-video-call-with-webrtc-step-5-b3d7890c8747
     await navigator.mediaDevices.enumerateDevices().then(async (devices) => {
       console.log('-------------------- device list ------------------------');
-
+      console.log(devices)
       // 장치 목록 객체화
       this.convertDeviceObject(devices)
-
       // 장치 연결, 권한 유무
       this.checkDevice()
 
@@ -139,7 +138,6 @@ export class DeviceCheckComponent implements OnInit {
 
   // select 창에서 장치를 선택하거나, 목록이 바뀌었을 경우 실행 
   selectDevice() {
-    console.log('-------------demvice Change ---------------')
     this.devicesInfo = {
       selectedVideoDeviceId: this.selectedVideoDevice?.id,
       selectedMiceDeviceId: this.selectedMiceDevice?.id,
@@ -185,18 +183,18 @@ export class DeviceCheckComponent implements OnInit {
 
   // video에 스트림 추출
   async getLocalMediaStream() {
-    // const options = {
-    //     audio: {
-    //         'echoCancellation': true,
-    //         'noiseSuppression': true,
-    //         deviceId: this.selectedMiceDevice?.id
-    //     },
-    //     video: {
-    //         deviceId: this.selectedVideoDevice?.id,
-    //         width: 320,
-    //         framerate: { max: 24, min: 24 }
-    //     }
-    // };
+    const options = {
+      audio: {
+        'echoCancellation': true,
+        'noiseSuppression': true,
+        deviceId: this.selectedMiceDevice?.id
+      },
+      video: {
+        deviceId: this.selectedVideoDevice?.id,
+        width: 320,
+        framerate: { max: 24, min: 24 }
+      }
+    };
     const options = {
       audio:
         this.audioDeviceExist ? {
