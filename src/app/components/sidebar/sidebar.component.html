@@ -35,19 +35,6 @@
         </button>
         <!-- <mat-icon>videocam_off</mat-icon> -->
       </li>
-      <li class="shareBtn2" [ngClass]="myRole == 'Participant' ? 'wrap' : ''">
-        <!-- sharing video -->
-        <button
-          [ngClass]="myRole == 'Participant' ? 'participant' : ''"
-          #sharingBtn
-          class="btn"
-          mat-icon-button
-          (click)="handleSharingClick()"
-        >
-          <mat-icon>{{ shareIcon }}</mat-icon>
-        </button>
-        <!-- <mat-icon>videocam_off</mat-icon> -->
-      </li>
     </ul>
   </div>
 </div>
