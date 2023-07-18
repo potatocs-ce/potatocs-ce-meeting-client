@@ -93,11 +93,4 @@ export class MeetingService {
 
   ////////////////////////////////////////////////////
 
-  updateMeetingInfo(body) {
-    return this.http.patch('/apim/v1/collab/patchMeeingInfo', body)
-  }
-
-  updateParticipantMeetingInfo(body) {
-    return this.http.patch('/apim/v1/collab/updateParticipantMeetingInfo', body)
-  }
 }
