@@ -32,8 +32,6 @@ export class WebRTCService {
   public packetSent$: Observable<number>;
   private intervalId;
 
-
-  streams = []
   constructor() {
     this._localStream$ = new BehaviorSubject(null);
     this._remoteStream$ = new BehaviorSubject(null);
@@ -74,20 +72,6 @@ export class WebRTCService {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(options)
       this.updateLocalStream(stream);
-      // 디바이스 체크 창에서 소리가 나오지 않게 하기
-      stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  /**
- * 내 Local Video 불러오기
- */
-  async getMediaStreams(options) {
-    try {
-      const streams = await navigator.mediaDevices.getUserMedia(options)
-      this.streams.pudh(this.updateLocalStream(stream));
       // 디바이스 체크 창에서 소리가 나오지 않게 하기
       stream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
     } catch (e) {

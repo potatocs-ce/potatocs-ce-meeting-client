@@ -22,19 +22,26 @@ export class ParticipantsService {
   constructor() { }
 
 
-  updateParticipants(data){
+  updateParticipants(data) {
     this.participantsSubject.next(data);
   }
 
-  updateUserName(userName){
+  updateUserName(userName) {
     this.participantsSubject.next(userName);
   }
 
-  updateScreenStream(screenStream){
+  updateScreenStream(screenStream) {
     this.screenStreamSubject.next(screenStream);
   }
 
-  updateMyVideo(video){
+  updateMyVideo(video) {
     this.videoSubject.next(video);
+  }
+
+  setSocketListInfo(info) {
+    this.socketList.push(info)
+  }
+  getSockListInfo(id) {
+    this.socketList[id]
   }
 }
