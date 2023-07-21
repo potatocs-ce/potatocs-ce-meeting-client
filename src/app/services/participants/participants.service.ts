@@ -37,11 +37,4 @@ export class ParticipantsService {
   updateMyVideo(video) {
     this.videoSubject.next(video);
   }
-
-  setSocketListInfo(info) {
-    this.socketList.push(info)
-  }
-  getSockListInfo(id) {
-    this.socketList[id]
-  }
 }
