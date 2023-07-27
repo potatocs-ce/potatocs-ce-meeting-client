@@ -37,7 +37,7 @@
 - Real-time Video Conferencing
     - Enables face-to-face meetings, opinion sharing, and real-time communication for geographically dispersed users.
 - Real-time Document Sharing
-    - Enables instant receipt and review of documents within the context of a real-time meeting.
+    - Facilitates instant receipt and review of documents within the context of a real-time meeting.
 - Real-time Opinions Sharing
     - Allows users to express and document their opinions during meetings through real-time chat.
 - Real-time Collaborative Writing
