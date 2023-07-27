@@ -39,7 +39,7 @@
 - Real-time Document Sharing
     - Facilitates instant receipt and review of documents within the context of a real-time meeting.
 - Real-time Opinions Sharing
-    - Allows users to express and document their opinions during meetings through real-time chat.
+    - Allows users to express and document opinions during meetings through real-time chat.
 - Real-time Collaborative Writing
     - Enhances meeting dynamics by enabling real-time whiteboard sharing for users to collaboratively draw and share images.
 - Real-time Presentation Feature
