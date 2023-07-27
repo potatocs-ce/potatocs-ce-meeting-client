@@ -54,7 +54,7 @@
 ## 📈 Release Note
 |version|log|
 |---|---|
-|0.1.0| Create community versions and upload code |
+|1.0.0| Create community versions and upload code |
 
 <br/>
 
