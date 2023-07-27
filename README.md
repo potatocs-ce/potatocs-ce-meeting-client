@@ -35,7 +35,7 @@
 
 ## 🛠️ Features
 - Real-time Video Conferencing
-    - Facilitates face-to-face meetings, opinion sharing, and real-time communication for users located in different places.
+    - Enables face-to-face meetings, opinion sharing, and real-time communication for geographically dispersed users.
 - Real-time Document Sharing
     - Enables instant receipt and review of documents within the context of a real-time meeting.
 - Real-time Opinions Sharing
