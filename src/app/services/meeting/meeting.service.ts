@@ -43,29 +43,16 @@ export class MeetingService {
     return this.http.get('/apim/v1/collab/getChat/', { params: meetingId });
   }
 
-  // // 채팅 삭제
-  // deleteMeetingChat(chatId) {
-  //   console.log('[API] -----> deleteMeetingChat');
-  //   return this.http.delete('/apim/v1/collab/deleteChat/', { params: chatId });
-  // }
-
-  // // 미팅 삭제 시 DB에 저장된 채팅 삭제
-  // deleteAllOfChat(data) {
-  //   console.log('[API] -----> deleteAllOfChat');
-  //   return this.http.delete('/apim/v1/collab/deleteAllOfChat/');
-  // }
-  // ////////////////////////////////////////////////////
-
-
   // 채팅 삭제
   deleteMeetingChat(chatId) {
-    return this.http.delete('/apim/v1/collab/deleteChat/delete', { params: chatId });
+    console.log('[API] -----> deleteMeetingChat');
+    return this.http.delete('/apim/v1/collab/deleteChat/', { params: chatId });
   }
 
   // 미팅 삭제 시 DB에 저장된 채팅 삭제
   deleteAllOfChat(data) {
     console.log('[API] -----> deleteAllOfChat');
-    return this.http.delete('/apim/v1/collab/deleteAll/');
+    return this.http.delete('/apim/v1/collab/deleteAllOfChat/');
   }
   ////////////////////////////////////////////////////
 
