@@ -177,17 +177,17 @@ export class WebRTCComponent implements OnInit {
     this.socket.on("newParticipantArrived", (data) => {
       this.onNewParticipant(data);
     });
-    // // 나중에 구현
-    // this.socket.on("participantLeft", (data) => {
-    //     console.log("participantLeft---------------", data)
-    //     this.onParticipantLeft(data);
-    //     this.eventBusService.emit(new EventData('participantLeft', data))
+    // 나중에 구현
+    this.socket.on("participantLeft", (data) => {
+      console.log("participantLeft---------------", data)
+      this.onParticipantLeft(data);
+      this.eventBusService.emit(new EventData('participantLeft', data))
 
-    // });
-    // this.socket.on("receiveVideoAnswer", (data) => {
-    //     // console.log(data)
-    //     this.receiveVideoResponse(data);
-    // });
+    });
+    this.socket.on("receiveVideoAnswer", (data) => {
+      // console.log(data)
+      this.receiveVideoResponse(data);
+    });
     this.socket.on("iceCandidate", (data) => {
       // console.log(data)
       this.participants[data.userId].rtcPeer.addIceCandidate(data.candidate, function (error) {
@@ -266,12 +266,6 @@ export class WebRTCComponent implements OnInit {
 
     this.eventBusService.on('handleSharingClick', this.unsubscribe$, async () => {
       this.handleSharingClick()
-
-    })
-
-    this.eventBusService.on('handleClick', this.unsubscribe$, async () => {
-      console.log('eventBusService')
-      this.handleMuteClick()
 
     })
 
@@ -557,13 +551,13 @@ export class WebRTCComponent implements OnInit {
   }
 
   receiveVideo(sender) {
-    console.log(sender)
+    // console.log(sender)
 
     var participant = new Participant(this.socketService, this.userId, sender.userId, sender.name, this.participantsElement);
     this.participants[sender.userId] = participant;
     var video = participant.getVideoElement();
 
-    console.log(this.participants)
+    // console.log(this.participants)
 
     //--------------------------------------------
     // 스피커 변경 크롬만 작동 중 => 나중에 다른식으로 구현
@@ -922,7 +916,9 @@ function checkClass(userids) {
   console.log(userids)
 }
 
-
+/*
+* Participent socket 이벤트 업데이트 
+*/
 function Participant(socketService, userId, receiveUserid, userName, participants) {
   console.log('userId = ', userId, 'receiveUserid = ', receiveUserid)
   const socket = socketService.socket;
