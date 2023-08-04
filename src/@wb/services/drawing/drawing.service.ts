@@ -16,34 +16,6 @@ export class DrawingService {
   /**
    * Drawing Start
    */
-
-
-  calcZoomScale(zoomInfo, docNum, pageNum, prevZoomScale = 1) {
-
-    let zoomScale = 1;
-
-    switch (zoomInfo) {
-      case 'zoomIn':
-        zoomScale = this.calcNewZoomScale(prevZoomScale, +1);
-        break;
-
-      case 'zoomOut':
-        zoomScale = this.calcNewZoomScale(prevZoomScale, -1);
-        break;
-
-      // 너비에 맞춤
-      case 'fitToWidth':
-        zoomScale = this.fitToWidth(docNum, pageNum);
-        break;
-
-      // page에 맞춤
-      case 'fitToPage':
-        zoomScale = this.fitToPage(docNum, pageNum);
-        break;
-    }
-
-    return zoomScale;
-  }
   start(context, points, tool, sourceCanvas) {
     switch (tool.type) {
       case 'pen':
