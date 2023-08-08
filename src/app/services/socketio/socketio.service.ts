@@ -9,17 +9,14 @@ export class SocketioService {
   // private url = 'http://localhost:3000/socketWebRTC';
   private url = environment.socketUrl;
   private _socket: Socket; // type: https://stackoverflow.com/questions/47161589/how-to-use-socket-io-client-in-angular-4
-  private _socket_test: Socket;
+
   constructor() {
     // this.socket = io(this.url, {transports: ['websocket']});
     this._socket = io(this.url + '/socketWebRTC', {
       transports: ['websocket'],
       path: '/socketWebRTC',
     });
-    this._socket_test = io(this.url + '/socketWebRTC', {
-      transports: ['websocket'],
-      path: '/socketWebRTC',
-    });
+
     // console.log(this._socket);
   }
 
