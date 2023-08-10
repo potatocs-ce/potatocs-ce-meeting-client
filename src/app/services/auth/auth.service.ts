@@ -35,18 +35,6 @@ export class AuthService {
             )
     }
 
-    signInTest(userData: any): Observable<Token> {
-        console.log('userData', userData);
-        return this.http.post<Token>('/apim/v1/auth/signIn', userData)
-            .pipe(
-                tap(
-                    (res: any) => {
-                        this.setToken(res.token)
-                    }),
-                shareReplay()
-            )
-    }
-
     isAuthenticated(): boolean {
         const token = this.getToken();
         return token ? !this.isTokenExpired(token) : false;

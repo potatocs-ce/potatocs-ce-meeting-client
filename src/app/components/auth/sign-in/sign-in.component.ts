@@ -81,25 +81,6 @@ export class SignInComponent implements OnInit {
         )
     }
 
-    signInTest() {
-        // console.log(this.signInFormData);
-        this.authService.signInTest(this.signInFormData).subscribe(
-            (data: any) => {
-                if (data.message != null && data.message != '') {
-                    console.log(data.message);
-                }
-                // alert('successfully signed in');
-                // console.log(this.params)
-                // this.router.navigateByUrl(this.params.params)
-                this.router.navigate([`${this.params.params}`]);
-            },
-            err => {
-                console.log(err.error);
-                this.errorAlert(err.error.message);
-            }
-        )
-    }
-
     errorAlert(err) {
         switch (err) {
             case 'not found':
