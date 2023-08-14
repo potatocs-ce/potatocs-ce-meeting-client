@@ -59,18 +59,7 @@ export class BoardFileViewComponent implements OnInit {
     documentInfo = [];
 
     ngOnInit(): void {
-        currentWidth = {
-            pointer: this.widthSet.pointer[0],
-            pen: this.widthSet.pen[0],
-            highlighter: this.widthSet.highlighter[0],
-            eraser: this.widthSet.eraser[2],
-            line: this.widthSet.line[0],
-            circle: this.widthSet.circle[0],
-            rectangle: this.widthSet.rectangle[0],
-            roundedRectangle: this.widthSet.roundedRectangle[0],
-            textarea: this.widthSet.textarea[0],
-            text: this.widthSet.text[0],
-        };
+
         this.meetingId = this.route.snapshot.params['id'];
 
         // Document가 Update 된 경우 : File List rendering
