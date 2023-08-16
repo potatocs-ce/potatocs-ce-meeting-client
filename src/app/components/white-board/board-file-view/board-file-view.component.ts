@@ -165,7 +165,7 @@ export class BoardFileViewComponent implements OnInit {
             return;
         }
 
-        if (files[0].size > 12000000) {
+        if (files[0].size > 32000000) {
             this.dialogService.openDialogNegative(`This file is too large. Maximum file size is 12MB.`);
             return;
         }
