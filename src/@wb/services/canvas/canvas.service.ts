@@ -14,7 +14,6 @@ import { EventBusService } from 'src/@wb/services/eventBus/event-bus.service';
   providedIn: 'root'
 })
 export class CanvasService {
-  canvasInfo = [];
 
   listenerSet = [];
   zoomScale = 1;
@@ -33,13 +32,6 @@ export class CanvasService {
     return this.clearBoardA$;
   }
 
-  getCanvasInfo() {
-    return this.canvasInfo;
-  }
-
-  setCanvasInfo() {
-    return this.canvasInfoService.getCanvasInfo();
-  }
 
 
   getDeviceScale(canvas) {
