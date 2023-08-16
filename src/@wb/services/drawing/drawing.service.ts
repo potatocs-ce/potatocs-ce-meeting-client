@@ -6,8 +6,6 @@ import { EventData } from '../eventBus/event.class';
   providedIn: 'root'
 })
 export class DrawingService {
-  // [x좌표, y좌표]
-  pointer = []
 
   private sourceCanvas: any;
   textX1;
@@ -18,12 +16,6 @@ export class DrawingService {
   constructor(
     private eventBusService: EventBusService,
   ) { }
-
-
-  getPointer() {
-    return this.pointer
-  }
-
   /**
      * Drawing Start
      */
