@@ -235,6 +235,17 @@ export class DeviceCheckComponent implements OnInit {
         }
     }
 
+    checkValueTest(event: any) {
+        if (event == false) {
+            this.videoDeviceExist = false;
+            // web-rtc 컴포넌트에 있는 비디오 스트림 설정 변경
+            this.selectDevice();
+        } else {
+            this.videoDeviceExist = true;
+            this.selectDevice();
+        }
+    }
+
 
 
     // 채널 참가 main component로 이동
