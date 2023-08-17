@@ -170,6 +170,11 @@ export class DeviceCheckComponent implements OnInit {
         this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false
     }
 
+    checkDeviceTest() {
+        this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false
+        this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false
+    }
+
     // select 창에서 장치를 선택하거나, 목록이 바뀌었을 경우 실행 
     selectDevice() {
         console.log('-------------demvice Change ---------------')
