@@ -199,6 +199,28 @@ export class DeviceCheckComponent implements OnInit {
         }
     }
 
+    selectDeviceTest() {
+        console.log('-------------demvice Change ---------------')
+        this.devicesInfo = {
+            selectedVideoDeviceId: this.selectedVideoDevice?.id,
+            selectedMiceDeviceId: this.selectedMiceDevice?.id,
+            selectedSpeakerDeviceId: this.selectedSpeakerDevice?.id,
+            audioDeviceExist: this.audioDeviceExist,
+            videoDeviceExist: this.videoDeviceExist
+        }
+        console.log(this.devicesInfo)
+        this.devicesInfoService.setDevicesInfo(this.devicesInfo);
+        this.changeMediaStream();
+
+        if (typeof this.video.sinkId !== 'undefined') {
+            this.video.setSinkId(this.selectedSpeakerDevice?.id).then(() => {
+                console.log('succes speaker device')
+            })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+    }
 
 
     // device check 화면에서 카메라 On / Off 유무
