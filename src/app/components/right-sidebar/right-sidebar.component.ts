@@ -8,168 +8,168 @@ import { SocketioService } from '../../services/socketio/socketio.service';
 
 
 @Component({
-    selector: 'app-right-sidebar',
-    templateUrl: './right-sidebar.component.html',
-    styleUrls: ['./right-sidebar.component.scss']
+  selector: 'app-right-sidebar',
+  templateUrl: './right-sidebar.component.html',
+  styleUrls: ['./right-sidebar.component.scss']
 })
 export class RightSidebarComponent implements OnInit, AfterViewInit {
 
-    private unsubscribe$ = new Subject<void>();
+  private unsubscribe$ = new Subject<void>();
 
-    whiteBoardMode = false;
+  whiteBoardMode = false;
 
-    participants = []; // 현재 접속 중인 참여자
-    enlistedMembers = []; // 미팅에 허가 된 멤버들
-    enlistedMember_check = []; // li의 이름들을 담은 배열
-    checkName = []; // li(enlistedMember)와 현재 접속 중인 참여자 비교할 배열
+  participants = []; // 현재 접속 중인 참여자
+  enlistedMembers = []; // 미팅에 허가 된 멤버들
+  enlistedMember_check = []; // li의 이름들을 담은 배열
+  checkName = []; // li(enlistedMember)와 현재 접속 중인 참여자 비교할 배열
 
-    @ViewChildren('enlistedMember_span') public enlistedMember_spanRef: QueryList<ElementRef>;
+  @ViewChildren('enlistedMember_span') public enlistedMember_spanRef: QueryList<ElementRef>;
 
-    selectedIndex = 0;
-    currentMembersCount;
+  selectedIndex = 0;
+  currentMembersCount;
 
-    private socket;
+  private socket;
 
-    constructor(
-        private eventBusService: EventBusService,
-        private meetingInfoService: MeetingInfoService,
-        private socketService: SocketioService,
-    ) {
-        this.socket = socketService.socket;
-    }
+  constructor(
+    private eventBusService: EventBusService,
+    private meetingInfoService: MeetingInfoService,
+    private socketService: SocketioService,
+  ) {
+    this.socket = socketService.socket;
+  }
 
-    ngOnInit(): void {
-        this.selectedIndex = 0;
+  ngOnInit(): void {
+    this.selectedIndex = 0;
 
-        this.eventBusService.on('whiteBoardClick', this.unsubscribe$, () => {
-            console.log('eventBus on whiteBoardClick')
-            if (this.whiteBoardMode == false) {
-                this.whiteBoardMode = true;
-            } else {
-                this.whiteBoardMode = false
-            }
-        })
-
-
-        // 현재 접속 중인 참여자 수 구하기
-        this.eventBusService.on("currentMembersCount", this.unsubscribe$, (data) => {
-            console.log(data)
-            this.currentMembersCount = data;
-        })
-    }
+    this.eventBusService.on('whiteBoardClick', this.unsubscribe$, () => {
+      console.log('eventBus on whiteBoardClick')
+      if (this.whiteBoardMode == false) {
+        this.whiteBoardMode = true;
+      } else {
+        this.whiteBoardMode = false
+      }
+    })
 
 
-    ngAfterViewInit(): void {
-
-        //   /***************************************************************
-        //   *  1.     
-        //   *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
-        //   *  이름 교집합 찾아서 enlistedMember_check 배열에 담기                       
-        //   *****************************************************************/
-        //   this.enlistedMember_spanRef.toArray().forEach(element => {
-
-        //     const innerText = element.nativeElement.innerText    
-        //     this.enlistedMember_check.push(innerText)     
-
-        //     console.log(this.enlistedMember_check)
-        //   })
-
-        //   // 새로운 참여자가 들어오면
-        //   this.eventBusService.on('updateParticipants', this.unsubscribe$, async (userName) => {
-        //     console.log(userName)
-
-        //     this.participants = Object.keys(userName);
-
-        //     /*************************************************************** 
-        //     *  2.    
-        //     *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
-        //     *  이름 교집합 찾아서 checkName 배열에 담기                       
-        //     *****************************************************************/
-        //     this.checkName = this.enlistedMember_check.filter(userName => this.participants.includes(userName))
-
-        //     // 교집합 결과
-        //     console.log(this.checkName)
+    // 현재 접속 중인 참여자 수 구하기
+    this.eventBusService.on("currentMembersCount", this.unsubscribe$, (data) => {
+      console.log(data)
+      this.currentMembersCount = data;
+    })
+  }
 
 
-        //     /***************************************************************   
-        //     *  3. 
-        //     *  this.enlistedMember_spanRef.toArray()에서 이름 교집합을 찾아서
-        //     *  값이 있으면 클레스네임 추가                      
-        //     *****************************************************************/
-        //     this.enlistedMember_spanRef.toArray().forEach(element => {
-        //       const innerText = element.nativeElement.innerText // 이름
-        //       const span = element.nativeElement // element <span></span>
+  ngAfterViewInit(): void {
 
-        //       // 교집합과 li.innerText와 비교하여 return 0, -1 
-        //       const itemIndex = this.checkName.findIndex((item) => item === innerText);
+    //   /***************************************************************
+    //   *  1.     
+    //   *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
+    //   *  이름 교집합 찾아서 enlistedMember_check 배열에 담기                       
+    //   *****************************************************************/
+    //   this.enlistedMember_spanRef.toArray().forEach(element => {
 
-        //       // 이름이 있으면 클레스 네임추가
-        //       if (itemIndex >= 0) {
-        //         span.className = "onLine"
-        //       } else {
-        //         span.className = "offLine"
-        //       }
-        //     })
-        //   })
+    //     const innerText = element.nativeElement.innerText    
+    //     this.enlistedMember_check.push(innerText)     
 
+    //     console.log(this.enlistedMember_check)
+    //   })
 
-        // /***************************************************************
-        // *  1.     
-        // *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
-        // *  이름 교집합 찾아서 enlistedMember_check 배열에 담기                       
-        // *****************************************************************/
-        // this.enlistedMember_spanRef.toArray().forEach(element => {
+    //   // 새로운 참여자가 들어오면
+    //   this.eventBusService.on('updateParticipants', this.unsubscribe$, async (userName) => {
+    //     console.log(userName)
 
-        //     const innerText = element.nativeElement.innerText
-        //     this.enlistedMember_check.push(innerText)
+    //     this.participants = Object.keys(userName);
 
-        //     // console.log(this.enlistedMember_check)
-        // })
+    //     /*************************************************************** 
+    //     *  2.    
+    //     *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
+    //     *  이름 교집합 찾아서 checkName 배열에 담기                       
+    //     *****************************************************************/
+    //     this.checkName = this.enlistedMember_check.filter(userName => this.participants.includes(userName))
+
+    //     // 교집합 결과
+    //     console.log(this.checkName)
 
 
-        // // 새로운 참여자가 들어오면
-        // this.eventBusService.on('updateParticipants', this.unsubscribe$, async (userName) => {
+    //     /***************************************************************   
+    //     *  3. 
+    //     *  this.enlistedMember_spanRef.toArray()에서 이름 교집합을 찾아서
+    //     *  값이 있으면 클레스네임 추가                      
+    //     *****************************************************************/
+    //     this.enlistedMember_spanRef.toArray().forEach(element => {
+    //       const innerText = element.nativeElement.innerText // 이름
+    //       const span = element.nativeElement // element <span></span>
 
-        //     this.itemIndex = [];
-        //     this.userName = userName;
-        //     this.participants = Object.keys(userName);
+    //       // 교집합과 li.innerText와 비교하여 return 0, -1 
+    //       const itemIndex = this.checkName.findIndex((item) => item === innerText);
 
-
-        //     /*************************************************************** 
-        //     *  2.    
-        //     *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
-        //     *  이름 교집합 찾아서 checkName 배열에 담기                       
-        //     *****************************************************************/
-        //     this.checkName = this.enlistedMember_check.filter(userName => this.participants.includes(userName))
-
-        //     /***************************************************************   
-        //     *  3. 
-        //     *  this.enlistedMember_spanRef.toArray()에서 이름 교집합을 찾아서
-        //     *  값이 있으면 클레스네임 추가                      
-        //     *****************************************************************/            
-        //     await this.enlistedMember_spanRef.toArray().forEach(element => {
-        //         const innerText = element.nativeElement.innerText // 이름
-        //         const span = element.nativeElement // element <span></span>
+    //       // 이름이 있으면 클레스 네임추가
+    //       if (itemIndex >= 0) {
+    //         span.className = "onLine"
+    //       } else {
+    //         span.className = "offLine"
+    //       }
+    //     })
+    //   })
 
 
+    // /***************************************************************
+    // *  1.     
+    // *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
+    // *  이름 교집합 찾아서 enlistedMember_check 배열에 담기                       
+    // *****************************************************************/
+    // this.enlistedMember_spanRef.toArray().forEach(element => {
 
-        //         // 교집합과 li.innerText와 비교하여 return 0, -1 
-        //         const itemIndex = this.checkName.findIndex((item) => item === innerText);
+    //     const innerText = element.nativeElement.innerText
+    //     this.enlistedMember_check.push(innerText)
 
-        //         this.itemIndex.push(itemIndex);
+    //     // console.log(this.enlistedMember_check)
+    // })
 
-        //         // 이름이 있으면 클레스 네임추가
-        //         for (let index = 0; index < this.itemIndex.length; index++){
-        //             if (this.itemIndex[index] >= 0) {
-        //                     return 'onLine'
-        //                 } else {
-        //                     return 'offLine'
-        //                 }
 
-        //         }
-        //     })
-        // })
+    // // 새로운 참여자가 들어오면
+    // this.eventBusService.on('updateParticipants', this.unsubscribe$, async (userName) => {
 
-    }
+    //     this.itemIndex = [];
+    //     this.userName = userName;
+    //     this.participants = Object.keys(userName);
+
+
+    //     /*************************************************************** 
+    //     *  2.    
+    //     *  this.enlistedMember_spanRef.toArray()와 현재 접속중인 참여자
+    //     *  이름 교집합 찾아서 checkName 배열에 담기                       
+    //     *****************************************************************/
+    //     this.checkName = this.enlistedMember_check.filter(userName => this.participants.includes(userName))
+
+    //     /***************************************************************   
+    //     *  3. 
+    //     *  this.enlistedMember_spanRef.toArray()에서 이름 교집합을 찾아서
+    //     *  값이 있으면 클레스네임 추가                      
+    //     *****************************************************************/            
+    //     await this.enlistedMember_spanRef.toArray().forEach(element => {
+    //         const innerText = element.nativeElement.innerText // 이름
+    //         const span = element.nativeElement // element <span></span>
+
+
+
+    //         // 교집합과 li.innerText와 비교하여 return 0, -1 
+    //         const itemIndex = this.checkName.findIndex((item) => item === innerText);
+
+    //         this.itemIndex.push(itemIndex);
+
+    //         // 이름이 있으면 클레스 네임추가
+    //         for (let index = 0; index < this.itemIndex.length; index++){
+    //             if (this.itemIndex[index] >= 0) {
+    //                     return 'onLine'
+    //                 } else {
+    //                     return 'offLine'
+    //                 }
+
+    //         }
+    //     })
+    // })
+
+  }
 
 }

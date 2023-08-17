@@ -551,13 +551,13 @@ export class WebRTCComponent implements OnInit {
   }
 
   receiveVideo(sender) {
-    // console.log(sender)
+    console.log(sender)
 
     var participant = new Participant(this.socketService, this.userId, sender.userId, sender.name, this.participantsElement);
     this.participants[sender.userId] = participant;
     var video = participant.getVideoElement();
 
-    // console.log(this.participants)
+    console.log(this.participants)
 
     //--------------------------------------------
     // 스피커 변경 크롬만 작동 중 => 나중에 다른식으로 구현
@@ -916,9 +916,7 @@ function checkClass(userids) {
   console.log(userids)
 }
 
-/*
-* Participent socket 이벤트 업데이트 
-*/
+
 function Participant(socketService, userId, receiveUserid, userName, participants) {
   console.log('userId = ', userId, 'receiveUserid = ', receiveUserid)
   const socket = socketService.socket;
