@@ -34,7 +34,7 @@ export class DeviceCheckComponent implements OnInit {
 
     browserInfo: any;
     browserVersion: any;
-    soundMeterInterval:any;
+    soundMeterInterval: any;
     localStream$;
     soundLevel: any;
     private unsubscribe$ = new Subject<void>();
@@ -58,19 +58,19 @@ export class DeviceCheckComponent implements OnInit {
         this.meetingId = this.route.snapshot.params['id'];
 
         this.video = this.videoRef.nativeElement;
-        
+
         // 브라우저 체크
         this.browserCheck();
-        
+
         // 웹캠으로 부터 스트림 추출
         this.getLocalMediaStream();
-        
+
         // 컴퓨터에 연결된 장치 목록
         this.deviceCheck();
-        
+
         // 오디오 스트림 바
         this.extractAudioStream();
-        
+
         // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 수정
         this.deviceChangeCheck();
     }
@@ -101,6 +101,15 @@ export class DeviceCheckComponent implements OnInit {
 
     // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 변경
     deviceChangeCheck() {
+        navigator.mediaDevices.addEventListener('devicechange', async event => {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            await this.convertDeviceObject(devices)
+            this.checkDevice()
+            this.selectDevice();
+        });
+    }
+
+    deviceChangeCheckTest() {
         navigator.mediaDevices.addEventListener('devicechange', async event => {
             const devices = await navigator.mediaDevices.enumerateDevices();
             await this.convertDeviceObject(devices)
@@ -256,7 +265,7 @@ export class DeviceCheckComponent implements OnInit {
             .then(res => this.handleSuccess(res))
             .then(result => this.deviceCheck())
             .catch(error => this.handleError(error));
-            
+
     }
 
     handleSuccess(stream) {
@@ -265,7 +274,7 @@ export class DeviceCheckComponent implements OnInit {
         const AudioContext = window.AudioContext
         let audioContext = new AudioContext();
         const soundMeter = new SoundMeter(audioContext);
-        
+
         const that = this;
         soundMeter.connectToSource(stream, function (e) {
 
@@ -278,7 +287,7 @@ export class DeviceCheckComponent implements OnInit {
             }, 10);
         });
 
-        
+
     }
 
     handleError(error) {
@@ -339,7 +348,7 @@ export class DeviceCheckComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-    
+
     }
 }
 
