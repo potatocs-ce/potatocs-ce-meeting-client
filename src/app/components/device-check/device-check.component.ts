@@ -254,6 +254,11 @@ export class DeviceCheckComponent implements OnInit {
         this.eventBusService.emit(new EventData('deviceCheck', ''))
     }
 
+    joinMeetingRoomTest() {
+        this.eventBusService.emit(new EventData('join', ''));
+        this.eventBusService.emit(new EventData('deviceCheck', ''))
+    }
+
     // video에 스트림 추출
     async getLocalMediaStream() {
         // const options = {
