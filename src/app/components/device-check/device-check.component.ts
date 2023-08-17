@@ -142,6 +142,28 @@ export class DeviceCheckComponent implements OnInit {
         this.selectedSpeakerDevice = this.speakerDevices[0];
     }
 
+    convertDeviceObjectTest(devices) {
+        // 장치값 초기화
+
+        this.miceDevices = []
+        this.videoDevices = []
+        this.speakerDevices = []
+
+        devices.forEach((device) => {
+            if (device.kind == 'audioinput') {
+                this.miceDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
+            } else if (device.kind == 'videoinput') {
+                this.videoDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
+            } else if (device.kind == 'audiooutput') {
+                this.speakerDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
+            }
+        })
+
+        this.selectedMiceDevice = this.miceDevices[0];
+        this.selectedVideoDevice = this.videoDevices[0];
+        this.selectedSpeakerDevice = this.speakerDevices[0];
+    }
+
     // 장치의 연결 유무
     checkDevice() {
         this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false
