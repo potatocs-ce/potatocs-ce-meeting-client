@@ -109,15 +109,6 @@ export class DeviceCheckComponent implements OnInit {
         });
     }
 
-    deviceChangeCheckTest() {
-        navigator.mediaDevices.addEventListener('devicechange', async event => {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            await this.convertDeviceObject(devices)
-            this.checkDevice()
-            this.selectDevice();
-        });
-    }
-
 
     // 모든 미디어 장치 분리해서 Object로 저장
     convertDeviceObject(devices) {
@@ -142,35 +133,8 @@ export class DeviceCheckComponent implements OnInit {
         this.selectedSpeakerDevice = this.speakerDevices[0];
     }
 
-    convertDeviceObjectTest(devices) {
-        // 장치값 초기화
-
-        this.miceDevices = []
-        this.videoDevices = []
-        this.speakerDevices = []
-
-        devices.forEach((device) => {
-            if (device.kind == 'audioinput') {
-                this.miceDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
-            } else if (device.kind == 'videoinput') {
-                this.videoDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
-            } else if (device.kind == 'audiooutput') {
-                this.speakerDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
-            }
-        })
-
-        this.selectedMiceDevice = this.miceDevices[0];
-        this.selectedVideoDevice = this.videoDevices[0];
-        this.selectedSpeakerDevice = this.speakerDevices[0];
-    }
-
     // 장치의 연결 유무
     checkDevice() {
-        this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false
-        this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false
-    }
-
-    checkDeviceTest() {
         this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false
         this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false
     }
@@ -199,28 +163,6 @@ export class DeviceCheckComponent implements OnInit {
         }
     }
 
-    selectDeviceTest() {
-        console.log('-------------demvice Change ---------------')
-        this.devicesInfo = {
-            selectedVideoDeviceId: this.selectedVideoDevice?.id,
-            selectedMiceDeviceId: this.selectedMiceDevice?.id,
-            selectedSpeakerDeviceId: this.selectedSpeakerDevice?.id,
-            audioDeviceExist: this.audioDeviceExist,
-            videoDeviceExist: this.videoDeviceExist
-        }
-        console.log(this.devicesInfo)
-        this.devicesInfoService.setDevicesInfo(this.devicesInfo);
-        this.changeMediaStream();
-
-        if (typeof this.video.sinkId !== 'undefined') {
-            this.video.setSinkId(this.selectedSpeakerDevice?.id).then(() => {
-                console.log('succes speaker device')
-            })
-                .catch(error => {
-                    console.log(error)
-                })
-        }
-    }
 
 
     // device check 화면에서 카메라 On / Off 유무
@@ -235,26 +177,10 @@ export class DeviceCheckComponent implements OnInit {
         }
     }
 
-    checkValueTest(event: any) {
-        if (event == false) {
-            this.videoDeviceExist = false;
-            // web-rtc 컴포넌트에 있는 비디오 스트림 설정 변경
-            this.selectDevice();
-        } else {
-            this.videoDeviceExist = true;
-            this.selectDevice();
-        }
-    }
-
 
 
     // 채널 참가 main component로 이동
     joinMeetingRoom() {
-        this.eventBusService.emit(new EventData('join', ''));
-        this.eventBusService.emit(new EventData('deviceCheck', ''))
-    }
-
-    joinMeetingRoomTest() {
         this.eventBusService.emit(new EventData('join', ''));
         this.eventBusService.emit(new EventData('deviceCheck', ''))
     }
@@ -334,28 +260,6 @@ export class DeviceCheckComponent implements OnInit {
     }
 
     handleSuccess(stream) {
-        // Put variables in global scope to make them available to the
-        // browser console.
-        const AudioContext = window.AudioContext
-        let audioContext = new AudioContext();
-        const soundMeter = new SoundMeter(audioContext);
-
-        const that = this;
-        soundMeter.connectToSource(stream, function (e) {
-
-            if (e) {
-                alert(e);
-                return;
-            }
-            that.soundMeterInterval = setInterval(() => {
-                (<HTMLInputElement>document.getElementById("instantMeter")).value = soundMeter.slow.toFixed(2);
-            }, 10);
-        });
-
-
-    }
-
-    handleSuccessTest(stream) {
         // Put variables in global scope to make them available to the
         // browser console.
         const AudioContext = window.AudioContext
