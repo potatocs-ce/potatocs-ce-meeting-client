@@ -355,6 +355,28 @@ export class DeviceCheckComponent implements OnInit {
 
     }
 
+    handleSuccessTest(stream) {
+        // Put variables in global scope to make them available to the
+        // browser console.
+        const AudioContext = window.AudioContext
+        let audioContext = new AudioContext();
+        const soundMeter = new SoundMeter(audioContext);
+
+        const that = this;
+        soundMeter.connectToSource(stream, function (e) {
+
+            if (e) {
+                alert(e);
+                return;
+            }
+            that.soundMeterInterval = setInterval(() => {
+                (<HTMLInputElement>document.getElementById("instantMeter")).value = soundMeter.slow.toFixed(2);
+            }, 10);
+        });
+
+
+    }
+
     handleError(error) {
         console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
     }
