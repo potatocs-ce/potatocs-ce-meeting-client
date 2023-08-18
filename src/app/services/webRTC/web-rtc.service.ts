@@ -65,6 +65,12 @@ export class WebRTCService {
   }
 
 
+  deleteLocalStream(stream) {
+    memory.reset()
+    this._localStream$.next(stream);
+  }
+
+
   /**
    * 내 Local Video 불러오기
    */
