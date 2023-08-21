@@ -79,14 +79,6 @@ export class WebRTCService {
     }
   }
 
-  memoryRelease() {
-    this._localStream$.destory()
-    this._remoteStream$.destory()
-    this._iceCandidateEvent.destory()
-    this._localStream$.delete()
-    this._remoteStream$.delete()
-    this._iceCandidateEvent.delete()
-  }
 
 
 }

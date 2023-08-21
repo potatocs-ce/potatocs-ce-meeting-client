@@ -93,4 +93,13 @@ export class MeetingService {
 
   ////////////////////////////////////////////////////
 
+  ////////////////////////////////////////////////////
+  // 미팅 status가 On일 경우 모든 권한 풀기
+  getMeetingStatusOn(meetingId) {
+    const result = this.http.get('/apim/v1/collab/getMeetingStatus/', { params: meetingId });
+    return result.status
+  }
+
+  ////////////////////////////////////////////////////
+
 }
