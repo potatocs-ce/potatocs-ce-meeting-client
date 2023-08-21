@@ -65,12 +65,6 @@ export class WebRTCService {
   }
 
 
-  deleteLocalStream(stream) {
-    memory.reset()
-    this._localStream$.next(stream);
-  }
-
-
   /**
    * 내 Local Video 불러오기
    */
@@ -85,6 +79,14 @@ export class WebRTCService {
     }
   }
 
+  memoryRelease() {
+    this._localStream$.destory()
+    this._remoteStream$.destory()
+    this._iceCandidateEvent.destory()
+    this._localStream$.delete()
+    this._remoteStream$.delete()
+    this._iceCandidateEvent.delete()
+  }
 
 
 }
