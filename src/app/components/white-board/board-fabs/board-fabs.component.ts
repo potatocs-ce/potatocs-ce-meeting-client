@@ -19,18 +19,7 @@ export class BoardFabsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //now side info
-    this.viewInfoService.state$
-      .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
-      .subscribe(([prevViewInfo, viewInfo]) => {
 
-        console.log(prevViewInfo.leftSideView)
-
-        // 현재 sideBar doc. view 정보 받아서 저장.
-        this.prevViewInfo = prevViewInfo.leftSideView
-
-
-      });
   }
 
 
