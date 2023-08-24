@@ -104,7 +104,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.initCanvasSet();
+        this.initCanvasSetTest();
 
         ////////////////////////////////////////////////
         // Document가 Update 된 경우
@@ -356,6 +356,21 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
      * @param pageNum page 번호
      */
     preRenderBackground(pageNum) {
+        const targetCanvas = this.bgCanvas
+        const ctx = targetCanvas.getContext("2d");
+        const imgElement: any = document.getElementById('thumb_' + pageNum);
+
+        /**************************************************
+        * 처음 화이트보드에 들어오면 thumbnail view 아니라 fileList view이기 때문에
+        * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
+        * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
+        ****************************************************/
+        if (this.prevViewInfo === 'thumbnail') {
+            ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
+        }
+    }
+
+    preRenderBackgroundTest(pageNum) {
         const targetCanvas = this.bgCanvas
         const ctx = targetCanvas.getContext("2d");
         const imgElement: any = document.getElementById('thumb_' + pageNum);
