@@ -335,7 +335,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
     async pageRender(currentDocNum, currentPage, zoomScale) {
 
         // 화면을 급하게 확대하거나 축소 시 깜빡거리는 UI 측면 문제 해결 위한 함수
-        this.preRenderBackground(currentPage)
+        this.preRenderBackgroundTest(currentPage)
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
