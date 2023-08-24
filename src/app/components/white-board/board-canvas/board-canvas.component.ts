@@ -399,6 +399,10 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.rxCoverCanvas, this.teacherCanvas, this.bgCanvas);
     }
 
+    setCanvasSizeTest(currentDocNum, currentPage, zoomScale) {
+        return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.rxCoverCanvas, this.teacherCanvas, this.bgCanvas);
+    }
+
     /**
      * 창 크기 변경시
      *
@@ -452,7 +456,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         this.drawingService.stopRxDrawing();
 
         // set Canvas Size
-        const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
+        const ratio = this.setCanvasSizeTest(docNum, pageNum, zoomScale);
 
         // BG & Board Render
         this.pageRender(docNum, pageNum, zoomScale);
