@@ -21,11 +21,6 @@ export class ParticipantsService {
 
   constructor() { }
 
-  updateParticipantsDocPage(data) {
-    if (this.participants.docPage === data.docPage)
-      this.participantsSubject.next(data);
-
-  }
 
   updateParticipants(data) {
     this.participantsSubject.next(data);
