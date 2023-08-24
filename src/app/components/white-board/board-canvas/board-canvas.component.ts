@@ -104,7 +104,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.initCanvasSetTest();
+        this.initCanvasSet();
 
         ////////////////////////////////////////////////
         // Document가 Update 된 경우
@@ -302,24 +302,6 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(this.coverCanvas);
     }
 
-    initCanvasSetTest() {
-
-        this.coverCanvas = this.coverCanvasRef.nativeElement;
-        this.rxCoverCanvas = this.rxCoverCanvasRef.nativeElement;
-
-        this.teacherCanvas = this.teacherCanvasRef.nativeElement;
-        this.bgCanvas = this.bgCanvasRef.nativeElement;
-
-        this.tmpCanvas = this.tmpCanvasRef.nativeElement;
-        this.canvasContainer = this.canvasContainerRef.nativeElement;
-
-        /* container size 설정 */
-        CANVAS_CONFIG.maxContainerHeight = window.innerHeight - CANVAS_CONFIG.navbarHeight; // pdf 불러오기 사이즈
-        CANVAS_CONFIG.maxContainerWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
-
-        CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(this.coverCanvas);
-    }
-
 
     /**
      *  판서 + background drawing
@@ -335,7 +317,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
     async pageRender(currentDocNum, currentPage, zoomScale) {
 
         // 화면을 급하게 확대하거나 축소 시 깜빡거리는 UI 측면 문제 해결 위한 함수
-        this.preRenderBackgroundTest(currentPage)
+        this.preRenderBackground(currentPage)
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
@@ -370,21 +352,6 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         }
     }
 
-    preRenderBackgroundTest(pageNum) {
-        const targetCanvas = this.bgCanvas
-        const ctx = targetCanvas.getContext("2d");
-        const imgElement: any = document.getElementById('thumb_' + pageNum);
-
-        /**************************************************
-        * 처음 화이트보드에 들어오면 thumbnail view 아니라 fileList view이기 때문에
-        * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
-        * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
-        ****************************************************/
-        if (this.prevViewInfo === 'thumbnail') {
-            ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
-        }
-    }
-
 
 
     /**
@@ -396,10 +363,6 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
      * @returns
      */
     setCanvasSize(currentDocNum, currentPage, zoomScale) {
-        return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.rxCoverCanvas, this.teacherCanvas, this.bgCanvas);
-    }
-
-    setCanvasSizeTest(currentDocNum, currentPage, zoomScale) {
         return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.rxCoverCanvas, this.teacherCanvas, this.bgCanvas);
     }
 
@@ -456,7 +419,7 @@ export class BoardCanvasComponent implements OnInit, OnDestroy {
         this.drawingService.stopRxDrawing();
 
         // set Canvas Size
-        const ratio = this.setCanvasSizeTest(docNum, pageNum, zoomScale);
+        const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
 
         // BG & Board Render
         this.pageRender(docNum, pageNum, zoomScale);
