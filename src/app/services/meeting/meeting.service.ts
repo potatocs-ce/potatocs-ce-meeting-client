@@ -19,14 +19,10 @@ export class MeetingService {
 
 
   getMeetingData(data: any) {
-    console.log(data)
-    console.log(data.meetingId)
     return this.http.get('/apim/v1/meetingInfo/' + data.meetingId);
   }
 
   getUserData(userId: any) {
-    console.log(userId)
-    console.log(userId)
     return this.http.get('/apim/v1/collab/getUserData/' + userId);
   }
 
