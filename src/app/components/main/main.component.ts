@@ -130,7 +130,7 @@ export class MainComponent implements OnInit {
     // // 자기 자신 포함 같은 room에 있는 사람들에게 퇴장했다고 알림
     this.socket.on('notifier_out', (userName) => {
       // console.log(userName)
-      this.showNotification('info', `${userName} has left.`);
+      // this.showNotification('info', `${userName} has left.`);
 
       this.snackbar.open(userName, 'has left.', {
         duration: 3000,
@@ -189,10 +189,6 @@ export class MainComponent implements OnInit {
 * @param {string} type    Notification type
 * @param {string} message Notification message
 */
-  // showNotification( type: string, message: string ): void {
-  // 	this.notifier.notify( type, message );
-  // }
-
   showNotification(type: string, message: string): void {
     this.notifier.notify(type, message);
   }
