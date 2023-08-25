@@ -150,26 +150,6 @@ export class BoardFileViewComponent implements OnInit {
         //////////////////////////////////////////////////////////
     }
 
-    clickPdfTest(docId) {
-        console.log('>> click PDF : change to Thumbnail Mode');
-        this.viewInfoService.changeToThumbnailView(docId);
-
-        //////////////////////////////////////////////////////////
-        /*-------------------------------------------
-            doc 전환 하는 경우 sync
-        ---------------------------------------------*/
-        const data = {
-            meetingId: this.meetingId,
-            docId: docId
-        }
-
-        // Participant 모드 일 경우 sync 기능 적용 제외
-        if (this.myRole != 'Participant') {
-            this.socket.emit('sync:doc', data)
-        }
-        //////////////////////////////////////////////////////////
-    }
-
 
     /**
      * 새로운 File Load (Local)
@@ -214,88 +194,8 @@ export class BoardFileViewComponent implements OnInit {
             ///////////////////////////////////////////////////////////////////
         }
     }
-    handleUploadFileChangedTest(event) {
-        const files: File[] = event.target.files;
-
-        if (event.target.files.length === 0) {
-            console.log('file 안들어옴');
-            return;
-        }
-
-        if (files[0].size > 12000000) {
-            this.dialogService.openDialogNegative(`This file is too large. Maximum file size is 12MB.`);
-            return;
-        }
-
-        // 파일 유효성 검사
-        const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
-        if (ext.toLowerCase() != 'pdf') {
-            this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
-        } else {
-
-            // @OUTPUT -> white-board component로 전달
-            this.newLocalDocumentFile.emit(event.target.files[0]);
-
-            ///////////////////////////////////////////////////////////////////
-            /*---------------------------------------
-            pdf 업로드 시 spinner 
-            -----------------------------------------*/
-            const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-                // width: '300px',
-
-                data: {
-                    content: 'Upload'
-                }
-            });
-            this.eventBusService.emit(new EventData('spinner', dialogRef))
-            ///////////////////////////////////////////////////////////////////
-        }
-    }
 
     deletePdf(_id) {
-        // thumbnail-container(div) 안에 delete(button)이 존재
-        // 2개의 엘리먼트가 동시에 이벤트 발생하는것을 막는 함수 (이벤트 버블링 이슈)
-        // https://webisfree.com/2016-06-15/[%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8]-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%B2%84%EB%B8%94%EB%A7%81-%EC%A0%9C%EA%B1%B0%EB%B0%A9%EB%B2%95-stoppropagation()
-
-        event.stopPropagation();
-
-        this.dialogService.openDialogConfirm('Are you sure you want to delete it?').subscribe(result => {
-            if (result) {
-
-                console.log(_id)
-                console.log('>> click PDF : delete');
-                this.apiService.deleteMeetingPdfFile({ _id }).subscribe(async (data: any) => {
-
-                    // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-                    await this.socket.emit('check:documents', data.meetingId);
-                })
-
-
-                ///////////////////////////////////////////////////////////////////
-                /*---------------------------------------
-                    pdf 삭제 시 spinner 
-                -----------------------------------------*/
-                const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-                    // width: '300px',
-
-                    data: {
-                        content: 'Delete'
-                    }
-                });
-
-
-                this.renderFileList().then(async (value) => {
-                    await dialogRef.close();
-                });
-            }
-        });
-
-
-        ///////////////////////////////////////////////////////////////////
-
-        // this.viewInfoService.setViewInfo({ leftSideView: 'fileList' });
-    }
-    deletePdfTest(_id) {
         // thumbnail-container(div) 안에 delete(button)이 존재
         // 2개의 엘리먼트가 동시에 이벤트 발생하는것을 막는 함수 (이벤트 버블링 이슈)
         // https://webisfree.com/2016-06-15/[%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8]-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%B2%84%EB%B8%94%EB%A7%81-%EC%A0%9C%EA%B1%B0%EB%B0%A9%EB%B2%95-stoppropagation()
