@@ -213,14 +213,43 @@ export class BoardFileViewComponent implements OnInit {
             this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
+    }
+    handleUploadFileChangedTest(event) {
+        const files: File[] = event.target.files;
 
+        if (event.target.files.length === 0) {
+            console.log('file 안들어옴');
+            return;
+        }
 
+        if (files[0].size > 12000000) {
+            this.dialogService.openDialogNegative(`This file is too large. Maximum file size is 12MB.`);
+            return;
+        }
 
+        // 파일 유효성 검사
+        const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
+        if (ext.toLowerCase() != 'pdf') {
+            this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
+        } else {
 
+            // @OUTPUT -> white-board component로 전달
+            this.newLocalDocumentFile.emit(event.target.files[0]);
 
+            ///////////////////////////////////////////////////////////////////
+            /*---------------------------------------
+            pdf 업로드 시 spinner 
+            -----------------------------------------*/
+            const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+                // width: '300px',
 
-
-
+                data: {
+                    content: 'Upload'
+                }
+            });
+            this.eventBusService.emit(new EventData('spinner', dialogRef))
+            ///////////////////////////////////////////////////////////////////
+        }
     }
 
     deletePdf(_id) {
