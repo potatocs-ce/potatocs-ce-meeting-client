@@ -295,5 +295,48 @@ export class BoardFileViewComponent implements OnInit {
 
         // this.viewInfoService.setViewInfo({ leftSideView: 'fileList' });
     }
+    deletePdfTest(_id) {
+        // thumbnail-container(div) 안에 delete(button)이 존재
+        // 2개의 엘리먼트가 동시에 이벤트 발생하는것을 막는 함수 (이벤트 버블링 이슈)
+        // https://webisfree.com/2016-06-15/[%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8]-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%B2%84%EB%B8%94%EB%A7%81-%EC%A0%9C%EA%B1%B0%EB%B0%A9%EB%B2%95-stoppropagation()
+
+        event.stopPropagation();
+
+        this.dialogService.openDialogConfirm('Are you sure you want to delete it?').subscribe(result => {
+            if (result) {
+
+                console.log(_id)
+                console.log('>> click PDF : delete');
+                this.apiService.deleteMeetingPdfFile({ _id }).subscribe(async (data: any) => {
+
+                    // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
+                    await this.socket.emit('check:documents', data.meetingId);
+                })
+
+
+                ///////////////////////////////////////////////////////////////////
+                /*---------------------------------------
+                    pdf 삭제 시 spinner 
+                -----------------------------------------*/
+                const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+                    // width: '300px',
+
+                    data: {
+                        content: 'Delete'
+                    }
+                });
+
+
+                this.renderFileList().then(async (value) => {
+                    await dialogRef.close();
+                });
+            }
+        });
+
+
+        ///////////////////////////////////////////////////////////////////
+
+        // this.viewInfoService.setViewInfo({ leftSideView: 'fileList' });
+    }
 
 }
