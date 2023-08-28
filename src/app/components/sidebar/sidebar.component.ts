@@ -43,7 +43,7 @@ export class SidebarComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.participantsService.updateUserName('now User')
+
         /*-------------------------------------------
                 role에 따라 권한 설정
         ---------------------------------------------*/
