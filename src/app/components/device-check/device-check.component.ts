@@ -34,7 +34,7 @@ export class DeviceCheckComponent implements OnInit {
 
     browserInfo: any;
     browserVersion: any;
-    soundMeterInterval:any;
+    soundMeterInterval: any;
     localStream$;
     soundLevel: any;
     private unsubscribe$ = new Subject<void>();
@@ -58,19 +58,19 @@ export class DeviceCheckComponent implements OnInit {
         this.meetingId = this.route.snapshot.params['id'];
 
         this.video = this.videoRef.nativeElement;
-        
+
         // 브라우저 체크
         this.browserCheck();
-        
+
         // 웹캠으로 부터 스트림 추출
         this.getLocalMediaStream();
-        
+
         // 컴퓨터에 연결된 장치 목록
         this.deviceCheck();
-        
+
         // 오디오 스트림 바
         this.extractAudioStream();
-        
+
         // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 수정
         this.deviceChangeCheck();
     }
@@ -83,13 +83,13 @@ export class DeviceCheckComponent implements OnInit {
         // https://simpl.info/getusermedia/sources/
         // https://levelup.gitconnected.com/share-your-screen-with-webrtc-video-call-with-webrtc-step-5-b3d7890c8747
         await navigator.mediaDevices.enumerateDevices().then(async (devices) => {
-            console.log('-------------------- device list ------------------------');
-            console.log(devices)
+            // console.log('-------------------- device list ------------------------');
+            // console.log(devices)
             // 장치 목록 객체화
             this.convertDeviceObject(devices)
-            console.log(this.miceDevices)
-            console.log(this.videoDevices)
-            console.log(this.speakerDevices)
+            // console.log(this.miceDevices)
+            // console.log(this.videoDevices)
+            // console.log(this.speakerDevices)
             // 장치 연결, 권한 유무
             this.checkDevice()
 
@@ -256,7 +256,7 @@ export class DeviceCheckComponent implements OnInit {
             .then(res => this.handleSuccess(res))
             .then(result => this.deviceCheck())
             .catch(error => this.handleError(error));
-            
+
     }
 
     handleSuccess(stream) {
@@ -265,7 +265,7 @@ export class DeviceCheckComponent implements OnInit {
         const AudioContext = window.AudioContext
         let audioContext = new AudioContext();
         const soundMeter = new SoundMeter(audioContext);
-        
+
         const that = this;
         soundMeter.connectToSource(stream, function (e) {
 
@@ -278,7 +278,7 @@ export class DeviceCheckComponent implements OnInit {
             }, 10);
         });
 
-        
+
     }
 
     handleError(error) {
@@ -339,7 +339,7 @@ export class DeviceCheckComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-    
+
     }
 }
 

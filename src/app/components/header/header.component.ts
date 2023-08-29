@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
 
     participants: any;
     cameraOff: boolean = false;
-    mute: boolean = true;
+    mute: boolean = false;
     cameraIcon = 'videocam_on';
     muteIcon = 'mic';
     toggleIcon = 'density_medium';
@@ -57,36 +57,7 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        getMeetingStatus(meetingId) {
-            const data = {
-                meetingId: meetingId,
-            };
 
-            // meeting의 status를 불러온다.
-            this.meetingService.getMeetingStatus(data).subscribe((res: any) => {
-                this.eventBusService.emit(new EventData('meetingStatus', res));
-
-                // meeting의 status가 'Close'일 경우 role 변경
-                if (res.status === 'Close') {
-                    const userRoleData = {
-                        meetingId: this.meetingId,
-                        userId: this.userId,
-                        role: 'Participant',
-                    };
-
-                    this.meetingService.getRoleUpdate(userRoleData).subscribe(() => {
-                        const data = {
-                            role: 'Participant',
-                            status: res.status,
-                        };
-
-                        this.eventBusService.emit(new EventData('myRole', data));
-                        // meeting status가 'Close'일 경우 role 변경 버튼 안보이게 해서 role 변경 금지
-                        this.eventBusService.emit(new EventData('Close', data));
-                    });
-                }
-            });
-        }
         this.eventBusService.on('toggle', this.unsubscribe$, () => {
             if (this.toggleIcon == 'density_medium') {
                 this.toggleIcon = 'arrow_back_ios';
