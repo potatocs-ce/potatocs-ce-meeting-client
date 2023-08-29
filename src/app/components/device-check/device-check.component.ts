@@ -83,13 +83,13 @@ export class DeviceCheckComponent implements OnInit {
         // https://simpl.info/getusermedia/sources/
         // https://levelup.gitconnected.com/share-your-screen-with-webrtc-video-call-with-webrtc-step-5-b3d7890c8747
         await navigator.mediaDevices.enumerateDevices().then(async (devices) => {
-            // console.log('-------------------- device list ------------------------');
-            // console.log(devices)
+            console.log('-------------------- device list ------------------------');
+            console.log(devices)
             // 장치 목록 객체화
             this.convertDeviceObject(devices)
-            // console.log(this.miceDevices)
-            // console.log(this.videoDevices)
-            // console.log(this.speakerDevices)
+            console.log(this.miceDevices)
+            console.log(this.videoDevices)
+            console.log(this.speakerDevices)
             // 장치 연결, 권한 유무
             this.checkDevice()
 
@@ -339,7 +339,6 @@ export class DeviceCheckComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-
     }
 }
 
