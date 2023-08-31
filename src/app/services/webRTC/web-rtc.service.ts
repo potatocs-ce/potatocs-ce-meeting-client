@@ -46,7 +46,7 @@ export class WebRTCService {
 
         this._packetSent$ = new BehaviorSubject(0);
         this.packetSent$ = this._packetSent$.asObservable();
-        this._socket = io(this.url + '/socketWebRTC', { transports: ['websocket'], path: '/socketWebRTC' });
+
     }
 
     /*-------------------------------------------------------

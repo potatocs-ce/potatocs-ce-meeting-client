@@ -339,6 +339,7 @@ export class DeviceCheckComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
+
     }
 }
 
