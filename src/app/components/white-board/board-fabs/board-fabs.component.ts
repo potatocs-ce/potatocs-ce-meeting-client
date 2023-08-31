@@ -19,6 +19,15 @@ export class BoardFabsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.viewInfoService.state$
+      .pipe(takeUntil(this.unsubscribe$), pluck('documentInfo'), distinctUntilChanged())
+      .subscribe(async (documentInfo) => {
+        this.documentInfo = documentInfo;
+        console.log(this.documentInfo)
+        await new Promise(res => setTimeout(res, 0));
+
+        this.renderFileList();
+      });
 
   }
 
