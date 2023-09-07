@@ -32,18 +32,6 @@
 <br/>
 
 ## 🛠️ Features
-- Kanban Board
-    - Kanban board are available for team work
-    - You can create groups in teams and manage your work effectively.
-    - You can easily manage task-specific documents by uploading files.
-    - You can manage tasks in detail by tagging them for each task.
-- Real Time Meeting
-    - You can create real-time meetings per groups.
-    - You can record and share the contents of the meeting through real-time chat at the same time as the meeting.
-- Real Time Document Sharing
-    - You can create real-time document sharing per groups.
-    - You can hold meetings through real-time document sharing and writing.
-    - You can automatically follow and check the documents presented by the presenter.
 <br/>
 
 ## 📈 Release Note
