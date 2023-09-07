@@ -52,7 +52,7 @@
     - [MongoDB](https://www.mongodb.com/ko-kr/cloud/atlas/lp/try4)
 ### Installation
 ```
-git clone https://github.com/potatocs-ce/potatocs-ce-collab-client.git
+git clone https://github.com/potatocs-ce/potatocs-ce-meeting-client.git
 cd potatocs-ce-collab-client
 npm install
 npm start
