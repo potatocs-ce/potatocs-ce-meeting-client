@@ -53,7 +53,7 @@
 ### Installation
 ```
 git clone https://github.com/potatocs-ce/potatocs-ce-meeting-client.git
-cd potatocs-ce-collab-client
+cd potatocs-ce-meeting-client
 npm install
 npm start
 ```
