@@ -71,7 +71,7 @@ npm start
 <img src="https://img.shields.io/badge/materialdesign-757575?style=for-the-badge&logo=materialdesign&logoColor=white">
 <img src="https://img.shields.io/badge/css3-1572B6?style=for-the-badge&logo=css3&logoColor=white">
 <img src="https://img.shields.io/badge/scss-CC6699?style=for-the-badge&logo=sass&logoColor=white">
-
+<img src="https://img.shields.io/badge/socketdotio-010101?style=for-the-badge&logo=socketdotio&logoColor=white">
 <br/>
 
 ## 🪛 Project Control
