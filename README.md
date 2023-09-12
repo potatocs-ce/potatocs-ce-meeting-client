@@ -36,6 +36,7 @@
 - Real-time video conference
 - Real-time document sharing
 - Real-time opinions sharing
+- Real-time writer sharing
 <br/>
 
 ## 📈 Release Note
