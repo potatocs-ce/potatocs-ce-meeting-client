@@ -34,7 +34,7 @@
 
 ## 🛠️ Features
 - Real-time video conference
-
+- Real-time document sharing
 <br/>
 
 ## 📈 Release Note
