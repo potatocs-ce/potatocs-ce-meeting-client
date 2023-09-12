@@ -20,6 +20,7 @@
 
 ## 🔍 Preview
 ![img](./readmeImg/스크린샷.png)
+![img](./readmeImg/스크린샷2.png)
 
 <br/>
 
