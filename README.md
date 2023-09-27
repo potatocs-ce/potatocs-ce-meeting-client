@@ -40,6 +40,7 @@
 - Real-time sharing of opinions
     - You can express and document your opinions during meetings through real-time chat.
 - Real-time collaborative writing
+    - Real-time whiteboard sharing enhances the dynamism of meetings by allowing users to share and draw pictures as if they are being created right before their eyes.
 <br/>
 
 ## 📈 Release Note
