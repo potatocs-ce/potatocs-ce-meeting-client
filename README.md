@@ -59,6 +59,7 @@
 ### Setup
 - The following pre-tasks are required to run in a local environment  
     - [MongoDB](https://www.mongodb.com/ko-kr/cloud/atlas/lp/try4)
+    - [AWS S3](https://aws.amazon.com/ko/pm/serv-s3/?gclid=CjwKCAiAvoqsBhB9EiwA9XTWGWmj8Cuvq0Adz6isVZ7_zbeO7TamxYJQlnEMj23jh5SD09Sw7u3rlBoCJVMQAvD_BwE&trk=919c3162-c8f1-4d4c-baec-33fb3fcc1988&sc_channel=ps&ef_id=CjwKCAiAvoqsBhB9EiwA9XTWGWmj8Cuvq0Adz6isVZ7_zbeO7TamxYJQlnEMj23jh5SD09Sw7u3rlBoCJVMQAvD_BwE:G:s&s_kwcid=AL!4422!3!536452699328!e!!g!!aws%20s3!11547526035!116491964390)
 ### Installation
 ```
 git clone https://github.com/potatocs-ce/potatocs-ce-meeting-client.git
