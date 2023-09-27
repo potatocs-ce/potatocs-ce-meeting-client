@@ -33,10 +33,10 @@
 <br/>
 
 ## 🛠️ Features
-- Real-time video conference
+- Real-time video conferencing
 - Real-time document sharing
-- Real-time opinions sharing
-- Real-time writer sharing
+- Real-time sharing of opinions
+- Real-time collaborative writing
 <br/>
 
 ## 📈 Release Note
