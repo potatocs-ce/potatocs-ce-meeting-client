@@ -34,8 +34,11 @@
 
 ## 🛠️ Features
 - Real-time video conferencing
+    - Through real-time video conferencing, users in different locations can engage in face-to-face meetings, share opinions, and communicate in real-time.
 - Real-time document sharing
+    - Through real-time document sharing, you can receive and review documents instantly within the context of a real-time meeting.
 - Real-time sharing of opinions
+    - You can express and document your opinions during meetings through real-time chat.
 - Real-time collaborative writing
 <br/>
 
