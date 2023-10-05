@@ -44,6 +44,8 @@
 - Real-time presentation feature
     - Through the real-time presentation feature, attendees can follow along with the presenter as they navigate through the content of the presentation document.
 - Real-time participant attendance tracking feature
+    - The real-time participant attendance tracking feature allows you to assess the attendance status of participants, verify their roles, and modify participant roles based on permissions as needed.
+
 <br/>
 
 ## 📈 Release Note
