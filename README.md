@@ -42,6 +42,7 @@
 - Real-time collaborative writing
     - Real-time whiteboard sharing enhances the dynamism of meetings by allowing users to share and draw pictures as if they are being created right before their eyes.
 - Real-time presentation feature
+    - Through the real-time presentation feature, attendees can follow along with the presenter as they navigate through the content of the presentation document.
 - Real-time participant attendance tracking feature
 <br/>
 
