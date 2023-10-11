@@ -33,18 +33,24 @@
 <br/>
 
 ## 🛠️ Features
-- Real-time video conferencing
-    - Through real-time video conferencing, users in different locations can engage in face-to-face meetings, share opinions, and communicate in real-time.
-- Real-time document sharing
-    - Through real-time document sharing, you can receive and review documents instantly within the context of a real-time meeting.
-- Real-time sharing of opinions
-    - You can express and document your opinions during meetings through real-time chat.
-- Real-time collaborative writing
-    - Real-time whiteboard sharing enhances the dynamism of meetings by allowing users to share and draw pictures as if they are being created right before their eyes.
-- Real-time presentation feature
-    - Through the real-time presentation feature, attendees can follow along with the presenter as they navigate through the content of the presentation document.
-- Real-time participant attendance tracking feature
-    - The real-time participant attendance tracking feature allows you to assess the attendance status of participants, verify their roles, and modify participant roles based on permissions as needed.
+Real-time Video Conferencing:
+
+Facilitates face-to-face meetings, opinion sharing, and real-time communication for users located in different places.
+Real-time Document Sharing:
+
+Enables instant receipt and review of documents within the context of a real-time meeting.
+Real-time Opinions Sharing:
+
+Allows users to express and document their opinions during meetings through real-time chat.
+Real-time Collaborative Writing:
+
+Enhances meeting dynamics by enabling real-time whiteboard sharing for users to collaboratively draw and share images.
+Real-time Presentation Feature:
+
+Permits attendees to follow the presenter navigating through the content of the presentation document in real-time.
+Real-time Participant Attendance Tracking Feature:
+
+Assesses participant attendance, verifies roles, and enables role modifications based on permissions in real-time.
 
 <br/>
 
