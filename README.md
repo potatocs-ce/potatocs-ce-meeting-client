@@ -33,22 +33,22 @@
 <br/>
 
 ## 🛠️ Features
-Real-time Video Conferencing:
+- Real-time Video Conferencing:
 
 Facilitates face-to-face meetings, opinion sharing, and real-time communication for users located in different places.
-Real-time Document Sharing:
+- Real-time Document Sharing:
 
 Enables instant receipt and review of documents within the context of a real-time meeting.
-Real-time Opinions Sharing:
+- Real-time Opinions Sharing:
 
 Allows users to express and document their opinions during meetings through real-time chat.
-Real-time Collaborative Writing:
+- Real-time Collaborative Writing:
 
 Enhances meeting dynamics by enabling real-time whiteboard sharing for users to collaboratively draw and share images.
-Real-time Presentation Feature:
+- Real-time Presentation Feature:
 
 Permits attendees to follow the presenter navigating through the content of the presentation document in real-time.
-Real-time Participant Attendance Tracking Feature:
+- Real-time Participant Attendance Tracking Feature:
 
 Assesses participant attendance, verifies roles, and enables role modifications based on permissions in real-time.
 
