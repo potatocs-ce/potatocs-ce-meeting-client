@@ -41,7 +41,7 @@
 - Real-time Opinions Sharing
     - Allows users to express and document opinions during meetings through real-time chat.
 - Real-time Collaborative Writing
-    - Enhances meeting dynamics by enabling real-time whiteboard sharing for users to collaboratively draw and share images.
+    - Enhances meeting dynamics with real-time whiteboard sharing for collaborative drawing and image sharing.
 - Real-time Presentation Feature
     - Permits attendees to follow the presenter navigating through the content of the presentation document in real-time.
 - Real-time Participant Attendance Tracking Feature
