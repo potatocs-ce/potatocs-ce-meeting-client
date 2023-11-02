@@ -43,7 +43,7 @@
 - Real-time Collaborative Writing
     - Enhances meeting dynamics with real-time whiteboard sharing for collaborative drawing and image sharing.
 - Real-time Presentation Feature
-    - Permits attendees to follow the presenter navigating through the content of the presentation document in real-time
+    - Permits attendees to follow the presenter navigating through the content of the presentation document in real-time.
 - Real-time Participant Attendance Tracking Feature
     - Assesses participant attendance, verifies roles, and enables role modifications based on permissions in real-time.
 - Real-time Screen Sharing
