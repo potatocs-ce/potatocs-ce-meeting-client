@@ -17,6 +17,7 @@
     - [Task Control](#task-control)
 - [🚀 Deployment](#-deployment)
 
+<br/>
 
 ## 🔍 Preview
 ![img](./readmeImg/스크린샷.png)
