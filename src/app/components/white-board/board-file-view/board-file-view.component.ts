@@ -43,6 +43,78 @@ export class BoardFileViewComponent implements OnInit {
         this.socket = this.socketService.socket;
     }
 
+    eventBusListeners() {
+
+        // 내가 그린 Event thumbnail에 그리기
+        this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
+            this.drawThumb(data);
+        });
+
+
+        // 다른 사람이 그린 Event thumbnail에 그리기
+        this.eventBusService.on('receive:drawEvent', this.unsubscribe$, async (data) => {
+
+            /**
+             * 사용자별 판서 이벤트
+             * 다른 참가자가 드로우 이벤트를 발생해도
+             * 내가 가진 사용자별 판서에서 선택되지 않으면 그냥 return 한다.
+             */
+            for (let i = 0; i < this.selectedUserInfo.length; i++) {
+                if ((data.drawingEvent.userId === this.selectedUserInfo[i]?.selectedUserId)
+                    && !this.selectedUserInfo[i].isSelected) {
+                    return
+                }
+            }
+
+            this.drawThumbRx(data);
+        });
+
+        /**
+             * 자신이 보고있는 판서 드로잉 삭제
+            */
+        this.eventBusService.on('rmoveDrawEventThumRendering', this.unsubscribe$, (data) => {
+            if (this.viewInfoService.state.leftSideView == 'fileList') return;
+            const thumbCanvas = this.thumbCanvasRef.toArray()[this.currentPageNum - 1].nativeElement;
+            const thumbScale = this.thumbArray[this.currentPageNum - 1].scale;
+            this.drawingService.clearThumb(data, thumbCanvas, thumbScale);
+        })
+        // 다른 사림이 보고있는 판서 드로잉 삭제 
+        this.eventBusService.on('receive:clearDrawEvent', this.unsubscribe$, async (data) => {
+            if (this.viewInfoService.state.leftSideView == 'fileList') return;
+            if (this.currentDocId == data.docId) {
+                const thumbCanvas = this.thumbCanvasRef.toArray()[data.currentPage - 1].nativeElement;
+                const thumbScale = this.thumbArray[data.currentPage - 1].scale;
+                this.drawingService.clearThumb(data, thumbCanvas, thumbScale);
+            }
+        });
+        //
+        /*--------------------------------------
+            Scroll event에 따라서 thumbnail window 위치/크기 변경
+            --> broadcast from comclass component
+        --------------------------------------*/
+        this.eventBusService.on('change:containerScroll', this.unsubscribe$, async (data) => {
+            this.thumbWindow = this.thumbWindowRef.last.nativeElement;
+            this.thumbWindow.style.left = data.left * this.scrollRatio + 'px';
+            this.thumbWindow.style.top = data.top * this.scrollRatio + 'px';
+        })
+
+        /*-------------------------------------------
+            zoom, page 전환등을 하는 경우
+	
+            1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
+            2. thumbnail의 window size 계산 수행
+        ---------------------------------------------*/
+        this.eventBusService.on('change:containerSize', this.unsubscribe$, async (data) => {
+            this.scrollRatio = this.thumbArray[this.currentPageNum - 1].width / data.coverWidth;
+            this.thumbWindowSize = {
+                width: this.thumbArray[this.currentPageNum - 1].width * data.ratio.w + 'px',
+                height: this.thumbArray[this.currentPageNum - 1].height * data.ratio.h + 'px'
+            };
+
+            // console.log('<---[BUS] change:containerSize ::  this.thumbWindowSize : ', this.thumbWindowSize)
+        });
+
+    }
 
     // Open된 File을 white-board component로 전달
     @Output() newLocalDocumentFile = new EventEmitter();
