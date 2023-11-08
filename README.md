@@ -47,7 +47,7 @@
 - Real-time Participant Attendance Tracking Feature
     - Assesses participant attendance, verifies roles, and allows role modifications based on permissions in real-time.
 - Real-time Screen Sharing
-    - Assesses participant attendance, verifies roles, and enables role modifications based on permissions in real-time.
+    - Allows participants to share their screens in real-time for collaborative viewing.
 
 <br/>
 
