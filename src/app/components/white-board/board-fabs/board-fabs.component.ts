@@ -29,8 +29,8 @@ export class BoardFabsComponent implements OnInit {
    *
    * @param action : 'fitToWidth' , 'fitToPage', 'zoomIn', 'zoomOut'
    */
-  clickZoom(action:any){
-    console.log(">> Click Zoom: ", action);
+  clickZoom(action: any) {
+    // console.log(">> Click Zoom: ", action);
 
     const docNum = this.viewInfoService.state.pageInfo.currentDocNum;
     const currentPage = this.viewInfoService.state.pageInfo.currentPage;
