@@ -4,25 +4,21 @@ import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class PdfStorageService {
   private _pdfVarArray: Array<any> = [];
 
-  constructor() { }
-
+  constructor() {}
 
   get pdfVarArray(): any {
-		return [...this._pdfVarArray];
-	}
+    return [...this._pdfVarArray];
+  }
 
   setPdfVarArray(pdfVarArray) {
     this._pdfVarArray = pdfVarArray;
   }
-
 
   getPdfLength() {
     return this._pdfVarArray.length;
@@ -32,19 +28,20 @@ export class PdfStorageService {
    * pdf Page return
    * @param {number} pageNum 페이지 번호
    * @return 해당 page의 pdf document
-  */
+   */
   getPdfPage(pdfNum, pageNum) {
     return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
   }
 
-
   /**
    * 해당 page의 scale 1에 해당하는 viewport size.
    * @param {number} pageNum 페이지 번호
-  */
+   */
   getViewportSize(docNum, pageNum) {
     // console.log(`> get ViewPort size: docNum : ${docNum}, pageNum : ${pageNum}`);
-    return this._pdfVarArray[docNum - 1].pdfPages[pageNum - 1].getViewport({scale: 1});
+    return this._pdfVarArray[docNum - 1].pdfPages[pageNum - 1].getViewport({
+      scale: 1,
+    });
   }
 
   /**
@@ -63,12 +60,11 @@ export class PdfStorageService {
       }
 
       for (const pdfPage of item.pdfPages) {
-				pdfPage.cleanup();
-			}
+        pdfPage.cleanup();
+      }
 
       item.pdfDestroy = '';
       item.pdfPages = [];
-
     }
   }
 }
