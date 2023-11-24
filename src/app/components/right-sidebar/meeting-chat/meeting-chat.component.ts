@@ -101,7 +101,7 @@ export class MeetingChatComponent implements OnInit, AfterViewChecked {
         this.scrollToBottom();
     }
 
-    ngOnDestory(): void {
+    ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }

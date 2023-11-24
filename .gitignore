@@ -7,7 +7,7 @@
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
-
+git.sh
 # dependencies
 /node_modules
 

@@ -95,7 +95,7 @@ export class BoardFileViewComponent implements OnInit {
 
     }
 
-    ngOnDestory(): void {
+    ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }
@@ -193,6 +193,7 @@ export class BoardFileViewComponent implements OnInit {
             this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
+
     }
 
     deletePdf(_id) {

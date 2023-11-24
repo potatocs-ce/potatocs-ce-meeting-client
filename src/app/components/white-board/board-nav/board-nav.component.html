@@ -133,14 +133,43 @@
                         </button> -->
                     </mat-menu>
 
-                    <!-- <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
-                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
-                            (click)="changeTool('textarea');" mat-icon-button>
-                            
-                            <mat-icon [ngClass]="(currentTool == 'textarea') && (mode == 'draw')?'active':''"> title </mat-icon>
-                        </button>
-                    </div> -->
 
+                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button class="filter-btn" type="button"
+                            [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button mat-button
+                            [matMenuTriggerFor]="shapeMemu1" style="display: flex;
+                            align-items: center;">
+                            <mat-icon matSuffix [ngClass]="isChecked ? '' :'active'">how_to_reg</mat-icon>
+                        </button>
+                        <!-- <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " mat-icon-button
+                            mat-button [matMenuTriggerFor]="shapeMemu1">
+                            <mat-icon
+                            [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''">
+                            star_border_purple500 </mat-icon>
+                            interests
+                            <ic-icon [icon]="shapeOutlineIcon" [width]="40" [height]="40"
+                                [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''"></ic-icon>
+                        </button> -->
+                    </div>
+
+
+                    <!-- 사용자별 판서모드 진행중.. -->
+                    <mat-menu #shapeMemu1="matMenu" class="custom-menu">
+                        <div fxFlex fxLayout="column" (click)="$event.stopPropagation();">
+                            <div (click)="changeSeletedViewMode();">
+                                <mat-checkbox [(ngModel)]="isChecked" color="primary">
+                                    ALL
+                                </mat-checkbox>
+
+                            </div>
+                            <div *ngFor="let member of members">
+                                <mat-checkbox [(ngModel)]="member.isSelected"
+                                    (ngModelChange)="updateSeletedUser(member._id)">
+                                    {{member.name}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </mat-menu>
                 </div>
             </li>
         </ul>

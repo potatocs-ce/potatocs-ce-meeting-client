@@ -17,8 +17,8 @@ import { SocketService } from 'src/@wb/services/socket/socket.service';
 import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
-
-
+import { MeetingInfoService } from 'src/@wb/store/meeting-info.service';
+import { SelectedViewInfoService } from 'src/@wb/store/selected-view-info.service';
 
 @Component({
     selector: 'app-board-nav',
@@ -42,13 +42,17 @@ export class BoardNavComponent implements OnInit {
     currentPage: any;
     currentDocId: string;
     private socket;
-    
+    members; // 참가자 정보를 select 창에 맞게 가공
+    private enlistedMembers; // 참가자 정보
 
-     // iconify TEST //////////////////////
+
+    isChecked = true;
+
+    // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
     markerIcon = markerIcon;
-  //////////////////////////////////////
+    //////////////////////////////////////
 
     // Width: 3단계 설정
     widthSet = CANVAS_CONFIG.widthSet;
@@ -76,6 +80,8 @@ export class BoardNavComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private apiService: ApiService,
         private socketService: SocketService,
+        private meetingInfoService: MeetingInfoService,
+        private selectedViewInfoService: SelectedViewInfoService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -124,6 +130,38 @@ export class BoardNavComponent implements OnInit {
             }
 
         })
+
+
+        // 실시간으로 meeitngInfo를 바라보고 있다.
+        this.meetingInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$)).subscribe(async (meetingInfo) => {
+                if (meetingInfo) {
+                    // 미팅 참가자들을 가져와 사용자별 판서 모드에 사용되는 html DOM으로 사용
+                    this.members = meetingInfo.enlistedMembers.map(x => {
+                        return {
+                            _id: x._id,
+                            isSelected: true,
+                            name: x.name
+                        }
+                    })
+
+                    // 미팅 참가자를 이용해 사용자별 판서 모드 상태관리
+                    const selectedViewInfo = {
+                        ...this.selectedViewInfoService.state,
+                        isSelectedViewMode: false,
+                        selectedUserInfo: await this.members.map(x => {
+                            return { isSelected: true, selectedUserId: x._id }
+                        })
+                    }
+                    this.isChecked = true;
+                    this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+
+
+                }
+            });
+
+
+
     }
 
 
@@ -162,10 +200,10 @@ export class BoardNavComponent implements OnInit {
         if (editInfo.mode != 'draw') return;
 
         // textarea 모드거나 text모드 상태에서 width를 수정하면 같이 바뀥다.
-        if(editInfo.tool == 'text' || editInfo.tool == 'textarea'){
+        if (editInfo.tool == 'text' || editInfo.tool == 'textarea') {
             editInfo.toolsConfig['text'].width = width;
             editInfo.toolsConfig['textarea'].width = width;
-          } else {
+        } else {
             const tool = editInfo.tool; // tool: 'pen', 'eraser', 'shape'
             editInfo.toolsConfig[tool].width = width;
         }
@@ -182,10 +220,10 @@ export class BoardNavComponent implements OnInit {
     async changeTool(tool) {
         // console.log(tool)
         const editInfo = Object.assign({}, this.editInfoService.state);
-        
+
 
         if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
-            if(confirm("Do you want to delete all drawings on the current page?")){
+            if (confirm("Do you want to delete all drawings on the current page?")) {
                 const data = {
                     docId: this.currentDocId,
                     currentDocNum: this.currentDocNum,
@@ -220,5 +258,57 @@ export class BoardNavComponent implements OnInit {
         editInfo.mode = 'move';
         this.editInfoService.setEditInfo(editInfo);
     }
+
+    /**
+     * 사용자별 판서 모드
+     * ALL 클릭 시 사용자별 판서모드는 false가 되고
+     * 사용자 별 판서 전체가 true로 바뀜
+     */
+    changeSeletedViewMode() {
+
+        const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+        const { isSelectedViewMode } = getSelectedViewInfo
+
+        this.members = this.members.map(x => { return { ...x, isSelected: isSelectedViewMode } })
+        const selectedViewInfo = {
+            ...getSelectedViewInfo,
+            isSelectedViewMode: !isSelectedViewMode,
+            selectedUserInfo: this.members.map(x => { return { selectedUserId: x._id, isSelected: isSelectedViewMode } })
+        }
+
+        this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+        this.isChecked = !isSelectedViewMode
+
+    }
+    /**
+     * 사용자별 판서 모드
+     * seletedViewMode 사용자 선택
+     * @param memberId : 는 선택한 사용자 Id
+     */
+    async updateSeletedUser(memberId) {
+        const getSelectedViewInfo = Object.assign({}, this.selectedViewInfoService.state);
+        const selectedViewInfo = {
+            ...getSelectedViewInfo,
+            isSelectedViewMode: true,
+            selectedUserInfo: getSelectedViewInfo.selectedUserInfo.map((x) => {
+                if (x.selectedUserId === memberId) {
+                    return { ...x, isSelected: !x.isSelected }
+                }
+                return x
+            })
+        }
+        this.isChecked = false;
+        /**
+         * 만약 ALL을 누르지 않고 모든 사람들을 체크할 경우
+         * isSelectedViewMode를 false로
+         */
+        const isCheckALLMod = await selectedViewInfo.selectedUserInfo.every(x => x.isSelected)
+        if (isCheckALLMod) {
+            selectedViewInfo.isSelectedViewMode = false
+            this.isChecked = true;
+        }
+        this.selectedViewInfoService.setSelectedViewInfo(selectedViewInfo);
+    }
+
 
 }
