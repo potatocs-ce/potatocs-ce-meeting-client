@@ -8,57 +8,57 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 interface Token {
-	token: String
+    token: String
 }
 
 @Injectable({
-	providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
 
-	constructor(
-		private http: HttpClient,
-		private jwtHelper: JwtHelperService,
+    constructor(
+        private http: HttpClient,
+        private jwtHelper: JwtHelperService,
 
-	) { }
+    ) { }
 
-	signIn(userData: any): Observable<Token> {
-		console.log('userData', userData);
-		return this.http.post<Token>('/apim/v1/auth/signIn', userData)
-			.pipe(
-				tap(
-					(res: any) => {
-						this.setToken(res.token)
-					}),
-				shareReplay()
-			)
-	}
+    signIn(userData: any): Observable<Token> {
+        console.log('userData', userData);
+        return this.http.post<Token>('/apim/v1/auth/signIn', userData)
+            .pipe(
+                tap(
+                    (res: any) => {
+                        this.setToken(res.token)
+                    }),
+                shareReplay()
+            )
+    }
 
-	isAuthenticated(): boolean {
-		const token = this.getToken();
-		return token ? !this.isTokenExpired(token) : false;
-	}
+    isAuthenticated(): boolean {
+        const token = this.getToken();
+        return token ? !this.isTokenExpired(token) : false;
+    }
 
-	getToken(): string {
-		return localStorage.getItem(ENV.tokenName) || '';
-	}
+    getToken(): string {
+        return localStorage.getItem(ENV.tokenName) || '';
+    }
 
-	setToken(token: string): void {
-		localStorage.setItem(ENV.tokenName, token);
-	}
+    setToken(token: string): void {
+        localStorage.setItem(ENV.tokenName, token);
+    }
 
-	removeToken(): void {
-		localStorage.removeItem(ENV.tokenName);
-	}
+    removeToken(): void {
+        localStorage.removeItem(ENV.tokenName);
+    }
 
-	// jwtHelper
-	isTokenExpired(token: string) {
-		return this.jwtHelper.isTokenExpired(token);
-	}
+    // jwtHelper
+    isTokenExpired(token: string) {
+        return this.jwtHelper.isTokenExpired(token);
+    }
 
-	getTokenInfo() {
-		return this.jwtHelper.decodeToken(this.getToken());
-	}
+    getTokenInfo() {
+        return this.jwtHelper.decodeToken(this.getToken());
+    }
 
 }

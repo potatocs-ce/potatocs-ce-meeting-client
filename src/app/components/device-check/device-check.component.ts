@@ -65,6 +65,7 @@ export class DeviceCheckComponent implements OnInit {
     // 웹캠으로 부터 스트림 추출
     this.getLocalMediaStream();
 
+
     // 컴퓨터에 연결된 장치 목록
     this.deviceCheck();
 
@@ -294,6 +295,7 @@ export class DeviceCheckComponent implements OnInit {
       version: null
     };
 
+
     userAgent = userAgent.toLowerCase();
 
     if (userAgent.indexOf("opr") !== -1) {
@@ -341,7 +343,7 @@ export class DeviceCheckComponent implements OnInit {
     this.unsubscribe$.complete();
 
   }
-}
+
 
 
 

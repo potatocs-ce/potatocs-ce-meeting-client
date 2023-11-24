@@ -194,13 +194,6 @@ export class BoardFileViewComponent implements OnInit {
             ///////////////////////////////////////////////////////////////////
         }
 
-
-
-
-
-
-
-
     }
 
     deletePdf(_id) {
