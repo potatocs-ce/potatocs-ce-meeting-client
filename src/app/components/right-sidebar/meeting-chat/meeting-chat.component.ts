@@ -106,7 +106,18 @@ export class MeetingChatComponent implements OnInit, AfterViewChecked {
         this.unsubscribe$.complete();
     }
 
+    handleSharingClick() {
+        // Participant 모드 일 경우 화면공유 기능 제외
+        if (this.myRole != 'Participant') {
+            this.eventBusService.emit(new EventData('handleSharingClick', ''))
 
+            // this.sharing default -> false
+            // 화면 공유 x -> 화면 공유  o
+            if (this.sharing) {
+                this.shareIcon = 'screen_share' // 아이콘 변경
+            }
+        }
+    }
 
     // 채팅 생성
     createChat() {
