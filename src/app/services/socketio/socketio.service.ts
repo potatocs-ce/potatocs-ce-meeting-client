@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {io, Socket} from'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { environment } from '../../../environments/environment';
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class SocketioService {
 
@@ -14,7 +14,7 @@ export class SocketioService {
 
 	constructor() {
 		// this.socket = io(this.url, {transports: ['websocket']});
-		this._socket = io(this.url+'/socketWebRTC', { transports: ['websocket'], path:'/socketWebRTC' });
+		this._socket = io(this.url + '/', { transports: ['websocket'], path: '/' });
 		// console.log(this._socket);
 	}
 

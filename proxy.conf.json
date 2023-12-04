@@ -1,6 +1,6 @@
 {
 	"/apim": {
-		"target": "http://localhost:3300",
+		"target": "http://localhost:3400",
 		"secure": false
 	}
 }
