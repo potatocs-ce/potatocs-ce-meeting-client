@@ -14,7 +14,7 @@ export class SocketioService {
 
 	constructor() {
 		// this.socket = io(this.url, {transports: ['websocket']});
-		this._socket = io(this.url + '/', { transports: ['websocket'], path: '/socketWebRTC' });
+		this._socket = io(this.url + '/socketWebRTC', { transports: ['websocket'], path: '/socketWebRTC' });
 		// console.log(this._socket);
 	}
 
