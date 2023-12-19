@@ -13,7 +13,7 @@
 
     // icon size
     .mat-icon {
-      font-size:40px;
+        font-size: 40px;
     }
 
     .class-info {
@@ -84,7 +84,8 @@
                 }
             }
 
-            div:first-child, div:nth-child(4) {
+            div:first-child,
+            div:nth-child(4) {
                 i:before {
                     background-color: lightgray;
                     padding: 1px;
@@ -153,16 +154,17 @@
                 min-width: 70px;
                 padding: 0;
                 margin: 0;
-                background-color:transparent;
+                background-color: transparent;
                 border: 0;
                 color: white;
-                :hover{
+
+                :hover {
                     color: rgb(255, 255, 0);
                 }
             }
 
             mat-icon.active {
-              color:yellow;
+                color: yellow;
             }
 
             // i {
@@ -245,12 +247,12 @@
     부모에게는 커서 모양, 자식에게는 클릭 기능 제한
 */
 .wrap {
-    cursor : not-allowed;
+    cursor: not-allowed;
 }
 
 .participant {
     /* 클릭 불가능 none */
-    pointer-events : none;
+    pointer-events: none;
 }
 
 
@@ -260,18 +262,18 @@
 
 // icon
 mat-icon.active {
-    color:yellow;
+    color: yellow;
 }
 
 ic-icon.active {
-    color:yellow;
+    color: yellow;
 }
 
 
 
 @media screen and (max-width: 780px) {
 
-    
+
 
     .comclass-nav {
         margin-left: 0;
@@ -288,7 +290,7 @@ ic-icon.active {
         flex-wrap: wrap;
     }
 
-    
+
 
     .container-fluid {
         // display: flex;
@@ -298,11 +300,11 @@ ic-icon.active {
         padding: 0;
         width: 100vh;
         margin: 0;
-        
+
         ul {
             width: 100vw;
         }
- 
+
         .class-info_wrap {
             display: none;
         }
@@ -316,7 +318,7 @@ ic-icon.active {
                 width: 50%;
                 height: 45px;
                 margin: 0;
-            }          
+            }
 
             .width-set {
                 width: 50px;
@@ -325,13 +327,13 @@ ic-icon.active {
             }
         }
 
-        .tool-items { 
+        .tool-items {
             justify-content: space-around;
             width: 100vw;
             background-color: #2d2f5f;
             height: 45px;
             min-width: 48px;
-            
+
             .mat-icon {
                 font-size: 28px;
             }
@@ -345,9 +347,13 @@ ic-icon.active {
                     height: 70px;
                     min-width: 50px;
                 }
-            }  
+            }
         }
 
     }
-    
+
+}
+
+::ng-deep .mat-menu-content {
+    padding: 20px;
 }

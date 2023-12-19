@@ -26,7 +26,6 @@ import { DialogService } from '../../auth/sign-in/dialog/dialog.service';
     templateUrl: './board-file-view.component.html',
     styleUrls: ['./board-file-view.component.scss']
 })
-
 export class BoardFileViewComponent implements OnInit {
 
     constructor(
@@ -95,7 +94,7 @@ export class BoardFileViewComponent implements OnInit {
 
     }
 
-    ngOnDestory(): void {
+    ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }
@@ -193,13 +192,6 @@ export class BoardFileViewComponent implements OnInit {
             this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
-
-
-
-
-
-
-
 
     }
 

@@ -440,6 +440,7 @@ export class DrawingService {
           return;
         }
 
+
         context.beginPath();
         context.moveTo(points[0], points[1]);
         // console.log('end')
