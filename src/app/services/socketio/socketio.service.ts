@@ -18,6 +18,7 @@ export class SocketioService {
 		// console.log(this._socket);
 	}
 
+
 	get socket() {
 		return this._socket;
 	}
