@@ -1,0 +1,29 @@
+.toolbar_container {
+    display: flex;
+
+    .meeting_title_section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        text-wrap: nowrap;
+    }
+
+    .main_buttons_section {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        gap: 0.2rem;
+        text-wrap: nowrap;
+    }
+
+    .option_buttons_section {
+        display: flex;
+        flex: 1;
+        justify-content: end;
+        align-items: center;
+        gap: 0.2rem;
+        text-wrap: nowrap;
+    }
+}
