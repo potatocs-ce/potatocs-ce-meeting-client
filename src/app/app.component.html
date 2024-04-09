@@ -2,7 +2,7 @@
   <!-- 메인 기능들이 들어갈 부분 -->
   <div class="main_container">
     <section class="video_section"></section>
-    <section class="menu_section">
+    <section class="menu_section" [ngClass]="toggle_mode != 'close'? 'active' : ''">
       <app-menu></app-menu>
     </section>
   </div>

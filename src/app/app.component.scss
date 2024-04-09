@@ -16,6 +16,15 @@
             background-color: goldenrod;
         }
 
-        // .menu_section {}
+        .menu_section {
+            width: 0px;
+            overflow: hidden;
+
+            transition: width 0.3s ease;
+        }
+
+        .active {
+            width: 250px;
+        }
     }
 }

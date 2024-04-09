@@ -1,3 +1,9 @@
 <div class="menu_container">
-    ㅎㅇ
+    @if(toggle_mode == 'group'){
+    <app-group></app-group>
+    }@else if(toggle_mode == 'chat') {
+    <app-chat></app-chat>
+    }@else if(toggle_mode == 'survey') {
+    <app-survey></app-survey>
+    }
 </div>
