@@ -31,13 +31,16 @@
         </button>
     </section>
     <section class="option_buttons_section">
-        <button (click)="changeToggleMode('group')" mat-icon-button class="circle_button">
+        <button (click)="changeToggleMode('group')" [ngClass]="toggle_mode == 'group'? 'active_circle_button': ''"
+            mat-icon-button class="circle_button">
             <mat-icon inline="true">group</mat-icon>
         </button>
-        <button (click)="changeToggleMode('chat')" mat-icon-button class="circle_button">
+        <button (click)="changeToggleMode('chat')" [ngClass]="toggle_mode == 'chat'? 'active_circle_button': ''"
+            mat-icon-button class="circle_button">
             <i class="fa-regular fa-comments"></i>
         </button>
-        <button (click)="changeToggleMode('survey')" mat-icon-button class="circle_button">
+        <button (click)="changeToggleMode('survey')" [ngClass]="toggle_mode == 'survey'? 'active_circle_button': ''"
+            mat-icon-button class="circle_button">
             <i class="fa fa-check-to-slot"></i>
         </button>
     </section>

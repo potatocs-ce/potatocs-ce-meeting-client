@@ -5,7 +5,7 @@ import { Injectable, signal } from '@angular/core';
 })
 export class ToggleService {
 
-  toggle_mode = signal('close')
+  toggle_mode = signal('group')
 
   constructor() { }
 }
