@@ -71,6 +71,13 @@
         align-items: center;
         overflow: hidden;
         text-wrap: nowrap;
+
+
+
+        .meeting_title {
+            color: $main_color;
+            // font-weight: bold;
+        }
     }
 
     .main_buttons_section {

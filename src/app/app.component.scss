@@ -4,8 +4,18 @@
     height: 100%;
     padding: 0.2rem;
     box-sizing: border-box;
+    gap: 0.2rem;
 
-    .main_section {
+    .main_container {
         flex: 1;
+        display: flex;
+        gap: 0.2rem;
+
+        .video_section {
+            flex: 1;
+            background-color: goldenrod;
+        }
+
+        // .menu_section {}
     }
 }
