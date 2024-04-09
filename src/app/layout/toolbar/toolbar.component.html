@@ -3,19 +3,42 @@
         <span>미팅 제목</span>
     </section>
     <section class="main_buttons_section">
-        <section>
-            <button>비디오</button>
+        <section matRipple class="main_button_option_section">
+            <button class="toggle_button">
+                <i class="fa fa-caret-up"></i>
+            </button>
+            <button mat-icon-button class="circle_button">
+                <i class="fa fa-microphone icon"></i>
+            </button>
         </section>
-        <section>
-            <button>마이크</button>
+        <section class="main_button_option_section">
+            <button class="toggle_button">
+                <i class="fa fa-caret-up"></i>
+            </button>
+            <button mat-icon-button class="circle_button">
+                <i class="fa fa-solid fa-video-camera"></i>
+            </button>
         </section>
-        <button>화면 공유</button>
-        <button>문서</button>
-        <button>나가기</button>
+        <button mat-icon-button class="circle_button">
+
+            <mat-icon inline="true">present_to_all</mat-icon>
+        </button>
+        <button mat-icon-button class="circle_button">
+            <i class="fa fa-file-text"></i>
+        </button>
+        <button mat-icon-button class="circle_button call_end">
+            <mat-icon inline="true">call_end</mat-icon>
+        </button>
     </section>
     <section class="option_buttons_section">
-        <button>참가자</button>
-        <button>채팅</button>
-        <button>설문</button>
+        <button mat-icon-button class="circle_button">
+            <mat-icon inline="true">group</mat-icon>
+        </button>
+        <button mat-icon-button class="circle_button">
+            <i class="fa-regular fa-comments"></i>
+        </button>
+        <button mat-icon-button class="circle_button">
+            <i class="fa fa-check-to-slot"></i>
+        </button>
     </section>
 </div>

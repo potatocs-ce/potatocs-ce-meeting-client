@@ -1,5 +1,69 @@
+@import '../../setting.scss';
+
 .toolbar_container {
     display: flex;
+
+
+    .circle_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5rem;
+        width: 40px;
+        height: 40px;
+        background-color: $icon_button_color;
+        color: white;
+        padding: 0;
+        overflow: hidden;
+        z-index: 2;
+
+        &>*[role=img] {
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+        }
+
+        .mat-mdc-button-touch-target {
+            width: 40px !important;
+            height: 40px !important;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            font-size: 14pt;
+        }
+    }
+
+    .main_button_option_section {
+        width: 66px;
+        background-color: rgba(0, 21, 79, 0.7);
+        border-radius: 5rem;
+        display: flex;
+
+        align-items: center;
+
+        .toggle_button {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+            color: white;
+            padding-left: 10px;
+            height: 26px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    }
+
+    .call_end {
+        width: 56px;
+        background-color: rgb(234, 67, 53);
+    }
 
     .meeting_title_section {
         flex: 1;
@@ -14,7 +78,7 @@
         flex: 1;
         justify-content: center;
         align-items: center;
-        gap: 0.2rem;
+        gap: 0.5rem;
         text-wrap: nowrap;
     }
 
@@ -23,7 +87,7 @@
         flex: 1;
         justify-content: end;
         align-items: center;
-        gap: 0.2rem;
+        gap: 0.5rem;
         text-wrap: nowrap;
     }
 }
