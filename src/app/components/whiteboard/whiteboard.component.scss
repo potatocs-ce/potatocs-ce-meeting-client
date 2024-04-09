@@ -1,5 +1,19 @@
 .whiteboard_container {
-    background-color: white;
+
+    display: flex;
+    gap: 0.5rem;
     height: 100%;
-    border-radius: 0.5rem;
+
+    .whiteboard_menu_section {
+        background-color: white;
+        width: 40px;
+        border-radius: 0.5rem;
+    }
+
+    .whiteboard_section {
+        flex: 1;
+        background-color: white;
+
+        border-radius: 0.5rem;
+    }
 }
