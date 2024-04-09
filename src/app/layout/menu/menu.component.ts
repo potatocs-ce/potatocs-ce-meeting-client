@@ -1,5 +1,5 @@
 import { Component, effect } from '@angular/core';
-import { ToggleService } from '../../services/toggle.service';
+import { ToggleService } from '../../services/toggle/toggle.service';
 import { CommonModule } from '@angular/common';
 import { GroupComponent } from '../../components/group/group.component';
 import { ChatComponent } from '../../components/chat/chat.component';

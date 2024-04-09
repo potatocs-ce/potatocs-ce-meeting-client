@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { MenuComponent } from './layout/menu/menu.component';
-import { ToggleService } from './services/toggle.service';
+import { ToggleService } from './services/toggle/toggle.service';
 import { PresentComponent } from './components/present/present.component';
 import { AudienceComponent } from './components/audience/audience.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';

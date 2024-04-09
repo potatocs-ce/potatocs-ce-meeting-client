@@ -19,13 +19,22 @@
                 <i class="fa fa-solid fa-video-camera"></i>
             </button>
         </section>
-        <button mat-icon-button class="circle_button">
+        <button (click)="screen_share()" mat-icon-button class="circle_button"
+            [ngClass]="toggle_screen_share ? 'active_circle_button':''">
 
             <mat-icon inline="true">present_to_all</mat-icon>
         </button>
-        <button mat-icon-button class="circle_button">
+
+        @if(toggle_video == 'video'){
+        <button (click)="change_video_document('document')" mat-icon-button class="circle_button">
             <i class="fa fa-file-text"></i>
         </button>
+        }@else if(toggle_video == 'document'){
+        <button (click)="change_video_document('video')" mat-icon-button class="circle_button">
+            <i class="fa-regular fa-file-video"></i>
+        </button>
+        }
+
         <button mat-icon-button class="circle_button call_end">
             <mat-icon inline="true">call_end</mat-icon>
         </button>
