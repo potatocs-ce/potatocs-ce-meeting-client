@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './audience.component.scss'
 })
 export class AudienceComponent {
-
+  temp_data = [1, 2, 3, 4, 5, 6]
 }

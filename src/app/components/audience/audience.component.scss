@@ -1,0 +1,19 @@
+.audience_container {
+    display: inline-flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    width: 100%;
+    flex-wrap: nowrap;
+
+    .audience_video {
+        display: flex;
+        background-color: white;
+        border-radius: 0.5rem;
+
+
+        // 임시로
+        height: 150px;
+        width: 300px;
+        flex-shrink: 0;
+    }
+}

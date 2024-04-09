@@ -1,0 +1,17 @@
+.present_container {
+    display: flex;
+    height: 100%;
+    gap: 0.5rem;
+
+    .present_menu_section {
+        background-color: white;
+        border-radius: 0.5rem;
+        width: 40px;
+    }
+
+    .present_section {
+        flex: 1;
+        background-color: white;
+        border-radius: 0.5rem;
+    }
+}
