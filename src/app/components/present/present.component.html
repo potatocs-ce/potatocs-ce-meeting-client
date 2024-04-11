@@ -13,9 +13,24 @@
             <button mat-icon-button>
                 <i class="fa-solid fa-eraser"></i>
             </button>
-            <button mat-icon-button>
+            <button mat-icon-button [matMenuTriggerFor]="shape">
                 <mat-icon>shape_line</mat-icon>
             </button>
+
+            <!-- 그리기 도구 -->
+            <mat-menu #shape="matMenu" xPosition="before">
+                <article class="shape_tool">
+                    <button mat-icon-button>
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <button mat-icon-button>
+                        <mat-icon>radio_button_unchecked</mat-icon>
+                    </button>
+                    <button mat-icon-button>
+                        <mat-icon>crop_square</mat-icon>
+                    </button>
+                </article>
+            </mat-menu>
 
             <div class="divide"></div>
 

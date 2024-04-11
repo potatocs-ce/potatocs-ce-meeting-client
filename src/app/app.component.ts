@@ -1,5 +1,5 @@
-import { Component, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, PLATFORM_ID, effect } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { MenuComponent } from './layout/menu/menu.component';
@@ -8,6 +8,7 @@ import { PresentComponent } from './components/present/present.component';
 import { AudienceComponent } from './components/audience/audience.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 import { DocumentsComponent } from './components/documents/documents.component';
+import { VideoService } from './services/video/video.service';
 
 @Component({
   selector: 'app-root',
@@ -23,10 +24,30 @@ export class AppComponent {
   title = 'meeting_front';
   toggle_mode: string = '';
   toggle_video: string = '';
-  constructor(private toggleService: ToggleService) {
+  constructor(private toggleService: ToggleService,
+    @Inject(PLATFORM_ID) private _platform: Object,
+    private videoService: VideoService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video = this.toggleService.toggle_video();
+      console.log(this.videoService.videoDeivces(), this.videoService.audioDevices())
     })
+  }
+
+  ngOnInit() {
+    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
+      navigator.mediaDevices.enumerateDevices().then((devices: any) => {
+        devices.forEach((device: any) => {
+          // 오디오 타입인 경우
+          if ('audioinput' === device.kind) {
+            this.videoService.audioDevices.set([...this.videoService.audioDevices(), device.deviceId])
+          }
+          // 비디오 타입인 경우
+          else if ('videoinput' === device.kind) {
+            this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), device.deviceId])
+          }
+        })
+      })
+    }
   }
 }

@@ -59,7 +59,7 @@
             height: 1px;
 
             background-color: rgb(230, 230, 230);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .color_button {
@@ -70,7 +70,7 @@
         }
 
         .width_button {
-            background-color: rgb(226, 226, 226);
+            background-color: $icon_button_color;
             // border: 1px solid black;
             border: none;
             margin-bottom: 10px;
@@ -91,6 +91,10 @@
             width: 13px;
             height: 13px;
         }
+
+
+
+
     }
 
     .present_section {
@@ -98,4 +102,56 @@
         background-color: white;
         border-radius: 0.5rem;
     }
+}
+
+
+.shape_tool {
+    display: flex;
+
+    gap: 0.2rem;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5rem;
+
+        padding: 0px;
+        color: $main_color;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        overflow: hidden;
+
+        &>*[role=img] {
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            font-size: 13pt;
+        }
+
+    }
+
+
+
+}
+
+
+::ng-deep .mat-mdc-menu-content {
+    padding: 0 !important;
+    border-radius: 0.5rem !important;
+}
+
+
+::ng-deep .mat-mdc-menu-panel {
+    border-radius: 5rem !important;
+
 }
