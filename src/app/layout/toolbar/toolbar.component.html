@@ -32,22 +32,23 @@
             <button class="toggle_button" [matMenuTriggerFor]="videoList">
                 <i class="fa fa-caret-up"></i>
             </button>
-            <button mat-icon-button class="circle_button">
+            <button (click)="toggleVideo()" mat-icon-button class="circle_button"
+                [ngClass]="toggle_video ? 'active_circle_button':''">
                 <i class="fa fa-solid fa-video-camera"></i>
             </button>
         </section>
-        <button (click)="screen_share()" mat-icon-button class="circle_button"
+        <button (click)="screenShare()" mat-icon-button class="circle_button"
             [ngClass]="toggle_screen_share ? 'active_circle_button':''">
 
             <mat-icon inline="true">present_to_all</mat-icon>
         </button>
 
         @if(toggle_video_whiteboard == 'video'){
-        <button (click)="change_video_document('document')" mat-icon-button class="circle_button">
+        <button (click)="changeVideoDocument('document')" mat-icon-button class="circle_button">
             <i class="fa fa-file-text"></i>
         </button>
         }@else if(toggle_video_whiteboard == 'document'){
-        <button (click)="change_video_document('video')" mat-icon-button class="circle_button">
+        <button (click)="changeVideoDocument('video')" mat-icon-button class="circle_button">
             <i class="fa-regular fa-file-video"></i>
         </button>
         }

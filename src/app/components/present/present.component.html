@@ -1,4 +1,5 @@
 <div class="present_container">
+
     <section class="present_menu_section">
         <div class="button_container">
             <button mat-icon-button>
@@ -67,7 +68,13 @@
         </div>
 
     </section>
-    <section class="present_section">
-        여기 비디오
+    <section id="present" class="present_section" [ngClass]="isWidth ? 'fit_height' :'fit_width' ">
+
+        <video (resize)="videoResize($event)" class="present_video"
+            [ngClass]="isWidth ? 'present_width' :'present_height' " [srcObject]="videoStream" autoplay></video>
+
+
     </section>
+
+
 </div>

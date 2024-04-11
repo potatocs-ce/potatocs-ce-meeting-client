@@ -32,12 +32,15 @@ export class ToolbarComponent {
   now_video: string = '';
   now_audio: string = '';
 
+  toggle_video: boolean = false;
+
   constructor(private toggleService: ToggleService, private videoService: VideoService) {
     // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_screen_share = this.toggleService.toggle_screen_share();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
+      this.toggle_video = this.toggleService.toggle_video()
     })
 
     // effect for videoService
@@ -58,21 +61,47 @@ export class ToolbarComponent {
   }
 
   // 화면 공유
-  screen_share() {
+  screenShare() {
     this.toggleService.toggle_screen_share.set(!this.toggle_screen_share)
   }
 
   // 비디오 모드, 문서 모드 변경
-  change_video_document(mode: string) {
+  changeVideoDocument(mode: string) {
     this.toggleService.toggle_video_whiteboard.set(mode);
   }
 
 
+  // 마이크 선택
   selectAudio(deviceId: string) {
     this.videoService.nowAudioId.set(deviceId);
   }
 
+  // 비디오 카메라 선택
   selectVideo(deviceId: string) {
     this.videoService.nowVideoId.set(deviceId);
+  }
+
+  // 비디오 끄기 켜기
+  async toggleVideo() {
+    this.toggleService.toggle_video.set(!this.toggle_video);
+    try {
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: false, video: {
+          deviceId: this.now_video,
+          width: {
+            min: 640,
+            ideal: 1920
+          },
+          height: {
+            min: 400,
+            ideal: 1080
+          }
+        }
+      })
+      this.videoService.presentVideoStream.set(stream);
+    } catch (err) {
+      console.error(err, "해당 카메라를 사용할 수 없음")
+    }
   }
 }
