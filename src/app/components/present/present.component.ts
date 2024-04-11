@@ -20,6 +20,10 @@ export class PresentComponent {
   constructor(private videoService: VideoService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
+      console.log(this.videoStream)
+      if (this.videoStream == undefined) {
+        this.isWidth = true
+      }
     })
   }
 
@@ -42,4 +46,6 @@ export class PresentComponent {
       this.isWidth = true;
     }
   }
+
+
 }

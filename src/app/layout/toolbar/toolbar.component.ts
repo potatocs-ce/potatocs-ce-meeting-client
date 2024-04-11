@@ -47,10 +47,12 @@ export class ToolbarComponent {
     effect(() => {
       this.video_list = this.videoService.videoDeivces();
       this.audio_list = this.videoService.audioDevices();
-      this.now_video = this.videoService.nowVideoId();
+
       this.now_audio = this.videoService.nowAudioId();
+      this.now_video = this.videoService.nowVideoId();
     })
   }
+
   // 오른쪽 메뉴 토글 바꾸기
   changeToggleMode(mode: string) {
     if (this.toggle_mode == mode) {
@@ -77,31 +79,30 @@ export class ToolbarComponent {
   }
 
   // 비디오 카메라 선택
-  selectVideo(deviceId: string) {
-    this.videoService.nowVideoId.set(deviceId);
+  async selectVideo(deviceId: string) {
+    if (deviceId != this.now_video && this.toggle_video) {
+      this.videoService.nowVideoId.set(deviceId);
+
+      this.videoService.stopVideo();
+      setTimeout(() => { this.videoService.getUserVideo(deviceId); }
+        , 500)
+
+    } else {
+      this.videoService.nowVideoId.set(deviceId);
+    }
   }
+
+
 
   // 비디오 끄기 켜기
   async toggleVideo() {
     this.toggleService.toggle_video.set(!this.toggle_video);
-    try {
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false, video: {
-          deviceId: this.now_video,
-          width: {
-            min: 640,
-            ideal: 1920
-          },
-          height: {
-            min: 400,
-            ideal: 1080
-          }
-        }
-      })
-      this.videoService.presentVideoStream.set(stream);
-    } catch (err) {
-      console.error(err, "해당 카메라를 사용할 수 없음")
+    if (!this.toggle_video) {
+      this.videoService.getUserVideo(this.now_video);
+    } else {
+      this.videoService.stopVideo();
     }
+
   }
 }

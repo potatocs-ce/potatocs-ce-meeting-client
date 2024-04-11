@@ -31,16 +31,13 @@ export class AppComponent {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
     })
-
-    effect(() => {
-      console.log(this.videoService.videoDeivces(), this.videoService.audioDevices())
-    })
   }
 
   ngOnInit() {
+
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       navigator.mediaDevices.enumerateDevices().then((devices: any) => {
-        devices.forEach((device: any) => {
+        devices.forEach(async (device: any) => {
           // 오디오 타입인 경우
           if ('audioinput' === device.kind) {
             // 만약 첫 값이면
@@ -55,6 +52,7 @@ export class AppComponent {
             // 만약 첫 값이면
             if (this.videoService.videoDeivces().length == 0) {
               this.videoService.nowVideoId.set(device.deviceId);
+              this.videoService.getUserVideo(device.deviceId);
             }
 
             this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
