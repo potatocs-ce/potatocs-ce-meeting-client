@@ -29,6 +29,9 @@ export class ToolbarComponent {
   // 오디오 디바이스 리스트
   audio_list: Array<any> = [];
 
+  now_video: string = '';
+  now_audio: string = '';
+
   constructor(private toggleService: ToggleService, private videoService: VideoService) {
     // effect for toggleService
     effect(() => {
@@ -41,6 +44,8 @@ export class ToolbarComponent {
     effect(() => {
       this.video_list = this.videoService.videoDeivces();
       this.audio_list = this.videoService.audioDevices();
+      this.now_video = this.videoService.nowVideoId();
+      this.now_audio = this.videoService.nowAudioId();
     })
   }
   // 오른쪽 메뉴 토글 바꾸기
@@ -60,5 +65,14 @@ export class ToolbarComponent {
   // 비디오 모드, 문서 모드 변경
   change_video_document(mode: string) {
     this.toggleService.toggle_video_whiteboard.set(mode);
+  }
+
+
+  selectAudio(deviceId: string) {
+    this.videoService.nowAudioId.set(deviceId);
+  }
+
+  selectVideo(deviceId: string) {
+    this.videoService.nowVideoId.set(deviceId);
   }
 }

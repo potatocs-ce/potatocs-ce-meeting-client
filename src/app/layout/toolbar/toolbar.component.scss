@@ -138,3 +138,15 @@
 .mat_item_button {
     overflow: hidden !important;
 }
+
+
+.active_mat_item_button {
+    background-color: $icon_button_color;
+    color: white;
+
+
+    &:hover {
+        background-color: $main_color !important;
+    }
+
+}
