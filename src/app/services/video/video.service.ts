@@ -7,6 +7,9 @@ export class VideoService {
 
   constructor() { }
 
-  videoDeivces = signal<Array<string>>([]);
-  audioDevices = signal<Array<string>>([]);
+  videoDeivces = signal<Array<object>>([]);
+  audioDevices = signal<Array<object>>([]);
+
+  nowVideoId = signal<string>('');
+  nowAudioId = signal<string>('');
 }

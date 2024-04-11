@@ -5,7 +5,7 @@
     <section class="video_section">
 
       <!-- 비디오 모드인 경우 -->
-      @if(toggle_video == 'video') {
+      @if(toggle_video_whiteboard == 'video') {
       <div class="video_container">
         <section class="present_section">
           <app-present></app-present>
@@ -15,7 +15,7 @@
         </section>
 
       </div>
-      }@else if(toggle_video == 'document') {
+      }@else if(toggle_video_whiteboard == 'document') {
       <!-- 판서 모드인 경우 -->
       <div class="document_container">
         <section class="document_list_section">

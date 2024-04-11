@@ -4,10 +4,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { ToggleService } from '../../services/toggle/toggle.service';
+import { VideoService } from '../../services/video/video.service';
+import { MatMenuModule } from '@angular/material/menu';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatRippleModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatRippleModule, MatMenuModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
@@ -19,13 +21,26 @@ export class ToolbarComponent {
   toggle_screen_share: boolean = false;
 
   // 문서 모드
-  toggle_video: string = '';
+  toggle_video_whiteboard: string = '';
 
-  constructor(private toggleService: ToggleService) {
+  // 비디오 디바이스 리스트
+  video_list: Array<any> = [];
+
+  // 오디오 디바이스 리스트
+  audio_list: Array<any> = [];
+
+  constructor(private toggleService: ToggleService, private videoService: VideoService) {
+    // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_screen_share = this.toggleService.toggle_screen_share();
-      this.toggle_video = this.toggleService.toggle_video();
+      this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
+    })
+
+    // effect for videoService
+    effect(() => {
+      this.video_list = this.videoService.videoDeivces();
+      this.audio_list = this.videoService.audioDevices();
     })
   }
   // 오른쪽 메뉴 토글 바꾸기
@@ -44,6 +59,6 @@ export class ToolbarComponent {
 
   // 비디오 모드, 문서 모드 변경
   change_video_document(mode: string) {
-    this.toggleService.toggle_video.set(mode);
+    this.toggleService.toggle_video_whiteboard.set(mode);
   }
 }

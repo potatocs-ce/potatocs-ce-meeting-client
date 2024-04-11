@@ -4,7 +4,14 @@
     </section>
     <section class="main_buttons_section">
         <section matRipple class="main_button_option_section">
-            <button class="toggle_button">
+            <mat-menu #audioList="matMenu">
+                @for(audio of audio_list; track audio) {
+                <button class="mat_item_button" mat-menu-item>
+                    {{audio.label}}
+                </button>
+                }
+            </mat-menu>
+            <button class="toggle_button" [matMenuTriggerFor]="audioList">
                 <i class="fa fa-caret-up"></i>
             </button>
             <button mat-icon-button class="circle_button">
@@ -12,7 +19,15 @@
             </button>
         </section>
         <section matRipple class="main_button_option_section">
-            <button class="toggle_button">
+
+            <mat-menu #videoList="matMenu">
+                @for(video of video_list; track video) {
+                <button class="mat_item_button" mat-menu-item>
+                    {{video.label}}
+                </button>
+                }
+            </mat-menu>
+            <button class="toggle_button" [matMenuTriggerFor]="videoList">
                 <i class="fa fa-caret-up"></i>
             </button>
             <button mat-icon-button class="circle_button">
@@ -25,11 +40,11 @@
             <mat-icon inline="true">present_to_all</mat-icon>
         </button>
 
-        @if(toggle_video == 'video'){
+        @if(toggle_video_whiteboard == 'video'){
         <button (click)="change_video_document('document')" mat-icon-button class="circle_button">
             <i class="fa fa-file-text"></i>
         </button>
-        }@else if(toggle_video == 'document'){
+        }@else if(toggle_video_whiteboard == 'document'){
         <button (click)="change_video_document('video')" mat-icon-button class="circle_button">
             <i class="fa-regular fa-file-video"></i>
         </button>

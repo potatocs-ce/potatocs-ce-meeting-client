@@ -70,7 +70,7 @@
         }
 
         .width_button {
-            background-color: $icon_button_color;
+            background-color: rgb(216, 216, 216);
             // border: 1px solid black;
             border: none;
             margin-bottom: 10px;
@@ -141,17 +141,5 @@
     }
 
 
-
-}
-
-
-::ng-deep .mat-mdc-menu-content {
-    padding: 0 !important;
-    border-radius: 0.5rem !important;
-}
-
-
-::ng-deep .mat-mdc-menu-panel {
-    border-radius: 5rem !important;
 
 }

@@ -78,3 +78,23 @@
         }
     }
 }
+
+
+
+::ng-deep .mat-mdc-menu-content {
+    padding: 0 !important;
+    border-radius: 0.5rem !important;
+}
+
+
+::ng-deep .mat-mdc-menu-panel {
+    border-radius: 0.5rem !important;
+    max-width: 300px !important;
+}
+
+
+::ng-deep .mat-mdc-menu-item-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+}
