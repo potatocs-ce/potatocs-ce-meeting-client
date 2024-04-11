@@ -6,21 +6,37 @@
     gap: 0.5rem;
 
     .present_menu_section {
-        background-color: white;
-        border-radius: 0.5rem;
-        width: 40px;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+
+
+        .button_container {
+            background-color: white;
+            border-radius: 0.5rem;
+            width: 40px;
+            padding: 0.5rem 0.2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+
 
         button {
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 5rem;
-            width: 40px;
-            height: 40px;
-
+            width: 35px;
+            height: 35px;
+            padding: 0px;
             color: $main_color;
+            cursor: pointer;
 
             &>*[role=img] {
                 width: 16px;
@@ -32,10 +48,48 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 20px;
-                height: 20px;
-                font-size: 14pt;
+                width: 18px;
+                height: 18px;
+                font-size: 13pt;
             }
+        }
+
+        .divide {
+            width: 60%;
+            height: 1px;
+
+            background-color: rgb(230, 230, 230);
+            margin-bottom: 10px;
+        }
+
+        .color_button {
+            border: none;
+            width: 15px;
+            height: 15px;
+            margin-bottom: 10px;
+        }
+
+        .width_button {
+            background-color: rgb(226, 226, 226);
+            // border: 1px solid black;
+            border: none;
+            margin-bottom: 10px;
+
+        }
+
+        .big {
+            width: 18px;
+            height: 18px;
+        }
+
+        .medium {
+            width: 15px;
+            height: 15px;
+        }
+
+        .small {
+            width: 13px;
+            height: 13px;
         }
     }
 
