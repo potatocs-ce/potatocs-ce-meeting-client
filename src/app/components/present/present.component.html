@@ -68,10 +68,22 @@
         </div>
 
     </section>
-    <section id="present" class="present_section" [ngClass]="isWidth ? 'fit_height' :'fit_width' ">
+    <section id="present" class="present_section">
+        <!-- 캔버스 영역 -->
+        <div></div>
 
-        <video (resize)="videoResize($event)" class="present_video"
-            [ngClass]="isWidth ? 'present_width' :'present_height' " [srcObject]="videoStream" autoplay></video>
+        <!-- 메뉴 -->
+        <div class="menu_container">
+            <button mat-icon-button class="video_menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <article class="video_user_name">
+                이름
+            </article>
+        </div>
+        <!-- 비디오 -->
+        <video id="present_video" (resize)="videoResize($event.target)" class="present_video" [srcObject]="videoStream"
+            autoplay></video>
 
 
     </section>

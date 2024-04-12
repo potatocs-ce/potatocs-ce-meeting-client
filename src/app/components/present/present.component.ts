@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect } from '@angular/core';
+import { Component, HostListener, effect } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,37 +15,52 @@ export class PresentComponent {
 
   videoStream: any = undefined;
 
-  isWidth: boolean = true;
+  isWidth: boolean | undefined = undefined;
 
   constructor(private videoService: VideoService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
-      console.log(this.videoStream)
+      // console.log(this.videoStream)
       if (this.videoStream == undefined) {
-        this.isWidth = true
+        const present: any = document.getElementById('present');
+
+        present.style.width = '100%';
+        present.style.height = '100%';
       }
     })
   }
 
 
-  videoResize(event: any) {
-    const present_section: any = document.getElementById('present');
-    const pw = present_section.clientWidth;
+  videoResize(target: any) {
+
+    this.isWidth = undefined
+    const present: any = document.getElementById('present');
+    present.style.width = '100%';
+    const present_section: any = document.getElementById('present_section');
+    const pw = present.clientWidth;
     const ph = present_section.clientHeight;
 
-    const vw = event.target.clientWidth;
-    const vh = event.target.clientHeight;
+    const vw = target.clientWidth;
+    const vh = target.clientHeight;
 
-    // console.log(event.target.clientHeight, event.target.clientWidth, present_section.clientWidth)
-    // 세로가 길면
-    if (ph < vh + (pw + vw)) {
-      this.isWidth = false;
-
+    if (ph < vh + (pw - vw)) {
+      // 세로가 길면
+      target.style.height = `${ph}px`;
+      target.style.width = 'auto';
+      present.style.width = 'fit-content';
     } else {
       // 가로가 길면
-      this.isWidth = true;
+
+      target.style.width = `${pw}px`;
+      target.style.height = 'auto';
+      present.style.height = 'fit-content';
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    const video_target: any = document.getElementById('present_video');
 
+    this.videoResize(video_target)
+  }
 }
