@@ -15,7 +15,6 @@ export class AudienceComponent {
   constructor(private videoService: VideoService) {
     effect(() => {
       this.videoList = this.videoService.audienceVideoStream();
-      console.log(this.videoList)
     })
   }
 
