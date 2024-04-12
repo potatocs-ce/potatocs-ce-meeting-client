@@ -73,15 +73,15 @@
 
 
         <!-- 비디오 -->
-        <video id="present_video" (resize)="videoResize($event.target)" class="present_video" [srcObject]="videoStream"
-            autoplay></video>
+        <video id="present_video" #present_video (resize)="videoResize($event.target)" class="present_video"
+            [srcObject]="videoStream" autoplay></video>
         <!-- 메뉴 -->
         <article class="menu_container">
             <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #videoMenu="matMenu" xPosition="before">
-                <button mat-menu-item>
+                <button mat-menu-item (click)="capture(present_video)">
                     <mat-icon>screenshot_monitor</mat-icon>
                     <span>screenshot</span>
                 </button>

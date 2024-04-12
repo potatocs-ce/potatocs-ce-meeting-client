@@ -31,6 +31,10 @@ export class PresentComponent {
   }
 
 
+  /**
+   * 비디오 크기 변경 = 비디오가 바뀌거나 새로 들어왔을 경우
+   * @param target 비디오 태그
+   */
   videoResize(target: any) {
 
     this.isWidth = undefined
@@ -57,10 +61,31 @@ export class PresentComponent {
     }
   }
 
+  /**
+   * 윈도우 화면 변화 감지 함수
+   */
   @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  onResize() {
     const video_target: any = document.getElementById('present_video');
 
     this.videoResize(video_target)
+  }
+
+  /**
+   * 비디오 화면 캡쳐 함수
+   * @param e video tag
+   */
+  capture(e: any) {
+    // console.log(e);
+    const canvas = document.createElement('canvas');
+    canvas.width = e.clientWidth;
+    canvas.height = e.clientHeight;
+
+    canvas.getContext('2d')?.drawImage(e, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = 'capture.png';
+    a.click();
   }
 }
