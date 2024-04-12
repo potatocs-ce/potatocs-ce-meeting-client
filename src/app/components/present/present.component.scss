@@ -121,13 +121,16 @@
             position: absolute;
 
             &:hover {
-                background-color: rgba(0, 0, 0, 0.5);
+                background-color: rgba(0, 0, 0, 0.4);
             }
+
+            transition: background-color ease 0.3s;
 
             .video_menu {
                 position: absolute;
                 top: 0;
                 right: 0;
+                color: white;
             }
 
             .video_user_name {
@@ -135,33 +138,18 @@
                 left: 0;
                 bottom: 0;
                 color: white;
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 0.3rem 0.6rem;
+                border-radius: 0.5rem;
+                font-weight: bold;
             }
         }
-
-
 
         .present_video {
             border-radius: 0.5rem;
         }
-
-        .present_width {
-            width: 100%;
-        }
-
-
-        .present_height {
-            height: 100%;
-        }
     }
 
-
-    .fit_height {
-        height: fit-content;
-    }
-
-    .fit_width {
-        width: fit-content;
-    }
 }
 
 
@@ -169,6 +157,7 @@
     display: flex;
 
     gap: 0.2rem;
+    padding: 0.2rem;
 
     button {
         display: flex;

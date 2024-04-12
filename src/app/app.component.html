@@ -10,10 +10,11 @@
         <section id="present_section" class="present_section">
           <app-present></app-present>
         </section>
+        @if(audience_video.length != 0){
         <section class="audience_section">
           <app-audience></app-audience>
         </section>
-
+        }
       </div>
       }@else if(toggle_video_whiteboard == 'document') {
       <!-- 판서 모드인 경우 -->

@@ -5,7 +5,7 @@ import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { MenuComponent } from './layout/menu/menu.component';
 import { ToggleService } from './services/toggle/toggle.service';
 import { PresentComponent } from './components/present/present.component';
-import { AudienceComponent } from './components/audience/audience.component';
+import { AudienceComponent } from './components/Audience/audience/audience.component';
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 import { DocumentsComponent } from './components/documents/documents.component';
 import { VideoService } from './services/video/video.service';
@@ -24,6 +24,9 @@ export class AppComponent {
   title = 'meeting_front';
   toggle_mode: string = '';
   toggle_video_whiteboard: string = '';
+
+  audience_video: Array<any> = [];
+
   constructor(private toggleService: ToggleService,
     @Inject(PLATFORM_ID) private _platform: Object,
     private videoService: VideoService) {
@@ -31,10 +34,13 @@ export class AppComponent {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
     })
+
+    effect(() => {
+      this.audience_video = this.videoService.audienceVideoStream();
+    })
   }
 
   ngOnInit() {
-
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       navigator.mediaDevices.enumerateDevices().then((devices: any) => {
         devices.forEach(async (device: any) => {
@@ -51,7 +57,9 @@ export class AppComponent {
           else if ('videoinput' === device.kind) {
             // 만약 첫 값이면
             if (this.videoService.videoDeivces().length == 0) {
+              // 현재 디바이스 넣기
               this.videoService.nowVideoId.set(device.deviceId);
+              // 디바이스 켜기
               this.videoService.getUserVideo(device.deviceId);
             }
 
@@ -61,4 +69,11 @@ export class AppComponent {
       })
     }
   }
+
+
+
+  //청중 모드에 동영상 추가
+
+
+
 }

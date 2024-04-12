@@ -1,0 +1,44 @@
+.video_container {
+    background-color: white;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+
+    .video {
+        border-radius: 0.5rem;
+    }
+
+    .menu_container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        transition: background-color ease 0.3s;
+
+        .video_menu {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: white;
+        }
+
+        .video_user_name {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+    }
+}

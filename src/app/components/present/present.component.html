@@ -19,7 +19,7 @@
             </button>
 
             <!-- 그리기 도구 -->
-            <mat-menu #shape="matMenu" xPosition="before">
+            <mat-menu #shape="matMenu">
                 <article class="shape_tool">
                     <button mat-icon-button>
                         <mat-icon>remove</mat-icon>
@@ -69,23 +69,31 @@
 
     </section>
     <section id="present" class="present_section">
-        <!-- 캔버스 영역 -->
-        <div></div>
 
-        <!-- 메뉴 -->
-        <div class="menu_container">
-            <button mat-icon-button class="video_menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <article class="video_user_name">
-                이름
-            </article>
-        </div>
+
+
         <!-- 비디오 -->
         <video id="present_video" (resize)="videoResize($event.target)" class="present_video" [srcObject]="videoStream"
             autoplay></video>
+        <!-- 메뉴 -->
+        <article class="menu_container">
+            <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #videoMenu="matMenu" xPosition="before">
+                <button mat-menu-item>
+                    <mat-icon>screenshot_monitor</mat-icon>
+                    <span>screenshot</span>
+                </button>
+            </mat-menu>
 
+            <div class="video_user_name">
+                이름
+            </div>
+        </article>
 
+        <!-- 캔버스 영역 -->
+        <div></div>
     </section>
 
 
