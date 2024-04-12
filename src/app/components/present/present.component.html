@@ -70,8 +70,6 @@
     </section>
     <section id="present" class="present_section">
 
-
-
         <!-- 비디오 -->
         <video id="present_video" #present_video (resize)="videoResize($event.target)" class="present_video"
             [srcObject]="videoStream" autoplay></video>
@@ -93,7 +91,15 @@
         </article>
 
         <!-- 캔버스 영역 -->
-        <div></div>
+        <div class="canvas_container">
+            <section class="canvas_section">
+                <!-- 그려진 데이터가 보여질 부분 -->
+                <canvas id="data_canvas"></canvas>
+                <!-- 그림 그리는 부분 -->
+                <canvas id="drawing_canvas"></canvas>
+            </section>
+
+        </div>
     </section>
 
 

@@ -22,5 +22,16 @@ export class ToggleService {
   toggle_audio = signal<boolean>(false);
 
 
+  ////////////////////////////////////////////
+
+  // 판서 상태 click, pen, hilight, eraser, tool
+  toggle_drawing_mode = signal<string>('click');
+
+  toggle_color = signal<string>('red');
+
+
+  toggle_width = signal<number>(20);
+
+
   constructor() { }
 }
