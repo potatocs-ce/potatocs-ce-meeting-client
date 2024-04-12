@@ -12,8 +12,19 @@
                 </button>
                 }
             </mat-menu>
-            <button class="toggle_button" [matMenuTriggerFor]="audioList">
-                <i class="fa fa-caret-up"></i>
+            <button class="toggle_button" [matMenuTriggerFor]="audioList" #audio_t="matMenuTrigger">
+                @if(audio_t.menuOpen) {
+                <p>
+                    <i class="fa fa-caret-down"></i>
+                </p>
+
+                }@else{
+                <p>
+                    <i class="fa fa-caret-up"></i>
+                </p>
+
+                }
+
             </button>
             <button mat-icon-button class="circle_button">
                 <i class="fa fa-microphone icon"></i>
@@ -29,8 +40,17 @@
                 </button>
                 }
             </mat-menu>
-            <button class="toggle_button" [matMenuTriggerFor]="videoList">
-                <i class="fa fa-caret-up"></i>
+            <button class="toggle_button" [matMenuTriggerFor]="videoList" #video_t="matMenuTrigger">
+                @if(video_t.menuOpen){
+                <p>
+                    <i class="fa fa-caret-down"></i>
+                </p>
+                }@else {
+                <p>
+                    <i class="fa fa-caret-up"></i>
+                </p>
+                }
+
             </button>
             <button (click)="toggleVideo()" mat-icon-button class="circle_button"
                 [ngClass]="toggle_video ? 'active_circle_button':''">
