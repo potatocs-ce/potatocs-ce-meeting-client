@@ -194,7 +194,7 @@ export class CanvasService {
       // 3. cover canvas 초기화
       clear(sourceCanvas, scale);
 
-      points = [];
+      // points = [];
 
       console.log('upEvent', points)
     };

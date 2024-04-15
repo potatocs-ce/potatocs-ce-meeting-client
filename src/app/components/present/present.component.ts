@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { VideoService } from '../../services/video/video.service';
 import { CanvasService } from '../../services/canvas/canvas.service';
+import { DrawingService } from '../../services/drawing/drawing.service';
 @Component({
   selector: 'app-present',
   standalone: true,
@@ -18,7 +19,12 @@ export class PresentComponent {
 
   isWidth: boolean | undefined = undefined;
 
-  constructor(private videoService: VideoService, private canvasService: CanvasService) {
+  zoomScale: number = 1;
+  firstRender: boolean = true;
+
+  constructor(private videoService: VideoService,
+    private canvasService: CanvasService,
+    private drawingService: DrawingService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
       // console.log(this.videoStream)
@@ -33,16 +39,10 @@ export class PresentComponent {
 
 
   ngAfterViewInit() {
-    var pos = {
-      drawable: false,
-      x: -1,
-      y: -1,
-    };
     const canvas: HTMLCanvasElement = document.getElementById('drawing_canvas') as HTMLCanvasElement;
     const target_canvas: HTMLCanvasElement = document.getElementById('data_canvas') as HTMLCanvasElement;
 
-    this.canvasService.addEventHandler(canvas, target_canvas, { type: 'highlighter', color: 'black', width: '10' }, 1)
-
+    this.canvasService.addEventHandler(canvas, target_canvas, { type: 'pen', color: 'red', width: '1' }, 1)
   }
 
 
@@ -59,6 +59,7 @@ export class PresentComponent {
 
     // canvas
     const data_canvas: any = document.getElementById('data_canvas');
+    const context: any = data_canvas.getContext('2d');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
 
 
@@ -79,6 +80,12 @@ export class PresentComponent {
       target.style.height = 'auto';
       present.style.height = 'fit-content';
     }
+    if (this.firstRender) {
+      this.firstRender = false
+    } else {
+      this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
+      console.log(this.zoomScale, target.clientWidth, data_canvas.width)
+    }
 
     // 캔버스 사이즈 설정
     data_canvas.width = target.clientWidth;
@@ -86,6 +93,69 @@ export class PresentComponent {
 
     drawing_canvas.width = target.clientWidth;
     drawing_canvas.height = target.clientHeight;
+
+    // 캔버스가 바뀐 scale 만큼 
+    context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
+    this.drawingService.end(context,
+      [
+        223,
+        374,
+        224,
+        374,
+        225,
+        374,
+        226,
+        374,
+        227,
+        374,
+        228,
+        373,
+        230,
+        371,
+        235,
+        367,
+        241,
+        359,
+        249,
+        352,
+        260,
+        344,
+        274,
+        335,
+        291,
+        326,
+        312,
+        316,
+        336,
+        305,
+        365,
+        293,
+        395,
+        282,
+        428,
+        269,
+        463,
+        257,
+        495,
+        246,
+        522,
+        237,
+        545,
+        229,
+        565,
+        223,
+        583,
+        218,
+        598,
+        215,
+        609,
+        213,
+        618,
+        211
+      ], { type: 'pen', color: 'red', width: '1' })
+
+
+
   }
 
   /**
