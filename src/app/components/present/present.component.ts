@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { VideoService } from '../../services/video/video.service';
+import { CanvasService } from '../../services/canvas/canvas.service';
 @Component({
   selector: 'app-present',
   standalone: true,
@@ -17,7 +18,7 @@ export class PresentComponent {
 
   isWidth: boolean | undefined = undefined;
 
-  constructor(private videoService: VideoService) {
+  constructor(private videoService: VideoService, private canvasService: CanvasService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
       // console.log(this.videoStream)
@@ -38,80 +39,10 @@ export class PresentComponent {
       y: -1,
     };
     const canvas: HTMLCanvasElement = document.getElementById('drawing_canvas') as HTMLCanvasElement;
-    var ctx: any = canvas.getContext('2d');
-    var rect = canvas.getBoundingClientRect();
+    const target_canvas: HTMLCanvasElement = document.getElementById('data_canvas') as HTMLCanvasElement;
 
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    this.canvasService.addEventHandler(canvas, target_canvas, { type: 'highlighter', color: 'black', width: '10' }, 1)
 
-    canvas.addEventListener("mousedown", listener);
-    canvas.addEventListener("mousemove", listener);
-    canvas.addEventListener("mouseup", listener);
-    canvas.addEventListener("mouseout", listener);
-
-    /// 터치 스크린
-    canvas.addEventListener("touchstart", listener);
-    canvas.addEventListener("touchmove", listener);
-    canvas.addEventListener("touchend", listener);
-    function listener(e: any) {
-      switch (e.type) {
-        case "mousedown":
-          drawStart(e);
-          break;
-        case "mousemove":
-          if (pos.drawable) {
-            draw(e);
-          }
-          break;
-        case "mouseout":
-        case "mouseup":
-          drawEnd();
-          break;
-        case "touchstart":
-          touchStart(e);
-          break;
-        case "touchmove":
-          if (pos.drawable)
-            touch(e);
-          break;
-        case "touchend":
-          drawEnd();
-          break;
-        default:
-      }
-    }
-
-    function drawStart(e: any) {
-      pos.drawable = true;
-      ctx.beginPath();
-      pos.x = e.offsetX;
-      pos.y = e.offsetY;
-      ctx.moveTo(pos.x, pos.y);
-    }
-    function touchStart(e: any) {
-      pos.drawable = true;
-      ctx.beginPath();
-      pos.x = e.touches[0].pageX - rect.left
-      pos.y = e.touches[0].pageY - rect.top
-      ctx.moveTo(pos.x, pos.y);
-    }
-    function draw(e: any) {
-      ctx.lineTo(e.offsetX, e.offsetY);
-      pos.x = e.offsetX;
-      pos.y = e.offsetY;
-      ctx.stroke();
-    }
-    function touch(e: any) {
-      ctx.lineTo(e.touches[0].pageX - rect.left, e.touches[0].pageY - rect.top);
-      pos.x = e.touches[0].pageX - rect.left;
-      pos.y = e.touches[0].pageY - rect.top;
-      ctx.stroke();
-    }
-    function drawEnd() {
-      pos.drawable = false;
-      pos.x = -1;
-      pos.y = -1;
-    }
   }
 
 
