@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -6,4 +6,8 @@ import { Injectable } from '@angular/core';
 export class ToolService {
 
   constructor() { }
+
+  color = signal<string>('');
+  width = signal<number>(1);
+  type = signal<string>('');
 }

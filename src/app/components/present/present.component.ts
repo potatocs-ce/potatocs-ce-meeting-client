@@ -39,10 +39,7 @@ export class PresentComponent {
 
 
   ngAfterViewInit() {
-    const canvas: HTMLCanvasElement = document.getElementById('drawing_canvas') as HTMLCanvasElement;
-    const target_canvas: HTMLCanvasElement = document.getElementById('data_canvas') as HTMLCanvasElement;
 
-    this.canvasService.addEventHandler(canvas, target_canvas, { type: 'pen', color: 'red', width: '1' }, 1)
   }
 
 
@@ -51,6 +48,8 @@ export class PresentComponent {
    * @param target 비디오 태그
    */
   videoResize(target: any) {
+    const originalWidth = target.videoWidth;
+    const originalHeight = target.videoHeight;
 
     this.isWidth = undefined
     const present: any = document.getElementById('present');
@@ -59,8 +58,10 @@ export class PresentComponent {
 
     // canvas
     const data_canvas: any = document.getElementById('data_canvas');
-    const context: any = data_canvas.getContext('2d');
+    const data_context: any = data_canvas.getContext('2d');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
+    const drawing_context: any = drawing_canvas.getContext('2d');
+
 
 
     const pw = present.clientWidth;
@@ -81,10 +82,10 @@ export class PresentComponent {
       present.style.height = 'fit-content';
     }
     if (this.firstRender) {
-      this.firstRender = false
+      this.firstRender = false;
+      this.zoomScale = target.clientWidth / originalWidth * this.zoomScale;
     } else {
       this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
-      console.log(this.zoomScale, target.clientWidth, data_canvas.width)
     }
 
     // 캔버스 사이즈 설정
@@ -95,8 +96,10 @@ export class PresentComponent {
     drawing_canvas.height = target.clientHeight;
 
     // 캔버스가 바뀐 scale 만큼 
-    context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
-    this.drawingService.end(context,
+    data_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
+    drawing_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
+
+    this.drawingService.end(data_context,
       [
         223,
         374,
@@ -154,8 +157,158 @@ export class PresentComponent {
         211
       ], { type: 'pen', color: 'red', width: '1' })
 
-
-
+    this.drawingService.end(data_context,
+      [
+        41,
+        41,
+        37,
+        41,
+        33,
+        38,
+        28,
+        35,
+        24,
+        33,
+        20,
+        30,
+        18,
+        28,
+        15,
+        26,
+        13,
+        23,
+        11,
+        21,
+        11,
+        18,
+        11,
+        16,
+        11,
+        15,
+        11,
+        14,
+        11,
+        13,
+        13,
+        12,
+        17,
+        11,
+        19,
+        11,
+        21,
+        9,
+        22,
+        9,
+        25,
+        9,
+        28,
+        12,
+        32,
+        16,
+        36,
+        21,
+        39,
+        26,
+        41,
+        30,
+        42,
+        36,
+        42,
+        38,
+        42,
+        41,
+        41,
+        43,
+        40,
+        44,
+        39,
+        45,
+        37,
+        47,
+        36,
+        47,
+        35,
+        47,
+        34,
+        47,
+        32,
+        45,
+        28,
+        41,
+        26,
+        37,
+        25,
+        34,
+        25,
+        31,
+        24,
+        29,
+        24,
+        27,
+        24,
+        25,
+        26,
+        23,
+        28,
+        21,
+        30,
+        20,
+        34,
+        20,
+        36,
+        19,
+        39,
+        19,
+        41,
+        20,
+        42,
+        22,
+        43,
+        25,
+        43,
+        27,
+        43,
+        29,
+        43,
+        31,
+        41,
+        34,
+        40,
+        35,
+        36,
+        36,
+        34,
+        37,
+        33,
+        37,
+        32,
+        37,
+        30,
+        36,
+        28,
+        33,
+        26,
+        30,
+        26,
+        28,
+        26,
+        27,
+        26,
+        25,
+        26,
+        23,
+        28,
+        22,
+        29,
+        22,
+        30,
+        22,
+        32,
+        22,
+        33,
+        22
+      ], { type: 'pen', color: 'blue', width: '1' })
+    this.canvasService.addEventHandler(drawing_canvas, data_canvas, { type: 'pen', color: 'red', width: '1' }, this.zoomScale)
   }
 
   /**
