@@ -69,6 +69,12 @@ export class ToolbarComponent {
   // 화면 공유
   screenShare() {
     this.toggleService.toggle_screen_share.set(!this.toggle_screen_share)
+
+    if (!this.toggle_screen_share) {
+      this.mediasopuService.produce('screenType')
+    } else {
+      this.mediasopuService.closeProducer('screenType')
+    }
   }
 
   // 비디오 모드, 문서 모드 변경
@@ -87,9 +93,6 @@ export class ToolbarComponent {
     if (deviceId != this.now_video && this.toggle_video) {
       this.videoService.nowVideoId.set(deviceId);
 
-      this.videoService.stopVideo();
-      setTimeout(() => { this.videoService.getUserVideo(deviceId); }
-        , 500)
 
     } else {
       this.videoService.nowVideoId.set(deviceId);
@@ -106,7 +109,7 @@ export class ToolbarComponent {
       // this.videoService.getUserVideo(this.now_video);
       this.mediasopuService.produce('videoType')
     } else {
-      this.videoService.stopVideo();
+      this.mediasopuService.closeProducer('videoType')
     }
 
   }

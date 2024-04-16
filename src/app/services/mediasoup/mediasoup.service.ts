@@ -20,8 +20,8 @@ export class MediasoupService {
     private videoService: VideoService
   ) {
     effect(() => {
-      this.nowVideo = this.videoService.nowVideoId;
-      this.nowAudio = this.videoService.nowAudioId;
+      this.nowVideo = this.videoService.nowVideoId();
+      this.nowAudio = this.videoService.nowAudioId();
     })
   }
 
