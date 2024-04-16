@@ -1,5 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
+
+type toolType = {
+  type: string,
+  color: string,
+  width: number,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -7,7 +14,9 @@ export class ToolService {
 
   constructor() { }
 
-  color = signal<string>('');
-  width = signal<number>(1);
-  type = signal<string>('');
+  tool = signal<toolType>({
+    type: 'pen',
+    color: 'black',
+    width: 1
+  })
 }

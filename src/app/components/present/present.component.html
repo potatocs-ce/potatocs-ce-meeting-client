@@ -2,24 +2,25 @@
 
     <section class="present_menu_section">
         <div class="button_container">
-            <button mat-icon-button>
+            <button (click)="setType('click')" mat-icon-button [ngClass]="tool.type == 'click' ? 'active': ''">
                 <i class="fa fa-arrow-pointer"></i>
             </button>
-            <button mat-icon-button>
+            <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
                 <mat-icon>draw</mat-icon>
             </button>
-            <button mat-icon-button>
+            <button (click)="setType('highlighter')" mat-icon-button
+                [ngClass]="tool.type == 'highlighter' ? 'active': ''">
                 <i class="fa-solid fa-highlighter"></i>
             </button>
-            <button mat-icon-button>
-                <i class="fa-solid fa-eraser"></i>
+            <button (click)="setType('eraser')" mat-icon-button [ngClass]=" tool.type=='eraser' ? 'active' : ''">
+                <i class=" fa-solid fa-eraser"></i>
             </button>
-            <button mat-icon-button [matMenuTriggerFor]="shape">
+            <!-- <button mat-icon-button [matMenuTriggerFor]="shape" [ngClass]="tool.type == 'pen' ? 'active': ''">
                 <mat-icon>shape_line</mat-icon>
-            </button>
+            </button> -->
 
             <!-- 그리기 도구 -->
-            <mat-menu #shape="matMenu">
+            <!-- <mat-menu #shape="matMenu">
                 <article class="shape_tool">
                     <button mat-icon-button>
                         <mat-icon>remove</mat-icon>
@@ -31,39 +32,72 @@
                         <mat-icon>crop_square</mat-icon>
                     </button>
                 </article>
-            </mat-menu>
+            </mat-menu> -->
 
             <div class="divide"></div>
 
-            <button class="color_button" style="background-color: black;">
+            <button (click)="setColor('black')" class="color_button" style="background-color: black;">
+                @if(tool.color == 'black'){
+                <p> <i class="fas fa-check check"></i></p>
 
+                }
             </button>
 
-            <button class="color_button" style="background-color: red;">
-
+            <button (click)="setColor('red')" class="color_button" style="background-color: red;">
+                @if(tool.color == 'red'){
+                <p><i class="fas fa-check check"></i></p>
+                }
             </button>
 
-            <button class="color_button" style="background-color: blue;">
+            <button (click)="setColor('blue')" class="color_button" style="background-color: blue;">
+                @if(tool.color == 'blue'){
+                <p>
+                    <i class="fas fa-check check"></i>
+                </p>
 
+                }
             </button>
 
-            <button class="color_button" style="background-color: green;">
+            <button (click)="setColor('green')" class="color_button" style="background-color: green;">
+                @if(tool.color == 'green'){
+                <p>
+                    <i class="fas fa-check check"></i>
+                </p>
 
+                }
             </button>
 
-            <button class="color_button" style="background-color: yellow;">
+            <button (click)="setColor('yellow')" class="color_button" style="background-color: yellow;">
+                @if(tool.color == 'yellow'){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
 
+                }
             </button>
 
-            <button class="width_button big">
-
+            <button (click)="setWidth(10)" class="width_button big">
+                @if(tool.width == 10){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+                }
             </button>
 
-            <button class="width_button medium">
+            <button (click)="setWidth(5)" class="width_button medium">
+                @if(tool.width == 5){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+                }
             </button>
 
-            <button class="width_button small">
-
+            <button (click)="setWidth(1)" class="width_button small">
+                @if(tool.width == 1){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+                }
             </button>
         </div>
 
@@ -74,7 +108,7 @@
         <video id="present_video" #present_video (resize)="videoResize($event.target)" class="present_video"
             [srcObject]="videoStream" autoplay></video>
         <!-- 메뉴 -->
-        <article class="menu_container">
+        <article class="menu_container" [ngClass]="tool.type === 'click' ? 'main':''">
             <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
                 <mat-icon>more_vert</mat-icon>
             </button>
@@ -91,7 +125,7 @@
         </article>
 
         <!-- 캔버스 영역 -->
-        <div class="canvas_container">
+        <div class="canvas_container" [ngClass]="tool.type !== 'click' ? 'main':''">
             <section class="canvas_section">
                 <!-- 그려진 데이터가 보여질 부분 -->
                 <canvas id="data_canvas"></canvas>

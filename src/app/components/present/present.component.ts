@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { VideoService } from '../../services/video/video.service';
 import { CanvasService } from '../../services/canvas/canvas.service';
 import { DrawingService } from '../../services/drawing/drawing.service';
+import { ToolService } from '../../services/tool/tool.service';
 @Component({
   selector: 'app-present',
   standalone: true,
@@ -22,9 +23,12 @@ export class PresentComponent {
   zoomScale: number = 1;
   firstRender: boolean = true;
 
+  tool: any = { type: 'pen', color: 'black' }
+
   constructor(private videoService: VideoService,
     private canvasService: CanvasService,
-    private drawingService: DrawingService) {
+    private drawingService: DrawingService,
+    private toolService: ToolService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
       // console.log(this.videoStream)
@@ -35,6 +39,11 @@ export class PresentComponent {
         present.style.height = '100%';
       }
     })
+
+    effect(() => {
+      this.tool = this.toolService.tool();
+      this.checkClickMode()
+    })
   }
 
 
@@ -44,12 +53,54 @@ export class PresentComponent {
 
 
   /**
+   * 현재 모드가 클릭 모드인지 확인하기 위한 함수 
+   */
+  checkClickMode() {
+
+  }
+
+  setCanvas() {
+    const data_canvas: any = document.getElementById('data_canvas');
+    const drawing_canvas: any = document.getElementById('drawing_canvas');
+    this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
+  }
+
+  /**
+   * 타입 지정 함수
+   * @param type 지정할 타입
+   */
+  setType(type: string) {
+    this.tool.type = type;
+    this.toolService.tool.set({ ...this.tool })
+    this.setCanvas()
+  }
+
+  /**
+   * 색 지정 함수
+   * @param color 색
+   */
+  setColor(color: string) {
+    this.tool.color = color;
+    this.toolService.tool.set({ ...this.tool })
+    this.setCanvas()
+  }
+
+  /**
+   * 팬 두께 지정
+   * @param width 두께
+   */
+  setWidth(width: number) {
+    this.tool.width = width;
+    this.toolService.tool.set({ ...this.tool })
+    this.setCanvas()
+  }
+
+  /**
    * 비디오 크기 변경 = 비디오가 바뀌거나 새로 들어왔을 경우
    * @param target 비디오 태그
    */
   videoResize(target: any) {
     const originalWidth = target.videoWidth;
-    const originalHeight = target.videoHeight;
 
     this.isWidth = undefined
     const present: any = document.getElementById('present');
@@ -307,8 +358,8 @@ export class PresentComponent {
         22,
         33,
         22
-      ], { type: 'pen', color: 'blue', width: '1' })
-    this.canvasService.addEventHandler(drawing_canvas, data_canvas, { type: 'pen', color: 'red', width: '1' }, this.zoomScale)
+      ], { type: 'highlighter', color: 'blue', width: '10' })
+    this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }
 
   /**
