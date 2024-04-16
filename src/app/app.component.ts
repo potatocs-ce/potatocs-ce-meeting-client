@@ -9,6 +9,7 @@ import { AudienceComponent } from './components/Audience/audience/audience.compo
 import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
 import { DocumentsComponent } from './components/documents/documents.component';
 import { VideoService } from './services/video/video.service';
+import { MediasoupService } from './services/mediasoup/mediasoup.service';
 
 @Component({
   selector: 'app-root',
@@ -27,9 +28,17 @@ export class AppComponent {
 
   audience_video: Array<any> = [];
 
+
+  roomInfo: string = ''; // 방 정보 저장용 변수
+  nameInfo: string = '호균-test'; // 이름 정보 저장용 변수
+
+
+
+
   constructor(private toggleService: ToggleService,
     @Inject(PLATFORM_ID) private _platform: Object,
-    private videoService: VideoService) {
+    private videoService: VideoService,
+    private mediasoupService: MediasoupService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
@@ -59,18 +68,24 @@ export class AppComponent {
             if (this.videoService.videoDeivces().length == 0) {
               // 현재 디바이스 넣기
               this.videoService.nowVideoId.set(device.deviceId);
-              // 디바이스 켜기
-              this.videoService.getUserVideo(device.deviceId);
+              // // 디바이스 켜기
+              // this.videoService.getUserVideo(device.deviceId);
             }
 
             this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
           }
         })
       })
+
     }
+
   }
 
+  async ngAfterViewInit() {
+    await this.mediasoupService.joinRoom()
 
+
+  }
 
   //청중 모드에 동영상 추가
 

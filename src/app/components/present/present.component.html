@@ -105,8 +105,8 @@
     <section id="present" class="present_section">
 
         <!-- 비디오 -->
-        <video id="present_video" #present_video (resize)="videoResize($event.target)" class="present_video"
-            [srcObject]="videoStream" autoplay></video>
+        <video id="present_video" [class]="videoStream?.id" #present_video (resize)="videoResize($event.target)"
+            class="present_video" [srcObject]="videoStream?.stream" autoplay playsInline muted></video>
         <!-- 메뉴 -->
         <article class="menu_container" [ngClass]="tool.type === 'click' ? 'main':''">
             <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
@@ -120,7 +120,7 @@
             </mat-menu>
 
             <div class="video_user_name">
-                이름
+                {{videoStream?.name}}
             </div>
         </article>
 

@@ -1,5 +1,5 @@
 <div class="audience_container">
     @for(stream of videoList; track stream){
-    <app-audience-video [stream]="stream"></app-audience-video>
+    <app-audience-video [stream]="stream.stream" [name]="stream.name" [id]="stream.id"></app-audience-video>
     }
 </div>

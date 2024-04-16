@@ -13,4 +13,6 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class AudienceVideoComponent {
   @Input() stream: any = '';
+  @Input() name: any = '';
+  @Input() id: any = '';
 }

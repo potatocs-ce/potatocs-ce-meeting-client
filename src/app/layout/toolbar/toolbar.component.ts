@@ -6,6 +6,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { ToggleService } from '../../services/toggle/toggle.service';
 import { VideoService } from '../../services/video/video.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
@@ -34,7 +35,10 @@ export class ToolbarComponent {
 
   toggle_video: boolean = false;
 
-  constructor(private toggleService: ToggleService, private videoService: VideoService) {
+  constructor(
+    private toggleService: ToggleService,
+    private videoService: VideoService,
+    private mediasopuService: MediasoupService) {
     // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
@@ -99,7 +103,8 @@ export class ToolbarComponent {
     this.toggleService.toggle_video.set(!this.toggle_video);
 
     if (!this.toggle_video) {
-      this.videoService.getUserVideo(this.now_video);
+      // this.videoService.getUserVideo(this.now_video);
+      this.mediasopuService.produce('videoType')
     } else {
       this.videoService.stopVideo();
     }

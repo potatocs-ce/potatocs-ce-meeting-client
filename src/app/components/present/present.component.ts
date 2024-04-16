@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, effect } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, effect } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -7,6 +7,7 @@ import { VideoService } from '../../services/video/video.service';
 import { CanvasService } from '../../services/canvas/canvas.service';
 import { DrawingService } from '../../services/drawing/drawing.service';
 import { ToolService } from '../../services/tool/tool.service';
+import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'app-present',
   standalone: true,
@@ -25,18 +26,29 @@ export class PresentComponent {
 
   tool: any = { type: 'pen', color: 'black' }
 
-  constructor(private videoService: VideoService,
+  constructor(
+    private host: ElementRef,
+    private zone: NgZone,
+    private videoService: VideoService,
     private canvasService: CanvasService,
     private drawingService: DrawingService,
     private toolService: ToolService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
-      // console.log(this.videoStream)
+
       if (this.videoStream == undefined) {
+        this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
         const present: any = document.getElementById('present');
 
         present.style.width = '100%';
         present.style.height = '100%';
+      } else {
+        // 이거 안해주니까 뭔가 동작을 안함....
+        const elem: any = document.getElementById('present_video');
+
+        elem.playsInline = true;
+        elem.autoplay = true;
+        elem.muted = true;
       }
     })
 
@@ -45,12 +57,14 @@ export class PresentComponent {
       this.checkClickMode()
     })
   }
+  width$ = new BehaviorSubject<number>(0);
+  observer: any;
 
 
-  ngAfterViewInit() {
 
+  ngOnDestroy() {
+    this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
   }
-
 
   /**
    * 현재 모드가 클릭 모드인지 확인하기 위한 함수 
@@ -100,6 +114,7 @@ export class PresentComponent {
    * @param target 비디오 태그
    */
   videoResize(target: any) {
+
     const originalWidth = target.videoWidth;
 
     this.isWidth = undefined
@@ -135,6 +150,15 @@ export class PresentComponent {
     if (this.firstRender) {
       this.firstRender = false;
       this.zoomScale = target.clientWidth / originalWidth * this.zoomScale;
+      // console.log(target.clientWidth, originalWidth)
+      this.observer = new ResizeObserver(entries => {
+        this.zone.run(() => {
+          const video_target: any = document.getElementById('present_video');
+          this.videoResize(video_target)
+        });
+      });
+
+      this.observer.observe(document.getElementsByClassName('present_container')[0]);
     } else {
       this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
     }
@@ -370,6 +394,7 @@ export class PresentComponent {
     const video_target: any = document.getElementById('present_video');
     this.videoResize(video_target)
   }
+
 
   /**
    * 비디오 화면 캡쳐 함수

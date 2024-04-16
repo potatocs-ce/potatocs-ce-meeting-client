@@ -1,6 +1,6 @@
 <div class="video_container">
     <!-- 비디오 -->
-    <video class="video" [srcObject]="stream" height="170" autoplay></video>
+    <video class="video" [class]="id" [srcObject]="stream" height="170" autoplay></video>
 
 
     <!-- 캔버스 정보 (판서) -->
@@ -23,6 +23,6 @@
                 <span>screenshot</span>
             </button> -->
         </mat-menu>
-        <div class="video_user_name">이름</div>
+        <div class="video_user_name">{{name}}</div>
     </article>
 </div>
