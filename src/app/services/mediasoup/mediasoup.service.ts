@@ -553,8 +553,6 @@ export class MediasoupService {
         this.videoService.audienceVideoStream.set([...filtered_stream])
       }
     }
-
-
   }
 
 
@@ -563,13 +561,11 @@ export class MediasoupService {
     this.joined = false;
     // this.socket.emit('exitRoom', ())
     let clean = () => {
-
       this.consumerTransport.close();
       this.producerTransport.close();
       this.socket.off('disconnect')
       this.socket.off('newProducers')
       this.socket.off('consumerClosed')
-
     }
 
     if (!offline) {

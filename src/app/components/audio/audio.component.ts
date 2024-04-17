@@ -75,7 +75,7 @@ export class AudioComponent {
           console.log(`${name}의 소리가 -20dB를 초과했습니다!`);
 
           audioTime = setTimeout(() => {
-            if (video) video.style.border = '0px solid rgba(0,0,0,0)'
+            if (video) video.style.border = '2px solid rgba(0,0,0,0)'
             my_audio.pause();
           }, 3000);
         }
