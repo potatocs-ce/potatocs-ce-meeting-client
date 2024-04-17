@@ -82,6 +82,21 @@ export class ToolbarComponent {
   // 비디오 모드, 문서 모드 변경
   changeVideoDocument(mode: string) {
     this.toggleService.toggle_video_whiteboard.set(mode);
+
+    // 문서 모드이면
+    if (mode == 'document') {
+      const stream = this.videoService.presentVideoStream();
+
+      this.videoService.presentVideoStream.set(undefined)
+      this.videoService.audienceVideoStream.set([stream, ...this.videoService.audienceVideoStream()])
+    } else {
+      // 아니면
+      let temp_audience = this.videoService.audienceVideoStream()
+      const stream = temp_audience.shift();
+
+      this.videoService.presentVideoStream.set(stream)
+      this.videoService.audienceVideoStream.set([...temp_audience])
+    }
   }
 
 

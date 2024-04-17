@@ -271,7 +271,7 @@ export class MediasoupService {
       const filtered_stream = this.videoService.audienceVideoStream().filter((stream) => stream.id != consumer_id);
       this.videoService.audienceVideoStream.set([...filtered_stream])
     }
-    elem.remove();
+    // elem.remove();
 
     this.consumers.delete(consumer_id)
   }

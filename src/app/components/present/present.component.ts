@@ -24,10 +24,12 @@ export class PresentComponent {
   zoomScale: number = 1;
   firstRender: boolean = true;
 
-  videoWidth: number = 0;
-  videoHeight: number = 0;
+  videoWidth: number | null = 0;
+  videoHeight: number | null = 0;
 
   tool: any = { type: 'pen', color: 'black' }
+
+  observer_target: any;
 
   constructor(
     private host: ElementRef,
@@ -79,15 +81,20 @@ export class PresentComponent {
     this.observer = new ResizeObserver(entries => {
       this.zone.run(() => {
         const video_target: any = document.getElementById('present_video');
+
         this.videoResize(video_target)
+
+
       });
     });
 
-    this.observer.observe(document.getElementsByClassName('present_container')[0]);
+    this.observer_target = document.getElementsByClassName('present_container')[0]
+
+    this.observer.observe(this.observer_target);
   }
 
   ngOnDestroy() {
-    this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
+    this.observer.unobserve(this.observer_target);
   }
 
   /**
@@ -149,7 +156,7 @@ export class PresentComponent {
     present.style.width = '100%';
     present.style.height = '100%';
 
-    if (!this.videoStream) {
+    if (!this.videoStream || !target?.videoWidth) {
       data_canvas.width = 0;
       data_canvas.height = 0;
 
@@ -159,13 +166,14 @@ export class PresentComponent {
       return
     }
 
-    if (this.videoWidth !== target.videoWidth && this.videoHeight !== target.videoHeight) {
-      this.videoWidth = target.videoWidth;
-      this.videoHeight = target.videoHeight;
+    if (this.videoWidth !== target?.videoWidth && this.videoHeight !== target?.videoHeight) {
+
+      this.videoWidth = target?.videoWidth;
+      this.videoHeight = target?.videoHeight;
       this.firstRender = true;
     }
 
-    const originalWidth = target.videoWidth;
+    const originalWidth = target?.videoWidth;
 
     this.isWidth = undefined
 
