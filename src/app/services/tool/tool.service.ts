@@ -15,7 +15,7 @@ export class ToolService {
   constructor() { }
 
   tool = signal<toolType>({
-    type: 'pen',
+    type: 'click',
     color: 'black',
     width: 1
   })

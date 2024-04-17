@@ -10,6 +10,7 @@ import { WhiteboardComponent } from './components/whiteboard/whiteboard.componen
 import { DocumentsComponent } from './components/documents/documents.component';
 import { VideoService } from './services/video/video.service';
 import { MediasoupService } from './services/mediasoup/mediasoup.service';
+import { AudioComponent } from './components/audio/audio.component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { MediasoupService } from './services/mediasoup/mediasoup.service';
   imports: [CommonModule, RouterOutlet,
     ToolbarComponent, MenuComponent,
     PresentComponent, AudienceComponent,
-    WhiteboardComponent, DocumentsComponent],
+    WhiteboardComponent, DocumentsComponent,
+    AudioComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -27,7 +29,7 @@ export class AppComponent {
   toggle_video_whiteboard: string = '';
 
   audience_video: Array<any> = [];
-
+  audioStreams: Array<any> = [];
 
   roomInfo: string = ''; // 방 정보 저장용 변수
   nameInfo: string = '호균-test'; // 이름 정보 저장용 변수
@@ -44,8 +46,14 @@ export class AppComponent {
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
     })
 
+    //
     effect(() => {
       this.audience_video = this.videoService.audienceVideoStream();
+    })
+
+    //
+    effect(() => {
+      this.audioStreams = this.videoService.audioStream();
     })
   }
 

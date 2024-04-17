@@ -37,18 +37,30 @@ export class PresentComponent {
       this.videoStream = this.videoService.presentVideoStream()
 
       if (this.videoStream == undefined) {
-        this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
+        // this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
         const present: any = document.getElementById('present');
+        const data_canvas: any = document.getElementById('data_canvas');
+        const drawing_canvas: any = document.getElementById('drawing_canvas');
 
         present.style.width = '100%';
         present.style.height = '100%';
+
+
+        data_canvas.width = 0;
+        data_canvas.height = 0;
+
+        drawing_canvas.width = 0;
+        drawing_canvas.height = 0;
+
       } else {
         // 이거 안해주니까 뭔가 동작을 안함....
         const elem: any = document.getElementById('present_video');
+        if (elem) {
+          elem.playsInline = true;
+          elem.autoplay = true;
+          elem.muted = true;
+        }
 
-        elem.playsInline = true;
-        elem.autoplay = true;
-        elem.muted = true;
       }
     })
 
@@ -60,7 +72,16 @@ export class PresentComponent {
   width$ = new BehaviorSubject<number>(0);
   observer: any;
 
+  ngAfterViewInit() {
+    this.observer = new ResizeObserver(entries => {
+      this.zone.run(() => {
+        const video_target: any = document.getElementById('present_video');
+        this.videoResize(video_target)
+      });
+    });
 
+    this.observer.observe(document.getElementsByClassName('present_container')[0]);
+  }
 
   ngOnDestroy() {
     this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
@@ -114,12 +135,7 @@ export class PresentComponent {
    * @param target 비디오 태그
    */
   videoResize(target: any) {
-
-    const originalWidth = target.videoWidth;
-
-    this.isWidth = undefined
     const present: any = document.getElementById('present');
-    present.style.width = '100%';
     const present_section: any = document.getElementById('present_section');
 
     // canvas
@@ -127,6 +143,22 @@ export class PresentComponent {
     const data_context: any = data_canvas.getContext('2d');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
     const drawing_context: any = drawing_canvas.getContext('2d');
+    present.style.width = '100%';
+    present.style.height = '100%';
+
+    if (!this.videoStream) {
+      data_canvas.width = 0;
+      data_canvas.height = 0;
+
+      drawing_canvas.width = 0;
+      drawing_canvas.height = 0;
+
+      return
+    }
+    const originalWidth = target.videoWidth;
+
+    this.isWidth = undefined
+
 
 
 
@@ -148,17 +180,10 @@ export class PresentComponent {
       present.style.height = 'fit-content';
     }
     if (this.firstRender) {
-      this.firstRender = false;
-      this.zoomScale = target.clientWidth / originalWidth * this.zoomScale;
-      // console.log(target.clientWidth, originalWidth)
-      this.observer = new ResizeObserver(entries => {
-        this.zone.run(() => {
-          const video_target: any = document.getElementById('present_video');
-          this.videoResize(video_target)
-        });
-      });
 
-      this.observer.observe(document.getElementsByClassName('present_container')[0]);
+      this.zoomScale = target.clientWidth / originalWidth * this.zoomScale;
+      this.firstRender = false;
+
     } else {
       this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
     }

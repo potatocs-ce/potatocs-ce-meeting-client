@@ -10,6 +10,7 @@
         flex: 1;
         display: flex;
         gap: 0.5rem;
+        min-width: 500px;
 
         .video_section {
 
@@ -74,6 +75,11 @@
             overflow: hidden;
 
             transition: width 0.3s ease;
+        }
+
+
+        .audio_section {
+            display: none;
         }
 
         .active {

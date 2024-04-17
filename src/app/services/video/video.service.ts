@@ -16,13 +16,16 @@ export class VideoService {
   nowVideoId: any = signal<string>('');
   nowAudioId = signal<string>('');
 
-  // 현재 발표 비디오, 오디오 스트림
+  // 현재 발표 비디오 스트림
   presentVideoStream = signal<any>(undefined);
-  presentAudioStream = signal<any>(undefined);
 
-  // 현재 청중들 비디오 스트림, 오디오 스트림
+
+  // 현재 청중들 비디오 스트림
   audienceVideoStream = signal<Array<any>>([]);
-  audienceAudioStream = signal<Array<any>>([]);
+
+
+  // 현재 오디오 스트림
+  audioStream = signal<Array<any>>([]);
 
   // 유저 비디오 가져오기
   getUserVideo = async (id: string) => {

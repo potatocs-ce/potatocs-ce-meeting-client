@@ -259,11 +259,19 @@ export class MediasoupService {
 
     // presentVideoStream에 있는지, audienceVideoStream에 있는지 찾아야 함
     if (this.videoService.presentVideoStream().id == consumer_id) {
-      this.videoService.presentVideoStream.set(undefined);
+      if (this.videoService.audienceVideoStream().length > 0) {
+        this.videoService.presentVideoStream.set(this.videoService.audienceVideoStream()[0]);
+        this.videoService.audienceVideoStream().shift()
+
+        this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream()])
+      } else {
+        this.videoService.presentVideoStream.set(undefined);
+      }
     } else {
       const filtered_stream = this.videoService.audienceVideoStream().filter((stream) => stream.id != consumer_id);
       this.videoService.audienceVideoStream.set([...filtered_stream])
     }
+    elem.remove();
 
     this.consumers.delete(consumer_id)
   }
@@ -277,77 +285,13 @@ export class MediasoupService {
 
         if (kind === 'video') {
           if (!this.videoService.presentVideoStream()) {
-
-            this.videoService.presentVideoStream.set({ id: consumer.id, stream, name })
+            this.videoService.presentVideoStream.set({ id: consumer.id, stream, name, socket_id: producer_socket_id })
           } else {
-            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, name }])
+            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, name, socket_id: producer_socket_id }])
           }
         } else {
-          // console.log(name, producer_socket_id)
-          // elem = document.createElement('audio')
-          // elem.srcObject = stream
-          // elem.id = consumer.id
-          // // elem.playsInline = false
-          // elem.autoplay = true;
-          // elem.pause();
-          // // 원격 오디오 요소 추가
-          // this.remoteAudiosEl.nativeElement.appendChild(elem)
+          this.videoService.audioStream.set([...this.videoService.audioStream(), { id: consumer.id, stream, socket_id: producer_socket_id }])
 
-          // // 오디오 컨텍스트 생성
-          // let audioContext = new AudioContext();
-
-          // // 소스 노드 생성
-          // let source = audioContext.createMediaStreamSource(stream);
-
-          // // Analyser 노드 생성
-          // let analyser = audioContext.createAnalyser();
-          // source.connect(analyser);
-
-          // // FFT 크기 설정 (분석을 위한 배열의 크기)
-          // analyser.fftSize = 2048;
-          // let bufferLength = analyser.frequencyBinCount;
-          // let dataArray = new Uint8Array(bufferLength);
-
-          // let audioTime: any;
-
-          // console.log(video);
-          // 소리 데시벨 모니터링
-          // function monitorDecibel() {
-          //   // FFT 데이터 가져오기
-          //   analyser.getByteFrequencyData(dataArray);
-
-          //   // 데시벨 값 계산
-          //   let sum = 0;
-          //   for (let i = 0; i < bufferLength; i++) {
-          //     sum += dataArray[i];
-          //   }
-          //   let average = sum / bufferLength;
-          //   let decibel = 20 * Math.log10(average / 255);
-          //   // console.log(decibel)
-          //   // 임계값 초과 시 콘솔에 로그 출력
-          //   // -20 데시벨
-          //   if (decibel > -20) {
-          //     const video: any = document.getElementsByClassName(`${producer_socket_id}`)[0];
-          //     if (video) video.style.border = '2px solid rgba(255, 180, 18)'
-
-          //     elem.play();
-          //     if (audioTime) {
-          //       clearTimeout(audioTime)
-          //     }
-
-          //     // console.log(`${name}의 소리가 -20dB를 초과했습니다!`);
-
-          //     audioTime = setTimeout(() => {
-          //       if (video) video.style.border = '2px solid rgba(0,0,0,0)'
-          //       elem.pause();
-          //     }, 3000);
-          //   }
-
-          //   // 주기적으로 모니터링
-          //   requestAnimationFrame(monitorDecibel);
-          // }
-          // // 소리 데시벨 모니터링 시작
-          // monitorDecibel();
         }
 
         consumer.on(
@@ -532,9 +476,9 @@ export class MediasoupService {
       if (!audio) {
         // 현재 발표 칸에 비디오가 없으면
         if (!this.videoService.presentVideoStream()) {
-          this.videoService.presentVideoStream.set({ id: producer.id, stream, name: this.name })
+          this.videoService.presentVideoStream.set({ id: producer.id, stream, name: this.name + '(me)' })
         } else {
-          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, name: this.name }])
+          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, name: this.name + '(me)' }])
         }
       }
 
@@ -594,7 +538,16 @@ export class MediasoupService {
         track.stop()
       })
       if (this.videoService.presentVideoStream().id == producer_id) {
-        this.videoService.presentVideoStream.set(undefined);
+        // this.videoService.presentVideoStream.set(undefined);
+
+        if (this.videoService.audienceVideoStream().length > 0) {
+          this.videoService.presentVideoStream.set(this.videoService.audienceVideoStream()[0]);
+          this.videoService.audienceVideoStream().shift()
+
+          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream()])
+        } else {
+          this.videoService.presentVideoStream.set(undefined);
+        }
       } else {
         const filtered_stream = this.videoService.audienceVideoStream().filter((stream) => stream.id != producer_id);
         this.videoService.audienceVideoStream.set([...filtered_stream])

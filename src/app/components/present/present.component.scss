@@ -141,6 +141,9 @@
             height: 100%;
             position: absolute;
             z-index: 9;
+            // border: 2px solid black;
+            box-sizing: border-box;
+            border-radius: 0.5rem;
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.4);

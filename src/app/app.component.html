@@ -48,4 +48,9 @@
   <section class="toolbar_section">
     <app-toolbar></app-toolbar>
   </section>
+  <section class="audio_section" id="audio_section">
+    @for(stream of audioStreams; track stream) {
+    <app-audio [id]="stream.id" [stream]="stream.stream" [socket_id]="stream.socket_id"></app-audio>
+    }
+  </section>
 </div>

@@ -34,6 +34,7 @@ export class ToolbarComponent {
   now_audio: string = '';
 
   toggle_video: boolean = false;
+  toggle_audio: boolean = false;
 
   constructor(
     private toggleService: ToggleService,
@@ -44,7 +45,8 @@ export class ToolbarComponent {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_screen_share = this.toggleService.toggle_screen_share();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
-      this.toggle_video = this.toggleService.toggle_video()
+      this.toggle_video = this.toggleService.toggle_video();
+      this.toggle_audio = this.toggleService.toggle_audio();
     })
 
     // effect for videoService
@@ -111,6 +113,15 @@ export class ToolbarComponent {
     } else {
       this.mediasopuService.closeProducer('videoType')
     }
+  }
 
+  async toggleAudio() {
+    this.toggleService.toggle_audio.set(!this.toggle_audio);
+    console.log(this.toggle_audio)
+    if (!this.toggle_audio) {
+      this.mediasopuService.produce('audioType')
+    } else {
+      this.mediasopuService.closeProducer('audioType')
+    }
   }
 }
