@@ -1,4 +1,4 @@
-<div class="video_container" [class]="socket_id">
+<div class="video_container">
     <!-- 비디오 -->
     <video class="video" [class]="id" [srcObject]="stream" height="170" autoplay></video>
 
@@ -13,7 +13,7 @@
         <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
             <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #videoMenu="matMenu" xPosition="before">
+        <mat-menu #videoMenu="matMenu" xPosition="before" [class]="socket_id">
             <button mat-menu-item (click)="goToPresent()">
                 <mat-icon>co_present</mat-icon>
                 <span>presenter</span>
