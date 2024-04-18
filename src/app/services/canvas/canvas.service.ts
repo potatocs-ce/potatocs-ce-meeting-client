@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DrawingService } from '../drawing/drawing.service';
+import { Socket } from 'ngx-socket-io';
+import { VideoDrawingService } from '../socket/video_drawing/video-drawing.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +11,23 @@ export class CanvasService {
   listenerSet: any = [];
 
 
-  constructor(private drawingService: DrawingService) { }
+  constructor(private socket: Socket,
+    private drawingService: DrawingService,
+    private videoDrawingService: VideoDrawingService) {
+    console.log('왓더')
+    this.socket.on('draw:video', async (data: any) => {
+      // console.log('여기 여기', data)
+      let drawVarArray = this.videoDrawingService.drawVarArray();
+
+      if (drawVarArray[data.socket_id]) {
+        drawVarArray[data.socket_id].push(data.drawingEvent);
+      } else {
+        drawVarArray[data.socket_id] = [data.drawingEvent];
+      }
+      this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
+    })
+
+  }
 
 
   getDeviceScale(canvas: any) {
@@ -73,21 +92,6 @@ export class CanvasService {
     // sourceCanvas가 동일한 경우에 대한 내용 삭제.
     this.listenerSet = this.listenerSet.filter((item: any) => item.id !== sourceCanvas.id);
 
-    sourceCanvas.addEventListener('mousedown', downEvent);
-    sourceCanvas.addEventListener('mousemove', moveEvent);
-    sourceCanvas.addEventListener('mouseup', upEvent);
-    sourceCanvas.addEventListener('mouseout', upEvent);
-    sourceCanvas.addEventListener('touchstart', downEvent);
-    sourceCanvas.addEventListener('touchmove', moveEvent);
-    sourceCanvas.addEventListener('touchend', upEvent);
-
-    this.listenerSet.push({ id: sourceCanvas.id, name: 'mousedown', handler: downEvent });
-    this.listenerSet.push({ id: sourceCanvas.id, name: 'mousemove', handler: moveEvent });
-    this.listenerSet.push({ id: sourceCanvas.id, name: 'mouseup', handler: upEvent });
-    this.listenerSet.push({ id: sourceCanvas.id, name: 'mouseout', handler: upEvent });
-    this.listenerSet.push({ id: sourceCanvas.id, name: 'touchstart', handler: downEvent });
-    this.listenerSet.push({ id: sourceCanvas.id, name: 'touchmove', handler: moveEvent });
-    this.listenerSet.push({ id: sourceCanvas.id, ame: 'touchend', handler: upEvent });
 
 
     // console.log(this.listenerSet);
@@ -133,7 +137,7 @@ export class CanvasService {
       }
     };
 
-    function upEvent(event: any) {
+    const upEvent = (event: any) => {
 
       if (!isDown) return;
       isDown = false;
@@ -190,6 +194,8 @@ export class CanvasService {
 
       // Generate Event Emitter: new Draw 알림
       // eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
+      this.socket.emit('draw:video', { room_id: 'test_server', data: drawingEvent })
+
 
       // 3. cover canvas 초기화
       clear(sourceCanvas, scale);
@@ -223,5 +229,21 @@ export class CanvasService {
       const point = [Math.round((event.clientX - canvasRect.left) / scale), Math.round((event.clientY - canvasRect.top) / scale)];
       return point;
     }
+    sourceCanvas.addEventListener('mousedown', downEvent);
+    sourceCanvas.addEventListener('mousemove', moveEvent);
+    sourceCanvas.addEventListener('mouseup', upEvent);
+    sourceCanvas.addEventListener('mouseout', upEvent);
+    sourceCanvas.addEventListener('touchstart', downEvent);
+    sourceCanvas.addEventListener('touchmove', moveEvent);
+    sourceCanvas.addEventListener('touchend', upEvent);
+
+    this.listenerSet.push({ id: sourceCanvas.id, name: 'mousedown', handler: downEvent });
+    this.listenerSet.push({ id: sourceCanvas.id, name: 'mousemove', handler: moveEvent });
+    this.listenerSet.push({ id: sourceCanvas.id, name: 'mouseup', handler: upEvent });
+    this.listenerSet.push({ id: sourceCanvas.id, name: 'mouseout', handler: upEvent });
+    this.listenerSet.push({ id: sourceCanvas.id, name: 'touchstart', handler: downEvent });
+    this.listenerSet.push({ id: sourceCanvas.id, name: 'touchmove', handler: moveEvent });
+    this.listenerSet.push({ id: sourceCanvas.id, ame: 'touchend', handler: upEvent });
+
   }
 }

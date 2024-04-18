@@ -8,6 +8,7 @@ import { CanvasService } from '../../services/canvas/canvas.service';
 import { DrawingService } from '../../services/drawing/drawing.service';
 import { ToolService } from '../../services/tool/tool.service';
 import { BehaviorSubject } from 'rxjs';
+import { VideoDrawingService } from '../../services/socket/video_drawing/video-drawing.service';
 @Component({
   selector: 'app-present',
   standalone: true,
@@ -37,7 +38,8 @@ export class PresentComponent {
     private videoService: VideoService,
     private canvasService: CanvasService,
     private drawingService: DrawingService,
-    private toolService: ToolService) {
+    private toolService: ToolService,
+    private videoDrawingService: VideoDrawingService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
 
@@ -72,6 +74,23 @@ export class PresentComponent {
     effect(() => {
       this.tool = this.toolService.tool();
       this.checkClickMode()
+    })
+
+
+
+    effect(() => {
+      if (Object.keys(this.videoDrawingService.drawVarArray()).length) {
+        // console.log(this.videoDrawingService.drawVarArray().length)
+        const data_canvas: any = document.getElementById('data_canvas');
+        const data_context: any = data_canvas.getContext('2d');
+
+        const [firstKey, firstValue]: any = Object.entries(this.videoDrawingService.drawVarArray())[0];
+
+
+        this.drawingService.end(data_context,
+          firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
+      }
+
     })
   }
   width$ = new BehaviorSubject<number>(0);
