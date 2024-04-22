@@ -2,6 +2,7 @@ import { Injectable, effect } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { VideoService } from '../video/video.service';
 import * as mediasoupClient from "mediasoup-client";
+import { ToggleService } from '../toggle/toggle.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class MediasoupService {
   nowAudio: any = ''
   constructor(
     private socket: Socket,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private toggleService: ToggleService
   ) {
     effect(() => {
       this.nowVideo = this.videoService.nowVideoId();
@@ -60,7 +62,9 @@ export class MediasoupService {
             // 초기 연결 설정 producer , consumer 연결 transport 
             let device = await this.loadDevice(data);
             this.device = device;
-            await this.initTransports(device)
+            await this.initTransports(device);
+
+            this.produce('videoType')
           })
         })
       })
@@ -362,13 +366,17 @@ export class MediasoupService {
 
   //====== MAIN FUNCTION
   async produce(type: any, deviceId: any = null) {
+
+
+    deviceId = deviceId == null ? this.nowVideo : deviceId;
+
     let mediaConstraints: any = {};
     let audio = false;
     let screen = false;
     switch (type) {
       case this.mediaType.audio:
 
-        deviceId = this.nowAudio;
+        deviceId = deviceId;
         mediaConstraints = {
           audio: {
             deviceId: deviceId
@@ -378,7 +386,7 @@ export class MediasoupService {
         audio = true
         break;
       case this.mediaType.video:
-        deviceId = this.nowVideo;
+        deviceId = deviceId;
         if (deviceId != '') {
           mediaConstraints = {
             audio: false,
@@ -420,6 +428,9 @@ export class MediasoupService {
       default:
         return;
     }
+
+
+    console.log(this.device)
     if (!this.device.canProduce('video') && !audio) {
       console.error('Cannot produce video')
       return
@@ -504,6 +515,7 @@ export class MediasoupService {
 
       this.producerLabel.set(type, producer.id)
 
+      this.toggleService.toggle_video.set(true);
     } catch (err: any) {
       if (type == this.mediaType.screen) {
         // this.isScreen = false;

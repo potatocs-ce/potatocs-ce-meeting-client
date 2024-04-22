@@ -39,7 +39,7 @@ export class ToolbarComponent {
   constructor(
     private toggleService: ToggleService,
     private videoService: VideoService,
-    private mediasopuService: MediasoupService) {
+    private mediasoupService: MediasoupService) {
     // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
@@ -73,9 +73,9 @@ export class ToolbarComponent {
     this.toggleService.toggle_screen_share.set(!this.toggle_screen_share)
 
     if (!this.toggle_screen_share) {
-      this.mediasopuService.produce('screenType')
+      this.mediasoupService.produce('screenType')
     } else {
-      this.mediasopuService.closeProducer('screenType')
+      this.mediasoupService.closeProducer('screenType')
     }
   }
 
@@ -110,9 +110,19 @@ export class ToolbarComponent {
     if (deviceId != this.now_video && this.toggle_video) {
       this.videoService.nowVideoId.set(deviceId);
 
+      this.mediasoupService.closeProducer('videoType')
 
+      setTimeout(() => {
+        this.mediasoupService.produce('videoType')
+      }, 1)
     } else {
       this.videoService.nowVideoId.set(deviceId);
+
+      this.mediasoupService.closeProducer('audioType')
+
+      setTimeout(() => {
+        this.mediasoupService.produce('audioType')
+      }, 1)
     }
   }
 
@@ -124,19 +134,19 @@ export class ToolbarComponent {
 
     if (!this.toggle_video) {
       // this.videoService.getUserVideo(this.now_video);
-      this.mediasopuService.produce('videoType')
+      this.mediasoupService.produce('videoType')
     } else {
-      this.mediasopuService.closeProducer('videoType')
+      this.mediasoupService.closeProducer('videoType')
     }
   }
 
   async toggleAudio() {
     this.toggleService.toggle_audio.set(!this.toggle_audio);
-    console.log(this.toggle_audio)
+
     if (!this.toggle_audio) {
-      this.mediasopuService.produce('audioType')
+      this.mediasoupService.produce('audioType')
     } else {
-      this.mediasopuService.closeProducer('audioType')
+      this.mediasoupService.closeProducer('audioType')
     }
   }
 }

@@ -76,10 +76,7 @@ export class AppComponent {
             if (this.videoService.videoDeivces().length == 0) {
               // 현재 디바이스 넣기
               this.videoService.nowVideoId.set(device.deviceId);
-              // // 디바이스 켜기
-              // this.videoService.getUserVideo(device.deviceId);
             }
-
             this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
           }
         })
@@ -91,8 +88,6 @@ export class AppComponent {
 
   async ngAfterViewInit() {
     await this.mediasoupService.joinRoom()
-
-
   }
 
   //청중 모드에 동영상 추가

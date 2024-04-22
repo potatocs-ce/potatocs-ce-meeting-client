@@ -149,6 +149,8 @@ export class PresentComponent {
    * @param target 비디오 태그
    */
   videoResize(target: any) {
+    this.videoDrawingService.stopQueue();
+
     const present: any = document.getElementById('present');
     const present_section: any = document.getElementById('present_section');
 
@@ -230,63 +232,10 @@ export class PresentComponent {
     drawing_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
     target_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
 
+
+
     // this.drawingService.end(data_context,
-    //   [
-    //     223,
-    //     374,
-    //     224,
-    //     374,
-    //     225,
-    //     374,
-    //     226,
-    //     374,
-    //     227,
-    //     374,
-    //     228,
-    //     373,
-    //     230,
-    //     371,
-    //     235,
-    //     367,
-    //     241,
-    //     359,
-    //     249,
-    //     352,
-    //     260,
-    //     344,
-    //     274,
-    //     335,
-    //     291,
-    //     326,
-    //     312,
-    //     316,
-    //     336,
-    //     305,
-    //     365,
-    //     293,
-    //     395,
-    //     282,
-    //     428,
-    //     269,
-    //     463,
-    //     257,
-    //     495,
-    //     246,
-    //     522,
-    //     237,
-    //     545,
-    //     229,
-    //     565,
-    //     223,
-    //     583,
-    //     218,
-    //     598,
-    //     215,
-    //     609,
-    //     213,
-    //     618,
-    //     211
-    //   ], { type: 'pen', color: 'red', width: '1' })
+    //   this.videoDrawingService.drawVarArray(), { type: 'pen', color: 'red', width: '1' })
 
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)

@@ -24,7 +24,7 @@ export class VideoDrawingService {
       // 사용자별로 구분하는 것도 필요할듯
       if (Object.keys(this.drawVarArray()).length) {
         const [firstKey, firstValue]: any = Object.entries(this.drawVarArray())[0];
-        console.log(firstValue[firstValue.length - 1])
+
 
         this.dataArray.push(firstValue[firstValue.length - 1]);
         if (this.dataArray.length == 1) {
@@ -37,6 +37,13 @@ export class VideoDrawingService {
 
   // {socket_id: , drawingEvent}
 
+
+  async stopQueue() {
+    this.dataArray = [];
+    clearInterval(this.stop);
+    this.stop = null;
+  }
+
   async drawingQueue() {
     if (!this.dataArray.length) return
 
@@ -48,7 +55,7 @@ export class VideoDrawingService {
 
 
     const data = this.dataArray[0]
-    console.log(data, this.dataArray)
+
     // this.drawingService.end(data_context,firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
 
     const pointsLength = data.points.length / 2;
