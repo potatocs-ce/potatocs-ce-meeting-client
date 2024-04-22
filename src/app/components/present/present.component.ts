@@ -31,7 +31,7 @@ export class PresentComponent {
   tool: any = { type: 'pen', color: 'black' }
 
   observer_target: any;
-  stop: any = null;
+
   constructor(
     private host: ElementRef,
     private zone: NgZone,
@@ -76,103 +76,6 @@ export class PresentComponent {
       this.checkClickMode()
     })
 
-
-
-    effect(() => {
-      if (Object.keys(this.videoDrawingService.drawVarArray()).length) {
-        // console.log(this.videoDrawingService.drawVarArray().length)
-        const data_canvas: any = document.getElementById('data_canvas');
-        const data_context: any = data_canvas.getContext('2d');
-        const drawing_canvas: any = document.getElementById('drawing_canvas');
-        const context: any = drawing_canvas.getContext('2d');
-
-        const [firstKey, firstValue]: any = Object.entries(this.videoDrawingService.drawVarArray())[0];
-
-        const data = firstValue[firstValue.length - 1];
-        // this.drawingService.end(data_context,firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
-
-        const pointsLength = data.points.length / 2;
-
-
-        context.lineCap = "round";
-        context.lineJoin = 'round';
-        context.globalAlpha = 1;
-        context.lineWidth = data.tool.width;
-
-        if (data.tool.type === "pen") {
-          context.globalCompositeOperation = 'source-over';
-          context.strokeStyle = data.tool.color;
-          context.fillStyle = data.tool.color;
-        }
-        else if (data.tool.type === "eraser") {
-          context.globalCompositeOperation = 'source-over';
-          context.strokeStyle = "rgba(255, 255, 255, 1)";
-          context.fillStyle = "rgba(255, 255, 255, 1)";
-        }
-        else if (data.tool.type === "highlighter") {
-          context.globalCompositeOperation = 'xor';
-          context.globalAlpha = 0.5;
-          context.lineCap = "square";
-          context.fillStyle = '#ff0';
-          context.strokeStyle = '#ff0';
-        }
-
-
-        if (data.tool.type === "pen" || data.tool.type === "eraser" || data.tool.type === "highlighter") {
-          if (pointsLength < 3) {
-            context.beginPath();
-            context.arc(data.points[0], data.points[1], data.tool.width / 2, 0, Math.PI * 2, !0);
-            context.fill();
-            context.closePath();
-
-            // context.clearRect(0, 0, sourceCanvas.width / scale, sourceCanvas.height / scale);
-            this.drawingService.end(data_context, firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
-
-            // this.dataArray.shift();
-            // this.rxDrawingFunc();
-            return;
-
-          }
-
-          let i = 2;
-
-          this.stop = setInterval(() => {
-            context.beginPath();
-            if (i === 2) {
-              context.moveTo(data.points[0], data.points[1]);
-            }
-            else {
-              context.lineCap = "round";
-              const a = (data.points[2 * (i - 2)] + data.points[2 * (i - 1)]) / 2;
-              const b = (data.points[2 * (i - 2) + 1] + data.points[2 * (i - 1) + 1]) / 2;
-              context.moveTo(a, b);
-            }
-            const c = (data.points[2 * (i - 1)] + data.points[2 * i]) / 2;
-            const d = (data.points[2 * (i - 1) + 1] + data.points[2 * i + 1]) / 2;
-            context.quadraticCurveTo(data.points[2 * (i - 1)], data.points[2 * (i - 1) + 1], c, d);
-            context.stroke();
-            i += 1;
-
-            if (i === pointsLength) {
-              clearInterval(this.stop);
-              this.stop = null;
-
-              // this.dataArray.shift();
-              // context.clearRect(0, 0, sourceCanvas.width / scale, sourceCanvas.height / scale);
-
-              // 최종 target에 그리기
-              this.drawingService.end(data_context, firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
-
-              // // 다음 event 그리기 시작.
-              // this.rxDrawingFunc();
-            }
-
-          }, data.timeDiff / pointsLength);
-        }
-
-      }
-
-    })
   }
   width$ = new BehaviorSubject<number>(0);
   observer: any;
@@ -207,6 +110,7 @@ export class PresentComponent {
   setCanvas() {
     const data_canvas: any = document.getElementById('data_canvas');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
+
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }
 
@@ -253,6 +157,8 @@ export class PresentComponent {
     const data_context: any = data_canvas.getContext('2d');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
     const drawing_context: any = drawing_canvas.getContext('2d');
+    const target_canvas: any = document.getElementById('target_canvas');
+    const target_context: any = target_canvas.getContext('2d');
     present.style.width = '100%';
     present.style.height = '100%';
 
@@ -262,6 +168,9 @@ export class PresentComponent {
 
       drawing_canvas.width = 0;
       drawing_canvas.height = 0;
+
+      target_canvas.width = 0;
+      target_canvas.height = 0;
 
       return
     }
@@ -313,67 +222,71 @@ export class PresentComponent {
     drawing_canvas.width = target.clientWidth;
     drawing_canvas.height = target.clientHeight;
 
+    target_canvas.width = target.clientWidth;
+    target_canvas.height = target.clientHeight;
+
     // 캔버스가 바뀐 scale 만큼 
     data_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
     drawing_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
+    target_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
 
-    this.drawingService.end(data_context,
-      [
-        223,
-        374,
-        224,
-        374,
-        225,
-        374,
-        226,
-        374,
-        227,
-        374,
-        228,
-        373,
-        230,
-        371,
-        235,
-        367,
-        241,
-        359,
-        249,
-        352,
-        260,
-        344,
-        274,
-        335,
-        291,
-        326,
-        312,
-        316,
-        336,
-        305,
-        365,
-        293,
-        395,
-        282,
-        428,
-        269,
-        463,
-        257,
-        495,
-        246,
-        522,
-        237,
-        545,
-        229,
-        565,
-        223,
-        583,
-        218,
-        598,
-        215,
-        609,
-        213,
-        618,
-        211
-      ], { type: 'pen', color: 'red', width: '1' })
+    // this.drawingService.end(data_context,
+    //   [
+    //     223,
+    //     374,
+    //     224,
+    //     374,
+    //     225,
+    //     374,
+    //     226,
+    //     374,
+    //     227,
+    //     374,
+    //     228,
+    //     373,
+    //     230,
+    //     371,
+    //     235,
+    //     367,
+    //     241,
+    //     359,
+    //     249,
+    //     352,
+    //     260,
+    //     344,
+    //     274,
+    //     335,
+    //     291,
+    //     326,
+    //     312,
+    //     316,
+    //     336,
+    //     305,
+    //     365,
+    //     293,
+    //     395,
+    //     282,
+    //     428,
+    //     269,
+    //     463,
+    //     257,
+    //     495,
+    //     246,
+    //     522,
+    //     237,
+    //     545,
+    //     229,
+    //     565,
+    //     223,
+    //     583,
+    //     218,
+    //     598,
+    //     215,
+    //     609,
+    //     213,
+    //     618,
+    //     211
+    //   ], { type: 'pen', color: 'red', width: '1' })
 
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)

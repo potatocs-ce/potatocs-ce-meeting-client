@@ -14,7 +14,6 @@ export class CanvasService {
   constructor(private socket: Socket,
     private drawingService: DrawingService,
     private videoDrawingService: VideoDrawingService) {
-    console.log('왓더')
     this.socket.on('draw:video', async (data: any) => {
       // console.log('여기 여기', data)
       let drawVarArray = this.videoDrawingService.drawVarArray();
@@ -24,6 +23,8 @@ export class CanvasService {
       } else {
         drawVarArray[data.socket_id] = [data.drawingEvent];
       }
+
+      console.log(data, drawVarArray)
       this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
     })
 
