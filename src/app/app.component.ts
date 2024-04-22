@@ -1,97 +1,15 @@
-import { Component, Inject, PLATFORM_ID, effect } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ToolbarComponent } from './layout/toolbar/toolbar.component';
-import { MenuComponent } from './layout/menu/menu.component';
-import { ToggleService } from './services/toggle/toggle.service';
-import { PresentComponent } from './components/present/present.component';
-import { AudienceComponent } from './components/Audience/audience/audience.component';
-import { WhiteboardComponent } from './components/whiteboard/whiteboard.component';
-import { DocumentsComponent } from './components/documents/documents.component';
-import { VideoService } from './services/video/video.service';
-import { MediasoupService } from './services/mediasoup/mediasoup.service';
-import { AudioComponent } from './components/audio/audio.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet,
-    ToolbarComponent, MenuComponent,
-    PresentComponent, AudienceComponent,
-    WhiteboardComponent, DocumentsComponent,
-    AudioComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'meeting_front';
-  toggle_mode: string = '';
-  toggle_video_whiteboard: string = '';
-
-  audience_video: Array<any> = [];
-  audioStreams: Array<any> = [];
-
-  roomInfo: string = ''; // 방 정보 저장용 변수
-  nameInfo: string = '호균-test'; // 이름 정보 저장용 변수
-
-
-
-
-  constructor(private toggleService: ToggleService,
-    @Inject(PLATFORM_ID) private _platform: Object,
-    private videoService: VideoService,
-    private mediasoupService: MediasoupService) {
-    effect(() => {
-      this.toggle_mode = this.toggleService.toggle_mode();
-      this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
-    })
-
-    //
-    effect(() => {
-      this.audience_video = this.videoService.audienceVideoStream();
-    })
-
-    //
-    effect(() => {
-      this.audioStreams = this.videoService.audioStream();
-    })
-  }
-
-  ngOnInit() {
-    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-      navigator.mediaDevices.enumerateDevices().then((devices: any) => {
-        devices.forEach(async (device: any) => {
-          // 오디오 타입인 경우
-          if ('audioinput' === device.kind) {
-            // 만약 첫 값이면
-            if (this.videoService.audioDevices().length == 0) {
-              this.videoService.nowAudioId.set(device.deviceId);
-            }
-
-            this.videoService.audioDevices.set([...this.videoService.audioDevices(), { label: device.label, deviceId: device.deviceId }])
-          }
-          // 비디오 타입인 경우
-          else if ('videoinput' === device.kind) {
-            // 만약 첫 값이면
-            if (this.videoService.videoDeivces().length == 0) {
-              // 현재 디바이스 넣기
-              this.videoService.nowVideoId.set(device.deviceId);
-            }
-            this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
-          }
-        })
-      })
-
-    }
-
-  }
-
-  async ngAfterViewInit() {
-    await this.mediasoupService.joinRoom()
-  }
-
-  //청중 모드에 동영상 추가
-
 
 
 }
