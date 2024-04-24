@@ -20,8 +20,8 @@
 
         .button_container {
             background-color: white;
-            border-radius: 0.5rem;
-            width: 40px;
+            border-radius: 1.5rem;
+            width: 45px;
             padding: 0.5rem 0.2rem;
             box-sizing: border-box;
             display: flex;
@@ -43,7 +43,7 @@
             width: 35px;
             height: 35px;
             padding: 0px;
-            color: $main_color;
+            color: rgba(0, 21, 79, 0.2);
             cursor: pointer;
 
             &>*[role=img] {
@@ -117,7 +117,7 @@
 
         .active {
             // background-color: $main_logo_color;
-            color: $main_logo_color;
+            color: rgba(0, 21, 79, 0.7);
         }
 
 

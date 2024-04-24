@@ -174,6 +174,9 @@ export class PresentComponent {
       target_canvas.width = 0;
       target_canvas.height = 0;
 
+
+      this.zoomScale = 1;
+
       return
     }
 
