@@ -4,13 +4,19 @@ import { SignInComponent } from './components/auth/sign-in/sign-in.component';
 import { MainComponent } from './components/main/main.component';
 
 export const routes: Routes = [
+
     {
-        path: '',
+        path: 'sign-in',
+        component: SignInComponent
+    },
+    {
+        path: 'room/:id',
         component: MainComponent,
         canActivate: [authGuard]
     },
     {
-        path: 'sign-in',
-        component: SignInComponent
-    }
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full'
+    },
 ];
