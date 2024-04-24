@@ -3,6 +3,8 @@ import { Socket } from 'ngx-socket-io';
 import { VideoService } from '../video/video.service';
 import * as mediasoupClient from "mediasoup-client";
 import { ToggleService } from '../toggle/toggle.service';
+import { MeetingService } from '../meeting/meeting.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,9 @@ export class MediasoupService {
   constructor(
     private socket: Socket,
     private videoService: VideoService,
-    private toggleService: ToggleService
+    private toggleService: ToggleService,
+    private meetingService: MeetingService,
+    private authService: AuthService
   ) {
     effect(() => {
       this.nowVideo = this.videoService.nowVideoId();
@@ -42,12 +46,11 @@ export class MediasoupService {
   producers = new Map()
   producerLabel = new Map()
 
-  name: string = '호균'
 
   // 방 참가 함수
   async joinRoom() {
-    const name = this.name
-    const room_id = 'test_server';
+    const name = this.authService.getTokenInfo().name;
+    const room_id = this.meetingService.meeting_room_id();
 
     if (this.rc && this.rc.isOpen()) {
       console.log('Already connected to a room')
@@ -487,9 +490,9 @@ export class MediasoupService {
       if (!audio) {
         // 현재 발표 칸에 비디오가 없으면
         if (!this.videoService.presentVideoStream()) {
-          this.videoService.presentVideoStream.set({ id: producer.id, stream, name: this.name + '(me)' })
+          this.videoService.presentVideoStream.set({ id: producer.id, stream, name: this.authService.getTokenInfo().name + '(me)' })
         } else {
-          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, name: this.name + '(me)' }])
+          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, name: this.authService.getTokenInfo().name + '(me)' }])
         }
       }
 

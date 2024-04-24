@@ -7,6 +7,7 @@ import { ToggleService } from '../../services/toggle/toggle.service';
 import { VideoService } from '../../services/video/video.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
+import { MeetingService } from '../../services/meeting/meeting.service';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
@@ -36,10 +37,13 @@ export class ToolbarComponent {
   toggle_video: boolean = false;
   toggle_audio: boolean = false;
 
+  meeting_title: string = '';
+
   constructor(
     private toggleService: ToggleService,
     private videoService: VideoService,
-    private mediasoupService: MediasoupService) {
+    private mediasoupService: MediasoupService,
+    private meetingService: MeetingService) {
     // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
@@ -56,6 +60,11 @@ export class ToolbarComponent {
 
       this.now_audio = this.videoService.nowAudioId();
       this.now_video = this.videoService.nowVideoId();
+    })
+
+    // effect for meetingService
+    effect(() => {
+      this.meeting_title = this.meetingService.meeting_info().meetingTitle;
     })
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -6,4 +6,9 @@ import { Injectable } from '@angular/core';
 export class MeetingService {
 
   constructor() { }
+
+  meeting_room_id = signal<string>('');
+  meeting_room_title = signal<string>('');
+
+  meeting_info = signal<any>(undefined);
 }

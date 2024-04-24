@@ -46,7 +46,7 @@
         width: 40px;
         height: 40px;
         background-color: white;
-        color: $main_logo_color;
+        color: rgba(0, 21, 79, 0.7);
         padding: 0;
         overflow: hidden;
         z-index: 2;
@@ -80,8 +80,8 @@
 
         align-items: center;
         z-index: 1;
-        border: 0;
 
+        border: none;
 
         .toggle_button {
             flex: 1;

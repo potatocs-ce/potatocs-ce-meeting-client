@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID, effect } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from '../../layout/toolbar/toolbar.component';
 import { MenuComponent } from '../../layout/menu/menu.component';
 import { AudienceComponent } from '../Audience/audience/audience.component';
@@ -11,6 +11,7 @@ import { AudioComponent } from '../audio/audio.component';
 import { ToggleService } from '../../services/toggle/toggle.service';
 import { VideoService } from '../../services/video/video.service';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
+import { MeetingService } from '../../services/meeting/meeting.service';
 
 @Component({
   selector: 'app-main',
@@ -37,10 +38,14 @@ export class MainComponent {
 
 
 
-  constructor(private toggleService: ToggleService,
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private toggleService: ToggleService,
     @Inject(PLATFORM_ID) private _platform: Object,
     private videoService: VideoService,
-    private mediasoupService: MediasoupService) {
+    private mediasoupService: MediasoupService,
+    private meetingService: MeetingService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
@@ -55,9 +60,25 @@ export class MainComponent {
     effect(() => {
       this.audioStreams = this.videoService.audioStream();
     })
+
+
+    effect(async () => {
+      if (this.meetingService.meeting_room_id() !== '' && this.meetingService.meeting_room_id() !== undefined) {
+        console.log(this.meetingService.meeting_room_id())
+        await this.mediasoupService.joinRoom()
+      }
+
+    })
   }
 
   ngOnInit() {
+
+    this.route.params.subscribe((params: any) => {
+      console.log(params)
+      this.meetingService.meeting_room_id.set(params.id)
+    });
+
+
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       navigator.mediaDevices.enumerateDevices().then((devices: any) => {
         devices.forEach(async (device: any) => {
@@ -87,7 +108,7 @@ export class MainComponent {
   }
 
   async ngAfterViewInit() {
-    await this.mediasoupService.joinRoom()
+    // await this.mediasoupService.joinRoom()
   }
 
   //청중 모드에 동영상 추가
