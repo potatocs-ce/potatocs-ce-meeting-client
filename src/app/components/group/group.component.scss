@@ -1,0 +1,60 @@
+@import '../../setting.scss';
+
+.group_container {
+    color: $main_color;
+    font-size: 11pt;
+
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+
+
+    .group_count {
+        font-size: 10pt;
+        display: flex;
+
+        margin-bottom: 5px;
+        margin-top: 4px;
+        margin-left: 10px;
+    }
+
+    .group_list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .member_info {
+            padding-left: 10px;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+
+            color: rgba(0, 21, 79, 0.2);
+
+            .name {
+                font-weight: bold;
+            }
+
+            .active {
+                color: rgba(0, 21, 79, 0.8);
+            }
+
+            .role {
+                font-size: 8pt;
+                border: 1px solid $icon_button_color;
+                display: block;
+                height: 100%;
+                box-sizing: border-box;
+                padding: 0.4rem;
+                border-radius: 0.4rem;
+                color: $icon_button_color;
+            }
+
+            .active_role {
+                background-color: $icon_button_color;
+                color: white;
+            }
+        }
+    }
+}

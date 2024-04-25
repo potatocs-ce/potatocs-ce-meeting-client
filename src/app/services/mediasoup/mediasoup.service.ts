@@ -5,6 +5,8 @@ import * as mediasoupClient from "mediasoup-client";
 import { ToggleService } from '../toggle/toggle.service';
 import { MeetingService } from '../meeting/meeting.service';
 import { AuthService } from '../auth/auth.service';
+import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
+import { UserService } from '../../api/user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,9 @@ export class MediasoupService {
     private videoService: VideoService,
     private toggleService: ToggleService,
     private meetingService: MeetingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private meetingServiceAPI: MeetingServiceAPI,
+    private userService: UserService
   ) {
     effect(() => {
       this.nowVideo = this.videoService.nowVideoId();
@@ -50,7 +54,10 @@ export class MediasoupService {
   // 방 참가 함수
   async joinRoom() {
     const name = this.authService.getTokenInfo().name;
+    const user_id = this.authService.getTokenInfo()._id;
     const room_id = this.meetingService.meeting_room_id();
+
+
 
     if (this.rc && this.rc.isOpen()) {
       console.log('Already connected to a room')
@@ -58,8 +65,20 @@ export class MediasoupService {
       // 방 생성
       await this.socket.emit('createRoom', { room_id }, async (response: any) => {
         // 방 참가
-        await this.socket.emit('join', { name, room_id }, async (response: any) => {
+        await this.socket.emit('join', { name, room_id, user_id }, async (response: any) => {
           this.joined = true;
+
+          // 방 참가 시 유저 업데이트도 같이 진행
+          this.meetingServiceAPI.getMeetingInfo(room_id).subscribe(async (data: any) => {
+            const meetingInfo: any = data;
+            const userInfo: any = await this.userService.getUserInfo(user_id).toPromise();
+
+            meetingInfo.userData = userInfo.userData;
+
+            this.meetingService.meeting_info.set(meetingInfo);
+          })
+
+
           // 통신을 위해 필요한 미디어 수준 정보 요청 
           await this.socket.emit('getRouterRtpCapabilities', {}, async (data: any) => {
             // 초기 연결 설정 producer , consumer 연결 transport 
@@ -241,6 +260,9 @@ export class MediasoupService {
       'newProducers',
       async (data: any) => {
         console.log('Now Producers', data)
+
+
+
         for (let { producer_id, producer_socket_id } of data) {
           await this.consume(producer_id, producer_socket_id)
         }
@@ -251,6 +273,37 @@ export class MediasoupService {
       'disconnect',
       () => {
         this.exit(true)
+      }
+    )
+
+    this.socket.on(
+      'user_join', async (data: any) => {
+        console.log(data)
+        // 방 참가 시 유저 업데이트도 같이 진행
+        this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
+          const meetingInfo: any = data2;
+          const userInfo: any = await this.userService.getUserInfo(data.user_id).toPromise();
+
+          meetingInfo.userData = userInfo.userData;
+
+          this.meetingService.meeting_info.set(meetingInfo);
+        })
+      }
+    )
+
+
+    this.socket.on(
+      'user_exit',
+      async (data: any) => {
+        // 방 참가 시 유저 업데이트도 같이 진행
+        this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
+          const meetingInfo: any = data2;
+          const userInfo: any = await this.userService.getUserInfo(data.user_id).toPromise();
+
+          meetingInfo.userData = userInfo.userData;
+
+          this.meetingService.meeting_info.set(meetingInfo);
+        })
       }
     )
   }

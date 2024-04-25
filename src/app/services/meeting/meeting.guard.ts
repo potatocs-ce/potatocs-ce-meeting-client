@@ -15,7 +15,7 @@ export const meetingGuard: CanActivateFn = async (route, state) => {
 
   try {
     const meetingInfo: any = await lastValueFrom(meetingApiService.getMeetingInfo(route.params['id']))
-    console.log(meetingInfo)
+
     const userId = authService.getTokenInfo()._id;
 
     if (userId) {
@@ -25,7 +25,7 @@ export const meetingGuard: CanActivateFn = async (route, state) => {
       meetingInfo.userData = userInfo.userData;
 
       meetingService.meeting_info.set(meetingInfo);
-      console.log(meetingInfo)
+
       if (meetingInfo.status == 'pending') {
         console.log('회의가 열리지 않았습니다. ')
       }

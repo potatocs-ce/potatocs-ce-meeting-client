@@ -21,8 +21,8 @@
         .button_container {
             background-color: white;
             border-radius: 1.5rem;
-            width: 45px;
-            padding: 0.5rem 0.2rem;
+            width: 40px;
+            padding: 0.3rem 0.2rem;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -63,7 +63,7 @@
         }
 
         .divide {
-            width: 60%;
+            width: 55%;
             height: 1px;
 
             background-color: rgb(230, 230, 230);
@@ -116,8 +116,9 @@
         }
 
         .active {
-            // background-color: $main_logo_color;
-            color: rgba(0, 21, 79, 0.7);
+            // color: $main_logo_color;
+            color: rgba(0, 21, 79, 0.8);
+            // color: $main-color;
         }
 
 
