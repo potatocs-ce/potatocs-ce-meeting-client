@@ -238,14 +238,14 @@ export class PresentComponent {
     target_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
 
 
-    console.log(this.videoDrawingService.drawVarArray())
+
 
 
     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
       this.drawingService.end(data_context, data.points, data.tool)
     })
 
-    console.log(this.zoomScale)
+
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }

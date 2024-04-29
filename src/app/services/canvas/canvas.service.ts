@@ -12,27 +12,22 @@ import { AuthService } from '../auth/auth.service';
 export class CanvasService {
   listenerSet: any = [];
 
-
-
-
   constructor(private socket: Socket,
     private drawingService: DrawingService,
     private videoDrawingService: VideoDrawingService,
     private meetingService: MeetingService,
     private authService: AuthService) {
     this.socket.on('draw:video', async (data: any) => {
-      console.log('여기 여기', data)
       let drawVarArray = this.videoDrawingService.drawVarArray();
 
-      if (drawVarArray[data.user_id]) {
-        drawVarArray[data.user_id].push(data.drawingEvent);
+      if (drawVarArray[data.target_id]) {
+        drawVarArray[data.target_id].push(data.drawingEvent);
       } else {
-        drawVarArray[data.user_id] = [data.drawingEvent];
+        drawVarArray[data.target_id] = [data.drawingEvent];
       }
-      this.videoDrawingService.lastUser.set(data.user_id)
+      this.videoDrawingService.lastUser.set(data.target_id)
       this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
     })
-
   }
 
 
@@ -200,7 +195,22 @@ export class CanvasService {
 
       // Generate Event Emitter: new Draw 알림
       // eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
-      this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, user_id: sourceCanvas.parentNode.id })
+      // user (적은 사람과) target (적힌 사람 구분)
+      this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id })
+
+
+
+
+      let drawVarArray = this.videoDrawingService.drawVarArray();
+
+      if (drawVarArray[sourceCanvas.parentNode.id]) {
+        drawVarArray[sourceCanvas.parentNode.id].push(drawingEvent);
+      } else {
+        drawVarArray[sourceCanvas.parentNode.id] = [drawingEvent];
+      }
+      this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
+
+
 
 
       // 3. cover canvas 초기화

@@ -206,7 +206,7 @@ export class DrawingService {
    * @param textareaPoints 
    */
   end(context: any, points: any, tool: any, txt?: any, scale?: any, textareaPoints?: any) {
-    console.log(tool)
+
     context.lineCap = 'round';
     context.lineJoin = 'round';
     context.lineWidth = tool.width;
