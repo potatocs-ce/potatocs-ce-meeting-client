@@ -176,6 +176,7 @@ export class PresentComponent {
 
 
       this.zoomScale = 1;
+      this.firstRender = true;
 
       return
     }
@@ -217,6 +218,7 @@ export class PresentComponent {
       this.firstRender = false;
 
     } else {
+      console.log(target.clientWidth, data_canvas.width, this.zoomScale)
       this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
     }
 
@@ -236,10 +238,14 @@ export class PresentComponent {
     target_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
 
 
+    console.log(this.videoDrawingService.drawVarArray())
 
-    // this.drawingService.end(data_context,
-    //   this.videoDrawingService.drawVarArray(), { type: 'pen', color: 'red', width: '1' })
 
+    this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
+      this.drawingService.end(data_context, data.points, data.tool)
+    })
+
+    console.log(this.zoomScale)
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }

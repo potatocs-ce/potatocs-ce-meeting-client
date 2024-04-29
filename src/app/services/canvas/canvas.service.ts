@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { DrawingService } from '../drawing/drawing.service';
 import { Socket } from 'ngx-socket-io';
 import { VideoDrawingService } from '../socket/video_drawing/video-drawing.service';
+import { MeetingService } from '../meeting/meeting.service';
+import { AuthService } from '../auth/auth.service';
 
 
 @Injectable({
@@ -11,20 +13,23 @@ export class CanvasService {
   listenerSet: any = [];
 
 
+
+
   constructor(private socket: Socket,
     private drawingService: DrawingService,
-    private videoDrawingService: VideoDrawingService) {
+    private videoDrawingService: VideoDrawingService,
+    private meetingService: MeetingService,
+    private authService: AuthService) {
     this.socket.on('draw:video', async (data: any) => {
-      // console.log('여기 여기', data)
+      console.log('여기 여기', data)
       let drawVarArray = this.videoDrawingService.drawVarArray();
 
-      if (drawVarArray[data.socket_id]) {
-        drawVarArray[data.socket_id].push(data.drawingEvent);
+      if (drawVarArray[data.user_id]) {
+        drawVarArray[data.user_id].push(data.drawingEvent);
       } else {
-        drawVarArray[data.socket_id] = [data.drawingEvent];
+        drawVarArray[data.user_id] = [data.drawingEvent];
       }
-
-      console.log(data, drawVarArray)
+      this.videoDrawingService.lastUser.set(data.user_id)
       this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
     })
 
@@ -195,7 +200,7 @@ export class CanvasService {
 
       // Generate Event Emitter: new Draw 알림
       // eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
-      this.socket.emit('draw:video', { room_id: 'test_server', data: drawingEvent })
+      this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, user_id: sourceCanvas.parentNode.id })
 
 
       // 3. cover canvas 초기화

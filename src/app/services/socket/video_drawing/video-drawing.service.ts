@@ -15,16 +15,18 @@ export class VideoDrawingService {
 
   // 비디오 그림 전체 데이터
   drawVarArray: any = signal<Object>({})
-
+  lastUser: any = signal<string>('')
 
   constructor(
     private drawingService: DrawingService
   ) {
     effect(async () => {
       // 사용자별로 구분하는 것도 필요할듯
-      if (Object.keys(this.drawVarArray()).length) {
-        const [firstKey, firstValue]: any = Object.entries(this.drawVarArray())[0];
 
+      if (this.lastUser() != '') {
+        const value = this.drawVarArray()[this.lastUser()][0]
+
+        const [firstKey, firstValue]: any = Object.entries(this.drawVarArray())[0];
 
         this.dataArray.push(firstValue[firstValue.length - 1]);
         if (this.dataArray.length == 1) {
@@ -45,11 +47,12 @@ export class VideoDrawingService {
   }
 
   async drawingQueue() {
-    if (!this.dataArray.length) return
-
-    const data_canvas: any = document.getElementById('data_canvas');
+    if (!this.dataArray.length) return;
+    console.log(this.lastUser())
+    console.log(document.getElementById(this.lastUser()))
+    const data_canvas: any = document.getElementById(this.lastUser())!.querySelector('.data_canvas')
     const data_context: any = data_canvas.getContext('2d');
-    const target_canvas: any = document.getElementById('target_canvas');
+    const target_canvas: any = document.getElementById(this.lastUser())!.querySelector('.target_canvas')
     const context: any = target_canvas.getContext('2d');
 
 

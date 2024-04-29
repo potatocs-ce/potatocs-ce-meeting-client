@@ -11,6 +11,22 @@
         border-radius: 0.5rem;
     }
 
+
+    .audience_canvas_container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        #data_canvas {
+            position: absolute;
+        }
+
+        #target_canvas {
+            position: absolute;
+        }
+
+    }
+
     .menu_container {
         width: 100%;
         height: 100%;

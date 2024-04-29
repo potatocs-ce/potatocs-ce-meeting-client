@@ -1,11 +1,12 @@
 <div class="video_container">
     <!-- 비디오 -->
-    <video class="video" [class]="id" [srcObject]="stream" height="170" autoplay></video>
+    <video (resize)="videoResize($event.target)" class="video" [class]="id" [srcObject]="stream" autoplay></video>
 
 
     <!-- 캔버스 정보 (판서) -->
-    <article>
-
+    <article class="audience_canvas_container" [id]="user_id">
+        <canvas #data_canvas class="data_canvas"></canvas>
+        <canvas #target_canvas class="target_canvas"></canvas>
     </article>
 
     <!-- 이름 등 정보  -->

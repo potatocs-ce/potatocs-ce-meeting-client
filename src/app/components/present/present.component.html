@@ -127,13 +127,13 @@
 
         <!-- 캔버스 영역 -->
         <div class="canvas_container" [ngClass]="tool.type !== 'click' ? 'main':''">
-            <section class="canvas_section">
+            <section class="canvas_section" [id]="videoStream?.user_id">
                 <!-- 그려진 데이터가 보여질 부분 -->
-                <canvas id="data_canvas"></canvas>
+                <canvas id="data_canvas" class="data_canvas"></canvas>
                 <!-- 상대방으로 부터 수신 받을 판서 데이터가 보여질 부분 -->
-                <canvas id="target_canvas"></canvas>
+                <canvas id="target_canvas" class="target_canvas"></canvas>
                 <!-- 그림 그리는 부분 -->
-                <canvas id="drawing_canvas"></canvas>
+                <canvas id="drawing_canvas" class="drawing_canvas"></canvas>
             </section>
 
         </div>

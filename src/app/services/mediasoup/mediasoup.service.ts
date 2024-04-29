@@ -340,17 +340,17 @@ export class MediasoupService {
   async consume(producer_id: any, producer_socket_id: string) {
 
     this.getConsumeStream(producer_id, producer_socket_id).then(
-      ({ consumer, stream, kind, name }: any) => {
+      ({ consumer, stream, kind, name, user_id }: any) => {
         this.consumers.set(consumer.id, consumer)
-
+        console.log(this.meetingService.meeting_info().currentMembers)
         if (kind === 'video') {
           if (!this.videoService.presentVideoStream()) {
-            this.videoService.presentVideoStream.set({ id: consumer.id, stream, name, socket_id: producer_socket_id })
+            this.videoService.presentVideoStream.set({ id: consumer.id, user_id, stream, name: user_id, socket_id: producer_socket_id })
           } else {
-            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, name, socket_id: producer_socket_id }])
+            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, user_id, name: user_id, socket_id: producer_socket_id }])
           }
         } else {
-          this.videoService.audioStream.set([...this.videoService.audioStream(), { id: consumer.id, stream, socket_id: producer_socket_id }])
+          this.videoService.audioStream.set([...this.videoService.audioStream(), { id: consumer.id, stream, user_id, socket_id: producer_socket_id }])
 
         }
 
@@ -385,6 +385,7 @@ export class MediasoupService {
         producer_socket_id
       }, async (data: any) => {
         try {
+          console.log(data)
           const { id, kind, rtpParameters } = data.params;
 
 
@@ -407,7 +408,8 @@ export class MediasoupService {
             consumer,
             stream,
             kind,
-            name: data.name
+            name: data.name,
+            user_id: data.user_id
           })
         } catch (error) {
           reject(error);
@@ -543,9 +545,9 @@ export class MediasoupService {
       if (!audio) {
         // 현재 발표 칸에 비디오가 없으면
         if (!this.videoService.presentVideoStream()) {
-          this.videoService.presentVideoStream.set({ id: producer.id, stream, name: this.authService.getTokenInfo().name + '(me)' })
+          this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo()._id + '(me)' })
         } else {
-          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, name: this.authService.getTokenInfo().name + '(me)' }])
+          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo()._id + '(me)' }])
         }
       }
 
