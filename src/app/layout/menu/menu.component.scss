@@ -1,5 +1,7 @@
+@import '../../setting.scss';
+
 .menu_container {
-    background-color: white;
+    background-color: $main_background_color;
     width: 240px;
     height: 100%;
     border-radius: 0.5rem;

@@ -1,7 +1,7 @@
 @import '../../setting.scss';
 
 .group_container {
-    color: $main_color;
+    color: white;
     font-size: 11pt;
 
     ul {
@@ -13,10 +13,20 @@
     .group_count {
         font-size: 10pt;
         display: flex;
+        align-items: center;
+        gap: 0.5rem;
 
         margin-bottom: 5px;
         margin-top: 4px;
         margin-left: 10px;
+
+        padding-bottom: 5px;
+
+        border-bottom: 1px solid rgba(48, 51, 56, 255);
+
+        .my_icon {
+            color: rgba(114, 118, 125, 255);
+        }
     }
 
     .group_list {
@@ -30,14 +40,14 @@
             gap: 0.5rem;
             align-items: center;
 
-            color: rgba(0, 21, 79, 0.2);
+            color: $icon_button_color;
 
             .name {
                 font-weight: bold;
             }
 
             .active {
-                color: rgba(0, 21, 79, 0.8);
+                color: $main_logo_color;
             }
 
             .role {

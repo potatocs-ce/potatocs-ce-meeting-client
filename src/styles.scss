@@ -96,7 +96,8 @@ $chat_front-theme: mat.define-light-theme((color: (primary: $chat_front-primary,
 html,
 body {
     height: 100%;
-    background-color: rgba(0, 21, 79, 0.05);
+    // background-color: rgba(0, 21, 79, 0.05);
+    background-color: rgba(0, 0, 0, 255);
     // background-color: $main_color;
     // color: white;
     font-size: 11pt;

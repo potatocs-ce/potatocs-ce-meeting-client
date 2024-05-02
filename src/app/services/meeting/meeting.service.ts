@@ -11,4 +11,6 @@ export class MeetingService {
   meeting_room_title = signal<string>('');
 
   meeting_info = signal<any>(undefined);
+
+  meeting_chat_info = signal<any>(undefined);
 }

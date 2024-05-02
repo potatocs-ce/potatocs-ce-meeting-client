@@ -1,11 +1,34 @@
 <div class="chat_container">
+    <section class="chat_header">
+        <i class="fa-solid fa-message my_icon"></i>
+        <span>김상민</span>
+    </section>
     <section class="chat_section">
+        @for(item of chat_info; track item) {
+        <div class="chat">
+            <section class="name_section">
+                <span class="name">
+                    {{item.chatMember}}
+                    @if(item.userId == user_id){
+                    (me)
+                    }
+                </span>
+                <span class="time">
+                    {{item.createdAt | date}}
+                </span>
+            </section>
+            <section class="content_section">
+                <article>
+                    {{item.chatContent}}
+                </article>
+            </section>
+        </div>
+        }
+    </section>
+    <form class="input_section" (ngSubmit)="submitChat()">
 
-    </section>
-    <section class="input_section">
-        <form>
-            <input />
-            <button>send</button>
-        </form>
-    </section>
+        <input [(ngModel)]="chatContent" [ngModelOptions]="{standalone: true}" />
+        <button mat-icon-button><mat-icon>send</mat-icon></button>
+
+    </form>
 </div>

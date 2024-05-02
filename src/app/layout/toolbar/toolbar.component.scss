@@ -46,7 +46,7 @@
         width: 40px;
         height: 40px;
         background-color: white;
-        color: rgba(0, 21, 79, 0.7);
+        color: black;
         padding: 0;
         overflow: hidden;
         z-index: 2;
@@ -74,7 +74,7 @@
 
     .main_button_option_section {
         width: 66px;
-        background-color: rgba(0, 21, 79, 0.7);
+        background-color: rgba(47, 50, 53, 255);
         border-radius: 5rem;
         display: flex;
 
@@ -112,7 +112,7 @@
 
 
         .meeting_title {
-            color: $main_color;
+            color: white;
             // font-weight: bold;
         }
     }
@@ -143,12 +143,12 @@
 
 
 .active_mat_item_button {
-    background-color: $icon_button_color;
-    color: white;
+    // background-color: rgba(0, 21, 79, 0.1);
+    color: $main_logo_color;
+    // font-weight: bolder !important;
 
-
-    &:hover {
-        background-color: $main_color !important;
-    }
+    // &:hover {
+    //     background-color: rgba(0, 21, 79, 0.2) !important;
+    // }
 
 }

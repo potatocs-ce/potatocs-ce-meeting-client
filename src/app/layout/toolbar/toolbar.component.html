@@ -15,12 +15,12 @@
             <button class="toggle_button" [matMenuTriggerFor]="audioList" #audio_t="matMenuTrigger">
                 @if(audio_t.menuOpen) {
                 <p>
-                    <i class="fa fa-caret-down"></i>
+                    <i class="fa-solid fa-angle-down"></i>
                 </p>
 
                 }@else{
                 <p>
-                    <i class="fa fa-caret-up"></i>
+                    <i class="fa-solid fa-angle-up"></i>
                 </p>
 
                 }
@@ -44,11 +44,11 @@
             <button class="toggle_button" [matMenuTriggerFor]="videoList" #video_t="matMenuTrigger">
                 @if(video_t.menuOpen){
                 <p>
-                    <i class="fa fa-caret-down"></i>
+                    <i class="fa-solid fa-angle-down"></i>
                 </p>
                 }@else {
                 <p>
-                    <i class="fa fa-caret-up"></i>
+                    <i class="fa-solid fa-angle-up"></i>
                 </p>
                 }
 
@@ -66,7 +66,7 @@
 
         @if(toggle_video_whiteboard == 'video'){
         <button (click)="changeVideoDocument('document')" mat-icon-button class="circle_button">
-            <i class="fa fa-file-text"></i>
+            <i class="fa-solid fa-file"></i>
         </button>
         }@else if(toggle_video_whiteboard == 'document'){
         <button (click)="changeVideoDocument('video')" mat-icon-button class="circle_button">
@@ -81,15 +81,15 @@
     <section class="option_buttons_section">
         <button (click)="changeToggleMode('group')" [ngClass]="toggle_mode == 'group'? 'active_circle_button': ''"
             mat-icon-button class="circle_button">
-            <mat-icon inline="true">group</mat-icon>
+            <i class="fa-solid fa-user"></i>
         </button>
         <button (click)="changeToggleMode('chat')" [ngClass]="toggle_mode == 'chat'? 'active_circle_button': ''"
             mat-icon-button class="circle_button">
-            <i class="fa-regular fa-comments"></i>
+            <i class="fa-solid fa-message"></i>
         </button>
         <button (click)="changeToggleMode('survey')" [ngClass]="toggle_mode == 'survey'? 'active_circle_button': ''"
             mat-icon-button class="circle_button">
-            <i class="fa fa-check-to-slot"></i>
+            <i class="fa-solid fa-list-check"></i>
         </button>
     </section>
 </div>
