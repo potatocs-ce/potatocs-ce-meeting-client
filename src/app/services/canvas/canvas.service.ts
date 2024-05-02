@@ -17,17 +17,7 @@ export class CanvasService {
     private videoDrawingService: VideoDrawingService,
     private meetingService: MeetingService,
     private authService: AuthService) {
-    this.socket.on('draw:video', async (data: any) => {
-      let drawVarArray = this.videoDrawingService.drawVarArray();
 
-      if (drawVarArray[data.target_id]) {
-        drawVarArray[data.target_id].push(data.drawingEvent);
-      } else {
-        drawVarArray[data.target_id] = [data.drawingEvent];
-      }
-      this.videoDrawingService.lastUser.set(data.target_id)
-      this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
-    })
   }
 
 
@@ -196,7 +186,7 @@ export class CanvasService {
       // Generate Event Emitter: new Draw 알림
       // eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
       // user (적은 사람과) target (적힌 사람 구분)
-      this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id })
+      this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
 
 
 
@@ -204,9 +194,9 @@ export class CanvasService {
       let drawVarArray = this.videoDrawingService.drawVarArray();
 
       if (drawVarArray[sourceCanvas.parentNode.id]) {
-        drawVarArray[sourceCanvas.parentNode.id].push(drawingEvent);
+        drawVarArray[sourceCanvas.parentNode.id].push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id })
       } else {
-        drawVarArray[sourceCanvas.parentNode.id] = [drawingEvent];
+        drawVarArray[sourceCanvas.parentNode.id] = [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id }];
       }
       this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
 

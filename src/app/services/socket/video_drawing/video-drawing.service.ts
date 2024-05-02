@@ -1,5 +1,7 @@
 import { Injectable, effect, signal } from '@angular/core';
 import { DrawingService } from '../../drawing/drawing.service';
+import { Socket } from 'ngx-socket-io';
+import { AuthService } from '../../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,22 +20,39 @@ export class VideoDrawingService {
   lastUser: any = signal<string>('')
 
   constructor(
-    private drawingService: DrawingService
+    private drawingService: DrawingService,
+    private socket: Socket,
+    private authService: AuthService
   ) {
+    this.socket.on('draw:video', async (data: any) => {
+
+
+      if (this.drawVarArray[data.target_id]) {
+        this.drawVarArray[data.target_id].push({ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id });
+      } else {
+        this.drawVarArray[data.target_id] = [{ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id }];
+      }
+      this.lastUser.set(data.target_id)
+      this.drawVarArray.set({ ...this.drawVarArray })
+      this.dataArray.push(data.drawingEvent);
+      if (this.dataArray.length == 1) {
+        this.drawingQueue();
+      }
+    })
     effect(async () => {
       // 사용자별로 구분하는 것도 필요할듯
 
-      if (this.lastUser() != '') {
-        const value = this.drawVarArray()[this.lastUser()][0]
+      // if (this.lastUser() != '') {
+      //   const value = this.drawVarArray()[this.lastUser()][0]
 
-        const [firstKey, firstValue]: any = Object.entries(this.drawVarArray())[0];
+      //   const [firstKey, firstValue]: any = Object.entries(this.drawVarArray())[0];
 
-        this.dataArray.push(firstValue[firstValue.length - 1]);
-        if (this.dataArray.length == 1) {
-          this.drawingQueue();
-        }
+      //   this.dataArray.push(firstValue[firstValue.length - 1]);
+      //   if (this.dataArray.length == 1) {
+      //     this.drawingQueue();
+      //   }
 
-      }
+      // }
     })
   }
 

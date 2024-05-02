@@ -42,8 +42,9 @@ export class PresentComponent {
     private videoDrawingService: VideoDrawingService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
-
+      console.log(this.videoStream)
       if (this.videoStream == undefined) {
+
         // this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
         const present: any = document.getElementById('present');
         const data_canvas: any = document.getElementById('data_canvas');
@@ -58,6 +59,11 @@ export class PresentComponent {
 
         drawing_canvas.width = 0;
         drawing_canvas.height = 0;
+
+        this.videoWidth = 0;
+        this.videoHeight = 0;
+
+        this.firstRender = true;
 
       } else {
         // 이거 안해주니까 뭔가 동작을 안함....
@@ -111,6 +117,12 @@ export class PresentComponent {
     const data_canvas: any = document.getElementById('data_canvas');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
 
+    if (this.tool.type == 'eraser') {
+      this.tool.width += 15;
+    } else if (this.tool.type == 'highlighter') {
+      this.tool.width += 10;
+    }
+
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }
 
@@ -120,6 +132,11 @@ export class PresentComponent {
    */
   setType(type: string) {
     this.tool.type = type;
+
+    if (type == 'highlighter' && this.tool.color == 'black') {
+      this.tool.color = 'yellow'
+    }
+
     this.toolService.tool.set({ ...this.tool })
     this.setCanvas()
   }
@@ -140,6 +157,7 @@ export class PresentComponent {
    */
   setWidth(width: number) {
     this.tool.width = width;
+
     this.toolService.tool.set({ ...this.tool })
     this.setCanvas()
   }
@@ -150,6 +168,7 @@ export class PresentComponent {
    */
   videoResize(target: any) {
     this.videoDrawingService.stopQueue();
+
 
     const present: any = document.getElementById('present');
     const present_section: any = document.getElementById('present_section');
@@ -190,6 +209,7 @@ export class PresentComponent {
 
     const originalWidth = target?.videoWidth;
 
+
     this.isWidth = undefined
 
 
@@ -218,7 +238,7 @@ export class PresentComponent {
       this.firstRender = false;
 
     } else {
-      console.log(target.clientWidth, data_canvas.width, this.zoomScale)
+
       this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
     }
 
@@ -242,7 +262,8 @@ export class PresentComponent {
 
 
     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
-      this.drawingService.end(data_context, data.points, data.tool)
+
+      this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
     })
 
 

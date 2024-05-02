@@ -29,6 +29,11 @@ export class MeetingServiceAPI {
     return this.http.get(this.baseUrl + '/meeting/getChat/' + meetingId);
   }
 
+
+  getVideoDrawings(meetingId: string) {
+    return this.http.get(this.baseUrl + '/meeting/getVideoDrawings/' + meetingId);
+  }
+
   // 채팅 생성
   createChat(data: any) {
     return this.http.post(this.baseUrl + '/meeting/createChat', data);

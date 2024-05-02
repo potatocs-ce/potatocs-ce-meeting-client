@@ -33,15 +33,20 @@
                     </button>
                 </article>
             </mat-menu> -->
-
+            @if(tool.type != 'click') {
             <div class="divide"></div>
 
+
+            @if(tool.type != 'eraser') {
+            @if(tool.type != 'highlighter') {
             <button (click)="setColor('black')" class="color_button" style="background-color: black;">
                 @if(tool.color == 'black'){
                 <p> <i class="fas fa-check check"></i></p>
 
                 }
             </button>
+            }
+
 
             <button (click)="setColor('red')" class="color_button" style="background-color: red;">
                 @if(tool.color == 'red'){
@@ -75,6 +80,8 @@
 
                 }
             </button>
+            }
+
 
             <button (click)="setWidth(10)" class="width_button big">
                 @if(tool.width == 10){
@@ -99,6 +106,8 @@
                 </p>
                 }
             </button>
+            }
+
         </div>
 
     </section>

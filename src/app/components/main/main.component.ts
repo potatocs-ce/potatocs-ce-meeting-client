@@ -12,6 +12,8 @@ import { ToggleService } from '../../services/toggle/toggle.service';
 import { VideoService } from '../../services/video/video.service';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
+import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
+import { VideoDrawingService } from '../../services/socket/video_drawing/video-drawing.service';
 
 @Component({
   selector: 'app-main',
@@ -45,7 +47,9 @@ export class MainComponent {
     @Inject(PLATFORM_ID) private _platform: Object,
     private videoService: VideoService,
     private mediasoupService: MediasoupService,
-    private meetingService: MeetingService) {
+    private meetingService: MeetingService,
+    private meetingServiceApi: MeetingServiceAPI,
+    private videoDrawingService: VideoDrawingService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
@@ -105,10 +109,21 @@ export class MainComponent {
 
     }
 
+
+
+
   }
 
   async ngAfterViewInit() {
     // await this.mediasoupService.joinRoom()
+    this.meetingServiceApi.getVideoDrawings(this.meetingService.meeting_room_id()).subscribe((res: any) => {
+      const object = res.reduce((acc: any, value: any, index: any) =>
+        ({ ...acc, [value._id]: value.data })
+        , {});
+
+      this.videoDrawingService.drawVarArray.set(object)
+    })
+
   }
 
   //청중 모드에 동영상 추가

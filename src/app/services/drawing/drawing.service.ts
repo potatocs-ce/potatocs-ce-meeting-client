@@ -21,6 +21,7 @@ export class DrawingService {
 
   // 지우개 마카 - 여러 부분에서 사용
   eraserMarker(context: any, points: any, width: any) {
+
     context.strokeStyle = 'black';
     context.fillStyle = 'white';
     context.lineWidth = 1.1;
@@ -65,6 +66,8 @@ export class DrawingService {
         break;
       case 'eraser':
         // 
+
+
         this.eraserMarker(context, [points[0], points[1]], tool.width);
         break;
       case 'highlighter':
@@ -74,8 +77,8 @@ export class DrawingService {
         context.lingJoin = 'round';
         context.beginPath();
         context.fillStyle = tool.color;
-
-        context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
+        context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, true);
+        // context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
         context.fill();
 
         context.closePath();
@@ -134,9 +137,10 @@ export class DrawingService {
         context.stroke();
         context.closePath();
         break;
-      case 'eraser': // 지운개는 cover canvas 초기화 후 처음부터 다시 그림: eraser marker 표시 용도
+      case 'eraser': // 지우개는 cover canvas 초기화 후 처음부터 다시 그림: eraser marker 표시 용도
         context.clearRect(0, 0, context.canvas.width / zoomScale, context.canvas.height / zoomScale);
-
+        context.fillStyle = 'white';
+        context.strokeStyle = 'white';
         if (len < 3) {
           context.beginPath();
           context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
@@ -170,8 +174,8 @@ export class DrawingService {
         context.clearRect(0, 0, context.canvas.width / zoomScale, context.canvas.height / zoomScale);
         if (len < 3) {
           context.beginPath();
-          // context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
-          context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
+          context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
+          // context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
           context.fill();
           context.closePath();
           this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], tool.width);
@@ -259,7 +263,8 @@ export class DrawingService {
 
         if (len < 3) {
           context.beginPath();
-          context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
+          context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
+          // context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
           context.fill();
           context.closePath();
           context.globalAlpha = 1
