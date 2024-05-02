@@ -116,23 +116,9 @@ export class ToolbarComponent {
 
   // 비디오 카메라 선택
   async selectVideo(deviceId: string) {
-    if (deviceId != this.now_video && this.toggle_video) {
-      this.videoService.nowVideoId.set(deviceId);
 
-      this.mediasoupService.closeProducer('videoType')
+    this.videoService.nowVideoId.set(deviceId);
 
-      setTimeout(() => {
-        this.mediasoupService.produce('videoType')
-      }, 1)
-    } else {
-      this.videoService.nowVideoId.set(deviceId);
-
-      this.mediasoupService.closeProducer('audioType')
-
-      setTimeout(() => {
-        this.mediasoupService.produce('audioType')
-      }, 1)
-    }
   }
 
 
