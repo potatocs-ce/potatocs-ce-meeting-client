@@ -63,6 +63,7 @@ export class PresentComponent {
         this.videoWidth = 0;
         this.videoHeight = 0;
 
+        this.zoomScale = 1;
         this.firstRender = true;
 
       } else {
@@ -233,7 +234,7 @@ export class PresentComponent {
       present.style.height = 'fit-content';
     }
     if (this.firstRender) {
-
+      console.log(originalWidth, this.zoomScale)
       this.zoomScale = target.clientWidth / originalWidth * this.zoomScale;
       this.firstRender = false;
 
@@ -241,7 +242,6 @@ export class PresentComponent {
 
       this.zoomScale = target.clientWidth / data_canvas.width * this.zoomScale;
     }
-
     // 캔버스 사이즈 설정
     data_canvas.width = target.clientWidth;
     data_canvas.height = target.clientHeight;
