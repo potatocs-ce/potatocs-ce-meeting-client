@@ -310,7 +310,12 @@ export class MediasoupService {
 
   // 연결 제거 함수
   removeConsumer(consumer_id: any) {
-    let elem: any = document.getElementsByClassName(consumer_id)[0] as HTMLVideoElement
+    let elem: any = document.getElementsByClassName(consumer_id)[0] as HTMLVideoElement;
+
+    if (!elem) {
+      return;
+    }
+
     const stream = elem.srcObject;
     const tracks = stream.getTracks();
     tracks.forEach(function (track: any) {
@@ -318,7 +323,8 @@ export class MediasoupService {
     })
 
     // presentVideoStream에 있는지, audienceVideoStream에 있는지 찾아야 함
-    if (this.videoService.presentVideoStream().id == consumer_id) {
+
+    if (this.videoService.presentVideoStream() != undefined && this.videoService.presentVideoStream().id == consumer_id) {
       if (this.videoService.audienceVideoStream().length > 0) {
         this.videoService.presentVideoStream.set(this.videoService.audienceVideoStream()[0]);
         this.videoService.audienceVideoStream().shift()
