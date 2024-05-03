@@ -4,6 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { VideoService } from '../../../services/video/video.service';
+import { VideoDrawingService } from '../../../services/socket/video_drawing/video-drawing.service';
+import { DrawingService } from '../../../services/drawing/drawing.service';
 
 @Component({
   selector: 'app-audience-video',
@@ -16,7 +18,10 @@ export class AudienceVideoComponent {
   @ViewChild('data_canvas') data_canvas: ElementRef | undefined;
   @ViewChild('target_canvas') target_canvas: ElementRef | undefined;
 
-  constructor(private videoService: VideoService,) {
+  constructor(
+    private videoService: VideoService,
+    private videoDrawingService: VideoDrawingService,
+    private drawingService: DrawingService) {
     effect(() => {
       // this.videoService.audienceVideoStream();
       if (this.videoService.audienceVideoStream().length) {
@@ -63,6 +68,7 @@ export class AudienceVideoComponent {
     const canvas_container: any = document.getElementsByClassName('audience_canvas_container')[0];
 
     zoomScale = 170 / target.videoHeight * zoomScale;
+    console.log(zoomScale)
     target.style.height = `170px`;
     console.log(canvas_container.clientWidth)
     data_canvas.width = canvas_container.clientWidth;
@@ -76,5 +82,13 @@ export class AudienceVideoComponent {
 
     target_context.setTransform(zoomScale, 0, 0, zoomScale, 0, 0)
     data_context.setTransform(zoomScale, 0, 0, zoomScale, 0, 0)
+
+    this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
+
+      this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+    })
   }
+
+
+
 }

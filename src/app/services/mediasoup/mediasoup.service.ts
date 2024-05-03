@@ -576,6 +576,7 @@ export class MediasoupService {
     } catch (err: any) {
       if (type == this.mediaType.screen) {
         // this.isScreen = false;
+        this.toggleService.toggle_screen_share.set(false)
       }
       console.log('Produce error:', err)
     }

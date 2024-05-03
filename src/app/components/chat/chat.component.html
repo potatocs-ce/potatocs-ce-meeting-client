@@ -4,26 +4,29 @@
         <span>김상민</span>
     </section>
     <section class="chat_section">
-        @for(item of chat_info; track item) {
-        <div class="chat">
-            <section class="name_section">
-                <span class="name">
-                    {{item.chatMember}}
-                    @if(item.userId == user_id){
-                    (me)
-                    }
-                </span>
-                <span class="time">
-                    {{item.createdAt | date}}
-                </span>
-            </section>
-            <section class="content_section">
-                <article>
-                    {{item.chatContent}}
-                </article>
-            </section>
-        </div>
-        }
+        <section class="chat_scroll_section">
+            @for(item of chat_info; track item) {
+            <div class="chat">
+                <section class="name_section">
+                    <span class="name">
+                        {{item.chatMember}}
+                        @if(item.userId == user_id){
+                        (me)
+                        }
+                    </span>
+                    <span class="time">
+                        {{item.createdAt | date}}
+                    </span>
+                </section>
+                <section class="content_section">
+                    <article>
+                        {{item.chatContent}}
+                    </article>
+                </section>
+            </div>
+            }
+        </section>
+
     </section>
     <form class="input_section" (ngSubmit)="submitChat()">
 

@@ -28,16 +28,27 @@
 
     .chat_section {
         flex: 1;
-        display: flex;
-        padding: 0 10px;
-        flex-direction: column;
-        gap: 0.5rem;
 
+
+        position: relative;
+
+        .chat_scroll_section {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
+
+            display: flex;
+            padding: 0 10px;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
         .chat {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+
 
             .name_section {
                 display: flex;

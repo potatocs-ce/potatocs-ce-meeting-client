@@ -107,45 +107,48 @@
                 }
             </button>
             }
-
         </div>
-
     </section>
-    <section id="present" class="present_section">
-        <!-- 비디오 -->
-        <video id="present_video" [class]="videoStream?.id" #present_video (resize)="videoResize($event.target)"
-            class="present_video" [srcObject]="videoStream?.stream" autoplay playsInline muted></video>
-        <!-- 메뉴 -->
-        <article class="menu_container" [class]="videoStream?.socket_id" [ngClass]="tool.type === 'click' ? 'main':''">
-            <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #videoMenu="matMenu" xPosition="before">
-                <button mat-menu-item (click)="capture(present_video)">
-                    <mat-icon>screenshot_monitor</mat-icon>
-                    <span>screenshot</span>
+
+    <div class="present_section_container">
+        <section id="present" class="present_section">
+            <!-- 비디오 -->
+            <video id="present_video" [class]="videoStream?.id" #present_video (resize)="videoResize($event.target)"
+                class="present_video" [srcObject]="videoStream?.stream" autoplay playsInline muted></video>
+            <!-- 메뉴 -->
+            <article class="menu_container" [class]="videoStream?.socket_id"
+                [ngClass]="tool.type === 'click' ? 'main':''">
+                <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
+                    <mat-icon>more_vert</mat-icon>
                 </button>
-            </mat-menu>
-            @if(videoStream?.name){
-            <div class="video_user_name">
-                {{videoStream?.name}}
+                <mat-menu #videoMenu="matMenu" xPosition="before">
+                    <button mat-menu-item (click)="capture(present_video)">
+                        <mat-icon>screenshot_monitor</mat-icon>
+                        <span>screenshot</span>
+                    </button>
+                </mat-menu>
+                @if(videoStream?.name){
+                <div class="video_user_name">
+                    {{videoStream?.name}}
+                </div>
+                }
+
+            </article>
+
+            <!-- 캔버스 영역 -->
+            <div class="canvas_container" [ngClass]="tool.type !== 'click' ? 'main':''">
+                <section class="canvas_section" [id]="videoStream?.user_id">
+                    <!-- 그려진 데이터가 보여질 부분 -->
+                    <canvas id="data_canvas" class="data_canvas"></canvas>
+                    <!-- 상대방으로 부터 수신 받을 판서 데이터가 보여질 부분 -->
+                    <canvas id="target_canvas" class="target_canvas"></canvas>
+                    <!-- 그림 그리는 부분 -->
+                    <canvas id="drawing_canvas" class="drawing_canvas"></canvas>
+                </section>
             </div>
-            }
+        </section>
+    </div>
 
-        </article>
-
-        <!-- 캔버스 영역 -->
-        <div class="canvas_container" [ngClass]="tool.type !== 'click' ? 'main':''">
-            <section class="canvas_section" [id]="videoStream?.user_id">
-                <!-- 그려진 데이터가 보여질 부분 -->
-                <canvas id="data_canvas" class="data_canvas"></canvas>
-                <!-- 상대방으로 부터 수신 받을 판서 데이터가 보여질 부분 -->
-                <canvas id="target_canvas" class="target_canvas"></canvas>
-                <!-- 그림 그리는 부분 -->
-                <canvas id="drawing_canvas" class="drawing_canvas"></canvas>
-            </section>
-        </div>
-    </section>
 
 
 </div>
