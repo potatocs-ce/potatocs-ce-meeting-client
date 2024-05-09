@@ -14,6 +14,8 @@ import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
 import { VideoDrawingService } from '../../services/socket/video_drawing/video-drawing.service';
+import { DocApiService } from '../../api/doc/doc-api.service';
+import { DocumentService } from '../../services/document/document.service';
 
 @Component({
   selector: 'app-main',
@@ -49,6 +51,8 @@ export class MainComponent {
     private mediasoupService: MediasoupService,
     private meetingService: MeetingService,
     private meetingServiceApi: MeetingServiceAPI,
+    private docSerciceApi: DocApiService,
+    private docService: DocumentService,
     private videoDrawingService: VideoDrawingService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
@@ -78,9 +82,21 @@ export class MainComponent {
   ngOnInit() {
 
     this.route.params.subscribe((params: any) => {
-      console.log(params)
+      // console.log(params)
       this.meetingService.meeting_room_id.set(params.id)
     });
+
+
+
+    // meetingId 로 db에 있는 채팅 정보 가져오기
+    this.meetingServiceApi.getMeetingChat(this.meetingService.meeting_room_id()).subscribe((res: any) => {
+      this.meetingService.meeting_chat_info.set(res)
+    })
+
+    // doc 리스트 조회
+    this.docSerciceApi.getDocList(this.meetingService.meeting_room_id()).subscribe((res: any) => {
+      this.docService.generatePdfData(res);
+    })
 
 
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {

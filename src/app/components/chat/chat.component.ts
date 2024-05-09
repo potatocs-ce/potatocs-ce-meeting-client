@@ -36,7 +36,7 @@ export class ChatComponent {
   }
 
   ngOnInit() {
-    this.getMeetingChat();
+    // this.getMeetingChat();
   }
 
   // meetingId 로 db에 있는 채팅 정보 가져오기

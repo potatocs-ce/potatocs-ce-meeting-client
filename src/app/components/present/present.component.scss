@@ -2,11 +2,10 @@
 
 .present_container {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     gap: 0.5rem;
-
-
 
 
     .present_menu_section {
@@ -16,8 +15,8 @@
         justify-content: center;
 
 
-        width: 45px;
-        height: 100%;
+        width: 100%;
+        height: 35px;
 
         .button_container {
             background-color: $main_background_color;
@@ -27,9 +26,9 @@
             padding: 0.3rem 0.2rem;
             box-sizing: border-box;
             display: flex;
-            flex-direction: column;
+            // flex-direction: column;
             align-items: center;
-            // justify-content: center;
+            justify-content: center;
             gap: 0.2rem;
 
 
@@ -70,18 +69,18 @@
         }
 
         .divide {
-            width: 55%;
-            height: 1px;
+            width: 1px;
+            height: 55%;
 
             background-color: rgba(109, 111, 116, 255);
-            margin-bottom: 10px;
+            margin-right: 10px;
         }
 
         .color_button {
             border: none;
             width: 15px;
             height: 15px;
-            margin: 3px 0px;
+            margin: 0px 3px;
 
             display: flex;
             align-items: center;
@@ -99,7 +98,7 @@
             background-color: rgb(216, 216, 216);
             // border: 1px solid black;
             border: none;
-            margin: 3px 0px;
+            margin: 0px 3px;
 
             .check {
                 width: 10px;
@@ -120,7 +119,7 @@
         .small {
             width: 13px;
             height: 13px;
-            margin-bottom: 10px;
+            // margin-bottom: 10px;
         }
 
         .active {

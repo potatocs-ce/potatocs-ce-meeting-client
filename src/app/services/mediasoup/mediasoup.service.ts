@@ -350,7 +350,7 @@ export class MediasoupService {
         this.consumers.set(consumer.id, consumer)
         console.log(this.meetingService.meeting_info().currentMembers)
         if (kind === 'video') {
-          if (!this.videoService.presentVideoStream()) {
+          if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
             this.videoService.presentVideoStream.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id })
           } else {
             this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id }])
@@ -549,7 +549,7 @@ export class MediasoupService {
       // 비디오라면
       if (!audio) {
         // 현재 발표 칸에 비디오가 없으면
-        if (!this.videoService.presentVideoStream()) {
+        if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
           this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)' })
         } else {
           this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)' }])
@@ -613,7 +613,7 @@ export class MediasoupService {
       elem.srcObject.getTracks().forEach(function (track: any) {
         track.stop()
       })
-      if (this.videoService.presentVideoStream().id == producer_id) {
+      if (this.videoService.presentVideoStream() && this.videoService.presentVideoStream().id == producer_id) {
         // this.videoService.presentVideoStream.set(undefined);
 
         if (this.videoService.audienceVideoStream().length > 0) {

@@ -68,27 +68,19 @@ export class AudienceVideoComponent {
     const canvas_container: any = document.getElementsByClassName('audience_canvas_container')[0];
 
     zoomScale = 170 / target.videoHeight * zoomScale;
-    console.log(zoomScale)
+
     target.style.height = `170px`;
-    console.log(canvas_container.clientWidth)
+
     data_canvas.width = canvas_container.clientWidth;
     data_canvas.height = canvas_container.clientHeight;
     target_canvas.width = canvas_container.clientWidth;
     target_canvas.height = canvas_container.clientHeight;
 
-    // this.drawingService.end(data_context,
-    //   this.videoDrawingService.drawVarArray(), { type: 'pen', color: 'red', width: '1' })
-
-
     target_context.setTransform(zoomScale, 0, 0, zoomScale, 0, 0)
     data_context.setTransform(zoomScale, 0, 0, zoomScale, 0, 0)
 
     this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
-
       this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
     })
   }
-
-
-
 }

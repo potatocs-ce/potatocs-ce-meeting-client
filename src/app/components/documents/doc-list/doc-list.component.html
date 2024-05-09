@@ -1,0 +1,15 @@
+<div class="doc_list_container">
+    @for(doc of docList; track doc; let i = $index) {
+    <div class="doc_container">
+        <section class="doc_preview_section">
+            <img #thumb id="thumb{{i+1}}" class="thumbBg" width="150" height="100" />
+        </section>
+        <section class="doc_title_section">
+            <span>{{doc.originalFileName}}</span>
+        </section>
+    </div>
+    }
+    <div class="add_button">
+        <button mat-icon-button><mat-icon>add</mat-icon></button>
+    </div>
+</div>
