@@ -27,8 +27,10 @@ export class DocApiService {
   }
 
   // 문서 등록
-  uploadFile() {
-    return
+  uploadFile(meetingId: string, file: any) {
+    const formData: any = new FormData();
+    formData.append("file", file[0]);
+    return this.http.post(this.baseUrl + '/doc/upload/' + meetingId, formData)
   }
 
   // 문서 삭제 todo

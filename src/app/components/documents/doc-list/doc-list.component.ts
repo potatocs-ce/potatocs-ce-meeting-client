@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RenderingService } from '../../../services/rendering/rendering.service';
+import { DocApiService } from '../../../api/doc/doc-api.service';
+import { MeetingService } from '../../../services/meeting/meeting.service';
+import { DocSocketService } from '../../../services/socket/doc/doc-socket.service';
 
 @Component({
   selector: 'app-doc-list',
@@ -15,9 +18,15 @@ import { RenderingService } from '../../../services/rendering/rendering.service'
 export class DocListComponent {
   docList: any;
   @ViewChildren('thumb') thumRef: QueryList<ElementRef> | any;
-  constructor(private docService: DocumentService, private renderingService: RenderingService) {
+  constructor(
+    public docService: DocumentService,
+    private renderingService: RenderingService,
+    private docApiService: DocApiService,
+    private meetingService: MeetingService,
+    private docSocketService: DocSocketService) {
     effect(() => {
-      this.docList = this.docService._docList()
+
+      this.docService._docList()
       setTimeout(() => {
         this.renderFileList();
       }, 0)
@@ -25,8 +34,73 @@ export class DocListComponent {
   }
 
   async renderFileList() {
-    for (let i = 0; i < this.docList.length; i++) {
+    for (let i = 0; i < this.docService._docList().length; i++) {
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb${i + 1}`), i + 1, 1);
     };
   }
+
+
+
+  // pdf 추가 기능
+  handleUploadFileChanged(event: any) {
+    console.log('뭐라고 말 좀 해봐')
+    const files: File[] = event.target.files;
+
+    if (event.target.files.length === 0) {
+      console.log('file 안등어옴');
+      return;
+    }
+
+
+    if (files[0].size > 12000000) {
+      // this.dialogService.openDialogNegative(`This file is too large. Maximum file size is 12MB.`);
+      console.log('너무 큽니다')
+      return;
+    }
+
+
+    // 파일 유효성 검사
+    const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
+    if (ext.toLowerCase() != 'pdf') {
+      //  this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
+      console.log('pdf file을 업로드 해주세요')
+    } else {
+      this.docApiService.uploadFile(this.meetingService.meeting_room_id(), files).subscribe((res: any) => {
+        // 업로드 성공시
+        if (res.message == 'document uploaded') {
+          this.docSocketService.updatedDoc(this.meetingService.meeting_room_id())
+        }
+      })
+      // @OUTPUT -> white-board component로 전달
+      // 
+      //  this.newLocalDocumentFile.emit(event.target.files[0]);
+
+
+      ///////////////////////////////////////////////////////////////////
+      /*---------------------------------------
+      pdf 업로드 시 spinner 
+      -----------------------------------------*/
+      //  const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+      //      // width: '300px',
+
+      //      data: {
+      //          content: 'Upload'
+      //      }
+      //  });
+      //  // 
+      //  this.eventBusService.emit(new EventData('spinner', dialogRef))
+      ///////////////////////////////////////////////////////////////////
+    }
+  }
+
+  // pdf 삭제 기능
+  deletePDF() {
+
+  }
+
+  // 디테일 페이지로 이동 
+  clickPDF(docId: any) {
+
+  }
 }
+
