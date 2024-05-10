@@ -34,4 +34,7 @@ export class DocApiService {
   }
 
   // 문서 삭제 todo
+  deleteMeetingPdfFile(_id: any) {
+    return this.http.delete(this.baseUrl + '/doc/delete/' + _id)
+  }
 }

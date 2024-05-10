@@ -7,6 +7,7 @@ import { RenderingService } from '../../../services/rendering/rendering.service'
 import { DocApiService } from '../../../api/doc/doc-api.service';
 import { MeetingService } from '../../../services/meeting/meeting.service';
 import { DocSocketService } from '../../../services/socket/doc/doc-socket.service';
+import { DialogService } from '../../../services/dialog/dialog.service';
 
 @Component({
   selector: 'app-doc-list',
@@ -23,7 +24,8 @@ export class DocListComponent {
     private renderingService: RenderingService,
     private docApiService: DocApiService,
     private meetingService: MeetingService,
-    private docSocketService: DocSocketService) {
+    private docSocketService: DocSocketService,
+    private dialogService: DialogService) {
     effect(() => {
       this.docService._docList()
       setTimeout(() => {
@@ -43,7 +45,7 @@ export class DocListComponent {
 
   // pdf 추가 기능
   handleUploadFileChanged(event: any) {
-    console.log('뭐라고 말 좀 해봐')
+
     const files: File[] = event.target.files;
 
     if (event.target.files.length === 0) {
@@ -93,9 +95,38 @@ export class DocListComponent {
     }
   }
 
-  // pdf 삭제 기능
-  deletePDF() {
+  // pdf 삭제
+  deletePdf(_id: string) {
+    this.dialogService.openDialogConfirm('Are you sure you want to delete it?').subscribe((result: any) => {
+      if (result) {
 
+        console.log(_id)
+        console.log('>> click PDF : delete');
+        this.docApiService.deleteMeetingPdfFile(_id).subscribe(async (data: any) => {
+
+          // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
+          // await this.socket.emit('check:documents', data.meetingId);
+        })
+
+
+        ///////////////////////////////////////////////////////////////////
+        /*---------------------------------------
+            pdf 삭제 시 spinner 
+        -----------------------------------------*/
+        // const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+        //   // width: '300px',
+
+        //   data: {
+        //     content: 'Delete'
+        //   }
+        // });
+
+
+        this.renderFileList().then(async (value) => {
+          // await dialogRef.close();
+        });
+      }
+    });
   }
 
   // 디테일 페이지로 이동 

@@ -12,7 +12,7 @@
 
             <section class="doc_title_section">
                 <span class="doc_title">{{doc.originalFileName}}</span>
-                <button class="doc_close_button"><mat-icon>close</mat-icon></button>
+                <button (click)="deletePdf(doc._id)" class="doc_close_button"><mat-icon>close</mat-icon></button>
             </section>
             <section class="doc_preview_section">
                 <img #thumb id="thumb{{i+1}}" class="thumbBg" width="120" />
