@@ -1,0 +1,16 @@
+<div class="confirm-dialog">
+    <div>
+        <div class="confirm-w-460"></div>
+    </div>
+
+    <p class="confirm-title">확인</p>
+
+    <p class="confirm-content" [innerHTML]="data.content">
+        <!-- {{ data.content }} -->
+    </p>
+
+    <div class="confirm-between-btn">
+        <button [mat-dialog-close]="true">확인</button>
+        <button [mat-dialog-close]="false">취소</button>
+    </div>
+</div>
