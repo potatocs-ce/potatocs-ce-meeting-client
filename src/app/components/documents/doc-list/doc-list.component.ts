@@ -25,7 +25,6 @@ export class DocListComponent {
     private meetingService: MeetingService,
     private docSocketService: DocSocketService) {
     effect(() => {
-
       this.docService._docList()
       setTimeout(() => {
         this.renderFileList();
@@ -34,6 +33,7 @@ export class DocListComponent {
   }
 
   async renderFileList() {
+
     for (let i = 0; i < this.docService._docList().length; i++) {
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb${i + 1}`), i + 1, 1);
     };

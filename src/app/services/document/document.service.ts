@@ -17,7 +17,6 @@ export class DocumentService {
   }
 
   getPdfPage(pdfNum: number, pageNum: number) {
-
     return this._docList()[pdfNum - 1]?.pdfPages[pageNum - 1];
   }
 
@@ -46,7 +45,7 @@ export class DocumentService {
    * @param result 
    */
   async generatePdfData(result: any) {
-    const pdfArrayVar = this._docList();
+    const pdfArrayVar = [...this._docList()];
 
     for (let i = 0; i < result.length; i++) {
       const updatedTime = result[i].updatedAt;
@@ -63,6 +62,7 @@ export class DocumentService {
           result[i].fileBuffer = file;
           result[i].pdfDoc = pdf_file.pdfDoc;
           result[i].pdfPages = pdf_file.pdfPages;
+          pdfArrayVar[i] = result[i];
         } catch (err) {
           console.error(err);
           return err;
@@ -70,7 +70,7 @@ export class DocumentService {
       }
     }
 
-    this._docList.set(result);
+    this._docList.set(pdfArrayVar);
     return;
   }
 }
