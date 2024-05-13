@@ -137,6 +137,73 @@ export class DrawingService {
         context.stroke();
         context.closePath();
         break;
+
+      // https://github.com/SidRH/Drawing-Different-Shapes-using-JavaScript-on-Mousedrag-
+      // https://github.com/demihe/HTML5-Canvas-Paint-Application/blob/bfdee5248a46c6955b52e2e23db8fc51dc785110/drawing.js#L206
+      // 선 그리기
+      case 'line':
+        console.log('shape moving~~~~~~')
+        context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+        console.log(points)
+        context.moveTo(points[0], points[1]);
+        context.lineTo(points[2 * (len - 1)], points[2 * (len - 1) + 1]);
+        context.quadraticCurveTo(points[2 * i], points[2 * i + 1], points[2 * (i + 1)], points[2 * (i + 1) + 1]);
+        context.closePath();
+        context.stroke();
+        context.strokeStyle = tool.color;
+        break;
+
+      // https://github.com/SidRH/Drawing-Different-Shapes-using-JavaScript-on-Mousedrag-
+      // https://github.com/demihe/HTML5-Canvas-Paint-Application/blob/bfdee5248a46c6955b52e2e23db8fc51dc785110/drawing.js#L206
+
+      // 타원그리기
+      case 'circle':
+        if (len > 3) {
+          context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+          // https://stackoverflow.com/questions/21594756/drawing-circle-ellipse-on-html5-canvas-using-mouse-events
+          var radiusX = (points[2 * (len - 1)] - points[0]) * 0.5,   /// radius for x based on input
+            radiusY = (points[2 * (len - 1) + 1] - points[1]) * 0.5,   /// radius for y based on input
+            centerX = points[0] + radiusX,      /// calc center
+            centerY = points[1] + radiusY,
+            step = 0.01,                 /// resolution of ellipse
+            temp = step,                    /// counter
+            pi2 = Math.PI * 2 - step;    /// end angle
+
+          /// start a new path
+          context.beginPath();
+
+          /// set start point at angle 0
+          context.moveTo(centerX + radiusX * Math.cos(0),
+            centerY + radiusY * Math.sin(0));
+
+          /// create the ellipse    
+          for (; temp < pi2; temp += step) {
+            context.lineTo(centerX + radiusX * Math.cos(temp),
+              centerY + radiusY * Math.sin(temp));
+          }
+
+          /// close it and stroke it for demo
+          context.closePath();
+          context.stroke();
+          context.strokeStyle = tool.color;
+        }
+        break;
+
+      // 사각형 그리기
+      case 'rectangle':
+        if (len > 3) {
+          console.log('shape moving~~~~~~')
+          context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
+          console.log(points)
+          context.strokeRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
+          // fillRect는 색이 채워지고 strokeRect은 색이 채워지지 않는다.
+          // context.fillRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
+          context.closePath();
+          context.stroke();
+          context.strokeStyle = tool.color;
+        }
+        break;
+
       case 'eraser': // 지우개는 cover canvas 초기화 후 처음부터 다시 그림: eraser marker 표시 용도
         context.clearRect(0, 0, context.canvas.width / zoomScale, context.canvas.height / zoomScale);
         context.fillStyle = 'white';
@@ -254,6 +321,60 @@ export class DrawingService {
         context.stroke();
         context.closePath();
         break;
+
+
+      // 선 함수
+      case 'line':
+        context.beginPath();
+        context.moveTo(points[0], points[1]);
+        context.lineTo(points[2 * (len - 1)], points[2 * (len - 1) + 1]);
+        context.quadraticCurveTo(points[2 * i], points[2 * i + 1], points[2 * (i + 1)], points[2 * (i + 1) + 1]);
+        context.closePath();
+        context.stroke();
+        context.strokeStyle = tool.color;
+        break;
+
+      // 타원 함수
+      case 'circle':
+        // https://stackoverflow.com/questions/21594756/drawing-circle-ellipse-on-html5-canvas-using-mouse-events
+        var radiusX = (points[2 * (len - 1)] - points[0]) * 0.5,   /// radius for x based on input
+          radiusY = (points[2 * (len - 1) + 1] - points[1]) * 0.5,   /// radius for y based on input
+          centerX = points[0] + radiusX,      /// calc center
+          centerY = points[1] + radiusY,
+          step = 0.01,                 /// resolution of ellipse
+          a = step,                    /// counter
+          pi2 = Math.PI * 2 - step;    /// end angle
+
+        /// start a new path
+        context.beginPath();
+
+        /// set start point at angle 0
+        context.moveTo(centerX + radiusX * Math.cos(0),
+          centerY + radiusY * Math.sin(0));
+
+        /// create the ellipse    
+        for (; a < pi2; a += step) {
+          context.lineTo(centerX + radiusX * Math.cos(a),
+            centerY + radiusY * Math.sin(a));
+        }
+
+        /// close it and stroke it for demo
+        context.closePath();
+        context.stroke();
+        context.strokeStyle = tool.color;
+        break;
+
+      // 사각형 함수
+      case 'rectangle':
+        console.log('done')
+        context.beginPath();
+        context.strokeRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
+        context.closePath();
+        // fillRect는 색이 채워지고 strokeRect은 색이 채워지지 않는다.
+        // context.fillRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
+        context.strokeStyle = tool.color;
+        break;
+
       case 'highlighter':
         context.globalAlpha = 0.5;
         context.lineCap = "round";

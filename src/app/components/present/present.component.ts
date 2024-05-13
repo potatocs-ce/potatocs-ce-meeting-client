@@ -42,7 +42,7 @@ export class PresentComponent {
     private videoDrawingService: VideoDrawingService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
-      console.log(this.videoStream)
+
       if (this.videoStream == undefined) {
 
         // this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
@@ -74,7 +74,6 @@ export class PresentComponent {
           elem.autoplay = true;
           elem.muted = true;
         }
-
       }
     })
 
@@ -93,8 +92,6 @@ export class PresentComponent {
         const video_target: any = document.getElementById('present_video');
 
         this.videoResize(video_target)
-
-
       });
     });
 
@@ -170,17 +167,19 @@ export class PresentComponent {
   videoResize(target: any) {
     this.videoDrawingService.stopQueue();
 
-
     const present: any = document.getElementById('present');
     const present_section: any = document.getElementById('present_section');
 
     // canvas
     const data_canvas: any = document.getElementById('data_canvas');
     const data_context: any = data_canvas.getContext('2d');
+
     const drawing_canvas: any = document.getElementById('drawing_canvas');
     const drawing_context: any = drawing_canvas.getContext('2d');
+
     const target_canvas: any = document.getElementById('target_canvas');
     const target_context: any = target_canvas.getContext('2d');
+
     present.style.width = '100%';
     present.style.height = '100%';
 
@@ -193,7 +192,6 @@ export class PresentComponent {
 
       target_canvas.width = 0;
       target_canvas.height = 0;
-
 
       this.zoomScale = 1;
       this.firstRender = true;
@@ -258,15 +256,10 @@ export class PresentComponent {
     target_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
 
 
-
-
-
     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
 
       this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
     })
-
-
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }

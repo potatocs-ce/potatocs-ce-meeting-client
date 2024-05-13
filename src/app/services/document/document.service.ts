@@ -90,8 +90,6 @@ export class DocumentService {
     this._doc.set(this._docList()[docNum].pdfPages);
     // 마지막 docNum은 클릭한 docNum으로 변경
     this.lastDocNum.set(docNum);
-
-
   }
 
 }

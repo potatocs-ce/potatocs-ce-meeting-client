@@ -16,11 +16,11 @@
 
 
         width: 100%;
-        height: 35px;
+        height: 30px;
 
         .button_container {
-            background-color: $main_background_color;
-            border-radius: 0.5rem;
+            background-color: white;
+            border-radius: 0.4rem;
             width: 100%;
             height: 100%;
             padding: 0.3rem 0.2rem;
@@ -29,32 +29,26 @@
             // flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0.2rem;
-
-
-            transition: all 0.3s ease;
-
+            gap: 0.4rem;
+            // transition: all 0.3s ease;
         }
-
-
-
-
 
         button {
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 5rem;
-            width: 40px;
-            height: 40px;
+            width: 25px;
+            height: 25px;
             padding: 0px;
             // color: rgb(212, 212, 212); 
-            color: rgba(109, 111, 116, 255);
+            // color: rgba(109, 111, 116, 255);
+            color: $main_background_color;
             cursor: pointer;
 
             &>*[role=img] {
-                width: 20px;
-                height: 20px;
+                width: 14px;
+                height: 14px;
                 // font-size: 18px;
             }
 
@@ -62,9 +56,9 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 18px;
-                height: 18px;
-                font-size: 22px;
+                width: 15px;
+                height: 15px;
+                font-size: 15px;
             }
         }
 
@@ -72,8 +66,8 @@
             width: 1px;
             height: 55%;
 
-            background-color: rgba(109, 111, 116, 255);
-            margin-right: 10px;
+            // background-color: rgba(109, 111, 116, 255);
+            background-color: rgb(216, 216, 216);
         }
 
         .color_button {
@@ -125,7 +119,8 @@
         .active {
             // color: $main_logo_color;
             // color: rgba(0, 21, 79, 0.8);
-            color: white; // color: $main-color;
+            // color: white; // color: $main-color;
+            background-color: rgb(238, 238, 238);
         }
 
 

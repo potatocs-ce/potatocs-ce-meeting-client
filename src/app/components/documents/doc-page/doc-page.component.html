@@ -4,7 +4,7 @@
     </section>
     <section class="page_section">
         @for(page of doc; track page; let i = $index) {
-        <div class="thumb_item">
+        <div class="thumb_item" (click)="clickThumb(i + 1)">
             <section class="tumb">
                 <img #thumb id="thumb_{{i+1}}" width={{thumbArray[i]?.width}} height={{thumbArray[i]?.height}} />
                 <!-- <canvas></canvas> -->

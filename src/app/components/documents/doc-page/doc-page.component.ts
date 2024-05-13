@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class DocPageComponent {
   doc: Array<any> = [];
   thumbArray: Array<any> = [];
+  currentPageNum: number = 0;
   constructor(private docService: DocumentService, private renderingService: RenderingService) {
     effect(() => {
       this.doc = this.docService._doc();
@@ -36,9 +37,19 @@ export class DocPageComponent {
     }
   }
 
-
-
+  // 폴더 리스트로 돌아가기
   backToFileList() {
     this.docService._doc.set([]);
+  }
+
+  // 페이지 선택
+  clickThumb(page: number) {
+    if (page == this.currentPageNum) return; // 동일 page click은 무시
+
+    // this.docService.updateCurrentPageNum(page); // page num 업데이트
+
+    const data = {
+
+    }
   }
 }
