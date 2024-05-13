@@ -132,7 +132,9 @@ export class DocListComponent {
 
   // 디테일 페이지로 이동 
   clickPDF(docId: any) {
+    console.log('>> click PDF : change to Thumbnail Mode');
 
+    this.docService.changeToThumbnailView(docId)
   }
 }
 

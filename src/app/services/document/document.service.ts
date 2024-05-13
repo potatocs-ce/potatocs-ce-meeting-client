@@ -9,21 +9,26 @@ export class DocumentService {
 
   constructor(private DocApi: DocApiService, private fileService: FileService) { }
 
-  _docList: any = signal<any>([]);
+  _docList: any = signal<any>([]); // 문서 리스트 저장용
+  _doc: any = signal<any>([]); // 문서 정보(페이지) 저장용
+  lastDocNum: any = signal<number>(-1); // 최근 문서 번호
 
-
+  // 문서 길이
   getDocLength() {
     return this._docList().length;
   }
 
+  // pdf page 가져오기
   getPdfPage(pdfNum: number, pageNum: number) {
     return this._docList()[pdfNum - 1]?.pdfPages[pageNum - 1];
   }
 
+  // viewport 반환
   getViewportSize(docNum: number, pageNum: number) {
     return this._docList()[docNum - 1].pdfPages[pageNum - 1].getViewport({ scale: 1 })
   }
 
+  // 메모리 비우기
   memoryRelease() {
     for (const item of this._docList()) {
       if (item.pdfDestroy) {
@@ -63,6 +68,7 @@ export class DocumentService {
           result[i].fileBuffer = file;
           result[i].pdfDoc = pdf_file.pdfDoc;
           result[i].pdfPages = pdf_file.pdfPages;
+          result[i].lastPage = 0;
           bufferArray[i] = result[i];
         } catch (err) {
           console.error(err);
@@ -74,6 +80,18 @@ export class DocumentService {
     }
 
     this._docList.set(bufferArray);
+
     return;
   }
+
+  // 썸네일 클릭해서 데이터 바뀌면
+  changeToThumbnailView(docNum: number) {
+    // _doc pdfPages로 데이터 변경
+    this._doc.set(this._docList()[docNum].pdfPages);
+    // 마지막 docNum은 클릭한 docNum으로 변경
+    this.lastDocNum.set(docNum);
+
+
+  }
+
 }

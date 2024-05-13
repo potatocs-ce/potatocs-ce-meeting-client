@@ -1,1 +1,19 @@
-<p>doc-page works!</p>
+<div class="doc_container">
+    <section class="button_section">
+        <button (click)="backToFileList()"><mat-icon>chevron_left</mat-icon><span>Doc. List</span></button>
+    </section>
+    <section class="page_section">
+        @for(page of doc; track page; let i = $index) {
+        <div class="thumb_item">
+            <section class="tumb">
+                <img #thumb id="thumb_{{i+1}}" width={{thumbArray[i]?.width}} height={{thumbArray[i]?.height}} />
+                <!-- <canvas></canvas> -->
+            </section>
+
+            <div class="page_number">
+                {{i + 1}} / {{doc.length }}
+            </div>
+        </div>
+        }
+    </section>
+</div>

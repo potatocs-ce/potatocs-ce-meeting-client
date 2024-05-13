@@ -1,9 +1,11 @@
 <div class="documents_container">
-    <div class="doc_list_section">
-        <app-doc-list></app-doc-list>
+    <section class="relative_section">
+        <div class="doc_list_section" [style]="doc.length == 0 ? '' : 'visibility: hidden'">
+            <app-doc-list></app-doc-list>
+        </div>
+        <div class="doc_page_section" [style]="doc.length == 0 ? 'visibility: hidden' : ''">
+            <app-doc-page></app-doc-page>
+        </div>
+    </section>
 
-    </div>
-    <div class="doc_page_section">
-
-    </div>
 </div>

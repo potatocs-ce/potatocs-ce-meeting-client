@@ -11,19 +11,29 @@
     padding: 0.2rem;
     box-sizing: border-box;
 
-
-    .doc {
-        border: 1px solid $main_color ;
-        border-radius: 0.5rem;
-        height: 80px;
-    }
-
-    .doc_list_section {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-        // overflow: hidden;
+    .relative_section {
         position: relative;
+        height: 100%;
+
+        .doc {
+            border: 1px solid $main_color ;
+            border-radius: 0.5rem;
+            height: 80px;
+        }
+
+        .doc_list_section {
+            width: 100%;
+            height: 100%;
+            // overflow: hidden;
+            position: absolute;
+        }
+
+        .doc_page_section {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
     }
+
+
 }

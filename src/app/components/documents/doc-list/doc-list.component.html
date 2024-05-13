@@ -14,7 +14,7 @@
                 <span class="doc_title">{{doc.originalFileName}}</span>
                 <button (click)="deletePdf(doc._id)" class="doc_close_button"><mat-icon>close</mat-icon></button>
             </section>
-            <section class="doc_preview_section">
+            <section class="doc_preview_section" (click)="clickPDF(i)">
                 <img #thumb id="thumb{{i+1}}" class="thumbBg" width="140" />
                 <div class="doc_cover"></div>
             </section>
