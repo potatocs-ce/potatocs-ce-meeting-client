@@ -45,32 +45,35 @@ export class DocumentService {
    * @param result 
    */
   async generatePdfData(result: any) {
-    const pdfArrayVar = [...this._docList()];
 
+    const bufferArray = [];
     for (let i = 0; i < result.length; i++) {
       const updatedTime = result[i].updatedAt;
 
-      if (pdfArrayVar[i]?.updatedAt !== updatedTime) {
+      if (this._docList()[i]?.updatedAt !== updatedTime) {
         try {
           // PDF File 정보 요청
           const res: any = await this.DocApi.getDoc(result[i]._id).toPromise();
 
           // Array buffer로 변환
           const file = await this.fileService.readFile(res);
-
+          // pdf data 변환
           const pdf_file = await this.fileService.pdfConvert(file);
+
           result[i].fileBuffer = file;
           result[i].pdfDoc = pdf_file.pdfDoc;
           result[i].pdfPages = pdf_file.pdfPages;
-          pdfArrayVar[i] = result[i];
+          bufferArray[i] = result[i];
         } catch (err) {
           console.error(err);
           return err;
         }
+      } else {
+        bufferArray[i] = this._docList()[i]
       }
     }
 
-    this._docList.set(pdfArrayVar);
+    this._docList.set(bufferArray);
     return;
   }
 }

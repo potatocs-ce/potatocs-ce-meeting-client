@@ -106,6 +106,7 @@ export class DocListComponent {
 
           // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
           // await this.socket.emit('check:documents', data.meetingId);
+          this.docSocketService.updatedDoc(this.meetingService.meeting_room_id())
         })
 
 
