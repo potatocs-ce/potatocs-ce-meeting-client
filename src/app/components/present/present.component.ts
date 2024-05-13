@@ -9,6 +9,8 @@ import { DrawingService } from '../../services/drawing/drawing.service';
 import { ToolService } from '../../services/tool/tool.service';
 import { BehaviorSubject } from 'rxjs';
 import { VideoDrawingService } from '../../services/socket/video_drawing/video-drawing.service';
+import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
+import { MeetingService } from '../../services/meeting/meeting.service';
 @Component({
   selector: 'app-present',
   standalone: true,
@@ -39,7 +41,9 @@ export class PresentComponent {
     private canvasService: CanvasService,
     private drawingService: DrawingService,
     private toolService: ToolService,
-    private videoDrawingService: VideoDrawingService) {
+    private videoDrawingService: VideoDrawingService,
+    private meetingApiService: MeetingServiceAPI,
+    private meetingService: MeetingService) {
     effect(() => {
       this.videoStream = this.videoService.presentVideoStream()
 
@@ -158,6 +162,14 @@ export class PresentComponent {
 
     this.toolService.tool.set({ ...this.tool })
     this.setCanvas()
+  }
+
+
+  clearDrawing() {
+    this.meetingApiService.clearVideoDrawing(this.meetingService.meeting_room_id(), this.videoStream?.user_id).subscribe((res: any) => {
+      console.log(res);
+      // 여기서 userId 판서 정보 일단 다 지우기
+    })
   }
 
   /**
