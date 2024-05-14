@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentService } from '../document/document.service';
-
+import { CANVAS_CONFIG } from '../../../config/config';
 @Injectable({
   providedIn: 'root'
 })
@@ -8,8 +8,11 @@ export class RenderingService {
 
   constructor(private documentService: DocumentService) { }
 
+  isPageRendering = false;
+  pageNumPending: boolean | any = null;
+
   async renderThumbBackground(imgElement: any, pdfNum: any, pageNum: any) {
-    // console.log('> renderThumbnail Background');
+    console.log('> renderThumbnail Background');
     const pdfPage = this.documentService.getPdfPage(pdfNum, pageNum);
 
     // 배경 처리를 위한 임시 canvas
@@ -54,16 +57,101 @@ export class RenderingService {
 
     // landscape 문서 : 가로를 150px(thumbnailMaxSize)로 설정
     if (viewport.width > viewport.height) {
-      size.width = 140;
+      size.width = CANVAS_CONFIG.thumbnailMaxSize;
       size.height = size.width * viewport.height / viewport.width;
     }
     // portrait 문서 : 세로를 150px(thumbnailMaxSize)로 설정
     else {
-      size.height = 140;
+      size.height = CANVAS_CONFIG.thumbnailMaxSize;
       size.width = size.height * viewport.width / viewport.height;
     }
-    size.scale = size.width / (viewport.width * (96 / 72));
+    size.scale = size.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
 
     return size;
+  }
+
+
+  async renderBackground(tmpCanvas: any, bgCanvas: any, pdfNum: any, pageNum: any) {
+    console.log(`>>>> renderBackground, pdfNum: ${pdfNum}, pageNum: ${pageNum}`);
+
+    const pdfPage = this.documentService.getPdfPage(pdfNum, pageNum);
+    if (!pdfPage) {
+      return;
+    }
+
+    if (this.isPageRendering) {
+      // console.log(' ---> pending!!! ');
+      this.pageNumPending = pageNum;
+    } else {
+      this.isPageRendering = true;
+
+      await this.rendering(pdfPage, bgCanvas, tmpCanvas);
+
+      this.isPageRendering = false;
+
+      if (this.pageNumPending) {
+        this.renderBackground(tmpCanvas, bgCanvas, pdfNum, this.pageNumPending);
+        this.pageNumPending = null;
+      }
+    }
+  }
+
+  async rendering(page: any, targetCanvas: any, tmpCanvas: any) {
+    if (!page) return false;
+
+    const viewport = page.getViewport({ scale: 1 });
+    const ctx = targetCanvas.getContext('2d');
+
+    const bgImgSize = { width: targetCanvas.width, height: targetCanvas.height }
+
+
+    try {
+      const scale = targetCanvas.width / viewport.width;
+      let tmpCanvasScaling;
+
+      // scale이 작을때만 tmpcanvas size increase... : 여러가지 추가 check. ~~ todo
+      if (scale <= 2 * CANVAS_CONFIG.CSS_UNIT) {
+        tmpCanvasScaling = Math.max(2, CANVAS_CONFIG.deviceScale);
+      } else {
+        tmpCanvasScaling = CANVAS_CONFIG.deviceScale;
+      }
+
+      // console.log('bgimgsize: ', bgImgSize);
+      // console.log('device scale: ', CONFIG.deviceScale);
+
+      // console.log('tmp canvas scaling: ', tmpCanvasScaling);
+
+      tmpCanvas.width = bgImgSize.width * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
+      tmpCanvas.height = bgImgSize.height * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
+
+      // console.log('rendering tmpcanvas: ', tmpCanvas);
+
+      const zoomScale = tmpCanvas.width / viewport.width;
+      const tmpCtx = tmpCanvas.getContext('2d');
+      const renderContext = {
+        canvasContext: tmpCtx,
+        viewport: page.getViewport({ scale: zoomScale })
+      };
+
+      // tmpCanvas에 pdf 그리기
+      await page.render(renderContext).promise;
+
+      /*-------------------------------------------------
+        tmpCanvas => target Canvas copy
+        --> 대기중인 image가 없는 경우에만 처리.
+        ---> pre-render 기능을 사용하므로 최종 image만 그려주면 됨.
+      -----------------------------------------------------------*/
+      if (!this.pageNumPending) {
+        ctx.drawImage(tmpCanvas, 0, 0, bgImgSize.width, bgImgSize.height);
+        // clear tmpCtx
+        tmpCtx.clearRect(0, 0, tmpCtx.width, tmpCtx.height);
+      }
+
+      return true;
+
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 }

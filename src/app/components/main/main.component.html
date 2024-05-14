@@ -27,9 +27,11 @@
                         <section class="whiteboard_section">
                             <app-whiteboard></app-whiteboard>
                         </section>
+                        @if(audience_video.length != 0){
                         <section class="audience_section">
                             <app-audience></app-audience>
                         </section>
+                        }
                     </div>
                 </section>
             </div>
