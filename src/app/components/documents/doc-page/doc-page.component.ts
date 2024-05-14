@@ -46,10 +46,8 @@ export class DocPageComponent {
   clickThumb(page: number) {
     if (page == this.currentPageNum) return; // 동일 page click은 무시
 
-    // this.docService.updateCurrentPageNum(page); // page num 업데이트
+    this.docService.updateCurrentPageNum(page); // page num 업데이트
+    this.currentPageNum = page;
 
-    const data = {
-
-    }
   }
 }

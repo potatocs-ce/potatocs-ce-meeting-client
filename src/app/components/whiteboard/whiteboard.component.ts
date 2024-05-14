@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
+import { DocumentService } from '../../services/document/document.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -8,5 +9,16 @@ import { Component } from '@angular/core';
   styleUrl: './whiteboard.component.scss'
 })
 export class WhiteboardComponent {
+  docInfo: any = {};
+  pageInfo: any = {};
+  constructor(private docService: DocumentService) {
+    effect(() => {
+      this.docInfo = this.docService._docList()[this.docService.lastDocNum()]
+      if (this.docInfo) {
+        this.pageInfo = this.docService._doc()[this.docInfo.lastPage];
+      }
 
+      console.log(this.docInfo, this.pageInfo)
+    })
+  }
 }

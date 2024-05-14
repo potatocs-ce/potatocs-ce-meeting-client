@@ -12,7 +12,6 @@ export class DocumentService {
   _docList: any = signal<any>([]); // 문서 리스트 저장용
   _doc: any = signal<any>([]); // 문서 정보(페이지) 저장용
   lastDocNum: any = signal<number>(-1); // 최근 문서 번호
-
   // 문서 길이
   getDocLength() {
     return this._docList().length;
@@ -92,4 +91,11 @@ export class DocumentService {
     this.lastDocNum.set(docNum);
   }
 
+
+  updateCurrentPageNum(pageNum: number) {
+    this._docList.update((doc: any) => {
+      doc[this.lastDocNum()].lastPage = pageNum;
+      return [...doc];
+    })
+  }
 }
