@@ -215,11 +215,14 @@ export class CanvasService {
      * @param {canvas element} targetCanvas
      * @param {number} zoomScale
      */
-    function clear(targetCanvas: any, zoomScale: any) {
+    const clear = (targetCanvas: any, zoomScale: any) => {
       const targetCtx = targetCanvas.getContext('2d');
       const scale = zoomScale || 1;
       targetCtx.clearRect(0, 0, targetCanvas.width / scale, targetCanvas.height / scale);
+      // this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: sourceCanvas.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
     }
+
+
 
     /**
      * Point 받아오기

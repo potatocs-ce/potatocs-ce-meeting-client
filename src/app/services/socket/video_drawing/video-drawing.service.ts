@@ -25,8 +25,6 @@ export class VideoDrawingService {
     private authService: AuthService
   ) {
     this.socket.on('draw:video', async (data: any) => {
-
-
       if (this.drawVarArray[data.target_id]) {
         this.drawVarArray[data.target_id].push({ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id });
       } else {
@@ -39,6 +37,16 @@ export class VideoDrawingService {
         this.drawingQueue();
       }
     })
+
+    this.socket.on('draw:video_clear', async (data: any) => {
+      this.drawVarArray[data.target_id] = [];
+      this.drawVarArray.set({ ...this.drawVarArray })
+      const target_canvas: any = document.getElementById(data.target_id)!.querySelector('.data_canvas')
+      const context: any = target_canvas.getContext('2d');
+      // Canvas 크기에 맞는 새로운 사각형을 그려서 이전에 그려진 요소들을 지웁니다.
+      context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+    })
+
     effect(async () => {
       // 사용자별로 구분하는 것도 필요할듯
 
@@ -157,19 +165,19 @@ export class VideoDrawingService {
 
       }, data.timeDiff / pointsLength);
     } else if (data.tool.type == 'line') {
-      context.fillStyle = data.tool.color;
-      context.strokeStyle = data.tool.color;
+      data_context.fillStyle = data.tool.color;
+      data_context.strokeStyle = data.tool.color;
       const len = data.points.length / 2;
-      context.beginPath();
-      context.moveTo(data.points[0], data.points[1]);
-      context.lineTo(data.points[2 * (len - 1)], data.points[2 * (len - 1) + 1]);
-      context.closePath();
-      context.stroke();
+      data_context.beginPath();
+      data_context.moveTo(data.points[0], data.points[1]);
+      data_context.lineTo(data.points[2 * (len - 1)], data.points[2 * (len - 1) + 1]);
+      data_context.closePath();
+      data_context.stroke();
 
       this.dataArray.shift()
     } else if (data.tool.type == 'circle') {
-      context.fillStyle = data.tool.color;
-      context.strokeStyle = data.tool.color;
+      data_context.fillStyle = data.tool.color;
+      data_context.strokeStyle = data.tool.color;
       const len = data.points.length / 2;
       var radiusX = (data.points[2 * (len - 1)] - data.points[0]) * 0.5,   /// radius for x based on input
         radiusY = (data.points[2 * (len - 1) + 1] - data.points[1]) * 0.5,   /// radius for y based on input
@@ -180,28 +188,28 @@ export class VideoDrawingService {
         pi2 = Math.PI * 2 - step;    /// end angle
 
       /// start a new path
-      context.beginPath();
+      data_context.beginPath();
 
       /// set start point at angle 0
-      context.moveTo(centerX + radiusX * Math.cos(0),
+      data_context.moveTo(centerX + radiusX * Math.cos(0),
         centerY + radiusY * Math.sin(0));
 
       /// create the ellipse    
       for (; a < pi2; a += step) {
-        context.lineTo(centerX + radiusX * Math.cos(a),
+        data_context.lineTo(centerX + radiusX * Math.cos(a),
           centerY + radiusY * Math.sin(a));
       }
 
       /// close it and stroke it for demo
-      context.closePath();
-      context.stroke();
+      data_context.closePath();
+      data_context.stroke();
     } else if (data.tool.type == 'rectangle') {
-      context.beginPath();
-      context.fillStyle = data.tool.color;
-      context.strokeStyle = data.tool.color;
+      data_context.beginPath();
+      data_context.fillStyle = data.tool.color;
+      data_context.strokeStyle = data.tool.color;
       const len = data.points.length / 2;
-      context.strokeRect(data.points[0], data.points[1], (data.points[2 * (len - 1)] - data.points[0]), (data.points[2 * (len - 1) + 1] - data.points[1]));
-      context.closePath();
+      data_context.strokeRect(data.points[0], data.points[1], (data.points[2 * (len - 1)] - data.points[0]), (data.points[2 * (len - 1) + 1] - data.points[1]));
+      data_context.closePath();
       // fillRect는 색이 채워지고 strokeRect은 색이 채워지지 않는다.
       // context.fillRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
 
