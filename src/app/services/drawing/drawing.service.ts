@@ -366,7 +366,7 @@ export class DrawingService {
 
       // 사각형 함수
       case 'rectangle':
-        console.log('done')
+
         context.beginPath();
         context.strokeRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
         context.closePath();

@@ -67,8 +67,8 @@ export class VideoDrawingService {
 
   async drawingQueue() {
     if (!this.dataArray.length) return;
-    console.log(this.lastUser())
-    console.log(document.getElementById(this.lastUser()))
+    // console.log(this.lastUser())
+    // console.log(document.getElementById(this.lastUser()))
     const data_canvas: any = document.getElementById(this.lastUser())!.querySelector('.data_canvas')
     const data_context: any = data_canvas.getContext('2d');
     const target_canvas: any = document.getElementById(this.lastUser())!.querySelector('.target_canvas')
@@ -156,6 +156,55 @@ export class VideoDrawingService {
         }
 
       }, data.timeDiff / pointsLength);
+    } else if (data.tool.type == 'line') {
+      context.fillStyle = data.tool.color;
+      context.strokeStyle = data.tool.color;
+      const len = data.points.length / 2;
+      context.beginPath();
+      context.moveTo(data.points[0], data.points[1]);
+      context.lineTo(data.points[2 * (len - 1)], data.points[2 * (len - 1) + 1]);
+      context.closePath();
+      context.stroke();
+
+      this.dataArray.shift()
+    } else if (data.tool.type == 'circle') {
+      context.fillStyle = data.tool.color;
+      context.strokeStyle = data.tool.color;
+      const len = data.points.length / 2;
+      var radiusX = (data.points[2 * (len - 1)] - data.points[0]) * 0.5,   /// radius for x based on input
+        radiusY = (data.points[2 * (len - 1) + 1] - data.points[1]) * 0.5,   /// radius for y based on input
+        centerX = data.points[0] + radiusX,      /// calc center
+        centerY = data.points[1] + radiusY,
+        step = 0.01,                 /// resolution of ellipse
+        a = step,                    /// counter
+        pi2 = Math.PI * 2 - step;    /// end angle
+
+      /// start a new path
+      context.beginPath();
+
+      /// set start point at angle 0
+      context.moveTo(centerX + radiusX * Math.cos(0),
+        centerY + radiusY * Math.sin(0));
+
+      /// create the ellipse    
+      for (; a < pi2; a += step) {
+        context.lineTo(centerX + radiusX * Math.cos(a),
+          centerY + radiusY * Math.sin(a));
+      }
+
+      /// close it and stroke it for demo
+      context.closePath();
+      context.stroke();
+    } else if (data.tool.type == 'rectangle') {
+      context.beginPath();
+      context.fillStyle = data.tool.color;
+      context.strokeStyle = data.tool.color;
+      const len = data.points.length / 2;
+      context.strokeRect(data.points[0], data.points[1], (data.points[2 * (len - 1)] - data.points[0]), (data.points[2 * (len - 1) + 1] - data.points[1]));
+      context.closePath();
+      // fillRect는 색이 채워지고 strokeRect은 색이 채워지지 않는다.
+      // context.fillRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
+
     }
 
   }
