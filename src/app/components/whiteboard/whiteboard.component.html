@@ -1,13 +1,32 @@
 <div class="whiteboard_container">
     <section class="whiteboard_menu_section">그리기 메뉴</section>
     <section class="whiteboard_section">
-        <div class="whiteboard_container">
-            <div class="tmp">
-                <canvas #tmp></canvas>
-            </div>
-            <div class="canvasBackground">
-                <canvas #bg></canvas>
-            </div>
+
+        <div class="no_doc_alert" [style]="docInfo == undefined ? '': 'visibility: hidden'">
+            There is no document seleted.
         </div>
+
+        <section class="canvas_position" #whiteboardSection>
+            <div #canvasContainer class="canvas_container" [style]="docInfo == undefined ? 'visibility: hidden': ''">
+
+                <div class="tmp">
+                    <canvas #tmp></canvas>
+                </div>
+                <div class="canvasBackground">
+                    <canvas #bg></canvas>
+                </div>
+                <div class="canvasUser">
+                    <canvas #userCanvas></canvas>
+                </div>
+                <div class="coverRx">
+                    <canvas #rxCanvasCover></canvas>
+                </div>
+                <div class="cover">
+                    <canvas #canvasCover></canvas>
+                </div>
+            </div>
+        </section>
+
+
     </section>
 </div>

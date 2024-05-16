@@ -4,7 +4,8 @@ import { Socket } from 'ngx-socket-io';
 import { VideoDrawingService } from '../socket/video_drawing/video-drawing.service';
 import { MeetingService } from '../meeting/meeting.service';
 import { AuthService } from '../auth/auth.service';
-
+import { CANVAS_CONFIG } from '../../../config/config';
+import { DocumentService } from '../document/document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class CanvasService {
     private drawingService: DrawingService,
     private videoDrawingService: VideoDrawingService,
     private meetingService: MeetingService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private docService: DocumentService) {
 
   }
 
@@ -39,6 +41,139 @@ export class CanvasService {
 
     return deviceScale;
   }
+
+  /*--------------------------------------
+        getThumbnailSize
+        - 각 thumbnail 별 canvas width/height
+      ----------------------------------------*/
+  getThumbnailSize(docNum: number, pageNum: number) {
+    const viewport = this.docService.getViewportSize(docNum, pageNum);
+
+    const size = {
+      width: 0,
+      height: 0,
+      scale: 1 // thumbnail draw에서 사용할 scale (thumbnail과 100% pdf size의 비율)
+    };
+
+    // landscape 문서 : 가로를 150px(thumbnailMaxSize)로 설정
+    if (viewport.width > viewport.height) {
+      size.width = CANVAS_CONFIG.thumbnailMaxSize;
+      size.height = size.width * viewport.height / viewport.width;
+    }
+    // portrait 문서 : 세로를 150px(thumbnailMaxSize)로 설정
+    else {
+      size.height = CANVAS_CONFIG.thumbnailMaxSize;
+      size.width = size.height * viewport.width / viewport.height;
+    }
+    size.scale = size.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
+
+    return size;
+  }
+
+  /**
+   * Main container관련 canvas Size 설정
+   *
+   */
+  setCanvasSize(pdfNum: number, pageNum: number, zoomScale: number, canvasContainer: any, coverCanvas: any, rxCoverCanvas: any, teacherCanvas: any, bgCanvas: any) {
+    console.log(`>>> set Canvas Size: pdfNum:${pdfNum}, pageNum:${pageNum}`)
+
+    const pdfPage = this.docService.getPdfPage(pdfNum + 1, pageNum);
+    const canvasFullSize = pdfPage.getViewport({ scale: zoomScale * CANVAS_CONFIG.CSS_UNIT });
+    canvasFullSize.width = Math.round(canvasFullSize.width);
+    canvasFullSize.height = Math.round(canvasFullSize.height);
+
+
+    /*------------------------------------
+      container Size
+      - 실제 canvas 영역을 고려한 width와 height
+      - deviceScale은 고려하지 않음
+    -------------------------------------*/
+    const containerSize = {
+      width: Math.min(CANVAS_CONFIG.maxContainerWidth, canvasFullSize.width), // 좌측 sidebar width만큼 빼야 zoonIn 시 왼쪽이 전부 보임
+      height: Math.min(CANVAS_CONFIG.maxContainerHeight, canvasFullSize.height)
+    };
+
+    // Canvas Container Size 조절
+    canvasContainer.style.width = containerSize.width + 'px';
+    canvasContainer.style.height = containerSize.height + 'px';
+
+
+    // Cover Canvas 조절
+    rxCoverCanvas.width = coverCanvas.width = canvasFullSize.width;
+    rxCoverCanvas.height = coverCanvas.height = canvasFullSize.height;
+
+
+
+    // container와 canvas의 비율 => thumbnail window에 활용
+    const ratio = {
+      w: containerSize.width / canvasFullSize.width,
+      h: containerSize.height / canvasFullSize.height
+    };
+
+    /*---------------------------------------
+      현재 page에 대한 background size 설정
+    ----------------------------------------*/
+    bgCanvas.width = canvasFullSize.width * CANVAS_CONFIG.deviceScale;
+    bgCanvas.height = canvasFullSize.height * CANVAS_CONFIG.deviceScale;
+    bgCanvas.style.width = canvasFullSize.width + 'px';
+    bgCanvas.style.height = canvasFullSize.height + 'px';
+
+    teacherCanvas.width = canvasFullSize.width;
+    teacherCanvas.height = canvasFullSize.height;
+
+
+    // canvas scale 조절
+    const ctx = coverCanvas.getContext("2d");
+    ctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+
+    const rxCtx = rxCoverCanvas.getContext("2d");
+    rxCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+
+    const teacherCtx = teacherCanvas.getContext("2d");
+    teacherCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+
+    return ratio;
+  }
+
+
+  /**
+     * Canvas Container size 설정
+     *  - resize인 경우
+     */
+  setContainerSize(coverCanvas: any, canvasContainer: any) {
+    /*------------------------------------
+      container Size
+      - 실제 canvas 영역을 고려한 width와 height
+    -------------------------------------*/
+    const containerSize = {
+      width: Math.min(CANVAS_CONFIG.maxContainerWidth, coverCanvas.width),
+      height: Math.min(CANVAS_CONFIG.maxContainerHeight, coverCanvas.height)
+    };
+
+    console.log(containerSize)
+    // Canvas Container Size 조절
+    canvasContainer.style.width = containerSize.width + 'px';
+    canvasContainer.style.height = containerSize.height + 'px';
+
+
+    // container와 canvas의 비율 => thumbnail window에 활용
+    const ratio = {
+      w: containerSize.width / coverCanvas.width,
+      h: containerSize.height / coverCanvas.height
+    };
+    return ratio;
+  }
+
+
+
+
+
+
+
+
+
+
+
   /**
    * Canvas에 event listener 추가
    * @param {canvas element} sourceCanvas event를 받아들일 canvas

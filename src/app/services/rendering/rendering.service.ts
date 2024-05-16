@@ -74,7 +74,8 @@ export class RenderingService {
   async renderBackground(tmpCanvas: any, bgCanvas: any, pdfNum: any, pageNum: any) {
     console.log(`>>>> renderBackground, pdfNum: ${pdfNum}, pageNum: ${pageNum}`);
 
-    const pdfPage = this.documentService.getPdfPage(pdfNum, pageNum);
+    const pdfPage = this.documentService.getPdfPage(pdfNum + 1, pageNum);
+
     if (!pdfPage) {
       return;
     }
@@ -123,6 +124,9 @@ export class RenderingService {
 
       tmpCanvas.width = bgImgSize.width * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
       tmpCanvas.height = bgImgSize.height * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
+
+      // tmpCanvas.width = viewport.width;
+      // tmpCanvas.height = viewport.height;
 
       // console.log('rendering tmpcanvas: ', tmpCanvas);
 

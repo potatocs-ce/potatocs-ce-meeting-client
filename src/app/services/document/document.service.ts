@@ -12,6 +12,7 @@ export class DocumentService {
   _docList: any = signal<any>([]); // 문서 리스트 저장용
   _doc: any = signal<any>([]); // 문서 정보(페이지) 저장용
   lastDocNum: any = signal<number>(-1); // 최근 문서 번호
+  pageBuffer: any = signal<Array<any>>([]); // 페이지 임시 저장용
   // 문서 길이
   getDocLength() {
     return this._docList().length;
@@ -51,6 +52,7 @@ export class DocumentService {
   async generatePdfData(result: any) {
 
     const bufferArray = [];
+    const pageBuffer = [];
     for (let i = 0; i < result.length; i++) {
       const updatedTime = result[i].updatedAt;
 
@@ -67,7 +69,7 @@ export class DocumentService {
           result[i].fileBuffer = file;
           result[i].pdfDoc = pdf_file.pdfDoc;
           result[i].pdfPages = pdf_file.pdfPages;
-          result[i].lastPage = 0;
+          pageBuffer[i] = 1;
           bufferArray[i] = result[i];
         } catch (err) {
           console.error(err);
@@ -78,6 +80,7 @@ export class DocumentService {
       }
     }
 
+    this.pageBuffer.set(pageBuffer);
     this._docList.set(bufferArray);
 
     return;
@@ -92,10 +95,12 @@ export class DocumentService {
   }
 
 
+  // 현재 문서의 페이지 업데이트
   updateCurrentPageNum(pageNum: number) {
-    this._docList.update((doc: any) => {
-      doc[this.lastDocNum()].lastPage = pageNum;
-      return [...doc];
+
+    this.pageBuffer.update((page: any) => {
+      page[this.lastDocNum()] = pageNum + 1;
+      return [...page];
     })
   }
 }

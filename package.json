@@ -36,6 +36,7 @@
     "@angular/cli": "^17.0.8",
     "@angular/compiler-cli": "^17.0.0",
     "@types/jasmine": "~5.1.0",
+    "@types/lodash": "^4.17.1",
     "@types/pdfjs-dist": "^2.10.378",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
