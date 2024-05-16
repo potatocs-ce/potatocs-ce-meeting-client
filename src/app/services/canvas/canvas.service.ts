@@ -93,6 +93,7 @@ export class CanvasService {
       height: Math.min(CANVAS_CONFIG.maxContainerHeight, canvasFullSize.height)
     };
 
+
     // Canvas Container Size 조절
     canvasContainer.style.width = containerSize.width + 'px';
     canvasContainer.style.height = containerSize.height + 'px';

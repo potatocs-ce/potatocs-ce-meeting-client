@@ -5,11 +5,12 @@ import { RenderingService } from '../../services/rendering/rendering.service';
 
 import { CANVAS_CONFIG } from '../../../config/config';
 import { CanvasService } from '../../services/canvas/canvas.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './whiteboard.component.html',
   styleUrl: './whiteboard.component.scss'
 })
