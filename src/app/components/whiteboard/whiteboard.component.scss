@@ -20,7 +20,7 @@
     .whiteboard_section {
         flex: 1;
         // background-color: white;
-        border-radius: 0.5rem;
+        // border-radius: 0.5rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -73,20 +73,17 @@
 
         .canvasUser {
             position: absolute;
-            top: 0;
-            left: 0;
+
         }
 
         .coverRx {
             position: absolute;
-            top: 0;
-            left: 0;
+
         }
 
         .cover {
             position: absolute;
-            top: 0;
-            left: 0;
+
 
         }
     }

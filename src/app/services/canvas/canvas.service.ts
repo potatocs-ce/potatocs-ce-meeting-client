@@ -89,7 +89,7 @@ export class CanvasService {
       - deviceScale은 고려하지 않음
     -------------------------------------*/
     const containerSize = {
-      width: Math.min(CANVAS_CONFIG.maxContainerWidth, canvasFullSize.width), // 좌측 sidebar width만큼 빼야 zoonIn 시 왼쪽이 전부 보임
+      width: Math.min(CANVAS_CONFIG.maxContainerWidth, canvasFullSize.width),
       height: Math.min(CANVAS_CONFIG.maxContainerHeight, canvasFullSize.height)
     };
 
@@ -151,12 +151,13 @@ export class CanvasService {
       height: Math.min(CANVAS_CONFIG.maxContainerHeight, coverCanvas.height)
     };
 
-    console.log(containerSize)
+    // console.log(containerSize)
     // Canvas Container Size 조절
     canvasContainer.style.width = containerSize.width + 'px';
     canvasContainer.style.height = containerSize.height + 'px';
 
 
+    console.log(containerSize.width, coverCanvas.width,)
     // container와 canvas의 비율 => thumbnail window에 활용
     const ratio = {
       w: containerSize.width / coverCanvas.width,

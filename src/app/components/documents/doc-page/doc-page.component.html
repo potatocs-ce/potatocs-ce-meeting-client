@@ -7,7 +7,14 @@
         <div class="thumb_item" (click)="clickThumb(i)">
             <section class="tumb">
                 <img #thumb id="thumb_{{i+1}}" width={{thumbArray[i]?.width}} height={{thumbArray[i]?.height}} />
-                <!-- <canvas></canvas> -->
+
+                <!-- 여기에 판서 드로잉 부분 작성 -->
+
+                @if(currentPageNum === i ) {
+                <div #thumbWindow id="thumb-window"
+                    [ngStyle]="{'width':thumbWindowSize.width, 'height':thumbWindowSize.height}"></div>
+                }
+
             </section>
 
             <div class="page_number">

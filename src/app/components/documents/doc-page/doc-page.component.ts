@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, effect } from '@angular/core';
 import { DocumentService } from '../../../services/document/document.service';
 import { RenderingService } from '../../../services/rendering/rendering.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,12 +15,46 @@ export class DocPageComponent {
   doc: Array<any> = [];
   thumbArray: Array<any> = [];
   currentPageNum: number = 0;
+
+
+  thumbWindow: HTMLDivElement | any;
+  thumbWindowSize = {
+    width: '',
+    height: ''
+  }
+
+
+  @ViewChildren('thumbWindow') thumbWindowRef: QueryList<ElementRef> | any;
+
+
   constructor(private docService: DocumentService, private renderingService: RenderingService) {
     effect(() => {
       this.doc = this.docService._doc();
       setTimeout(() => {
         this.renderThumbnails()
       })
+    })
+
+
+    effect(() => {
+      const data = this.docService.thumbData();
+      this.renderThumbnailBox(data);
+    })
+  }
+
+
+
+  renderThumbnailBox(data: any) {
+    if (!this.thumbArray.length) return
+    const scrollRatio = this.thumbArray[this.currentPageNum].width / data.coverWidth;
+    this.thumbWindowSize = {
+      width: this.thumbArray[this.currentPageNum].width * data.ratio.w + 'px',
+      height: this.thumbArray[this.currentPageNum].height * data.ratio.h + 'px'
+    };
+    setTimeout(() => {
+      this.thumbWindow = this.thumbWindowRef.last.nativeElement;
+      this.thumbWindow.style.left = data.left * scrollRatio + 'px';
+      this.thumbWindow.style.top = data.top * scrollRatio + 'px';
     })
   }
 
@@ -35,6 +69,7 @@ export class DocPageComponent {
     for (let i = 0; i < this.doc.length; i++) {
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb_${i + 1}`), this.docService.lastDocNum() + 1, i + 1);
     }
+    this.renderThumbnailBox(this.docService.thumbData())
   }
 
   // 폴더 리스트로 돌아가기
@@ -48,6 +83,5 @@ export class DocPageComponent {
 
     this.docService.updateCurrentPageNum(page); // page num 업데이트
     this.currentPageNum = page;
-
   }
 }

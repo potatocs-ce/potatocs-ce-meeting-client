@@ -14,6 +14,15 @@ export class DocumentService {
   lastDocNum: any = signal<number>(-1); // 최근 문서 번호
   pageBuffer: any = signal<Array<any>>([]); // 페이지 임시 저장용
 
+  // 썸네일에 현재 보고있는 네모 박스 보여주는 변수
+  /**
+   * ratio: 가로, 세로 비율
+   * coverWidth: 현재 커버 캔버스의 가로 길이
+   * left: x 좌표
+   * top: y 좌표
+   */
+  thumbData: any = signal<any>({ ratio: {}, coverWidth: 0, left: 0, top: 0 })
+
   // 문서 길이
   getDocLength() {
     return this._docList().length;

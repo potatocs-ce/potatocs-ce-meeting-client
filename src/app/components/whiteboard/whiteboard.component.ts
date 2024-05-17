@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, ViewChild, effect } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, Renderer2, ViewChild, effect } from '@angular/core';
 import { DocumentService } from '../../services/document/document.service';
 import * as pdfjsLib from 'pdfjs-dist';
 import { RenderingService } from '../../services/rendering/rendering.service';
@@ -58,16 +58,20 @@ export class WhiteboardComponent {
     private renderingService: RenderingService,
     private canvasService: CanvasService,
     private zone: NgZone,
-    private zoomService: ZoomService
+    private zoomService: ZoomService,
+    private renderer: Renderer2
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
       this.lastPage = this.docService.pageBuffer()[this.docService.lastDocNum()]
       this.docInfo = this.docService._docList()[this.docService.lastDocNum()];
       this.zoomScale = this.zoomService.zoomScale();
-      if (this.docInfo)
+      if (this.docInfo) {
         this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
-    })
+        this.onResize();
+      }
+
+    }, { allowSignalWrites: true })
   }
 
 
@@ -76,6 +80,10 @@ export class WhiteboardComponent {
    */
   ngOnInit(): void {
     this.initCanvasSet();
+
+    this.renderer.listen(this.canvasContainer, 'scroll', event => {
+      this.onScroll();
+    });
   }
 
   /**
@@ -87,6 +95,8 @@ export class WhiteboardComponent {
     this.observer = new ResizeObserver(entries => {
       this.zone.run(() => {
         this.initCanvasSet();
+        if (this.docInfo)
+          this.onResize();
       });
     });
 
@@ -114,26 +124,27 @@ export class WhiteboardComponent {
 
     CANVAS_CONFIG.maxContainerHeight = this.whiteboardSection.clientHeight;
     CANVAS_CONFIG.maxContainerWidth = this.whiteboardSection.clientWidth;
+
+
   }
 
-  @HostListener('window:resize') resize() {
+  // @HostListener('window:resize') resize() {
 
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
-    // sidenav 열릴때 resize event 발생... 방지용도.
-    if (CANVAS_CONFIG.maxContainerWidth === newWidth && CANVAS_CONFIG.maxContainerHeight === newHeight) {
-      return;
-    }
-    CANVAS_CONFIG.maxContainerWidth = newWidth;
-    CANVAS_CONFIG.maxContainerHeight = newHeight;
-    this.onResize();
-  }
+  //   const newWidth = this.whiteboardSection.clientWidth;
+  //   const newHeight = this.whiteboardSection.clientHeight;
+  //   // sidenav 열릴때 resize event 발생... 방지용도.
+  //   if (CANVAS_CONFIG.maxContainerWidth === newWidth && CANVAS_CONFIG.maxContainerHeight === newHeight) {
+  //     return;
+  //   }
+  //   CANVAS_CONFIG.maxContainerWidth = newWidth;
+  //   CANVAS_CONFIG.maxContainerHeight = newHeight;
+  //   this.onResize();
+  // }
 
   onResize() {
-
     // Resize시 container size 조절.
     const ratio = this.canvasService.setContainerSize(this.coverCanvas, this.canvasContainer);
-
+    // console.log(ratio)
     // if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
 
     // thumbnail window 크기 변경을 위한 처리.
@@ -142,6 +153,11 @@ export class WhiteboardComponent {
     //   coverWidth: this.coverCanvas.width,
     // }));
 
+    this.docService.thumbData.update((data: any) => {
+      data.ratio = ratio;
+      data.coverWidth = this.coverCanvas.width;
+      return { ...data }
+    })
   }
 
   /**
@@ -154,6 +170,11 @@ export class WhiteboardComponent {
     //   left: this.canvasContainer.scrollLeft,
     //   top: this.canvasContainer.scrollTop
     // }))
+    this.docService.thumbData.update((data: any) => {
+      data.left = this.canvasContainer.scrollLeft;
+      data.top = this.canvasContainer.scrollTop;
+      return { ...data }
+    })
   }
 
 

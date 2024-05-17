@@ -45,9 +45,21 @@
             flex-direction: column;
             align-items: center;
 
+
             .tumb {
                 position: relative;
             }
         }
     }
+}
+
+
+
+#thumb-window {
+    border: 1px solid #bbb;
+    background-color: rgba(33, 150, 243, 0.1);
+    position: absolute;
+    left: 0px;
+    top: 0;
+    box-sizing: border-box;
 }
