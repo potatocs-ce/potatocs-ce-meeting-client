@@ -141,21 +141,21 @@
 
 
             <!-- 첫 페이지 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="pageMove('first')">
                 <mat-icon fontSet="material-symbols-outlined">first_page</mat-icon>
             </button>
             <!-- 이전 페이지 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="pageMove('prev')">
                 <mat-icon fontSet="material-symbols-outlined">chevron_left</mat-icon>
             </button>
 
             <!-- 다음 페이지 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="pageMove('next')">
                 <mat-icon fontSet="material-symbols-outlined">chevron_right</mat-icon>
             </button>
 
             <!-- 마지막 페이지 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="pageMove('last')">
                 <mat-icon fontSet="material-symbols-outlined">last_page</mat-icon>
             </button>
         </div>

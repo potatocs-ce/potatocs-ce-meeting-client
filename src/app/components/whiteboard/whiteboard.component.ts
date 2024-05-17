@@ -230,8 +230,11 @@ export class WhiteboardComponent {
     }
   }
 
-
-  clickZoom(action: any) {
+  /**
+   * 페이지 확대 축소, 맟춤 함수 
+   * @param action zoomIn, zoomOut, fitToWidth, fitToPage
+   */
+  clickZoom(action: string): void {
     console.log(">> Click Zoom: ", action);
 
     if (!this.docInfo) return;
@@ -243,5 +246,34 @@ export class WhiteboardComponent {
     const newZoomScale = this.zoomService.calcZoomScale(action, docNum, currentPage, prevZoomScale);
     // zoomScale 업데이트
     this.zoomService.zoomScale.set(newZoomScale);
+  }
+
+  /**
+   * 페이지 이동 버튼
+   * @param action next, prev, first, last
+   */
+  pageMove(action: string) {
+    if (!this.docInfo) return;
+
+
+    const nowPage = this.docService.pageBuffer()[this.docService.lastDocNum()];
+    const lastPage = this.docInfo.pdfDoc._pdfInfo.numPages;
+
+    switch (action) {
+      case 'next':
+        if (nowPage == lastPage) return;
+        this.docService.updateCurrentPageNum(nowPage);
+        break;
+      case 'prev':
+        if (nowPage == 1) return;
+        this.docService.updateCurrentPageNum(nowPage - 2);
+        break;
+      case 'first':
+        this.docService.updateCurrentPageNum(0);
+        break;
+      case 'last':
+        this.docService.updateCurrentPageNum(lastPage - 1);
+        break;
+    }
   }
 }
