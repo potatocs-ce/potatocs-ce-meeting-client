@@ -1,11 +1,178 @@
 <div class="whiteboard_container">
-    <section class="whiteboard_menu_section">그리기 메뉴</section>
+    <!-- 그리기, 문서 활용 도구 모음 -->
+    <section class="whiteboard_menu_section">
+        <div class="button_container">
+            <button (click)="setType('click')" mat-icon-button [ngClass]="tool.type == 'click' ? 'active': ''">
+                <!-- <i class="fa fa-arrow-pointer"></i> -->
+                <mat-icon fontSet="material-symbols-outlined">open_with</mat-icon>
+            </button>
+            <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
+                <!-- <mat-icon>draw</mat-icon> -->
+                <mat-icon fontSet="material-symbols-outlined">stylus_note</mat-icon>
+            </button>
+            <button (click)="setType('highlighter')" mat-icon-button
+                [ngClass]="tool.type == 'highlighter' ? 'active': ''">
+                <!-- <i class="fa-solid fa-highlighter"></i> -->
+                <mat-icon fontSet="material-symbols-outlined">ink_highlighter</mat-icon>
+            </button>
+            <button (click)="setType('eraser')" (dblclick)="clearDrawing()" mat-icon-button
+                [ngClass]=" tool.type=='eraser' ? 'active' : ''">
+
+                <mat-icon fontSet="material-symbols-outlined">ink_eraser</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="shape"
+                [ngClass]="tool.type == 'line' || tool.type == 'circle' || tool.type == 'rectangle' ? 'active': ''">
+                <mat-icon fontSet="material-symbols-outlined">category</mat-icon>
+            </button>
+
+            <!-- 그리기 도구 -->
+            <mat-menu #shape="matMenu">
+                <article class="shape_tool">
+                    <button (click)="setType('line')" mat-icon-button [ngClass]="tool.type == 'line' ? 'active': ''">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <button (click)="setType('circle')" mat-icon-button [ngClass]="tool.type == 'circle'? 'active': ''">
+                        <mat-icon>panorama_fish_eye</mat-icon>
+                    </button>
+                    <button (click)="setType('rectangle')" mat-icon-button
+                        [ngClass]="tool.type == 'rectangle' ? 'active': ''">
+                        <mat-icon>crop_din</mat-icon>
+                    </button>
+                </article>
+            </mat-menu>
+
+            <div class="divide"></div>
+
+
+
+            <button (click)="setColor('black')" class="color_button" style="background-color: black;">
+                @if(tool.color == 'black'){
+                <p> <i class="fas fa-check check"></i></p>
+
+                }
+            </button>
+
+
+
+            <button (click)="setColor('red')" class="color_button" style="background-color: red;">
+                @if(tool.color == 'red'){
+                <p><i class="fas fa-check check"></i></p>
+                }
+            </button>
+
+            <button (click)="setColor('blue')" class="color_button" style="background-color: blue;">
+                @if(tool.color == 'blue'){
+                <p>
+                    <i class="fas fa-check check"></i>
+                </p>
+
+                }
+            </button>
+
+            <button (click)="setColor('green')" class="color_button" style="background-color: green;">
+                @if(tool.color == 'green'){
+                <p>
+                    <i class="fas fa-check check"></i>
+                </p>
+
+                }
+            </button>
+
+            <button (click)="setColor('yellow')" class="color_button" style="background-color: yellow;">
+                @if(tool.color == 'yellow'){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+
+                }
+            </button>
+
+            <div class="divide"></div>
+
+            <button (click)="setWidth(10)" class="width_button big">
+                @if(tool.width == 10){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+                }
+            </button>
+
+            <button (click)="setWidth(5)" class="width_button medium">
+                @if(tool.width == 5){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+                }
+            </button>
+
+            <button (click)="setWidth(1)" class="width_button small">
+                @if(tool.width == 1){
+                <p>
+                    <i class="fas fa-check check" style="color: black"></i>
+                </p>
+                }
+            </button>
+
+
+            <div class="divide"></div>
+
+            <!-- 판서 화면 가득 채우기 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">fullscreen</mat-icon>
+            </button>
+
+            <!-- 판서 화면에 맞추기 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">fit_screen</mat-icon>
+            </button>
+
+
+            <!-- 확대 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
+            </button>
+
+            <!-- 축소 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
+            </button>
+
+            <div class="divide"></div>
+
+
+            <!-- 첫 페이지 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">first_page</mat-icon>
+            </button>
+            <!-- 이전 페이지 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">chevron_left</mat-icon>
+            </button>
+
+            <!-- 다음 페이지 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">chevron_right</mat-icon>
+            </button>
+
+            <!-- 마지막 페이지 -->
+            <button mat-icon-button>
+                <mat-icon fontSet="material-symbols-outlined">last_page</mat-icon>
+            </button>
+        </div>
+    </section>
+
+
+    <!-- ====================================================화이트보드===========================================================  -->
+
     <section class="whiteboard_section">
 
+        <!-- 선택된 문서가 없을 경우 보여줄 알람 -->
         <div class="no_doc_alert" [style]="docInfo == undefined ? '': 'visibility: hidden'">
             There is no document seleted.
         </div>
 
+
+        <!-- 선택된 문서의 페이지를 보여줄 보드 -->
         <section class="canvas_position" #whiteboardSection>
             <div #canvasContainer class="canvas_container" [style]="docInfo == undefined ? 'visibility: hidden': ''">
                 <div class="tmp">

@@ -6,11 +6,14 @@ import { RenderingService } from '../../services/rendering/rendering.service';
 import { CANVAS_CONFIG } from '../../../config/config';
 import { CanvasService } from '../../services/canvas/canvas.service';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './whiteboard.component.html',
   styleUrl: './whiteboard.component.scss'
 })
@@ -40,6 +43,12 @@ export class WhiteboardComponent {
 
 
   whiteboardSection: HTMLDivElement | any;
+
+
+
+  // 그리기 도구용 변수
+  tool: any = { type: 'pen', color: 'black' }
+
 
 
   constructor(
@@ -164,5 +173,58 @@ export class WhiteboardComponent {
     await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage)
   }
 
+
+
+
+  //=====================그리기 함수
+
+  /**
+   * 타입 지정 함수
+   * @param type 지정할 타입
+   */
+  setType(type: string) {
+    this.tool.type = type;
+
+    if (type == 'highlighter' && this.tool.color == 'black') {
+      this.tool.color = 'yellow'
+    }
+  }
+
+  /**
+ * 색 지정 함수
+ * @param color 색
+ */
+  setColor(color: string) {
+    this.tool.color = color;
+    // this.toolService.tool.set({ ...this.tool })
+    // this.setCanvas()
+  }
+
+  /**
+   * 팬 두께 지정
+   * @param width 두께
+   */
+  setWidth(width: number) {
+    this.tool.width = width;
+
+    // this.toolService.tool.set({ ...this.tool })
+    // this.setCanvas()
+  }
+
+  clearDrawing() {
+    // 여기 한 번 확인 물어보는 로직 추가
+    if (window.confirm('Do you want to delete all drawings on the current page?')) {
+      // this.meetingApiService.clearVideoDrawing(this.meetingService.meeting_room_id(), this.videoStream?.user_id).subscribe((res: any) => {
+      //   if (res.message == 'success') {
+      //     // 여기서 userId 판서 정보 일단 다 지우기
+      //     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id] = [];
+      //     const video_target: any = document.getElementById('data_canvas');
+      //     const target_context: any = video_target.getContext('2d');
+      //     target_context.clearRect(0, 0, video_target.width, video_target.height);
+      //     this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: video_target.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
+      //   }
+      // })
+    }
+  }
 
 }
