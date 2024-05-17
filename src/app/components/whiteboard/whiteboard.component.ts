@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, Renderer2, ViewChild, effect } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, Renderer2, ViewChild, effect, untracked } from '@angular/core';
 import { DocumentService } from '../../services/document/document.service';
 import * as pdfjsLib from 'pdfjs-dist';
 import { RenderingService } from '../../services/rendering/rendering.service';
@@ -67,10 +67,15 @@ export class WhiteboardComponent {
       this.docInfo = this.docService._docList()[this.docService.lastDocNum()];
       this.zoomScale = this.zoomService.zoomScale();
       if (this.docInfo) {
-        this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
-        this.onResize();
-      }
+        const lastDocNum = this.docService.lastDocNum();
 
+        untracked(() => {
+          this.pageRender(lastDocNum, this.lastPage, this.zoomScale)
+          this.onResize();
+        })
+
+
+      }
     }, { allowSignalWrites: true })
   }
 
@@ -142,16 +147,10 @@ export class WhiteboardComponent {
   // }
 
   onResize() {
+    if (this.docService._doc().length == 0) return;
+
     // Resize시 container size 조절.
     const ratio = this.canvasService.setContainerSize(this.coverCanvas, this.canvasContainer);
-    // console.log(ratio)
-    // if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
-
-    // thumbnail window 크기 변경을 위한 처리.
-    // this.eventBusService.emit(new EventData("change:containerSize", {
-    //   ratio,
-    //   coverWidth: this.coverCanvas.width,
-    // }));
 
     this.docService.thumbData.update((data: any) => {
       data.ratio = ratio;
@@ -164,12 +163,8 @@ export class WhiteboardComponent {
    * Scroll 발생 시
    */
   onScroll() {
-    // if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
+    if (this.docService._doc().length == 0) return;
 
-    // this.eventBusService.emit(new EventData('change:containerScroll', {
-    //   left: this.canvasContainer.scrollLeft,
-    //   top: this.canvasContainer.scrollTop
-    // }))
     this.docService.thumbData.update((data: any) => {
       data.left = this.canvasContainer.scrollLeft;
       data.top = this.canvasContainer.scrollTop;

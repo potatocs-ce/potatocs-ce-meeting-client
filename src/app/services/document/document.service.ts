@@ -21,7 +21,7 @@ export class DocumentService {
    * left: x 좌표
    * top: y 좌표
    */
-  thumbData: any = signal<any>({ ratio: {}, coverWidth: 0, left: 0, top: 0 })
+  thumbData: any = signal<any>({ ratio: { width: 0, height: 0 }, coverWidth: 0, left: 0, top: 0 })
 
   // 문서 길이
   getDocLength() {

@@ -30,10 +30,12 @@ export class DocPageComponent {
   constructor(private docService: DocumentService, private renderingService: RenderingService) {
     effect(() => {
       this.doc = this.docService._doc();
+      this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
       setTimeout(() => {
         this.renderThumbnails()
       })
     })
+
 
 
     effect(() => {
