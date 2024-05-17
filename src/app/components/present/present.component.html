@@ -3,22 +3,26 @@
     <section class="present_menu_section">
         <div class="button_container">
             <button (click)="setType('click')" mat-icon-button [ngClass]="tool.type == 'click' ? 'active': ''">
-                <i class="fa fa-arrow-pointer"></i>
+                <!-- <i class="fa fa-arrow-pointer"></i> -->
+                <mat-icon fontSet="material-symbols-outlined">left_click</mat-icon>
             </button>
             <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
-                <mat-icon>draw</mat-icon>
+                <!-- <mat-icon>draw</mat-icon> -->
+                <mat-icon fontSet="material-symbols-outlined">stylus_note</mat-icon>
             </button>
             <button (click)="setType('highlighter')" mat-icon-button
                 [ngClass]="tool.type == 'highlighter' ? 'active': ''">
-                <i class="fa-solid fa-highlighter"></i>
+                <!-- <i class="fa-solid fa-highlighter"></i> -->
+                <mat-icon fontSet="material-symbols-outlined">ink_highlighter</mat-icon>
             </button>
             <button (click)="setType('eraser')" (dblclick)="clearDrawing()" mat-icon-button
                 [ngClass]=" tool.type=='eraser' ? 'active' : ''">
-                <i class=" fa-solid fa-eraser"></i>
+
+                <mat-icon fontSet="material-symbols-outlined">ink_eraser</mat-icon>
             </button>
             <button mat-icon-button [matMenuTriggerFor]="shape"
                 [ngClass]="tool.type == 'line' || tool.type == 'circle' || tool.type == 'rectangle' ? 'active': ''">
-                <mat-icon>shape_line</mat-icon>
+                <mat-icon fontSet="material-symbols-outlined">category</mat-icon>
             </button>
 
             <!-- 그리기 도구 -->

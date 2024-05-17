@@ -72,19 +72,24 @@
 
         .color_button {
             border: none;
-            width: 15px;
-            height: 15px;
+            width: 13px;
+            height: 13px;
             margin: 0px 3px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+
+            p {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
             .check {
-                width: 10px;
-                height: 10px;
+                width: 9px;
+                height: 9px;
                 // font-size: 8pt;
                 color: white;
+
             }
         }
 
