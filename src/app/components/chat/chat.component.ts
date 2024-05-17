@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect } from '@angular/core';
+import { Component, ElementRef, ViewChild, effect } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MeetingService } from '../../services/meeting/meeting.service';
@@ -21,6 +21,8 @@ export class ChatComponent {
   chat_info: any;
   user_id: any;
 
+  @ViewChild('target') private myScrollContainer: ElementRef | any;
+
   constructor(
     private meetingService: MeetingService,
     private meetingServiceApi: MeetingServiceAPI,
@@ -29,7 +31,11 @@ export class ChatComponent {
   ) {
     // chat_info
     effect(() => {
-      this.chat_info = this.meetingService.meeting_chat_info()
+      this.chat_info = this.meetingService.meeting_chat_info();
+      setTimeout(() => {
+        this.scrollToBottom();
+      })
+
     })
 
     this.user_id = this.authService.getTokenInfo()._id;
@@ -60,5 +66,18 @@ export class ChatComponent {
     })
 
     this.chatContent = '';
+  }
+
+
+
+  // 마지막 채팅에 스크롤 focus
+  // http://daplus.net/scroll-angular-2-%EC%95%84%EB%9E%98%EB%A1%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EC%B1%84%ED%8C%85-%EC%8A%A4%ED%83%80%EC%9D%BC/
+  scrollToBottom(): void {
+    try {
+      // this.scrolltop = this.myScrollContainer.nativeElement.scrollHeight;
+
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+
+    } catch (err) { }
   }
 }
