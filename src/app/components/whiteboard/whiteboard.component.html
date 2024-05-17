@@ -117,23 +117,23 @@
             <div class="divide"></div>
 
             <!-- 판서 화면 가득 채우기 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="clickZoom('fitToWidth')">
                 <mat-icon fontSet="material-symbols-outlined">fullscreen</mat-icon>
             </button>
 
-            <!-- 판서 화면에 맞추기 -->
-            <button mat-icon-button>
+            <!-- 페이지에 맞추기 -->
+            <button mat-icon-button (click)="clickZoom('fitToPage')">
                 <mat-icon fontSet="material-symbols-outlined">fit_screen</mat-icon>
             </button>
 
 
             <!-- 확대 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="clickZoom('zoomIn')">
                 <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
             </button>
 
             <!-- 축소 -->
-            <button mat-icon-button>
+            <button mat-icon-button (click)="clickZoom('zoomOut')">
                 <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
             </button>
 

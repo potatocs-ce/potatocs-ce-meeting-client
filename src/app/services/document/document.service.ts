@@ -13,6 +13,7 @@ export class DocumentService {
   _doc: any = signal<any>([]); // 문서 정보(페이지) 저장용
   lastDocNum: any = signal<number>(-1); // 최근 문서 번호
   pageBuffer: any = signal<Array<any>>([]); // 페이지 임시 저장용
+
   // 문서 길이
   getDocLength() {
     return this._docList().length;
@@ -103,4 +104,6 @@ export class DocumentService {
       return [...page];
     })
   }
+
+
 }

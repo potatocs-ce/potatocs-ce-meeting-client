@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { ZoomService } from '../../services/zoom/zoom.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -20,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 export class WhiteboardComponent {
   docInfo: any = {};
   lastPage: number = 0;
+  zoomScale: number = 1;
 
 
   @ViewChild('canvasContainer', { static: true }) public canvasContainerRef: ElementRef | any;
@@ -56,15 +58,15 @@ export class WhiteboardComponent {
     private renderingService: RenderingService,
     private canvasService: CanvasService,
     private zone: NgZone,
-
+    private zoomService: ZoomService
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
       this.lastPage = this.docService.pageBuffer()[this.docService.lastDocNum()]
       this.docInfo = this.docService._docList()[this.docService.lastDocNum()];
-
+      this.zoomScale = this.zoomService.zoomScale();
       if (this.docInfo)
-        this.pageRender(this.docService.lastDocNum(), this.lastPage, 1)
+        this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
     })
   }
 
@@ -128,6 +130,7 @@ export class WhiteboardComponent {
   }
 
   onResize() {
+
     // Resize시 container size 조절.
     const ratio = this.canvasService.setContainerSize(this.coverCanvas, this.canvasContainer);
 
@@ -166,7 +169,7 @@ export class WhiteboardComponent {
 
 
   async pageRender(currentDocNum: number, currentPage: number, zoomScale: number) {
-    console.log(this.canvasContainer)
+
     // set Canvas Size
     const ratio = this.setCanvasSize(currentDocNum, currentPage, zoomScale);
     // pdf 판서 표현 용도
@@ -227,4 +230,16 @@ export class WhiteboardComponent {
     }
   }
 
+
+  clickZoom(action: any) {
+    console.log(">> Click Zoom: ", action);
+
+    const docNum = this.docService.lastDocNum();
+    const currentPage = this.docService.pageBuffer()[docNum];
+    const prevZoomScale = this.zoomService.zoomScale();
+
+    const newZoomScale = this.zoomService.calcZoomScale(action, docNum, currentPage, prevZoomScale);
+    // zoomScale 업데이트
+    this.zoomService.zoomScale.set(newZoomScale);
+  }
 }
