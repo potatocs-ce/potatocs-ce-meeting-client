@@ -234,6 +234,8 @@ export class WhiteboardComponent {
   clickZoom(action: any) {
     console.log(">> Click Zoom: ", action);
 
+    if (!this.docInfo) return;
+
     const docNum = this.docService.lastDocNum();
     const currentPage = this.docService.pageBuffer()[docNum];
     const prevZoomScale = this.zoomService.zoomScale();
