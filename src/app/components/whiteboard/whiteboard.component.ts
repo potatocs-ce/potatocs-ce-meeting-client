@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { ZoomService } from '../../services/zoom/zoom.service';
+import { ToolService } from '../../services/tool/tool.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -59,7 +60,8 @@ export class WhiteboardComponent {
     private canvasService: CanvasService,
     private zone: NgZone,
     private zoomService: ZoomService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private toolService: ToolService
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
@@ -77,6 +79,13 @@ export class WhiteboardComponent {
 
       }
     }, { allowSignalWrites: true })
+
+
+
+    effect(() => {
+      this.tool = this.toolService.tool();
+      // this.checkClickMode()
+    })
   }
 
 
@@ -215,7 +224,7 @@ export class WhiteboardComponent {
  */
   setColor(color: string) {
     this.tool.color = color;
-    // this.toolService.tool.set({ ...this.tool })
+    this.toolService.tool.set({ ...this.tool })
     // this.setCanvas()
   }
 
@@ -226,7 +235,7 @@ export class WhiteboardComponent {
   setWidth(width: number) {
     this.tool.width = width;
 
-    // this.toolService.tool.set({ ...this.tool })
+    this.toolService.tool.set({ ...this.tool })
     // this.setCanvas()
   }
 
