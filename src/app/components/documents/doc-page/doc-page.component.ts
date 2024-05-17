@@ -38,6 +38,9 @@ export class DocPageComponent {
 
     effect(() => {
       const data = this.docService.thumbData();
+
+      if (!this.docService._doc().length) return
+
       this.renderThumbnailBox(data);
     })
   }
@@ -66,15 +69,21 @@ export class DocPageComponent {
       this.thumbArray.push(thumbSize);
     };
 
+    // 동기성 보장
+    setTimeout(() => {
+      this.renderThumbnailBox(this.docService.thumbData())
+    })
+
     for (let i = 0; i < this.doc.length; i++) {
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb_${i + 1}`), this.docService.lastDocNum() + 1, i + 1);
     }
-    this.renderThumbnailBox(this.docService.thumbData())
+
   }
 
   // 폴더 리스트로 돌아가기
   backToFileList() {
     this.docService._doc.set([]);
+
   }
 
   // 페이지 선택
