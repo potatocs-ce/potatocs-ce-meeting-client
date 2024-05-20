@@ -94,7 +94,6 @@ export class RenderingService {
       // console.log('renderBoard -------------------222222222')
 
       for (const item of drawingEvents) {
-        console.log(item)
         this.drawingService.end(targetCtx, item.drawingEvent.points, item.drawingEvent.tool, item.txt, scale);
       }
     }
