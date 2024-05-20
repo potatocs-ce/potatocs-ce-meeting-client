@@ -323,7 +323,7 @@ export class CanvasService {
       // Generate Event Emitter: new Draw 알림
       // eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
       // user (적은 사람과) target (적힌 사람 구분)
-      this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
+      // this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
 
 
 

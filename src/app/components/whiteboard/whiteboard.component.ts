@@ -196,13 +196,29 @@ export class WhiteboardComponent {
   async pageRender(currentDocNum: number, currentPage: number, zoomScale: number) {
     const ratio = this.setCanvasSize(currentDocNum, currentPage, zoomScale);
 
+    // 프리렌더링 처리
     this.preRenderBackground(currentPage)
-    // set Canvas Size
 
     // pdf 판서 표현 용도
     await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage)
+
+    // canvas event set
+    this.setCanvas();
   }
 
+
+  setCanvas() {
+    const data_canvas: any = this.userCanvas;
+    const drawing_canvas: any = this.rxCanvasCover;
+
+    if (this.tool.type == 'eraser') {
+      this.tool.width += 15;
+    } else if (this.tool.type == 'highlighter') {
+      this.tool.width += 10;
+    }
+
+    this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
+  }
 
   preRenderBackground(pageNum: number) {
     const targetCanvas = this.bgCanvas;
@@ -233,6 +249,8 @@ export class WhiteboardComponent {
     if (type == 'highlighter' && this.tool.color == 'black') {
       this.tool.color = 'yellow'
     }
+    this.toolService.tool.set({ ...this.tool })
+    this.setCanvas()
   }
 
   /**
@@ -242,7 +260,7 @@ export class WhiteboardComponent {
   setColor(color: string) {
     this.tool.color = color;
     this.toolService.tool.set({ ...this.tool })
-    // this.setCanvas()
+    this.setCanvas()
   }
 
   /**
@@ -253,7 +271,7 @@ export class WhiteboardComponent {
     this.tool.width = width;
 
     this.toolService.tool.set({ ...this.tool })
-    // this.setCanvas()
+    this.setCanvas()
   }
 
   clearDrawing() {

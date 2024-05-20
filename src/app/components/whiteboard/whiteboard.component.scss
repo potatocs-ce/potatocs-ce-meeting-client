@@ -99,10 +99,6 @@ canvas {
     /* 패딩 제거 */
     border: 0;
     /* 테두리 제거 */
-    width: 100%;
-    /* 부모 요소에 맞추기 */
-    height: 100%;
-    /* 부모 요소에 맞추기 */
     box-sizing: border-box;
     /* 패딩과 테두리를 포함한 박스 크기 계산 */
 }
@@ -239,4 +235,13 @@ canvas {
     }
 
 
+}
+
+
+.main {
+    z-index: 10;
+}
+
+.sub {
+    z-index: -1;
 }

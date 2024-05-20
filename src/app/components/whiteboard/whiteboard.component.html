@@ -187,7 +187,7 @@
                 <div class="coverRx">
                     <canvas #rxCanvasCover></canvas>
                 </div>
-                <div class="cover">
+                <div class="cover" [ngClass]="tool.type === 'click' ? 'main':'sub'">
                     <canvas #canvasCover></canvas>
                 </div>
             </div>
