@@ -38,6 +38,15 @@ export class DocumentService {
     return this._docList()[docNum - 1].pdfPages[pageNum - 1].getViewport({ scale: 1 })
   }
 
+
+  getDrawingEvents() {
+    const drawingEventSet = this._docList()[this.lastDocNum()]?.drawings;
+
+    // 없으면 undefined.
+    return drawingEventSet?.filter((item: any) => item.page === this.pageBuffer()[this.lastDocNum()]);
+  }
+
+
   // 메모리 비우기
   memoryRelease() {
     for (const item of this._docList()) {

@@ -201,11 +201,17 @@ export class WhiteboardComponent {
     // 프리렌더링 처리
     this.preRenderBackground(currentPage)
 
+    const drawingEvents = this.docService.getDrawingEvents();
+    console.log(drawingEvents)
+    this.renderingService.renderBoard(this.userCanvas, zoomScale, drawingEvents);
     // pdf 판서 표현 용도
     await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage)
 
     // canvas event set
     this.setCanvas();
+
+
+
   }
 
 

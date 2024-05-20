@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { DocumentService } from '../document/document.service';
 import { CANVAS_CONFIG } from '../../../config/config';
+import { DrawingService } from '../drawing/drawing.service';
 @Injectable({
   providedIn: 'root'
 })
 export class RenderingService {
 
-  constructor(private documentService: DocumentService) { }
+  constructor(
+    private documentService: DocumentService,
+    private drawingService: DrawingService
+  ) { }
 
   isPageRendering = false;
   pageNumPending: boolean | any = null;
@@ -69,7 +73,32 @@ export class RenderingService {
 
     return size;
   }
+  /**
+   * Teacher Canvas의 board rendering
+   * @param {element} targetCanvas canvas element
+   * @param {number} zoomScale zoomScale
+   * @param {Object} drawingEvents 판서 event (tool, points, timeDiff)
+   */
+  renderBoard(targetCanvas: any, zoomScale: any, drawingEvents: any) {
+    console.log('>> render Board: ', drawingEvents)
+    const targetCtx = targetCanvas.getContext('2d');
+    const scale = zoomScale || 1;
+    targetCtx.clearRect(0, 0, targetCanvas.width / scale, targetCanvas.height / scale);
+    /*----------------------------------------
+      해당 page의 drawing 정보가 있는 경우
+      drawing Service의 'end'관련 event 이용.
+    -----------------------------------------*/
 
+    // console.log('draw --------------------', drawingEvents)
+    if (drawingEvents && drawingEvents.length > 0) {
+      // console.log('renderBoard -------------------222222222')
+
+      for (const item of drawingEvents) {
+        console.log(item)
+        this.drawingService.end(targetCtx, item.drawingEvent.points, item.drawingEvent.tool, item.txt, scale);
+      }
+    }
+  }
 
   async renderBackground(tmpCanvas: any, bgCanvas: any, pdfNum: any, pageNum: any) {
     console.log(`>>>> renderBackground, pdfNum: ${pdfNum}, pageNum: ${pageNum}`);

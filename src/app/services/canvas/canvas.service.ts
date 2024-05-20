@@ -331,7 +331,7 @@ export class CanvasService {
       if (this.toggleService.toggle_video_whiteboard() == 'video') {
         this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
       } else {
-
+        this.socket.emit('draw:document', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, doc_id: this.docService._docList()[this.docService.lastDocNum()]._id, pageNum: this.docService.pageBuffer()[this.docService.lastDocNum()], meeting_id: this.meetingService.meeting_room_id() })
       }
       // 
 
