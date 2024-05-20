@@ -194,14 +194,31 @@ export class WhiteboardComponent {
 
 
   async pageRender(currentDocNum: number, currentPage: number, zoomScale: number) {
-
-    // set Canvas Size
     const ratio = this.setCanvasSize(currentDocNum, currentPage, zoomScale);
+
+    this.preRenderBackground(currentPage)
+    // set Canvas Size
+
     // pdf 판서 표현 용도
     await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage)
   }
 
 
+  preRenderBackground(pageNum: number) {
+    const targetCanvas = this.bgCanvas;
+    const ctx = targetCanvas.getContext("2d");
+    const imgElement: any = document.getElementById('thumb_' + pageNum);
+
+    /**************************************************
+    * 처음 화이트보드에 들어오면 thumbnail view 아니라 fileList view이기 때문에
+    * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
+    * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
+    ****************************************************/
+    if (imgElement) {
+      console.log(ctx, imgElement)
+      ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
+    }
+  }
 
 
   //=====================그리기 함수
