@@ -174,7 +174,8 @@
 
         <!-- 선택된 문서의 페이지를 보여줄 보드 -->
         <section class="canvas_position" #whiteboardSection>
-            <div #canvasContainer class="canvas_container" [style]="docInfo == undefined ? 'visibility: hidden': ''">
+            <div #canvasContainer class="canvas_container" [dragScroll]="dragOn"
+                [style]="docInfo == undefined ? 'visibility: hidden': ''">
                 <div class="tmp">
                     <canvas #tmp></canvas>
                 </div>

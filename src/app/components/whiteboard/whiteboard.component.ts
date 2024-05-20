@@ -11,11 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { ZoomService } from '../../services/zoom/zoom.service';
 import { ToolService } from '../../services/tool/tool.service';
+import { DragScrollDirective } from '../../directives/drag-scroll.directive';
 
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatMenuModule, DragScrollDirective],
   templateUrl: './whiteboard.component.html',
   styleUrl: './whiteboard.component.scss'
 })
@@ -24,6 +25,7 @@ export class WhiteboardComponent {
   lastPage: number = 0;
   zoomScale: number = 1;
 
+  dragOn = true;
 
   @ViewChild('canvasContainer', { static: true }) public canvasContainerRef: ElementRef | any;
   @ViewChild('canvasCover', { static: true }) public coverCanvasRef: ElementRef | any;
@@ -68,7 +70,7 @@ export class WhiteboardComponent {
       this.lastPage = this.docService.pageBuffer()[this.docService.lastDocNum()]
       this.docInfo = this.docService._docList()[this.docService.lastDocNum()];
       this.zoomScale = this.zoomService.zoomScale();
-      if (this.docInfo) {
+      if (this.docInfo && this.lastPage) {
         const lastDocNum = this.docService.lastDocNum();
 
         untracked(() => {
@@ -215,6 +217,12 @@ export class WhiteboardComponent {
       this.tool.width += 15;
     } else if (this.tool.type == 'highlighter') {
       this.tool.width += 10;
+    }
+
+    if (this.tool.type == 'click') {
+      this.dragOn = true;
+    } else {
+      this.dragOn = false;
     }
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)

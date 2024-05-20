@@ -6,6 +6,7 @@ import { MeetingService } from '../meeting/meeting.service';
 import { AuthService } from '../auth/auth.service';
 import { CANVAS_CONFIG } from '../../../config/config';
 import { DocumentService } from '../document/document.service';
+import { ToggleService } from '../toggle/toggle.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,9 @@ export class CanvasService {
     private videoDrawingService: VideoDrawingService,
     private meetingService: MeetingService,
     private authService: AuthService,
-    private docService: DocumentService) {
+    private docService: DocumentService,
+    private toggleService: ToggleService
+  ) {
 
   }
 
@@ -323,7 +326,14 @@ export class CanvasService {
       // Generate Event Emitter: new Draw 알림
       // eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
       // user (적은 사람과) target (적힌 사람 구분)
-      // this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
+
+
+      if (this.toggleService.toggle_video_whiteboard() == 'video') {
+        this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
+      } else {
+
+      }
+      // 
 
 
 
