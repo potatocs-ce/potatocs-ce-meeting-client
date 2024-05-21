@@ -12,6 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ZoomService } from '../../services/zoom/zoom.service';
 import { ToolService } from '../../services/tool/tool.service';
 import { DragScrollDirective } from '../../directives/drag-scroll.directive';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-whiteboard',
@@ -63,7 +64,8 @@ export class WhiteboardComponent {
     private zone: NgZone,
     private zoomService: ZoomService,
     private renderer: Renderer2,
-    private toolService: ToolService
+    private toolService: ToolService,
+    private socket: Socket,
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
@@ -87,6 +89,12 @@ export class WhiteboardComponent {
     effect(() => {
       this.tool = this.toolService.tool();
       // this.checkClickMode()
+    })
+
+
+
+    this.socket.on('draw:document', async (data: any) => {
+      console.log(data)
     })
   }
 
@@ -202,7 +210,7 @@ export class WhiteboardComponent {
     this.preRenderBackground(currentPage)
 
     const drawingEvents = this.docService.getDrawingEvents();
-    console.log(drawingEvents)
+
     this.renderingService.renderBoard(this.userCanvas, zoomScale, drawingEvents);
     // pdf 판서 표현 용도
     await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage)

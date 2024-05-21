@@ -2,6 +2,7 @@ import { Injectable, effect, signal } from '@angular/core';
 import { DrawingService } from '../../drawing/drawing.service';
 import { Socket } from 'ngx-socket-io';
 import { AuthService } from '../../auth/auth.service';
+import { DocumentService } from '../../document/document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class VideoDrawingService {
   constructor(
     private drawingService: DrawingService,
     private socket: Socket,
-    private authService: AuthService
+    private authService: AuthService,
+
   ) {
     this.socket.on('draw:video', async (data: any) => {
       if (this.drawVarArray[data.target_id]) {
@@ -46,6 +48,9 @@ export class VideoDrawingService {
       // Canvas 크기에 맞는 새로운 사각형을 그려서 이전에 그려진 요소들을 지웁니다.
       context.clearRect(0, 0, target_canvas.width, target_canvas.height);
     })
+
+
+
 
     effect(async () => {
       // 사용자별로 구분하는 것도 필요할듯

@@ -14,6 +14,8 @@ export class DocumentService {
   lastDocNum: any = signal<number>(-1); // 최근 문서 번호
   pageBuffer: any = signal<Array<any>>([]); // 페이지 임시 저장용
 
+  drawingData: any = signal<Array<any>>([]); // 문서별 판서 정보 저장용
+
   // 썸네일에 현재 보고있는 네모 박스 보여주는 변수
   /**
    * ratio: 가로, 세로 비율
@@ -40,7 +42,7 @@ export class DocumentService {
 
 
   getDrawingEvents() {
-    const drawingEventSet = this._docList()[this.lastDocNum()]?.drawings;
+    const drawingEventSet = this.drawingData().find((data: any) => this._docList()[this.lastDocNum()]?._id == data._id)?.drawings
 
     // 없으면 undefined.
     return drawingEventSet?.filter((item: any) => item.page === this.pageBuffer()[this.lastDocNum()]);
@@ -63,6 +65,12 @@ export class DocumentService {
       item.pdfPages = [];
     }
   }
+
+  // 판서 정보 받아오기
+  generateDrawingData(result: any) {
+    this.drawingData.set(result);
+  }
+
 
   /**
    * 각 pdf document api 요청

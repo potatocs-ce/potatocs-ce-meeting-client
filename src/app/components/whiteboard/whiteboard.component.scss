@@ -245,3 +245,9 @@ canvas {
 .sub {
     z-index: -1;
 }
+
+
+::ng-deep .mat-mdc-button-touch-target {
+    width: 25px !important;
+    height: 25px !important;
+}

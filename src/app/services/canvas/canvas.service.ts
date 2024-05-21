@@ -331,21 +331,37 @@ export class CanvasService {
       if (this.toggleService.toggle_video_whiteboard() == 'video') {
         this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
       } else {
-        this.socket.emit('draw:document', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, doc_id: this.docService._docList()[this.docService.lastDocNum()]._id, pageNum: this.docService.pageBuffer()[this.docService.lastDocNum()], meeting_id: this.meetingService.meeting_room_id() })
+        this.socket.emit('draw:document', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, user_id: this.authService.getTokenInfo()._id, doc_id: this.docService._docList()[this.docService.lastDocNum()]._id, pageNum: this.docService.pageBuffer()[this.docService.lastDocNum()], meeting_id: this.meetingService.meeting_room_id() })
       }
       // 
+      // 정보 저장
+      if (this.toggleService.toggle_video_whiteboard() == 'video') {
 
+        let drawVarArray = this.videoDrawingService.drawVarArray();
 
-
-
-      let drawVarArray = this.videoDrawingService.drawVarArray();
-
-      if (drawVarArray[sourceCanvas.parentNode.id]) {
-        drawVarArray[sourceCanvas.parentNode.id].push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id })
+        if (drawVarArray[sourceCanvas.parentNode.id]) {
+          drawVarArray[sourceCanvas.parentNode.id].push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id })
+        } else {
+          drawVarArray[sourceCanvas.parentNode.id] = [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id }];
+        }
+        this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
       } else {
-        drawVarArray[sourceCanvas.parentNode.id] = [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id }];
+        const drawingData = this.docService.drawingData();
+        const drawingEventSet = drawingData.find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;
+        // 있으면 넣어놓고 없으면 안넣고
+
+        if (drawingEventSet) {
+
+          drawingEventSet.push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, page: this.docService.pageBuffer()[this.docService.lastDocNum()] })
+          this.docService.drawingData.set([...drawingData])
+        } else {
+          this.docService.drawingData.update((data: any) => {
+            data.push({ _id: this.docService._docList()[this.docService.lastDocNum()]._id, drawings: [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, page: this.docService.pageBuffer()[this.docService.lastDocNum()] }] })
+            return [...data]
+          })
+        }
       }
-      this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
+
 
 
 

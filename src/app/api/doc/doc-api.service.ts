@@ -14,6 +14,11 @@ export class DocApiService {
     return this.http.get(this.baseUrl + '/doc/doc_list/' + meetingId)
   }
 
+  // 문서 판서 정보 조회
+  getDrawingList(meetingId: string) {
+    return this.http.get(this.baseUrl + '/doc/doc_drawing_list/' + meetingId);
+  }
+
   // 문서 조회
   getDoc(doc_id: string) {
     const headers = new HttpHeaders({
