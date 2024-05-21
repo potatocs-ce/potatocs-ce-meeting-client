@@ -8,11 +8,11 @@ import { DocApiService } from '../../../api/doc/doc-api.service';
 import { MeetingService } from '../../../services/meeting/meeting.service';
 import { DocSocketService } from '../../../services/socket/doc/doc-socket.service';
 import { DialogService } from '../../../services/dialog/dialog.service';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-doc-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule],
   templateUrl: './doc-list.component.html',
   styleUrl: './doc-list.component.scss'
 })

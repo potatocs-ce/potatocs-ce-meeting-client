@@ -102,17 +102,18 @@ export class RenderingService {
   async renderBackground(tmpCanvas: any, bgCanvas: any, pdfNum: any, pageNum: any) {
     console.log(`>>>> renderBackground, pdfNum: ${pdfNum}, pageNum: ${pageNum}`);
 
-    const pdfPage = this.documentService.getPdfPage(pdfNum + 1, pageNum);
-
-    if (!pdfPage) {
-      return;
-    }
 
     if (this.isPageRendering) {
-      // console.log(' ---> pending!!! ');
+      console.log(' ---> pending!!! ');
       this.pageNumPending = pageNum;
     } else {
       this.isPageRendering = true;
+
+      const pdfPage = this.documentService.getPdfPage(pdfNum + 1, pageNum);
+
+      if (!pdfPage) {
+        return;
+      }
 
       await this.rendering(pdfPage, bgCanvas, tmpCanvas);
 

@@ -172,6 +172,7 @@ export class VideoDrawingService {
     } else if (data.tool.type == 'line') {
       data_context.fillStyle = data.tool.color;
       data_context.strokeStyle = data.tool.color;
+      data_context.lineWidth = data.tool.width;
       const len = data.points.length / 2;
       data_context.beginPath();
       data_context.moveTo(data.points[0], data.points[1]);
@@ -183,6 +184,7 @@ export class VideoDrawingService {
     } else if (data.tool.type == 'circle') {
       data_context.fillStyle = data.tool.color;
       data_context.strokeStyle = data.tool.color;
+      data_context.lineWidth = data.tool.width;
       const len = data.points.length / 2;
       var radiusX = (data.points[2 * (len - 1)] - data.points[0]) * 0.5,   /// radius for x based on input
         radiusY = (data.points[2 * (len - 1) + 1] - data.points[1]) * 0.5,   /// radius for y based on input
@@ -208,16 +210,18 @@ export class VideoDrawingService {
       /// close it and stroke it for demo
       data_context.closePath();
       data_context.stroke();
+      this.dataArray.shift()
     } else if (data.tool.type == 'rectangle') {
       data_context.beginPath();
       data_context.fillStyle = data.tool.color;
       data_context.strokeStyle = data.tool.color;
+      data_context.lineWidth = data.tool.width;
       const len = data.points.length / 2;
       data_context.strokeRect(data.points[0], data.points[1], (data.points[2 * (len - 1)] - data.points[0]), (data.points[2 * (len - 1) + 1] - data.points[1]));
       data_context.closePath();
       // fillRect는 색이 채워지고 strokeRect은 색이 채워지지 않는다.
       // context.fillRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
-
+      this.dataArray.shift()
     }
 
   }
