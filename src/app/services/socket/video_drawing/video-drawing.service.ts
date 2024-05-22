@@ -27,13 +27,14 @@ export class VideoDrawingService {
 
   ) {
     this.socket.on('draw:video', async (data: any) => {
-      if (this.drawVarArray[data.target_id]) {
-        this.drawVarArray[data.target_id].push({ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id });
+      console.log(this.drawVarArray()[data.target_id])
+      if (this.drawVarArray()[data.target_id]) {
+        this.drawVarArray()[data.target_id].push({ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id });
       } else {
-        this.drawVarArray[data.target_id] = [{ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id }];
+        this.drawVarArray()[data.target_id] = [{ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id }];
       }
       this.lastUser.set(data.target_id)
-      this.drawVarArray.set({ ...this.drawVarArray })
+      this.drawVarArray.set({ ...this.drawVarArray() })
       this.dataArray.push(data.drawingEvent);
       if (this.dataArray.length == 1) {
         this.drawingQueue();
@@ -41,8 +42,8 @@ export class VideoDrawingService {
     })
 
     this.socket.on('draw:video_clear', async (data: any) => {
-      this.drawVarArray[data.target_id] = [];
-      this.drawVarArray.set({ ...this.drawVarArray })
+      this.drawVarArray()[data.target_id] = [];
+      this.drawVarArray.set({ ...this.drawVarArray() })
       const target_canvas: any = document.getElementById(data.target_id)!.querySelector('.data_canvas')
       const context: any = target_canvas.getContext('2d');
       // Canvas 크기에 맞는 새로운 사각형을 그려서 이전에 그려진 요소들을 지웁니다.

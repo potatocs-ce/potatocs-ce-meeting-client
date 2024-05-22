@@ -242,40 +242,40 @@
 
 .shape_tool {
     display: flex;
-
-    gap: 0.2rem;
+    gap: 0.5rem;
     padding: 0.2rem;
+    width: fit-content;
 
     button {
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 5rem;
-
+        width: 25px;
+        height: 25px;
         padding: 0px;
-        color: $main_color;
+        // color: rgb(212, 212, 212); 
+        // color: rgba(109, 111, 116, 255);
+        color: $main_background_color;
         cursor: pointer;
-        width: 35px;
-        height: 35px;
-        overflow: hidden;
 
         &>*[role=img] {
-            width: 16px;
-            height: 16px;
-            font-size: 16px;
+            width: 14px;
+            height: 14px;
+            // font-size: 18px;
         }
 
         .mat-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 18px;
-            height: 18px;
-            font-size: 13pt;
+            width: 15px;
+            height: 15px;
+            font-size: 15px;
         }
-
     }
+}
 
-
-
+::ng-deep .mat-mdc-menu-panel {
+    min-width: 0px !important;
 }

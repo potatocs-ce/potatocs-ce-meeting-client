@@ -251,3 +251,45 @@ canvas {
     width: 25px !important;
     height: 25px !important;
 }
+
+
+
+.shape_tool {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.2rem;
+    width: fit-content;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5rem;
+        width: 25px;
+        height: 25px;
+        padding: 0px;
+        // color: rgb(212, 212, 212); 
+        // color: rgba(109, 111, 116, 255);
+        color: $main_background_color;
+        cursor: pointer;
+
+        &>*[role=img] {
+            width: 14px;
+            height: 14px;
+            // font-size: 18px;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            font-size: 15px;
+        }
+    }
+}
+
+::ng-deep .mat-mdc-menu-panel {
+    min-width: 0px !important;
+}

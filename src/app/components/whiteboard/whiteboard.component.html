@@ -26,7 +26,7 @@
             </button>
 
             <!-- 그리기 도구 -->
-            <mat-menu #shape="matMenu">
+            <mat-menu #shape="matMenu" class="my-menu">
                 <article class="shape_tool">
                     <button (click)="setType('line')" mat-icon-button [ngClass]="tool.type == 'line' ? 'active': ''">
                         <mat-icon>remove</mat-icon>
