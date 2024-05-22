@@ -15,10 +15,12 @@ export class VideoDrawingService {
 
   // 그림 데이터 큐
   dataArray: any = [];
+  // 유저 데이터 큐
+  lastUser: any = [];
 
   // 비디오 그림 전체 데이터
   drawVarArray: any = signal<Object>({})
-  lastUser: any = signal<string>('')
+
 
   constructor(
     private drawingService: DrawingService,
@@ -27,13 +29,13 @@ export class VideoDrawingService {
 
   ) {
     this.socket.on('draw:video', async (data: any) => {
-      console.log(this.drawVarArray()[data.target_id])
+
       if (this.drawVarArray()[data.target_id]) {
         this.drawVarArray()[data.target_id].push({ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id });
       } else {
         this.drawVarArray()[data.target_id] = [{ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id }];
       }
-      this.lastUser.set(data.target_id)
+      this.lastUser.push(data.target_id)
       this.drawVarArray.set({ ...this.drawVarArray() })
       this.dataArray.push(data.drawingEvent);
       if (this.dataArray.length == 1) {
@@ -47,7 +49,14 @@ export class VideoDrawingService {
       const target_canvas: any = document.getElementById(data.target_id)!.querySelector('.data_canvas')
       const context: any = target_canvas.getContext('2d');
       // Canvas 크기에 맞는 새로운 사각형을 그려서 이전에 그려진 요소들을 지웁니다.
+      // 현재의 transform 상태를 저장
+      context.save();
+
+      // transform을 초기화하여 원래 좌표계로 복귀
+      context.setTransform(1, 0, 0, 1, 0, 0);
       context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+      // 저장된 transform 상태를 복원
+      context.restore();
     })
 
 
@@ -83,12 +92,14 @@ export class VideoDrawingService {
     if (!this.dataArray.length) return;
     // console.log(this.lastUser())
     // console.log(document.getElementById(this.lastUser()))
-    const data_canvas: any = document.getElementById(this.lastUser())!.querySelector('.data_canvas')
+
+
+    const data_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.data_canvas')
     const data_context: any = data_canvas.getContext('2d');
-    const target_canvas: any = document.getElementById(this.lastUser())!.querySelector('.target_canvas')
+    const target_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.target_canvas')
     const context: any = target_canvas.getContext('2d');
 
-
+    console.log(target_canvas.width, target_canvas.height)
 
     const data = this.dataArray[0]
 
@@ -111,10 +122,17 @@ export class VideoDrawingService {
         context.arc(data.points[0], data.points[1], data.tool.width / 2, 0, Math.PI * 2, !0);
         context.fill();
         context.closePath();
+        // 현재의 transform 상태를 저장
+        context.save();
 
+        // transform을 초기화하여 원래 좌표계로 복귀
+        context.setTransform(1, 0, 0, 1, 0, 0);
         context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+        // 저장된 transform 상태를 복원
+        context.restore();
         this.drawingService.end(data_context, data.points, data.tool)
         this.dataArray.shift()
+        this.lastUser.shift()
         this.drawingQueue()
         return;
 
@@ -160,12 +178,19 @@ export class VideoDrawingService {
         if (i === pointsLength) {
           clearInterval(this.stop);
           this.stop = null;
+          // 현재의 transform 상태를 저장
+          context.save();
 
+          // transform을 초기화하여 원래 좌표계로 복귀
+          context.setTransform(1, 0, 0, 1, 0, 0);
           context.clearRect(0, 0, target_canvas.width, target_canvas.height);
-
+          // 저장된 transform 상태를 복원
+          context.restore();
           // 최종 target에 그리기
           this.drawingService.end(data_context, data.points, data.tool)
+
           this.dataArray.shift()
+          this.lastUser.shift()
           this.drawingQueue()
         }
 
@@ -182,6 +207,7 @@ export class VideoDrawingService {
       data_context.stroke();
 
       this.dataArray.shift()
+      this.lastUser.shift()
     } else if (data.tool.type == 'circle') {
       data_context.fillStyle = data.tool.color;
       data_context.strokeStyle = data.tool.color;
@@ -212,6 +238,7 @@ export class VideoDrawingService {
       data_context.closePath();
       data_context.stroke();
       this.dataArray.shift()
+      this.lastUser.shift()
     } else if (data.tool.type == 'rectangle') {
       data_context.beginPath();
       data_context.fillStyle = data.tool.color;
@@ -223,6 +250,7 @@ export class VideoDrawingService {
       // fillRect는 색이 채워지고 strokeRect은 색이 채워지지 않는다.
       // context.fillRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
       this.dataArray.shift()
+      this.lastUser.shift()
     }
 
   }

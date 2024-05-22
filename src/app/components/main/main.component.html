@@ -10,7 +10,7 @@
                 <section id="present_section" class="present_section">
                     <app-present></app-present>
                 </section>
-                @if(audience_video.length != 0){
+                @if(audience_video.length != 0 && toggle_video_whiteboard == 'video'){
                 <section class="audience_section">
                     <app-audience></app-audience>
                 </section>
@@ -27,7 +27,7 @@
                         <section class="whiteboard_section">
                             <app-whiteboard></app-whiteboard>
                         </section>
-                        @if(audience_video.length != 0){
+                        @if(audience_video.length != 0 && toggle_video_whiteboard == 'document'){
                         <section class="audience_section">
                             <app-audience></app-audience>
                         </section>

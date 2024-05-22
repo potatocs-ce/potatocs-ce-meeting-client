@@ -19,10 +19,14 @@
 
         #data_canvas {
             position: absolute;
+            top: 0;
+            left: 0;
         }
 
         #target_canvas {
             position: absolute;
+            top: 0;
+            left: 0;
         }
 
     }
@@ -58,4 +62,17 @@
             font-weight: bold;
         }
     }
+}
+
+canvas {
+    display: block;
+    /* 기본적으로 캔버스는 inline-block이므로, block으로 변경 */
+    margin: 0;
+    /* 여백 제거 */
+    padding: 0;
+    /* 패딩 제거 */
+    border: 0;
+    /* 테두리 제거 */
+    box-sizing: border-box;
+    /* 패딩과 테두리를 포함한 박스 크기 계산 */
 }

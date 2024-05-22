@@ -144,7 +144,7 @@ export class DrawingService {
       case 'line':
         console.log('shape moving~~~~~~')
         context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
-        console.log(points)
+
         context.moveTo(points[0], points[1]);
         context.lineTo(points[2 * (len - 1)], points[2 * (len - 1) + 1]);
         context.quadraticCurveTo(points[2 * i], points[2 * i + 1], points[2 * (i + 1)], points[2 * (i + 1) + 1]);

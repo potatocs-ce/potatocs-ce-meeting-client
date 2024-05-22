@@ -191,7 +191,7 @@ export class PresentComponent {
     this.videoDrawingService.stopQueue();
 
     const present: any = document.getElementById('present');
-    const present_section: any = document.getElementById('present_section');
+    // const present_section: any = document.getElementById('present_section');
 
     // canvas
     const data_canvas: any = document.getElementById('data_canvas');
@@ -238,7 +238,7 @@ export class PresentComponent {
 
 
     const pw = present.clientWidth;
-    const ph = present_section.clientHeight;
+    const ph = present.clientHeight;
 
     const vw = target.clientWidth;
     const vh = target.clientHeight;

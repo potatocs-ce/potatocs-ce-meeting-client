@@ -18,6 +18,9 @@ export class AudienceVideoComponent {
   @ViewChild('data_canvas') data_canvas: ElementRef | undefined;
   @ViewChild('target_canvas') target_canvas: ElementRef | undefined;
 
+  @ViewChild('targetVideo') target_video: ElementRef | undefined;
+
+
   constructor(
     private videoService: VideoService,
     private videoDrawingService: VideoDrawingService,
@@ -26,16 +29,19 @@ export class AudienceVideoComponent {
       // this.videoService.audienceVideoStream();
       if (this.videoService.audienceVideoStream().length) {
         const elem: any = document.getElementsByClassName(this.id)[0];
-
-
         elem.playsInline = true;
         elem.autoplay = true;
         elem.muted = true;
       }
-
     })
 
+    // effect(() => {
+    //   this.videoDrawingService.drawVarArray()
+    //   this.videoResize(this.target_video?.nativeElement)
+    // })
   }
+
+
 
   @Input() stream: any = '';
   @Input() name: any = '';
@@ -59,6 +65,7 @@ export class AudienceVideoComponent {
   }
 
   videoResize(target: any) {
+
     let zoomScale = 1;
     const data_canvas: any = this.data_canvas?.nativeElement;
     const data_context: any = data_canvas.getContext('2d');
