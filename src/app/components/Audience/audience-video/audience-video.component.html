@@ -12,6 +12,7 @@
 
     <!-- 이름 등 정보  -->
     <article class="menu_container">
+        @if(toggle_video_whiteboard != 'document') {
         <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
             <mat-icon>more_vert</mat-icon>
         </button>
@@ -21,10 +22,12 @@
                 <span>presenter</span>
             </button>
             <!-- <button mat-menu-item>
-                <mat-icon>screenshot_monitor</mat-icon>
-                <span>screenshot</span>
-            </button> -->
+                    <mat-icon>screenshot_monitor</mat-icon>
+                    <span>screenshot</span>
+                </button> -->
         </mat-menu>
+        }
+
         <div class="video_user_name">{{name}}</div>
     </article>
 </div>

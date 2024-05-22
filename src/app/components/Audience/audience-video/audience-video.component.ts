@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { VideoService } from '../../../services/video/video.service';
 import { VideoDrawingService } from '../../../services/socket/video_drawing/video-drawing.service';
 import { DrawingService } from '../../../services/drawing/drawing.service';
+import { ToggleService } from '../../../services/toggle/toggle.service';
 
 @Component({
   selector: 'app-audience-video',
@@ -20,11 +21,15 @@ export class AudienceVideoComponent {
 
   @ViewChild('targetVideo') target_video: ElementRef | undefined;
 
+  videoHeight: number = 160;
+
+  toggle_video_whiteboard: string = '';
 
   constructor(
     private videoService: VideoService,
     private videoDrawingService: VideoDrawingService,
-    private drawingService: DrawingService) {
+    private drawingService: DrawingService,
+    private toggleService: ToggleService) {
     effect(() => {
       // this.videoService.audienceVideoStream();
       if (this.videoService.audienceVideoStream().length) {
@@ -35,10 +40,9 @@ export class AudienceVideoComponent {
       }
     })
 
-    // effect(() => {
-    //   this.videoDrawingService.drawVarArray()
-    //   this.videoResize(this.target_video?.nativeElement)
-    // })
+    effect(() => {
+      this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard()
+    })
   }
 
 
@@ -74,9 +78,9 @@ export class AudienceVideoComponent {
 
     const canvas_container: any = document.getElementsByClassName('audience_canvas_container')[0];
 
-    zoomScale = 170 / target.videoHeight * zoomScale;
+    zoomScale = this.videoHeight / target.videoHeight * zoomScale;
 
-    target.style.height = `170px`;
+    target.style.height = `${this.videoHeight}px`;
 
     data_canvas.width = canvas_container.clientWidth;
     data_canvas.height = canvas_container.clientHeight;
