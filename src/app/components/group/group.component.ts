@@ -5,6 +5,8 @@ import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { RoleSocketService } from '../../services/socket/role/role-socket.service';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-group',
@@ -20,7 +22,10 @@ export class GroupComponent {
   currentMembers: any;
   currentMembersCount: any = 0;
 
-  constructor(private meetingService: MeetingService, private meetingServiceAPI: MeetingServiceAPI) {
+  constructor(private meetingService: MeetingService,
+    private meetingServiceAPI: MeetingServiceAPI,
+    private roleSocketService: RoleSocketService,
+    private socket: Socket) {
 
     // effect for meetingService 
     effect(() => {
@@ -33,6 +38,14 @@ export class GroupComponent {
         }
       });
     })
+
+    this.socket.on('refreshRole', ({ member_id, role }: any) => {
+      this.currentMembers.forEach((currentMember: any) => {
+        if (currentMember.member_id._id == member_id) {
+          currentMember.role = role;
+        }
+      })
+    })
   }
 
 
@@ -42,6 +55,19 @@ export class GroupComponent {
 
   ngAfterViewInit() {
 
+  }
+
+
+  // role 변경
+  chooseRole(role: string, i: number) {
+    if (role == this.currentMembers[i].role) return
+
+
+    this.roleSocketService.updateRole(this.meetingInfo._id, role, this.currentMembers[i].member_id._id).then(result => {
+      if (result === 'success') {
+        this.currentMembers[i].role = role;
+      }
+    })
   }
 
 
