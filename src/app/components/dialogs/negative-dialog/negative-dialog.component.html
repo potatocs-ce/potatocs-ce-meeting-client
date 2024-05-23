@@ -1,15 +1,15 @@
 <div class="confirm-dialog">
-    <div>
-        <div class="confirm-w-460"></div>
-    </div>
 
-    <p class="confirm-title">실패!</p>
+    <mat-icon fontSet="material-symbols-outlined" color="primary" class='mat_icon'> cancel</mat-icon>
+
+
+    <p class="confirm-title">Error</p>
 
     <p class="confirm-content">
         {{ data.content }}
     </p>
 
     <p class="confirm-btn">
-        <button (click)="closeModal()">확인</button>
+        <button mat-flat-button color="primary" (click)="closeModal()">Confirm</button>
     </p>
 </div>
