@@ -3,6 +3,7 @@ import { Component, ElementRef, QueryList, ViewChildren, effect } from '@angular
 import { DocumentService } from '../../../services/document/document.service';
 import { RenderingService } from '../../../services/rendering/rendering.service';
 import { MatIconModule } from '@angular/material/icon';
+import { RoleSocketService } from '../../../services/socket/role/role-socket.service';
 
 @Component({
   selector: 'app-doc-page',
@@ -27,7 +28,9 @@ export class DocPageComponent {
   @ViewChildren('thumbWindow') thumbWindowRef: QueryList<ElementRef> | any;
 
 
-  constructor(private docService: DocumentService, private renderingService: RenderingService) {
+  constructor(private docService: DocumentService,
+    private renderingService: RenderingService,
+    private roleSocketService: RoleSocketService) {
     effect(() => {
       this.doc = this.docService._doc();
       this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
@@ -94,5 +97,8 @@ export class DocPageComponent {
 
     this.docService.updateCurrentPageNum(page); // page num 업데이트
     this.currentPageNum = page;
+
+
+    this.roleSocketService.presentStatus();
   }
 }

@@ -77,8 +77,8 @@ export class MainComponent {
         console.log(this.meetingService.meeting_room_id())
         await this.mediasoupService.joinRoom()
       }
-
     })
+
   }
 
   ngOnInit() {

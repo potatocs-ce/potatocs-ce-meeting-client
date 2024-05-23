@@ -8,6 +8,7 @@ import { VideoService } from '../../services/video/video.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
+import { RoleSocketService } from '../../services/socket/role/role-socket.service';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
@@ -43,7 +44,8 @@ export class ToolbarComponent {
     private toggleService: ToggleService,
     private videoService: VideoService,
     private mediasoupService: MediasoupService,
-    private meetingService: MeetingService) {
+    private meetingService: MeetingService,
+    private roleSocketService: RoleSocketService) {
     // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
@@ -106,6 +108,8 @@ export class ToolbarComponent {
       this.videoService.presentVideoStream.set(stream)
       this.videoService.audienceVideoStream.set([...temp_audience])
     }
+
+    this.roleSocketService.presentStatus()
   }
 
 

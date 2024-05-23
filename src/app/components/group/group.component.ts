@@ -40,11 +40,16 @@ export class GroupComponent {
     })
 
     this.socket.on('refreshRole', ({ member_id, role }: any) => {
-      this.currentMembers.forEach((currentMember: any) => {
-        if (currentMember.member_id._id == member_id) {
-          currentMember.role = role;
-        }
+
+      this.meetingService.meeting_info.update((meeting_info: any) => {
+        meeting_info.currentMembers.forEach((currentMember: any) => {
+          if (currentMember.member_id._id == member_id) {
+            currentMember.role = role;
+          }
+        })
+        return meeting_info
       })
+
     })
   }
 
@@ -65,7 +70,11 @@ export class GroupComponent {
 
     this.roleSocketService.updateRole(this.meetingInfo._id, role, this.currentMembers[i].member_id._id).then(result => {
       if (result === 'success') {
-        this.currentMembers[i].role = role;
+        this.meetingService.meeting_info.update((meeting_info: any) => {
+          meeting_info.currentMembers[i].role = role;
+
+          return meeting_info
+        })
       }
     })
   }

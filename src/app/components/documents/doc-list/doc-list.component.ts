@@ -9,6 +9,7 @@ import { MeetingService } from '../../../services/meeting/meeting.service';
 import { DocSocketService } from '../../../services/socket/doc/doc-socket.service';
 import { DialogService } from '../../../services/dialog/dialog.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RoleSocketService } from '../../../services/socket/role/role-socket.service';
 @Component({
   selector: 'app-doc-list',
   standalone: true,
@@ -25,7 +26,8 @@ export class DocListComponent {
     private docApiService: DocApiService,
     private meetingService: MeetingService,
     private docSocketService: DocSocketService,
-    private dialogService: DialogService) {
+    private dialogService: DialogService,
+    private roleSocketService: RoleSocketService) {
     effect(() => {
       this.docService._docList()
       setTimeout(() => {
@@ -135,6 +137,8 @@ export class DocListComponent {
     console.log('>> click PDF : change to Thumbnail Mode');
 
     this.docService.changeToThumbnailView(docId)
+
+    this.roleSocketService.presentStatus();
   }
 }
 
