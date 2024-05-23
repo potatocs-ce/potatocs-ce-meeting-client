@@ -227,11 +227,7 @@ export class WhiteboardComponent {
     const data_canvas: any = this.userCanvas;
     const drawing_canvas: any = this.rxCanvasCover;
 
-    if (this.tool.type == 'eraser') {
-      this.tool.width += 15;
-    } else if (this.tool.type == 'highlighter') {
-      this.tool.width += 10;
-    }
+
 
     if (this.tool.type == 'click') {
       this.dragOn = true;
@@ -291,6 +287,11 @@ export class WhiteboardComponent {
    */
   setWidth(width: number) {
     this.tool.width = width;
+    if (this.tool.type == 'eraser') {
+      this.tool.width += 15;
+    } else if (this.tool.type == 'highlighter') {
+      this.tool.width += 10;
+    }
 
     this.toolService.tool.set({ ...this.tool })
     this.setCanvas()
