@@ -13,6 +13,9 @@ import { ZoomService } from '../../services/zoom/zoom.service';
 import { ToolService } from '../../services/tool/tool.service';
 import { DragScrollDirective } from '../../directives/drag-scroll.directive';
 import { Socket } from 'ngx-socket-io';
+import { DocApiService } from '../../api/doc/doc-api.service';
+import { MeetingService } from '../../services/meeting/meeting.service';
+import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -66,6 +69,9 @@ export class WhiteboardComponent {
     private renderer: Renderer2,
     private toolService: ToolService,
     private socket: Socket,
+    private docApiService: DocApiService,
+    private meetingService: MeetingService,
+    private pdfDrawingService: PdfDrawingService
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
@@ -93,8 +99,13 @@ export class WhiteboardComponent {
 
 
 
-    this.socket.on('draw:document', async (data: any) => {
-      console.log(data)
+
+
+
+
+    this.socket.on('draw:doc_clear', async (data: any) => {
+      this.docService.generateDrawingData(data);
+      this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
     })
   }
 
@@ -300,16 +311,26 @@ export class WhiteboardComponent {
   clearDrawing() {
     // 여기 한 번 확인 물어보는 로직 추가
     if (window.confirm('Do you want to delete all drawings on the current page?')) {
-      // this.meetingApiService.clearVideoDrawing(this.meetingService.meeting_room_id(), this.videoStream?.user_id).subscribe((res: any) => {
-      //   if (res.message == 'success') {
-      //     // 여기서 userId 판서 정보 일단 다 지우기
-      //     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id] = [];
-      //     const video_target: any = document.getElementById('data_canvas');
-      //     const target_context: any = video_target.getContext('2d');
-      //     target_context.clearRect(0, 0, video_target.width, video_target.height);
-      //     this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: video_target.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
-      //   }
-      // })
+      this.docApiService.clearDocDrawing(this.meetingService.meeting_room_id(), this.docService._docList()[this.docService.lastDocNum()]._id, this.lastPage).subscribe((res: any) => {
+
+
+        this.docService.generateDrawingData(res);
+
+
+
+        this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
+
+
+        this.pdfDrawingService.clearDrawing(this.meetingService.meeting_room_id());
+        // if (res.message == 'success') {
+        //   // 여기서 userId 판서 정보 일단 다 지우기
+        //   this.videoDrawingService.drawVarArray()[this.videoStream?.user_id] = [];
+        //   const canvas_target: any = document.getElementById('canvasUser');
+        //   const target_context: any = canvas_target.getContext('2d');
+        //   target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+        //   this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: video_target.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
+        // }
+      })
     }
   }
 

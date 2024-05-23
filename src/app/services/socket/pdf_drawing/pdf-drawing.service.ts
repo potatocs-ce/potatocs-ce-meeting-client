@@ -21,8 +21,11 @@ export class PdfDrawingService {
     private drawingService: DrawingService) {
     this.socket.on('draw:document', async (data: any) => {
       const drawingData = this.docService.drawingData();
-      const drawingEventSet = drawingData.find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;
+      const drawingEventSet = drawingData.find((data2: any) => data2._id == data.doc_id)?.drawings;
       // 있으면 넣어놓고 없으면 안넣고
+
+
+
 
       if (drawingEventSet) {
 
@@ -36,12 +39,16 @@ export class PdfDrawingService {
       }
 
 
-
       this.dataArray.push({ ...data.drawingEvent, page: data.pageNum, doc_id: data.doc_id });
       if (this.dataArray.length == 1) {
         this.drawingQueue();
       }
     })
+
+  }
+
+  clearDrawing(meetingId: string) {
+    this.socket.emit('draw:doc_clear', { meetingId })
   }
 
   async stopQueue() {
@@ -64,7 +71,10 @@ export class PdfDrawingService {
     const data: any = this.dataArray[0]
 
 
-    if (data.doc_id != this.docService._docList()[this.docService.lastDocNum()]._id || data.page != this.docService.pageBuffer()[this.docService.lastDocNum()]) return
+    if (data.doc_id != this.docService._docList()[this.docService.lastDocNum()]?._id || data.page != this.docService.pageBuffer()[this.docService.lastDocNum()]) {
+      this.dataArray.shift()
+      return
+    }
 
     // this.drawingService.end(data_context,firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
 

@@ -19,6 +19,11 @@ export class DocApiService {
     return this.http.get(this.baseUrl + '/doc/doc_drawing_list/' + meetingId);
   }
 
+  // 문서 페이지 드로잉 정보 제거
+  clearDocDrawing(meetingId: string, docId: string, page: number) {
+    return this.http.post(this.baseUrl + '/doc/clear_drawing', { meetingId, docId, page })
+  }
+
   // 문서 조회
   getDoc(doc_id: string) {
     const headers = new HttpHeaders({
