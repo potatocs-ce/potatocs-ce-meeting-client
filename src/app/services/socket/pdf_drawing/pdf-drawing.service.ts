@@ -45,10 +45,23 @@ export class PdfDrawingService {
       }
     })
 
+
+    this.socket.on('draw:doc_clear', async (data: any) => {
+
+      if (this.docService._docList()[this.docService.lastDocNum()]._id == data.docId && this.docService.pageBuffer()[this.docService.lastDocNum()] == data.page) {
+        const canvas_target: any = document.getElementById('canvasUser');
+        const target_context: any = canvas_target.getContext('2d');
+        target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+      }
+
+
+      this.docService.generateDrawingData(data.result);
+
+    })
   }
 
-  clearDrawing(meetingId: string) {
-    this.socket.emit('draw:doc_clear', { meetingId })
+  clearDrawing(meetingId: string, result: any, docId: string, page: number) {
+    this.socket.emit('draw:doc_clear', { meetingId, result, docId, page })
   }
 
   async stopQueue() {

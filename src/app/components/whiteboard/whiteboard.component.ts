@@ -97,16 +97,6 @@ export class WhiteboardComponent {
       // this.checkClickMode()
     })
 
-
-
-
-
-
-
-    this.socket.on('draw:doc_clear', async (data: any) => {
-      this.docService.generateDrawingData(data);
-      this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
-    })
   }
 
 
@@ -260,7 +250,7 @@ export class WhiteboardComponent {
     * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
     ****************************************************/
     if (imgElement) {
-      console.log(ctx, imgElement)
+
       ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
     }
   }
@@ -311,17 +301,18 @@ export class WhiteboardComponent {
   clearDrawing() {
     // 여기 한 번 확인 물어보는 로직 추가
     if (window.confirm('Do you want to delete all drawings on the current page?')) {
+
       this.docApiService.clearDocDrawing(this.meetingService.meeting_room_id(), this.docService._docList()[this.docService.lastDocNum()]._id, this.lastPage).subscribe((res: any) => {
-
-
         this.docService.generateDrawingData(res);
 
+        const canvas_target: any = document.getElementById('canvasUser');
+        const target_context: any = canvas_target.getContext('2d');
+        target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+
+        // this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
 
 
-        this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
-
-
-        this.pdfDrawingService.clearDrawing(this.meetingService.meeting_room_id());
+        this.pdfDrawingService.clearDrawing(this.meetingService.meeting_room_id(), res, this.docService._docList()[this.docService.lastDocNum()]._id, this.lastPage);
         // if (res.message == 'success') {
         //   // 여기서 userId 판서 정보 일단 다 지우기
         //   this.videoDrawingService.drawVarArray()[this.videoStream?.user_id] = [];
