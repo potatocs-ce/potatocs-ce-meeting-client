@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { DocumentService } from '../../document/document.service';
 import { DrawingService } from '../../drawing/drawing.service';
+import { CANVAS_CONFIG } from '../../../../config/config';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class PdfDrawingService {
   dataArray: any = [];
 
 
+  eraserWidth: number = CANVAS_CONFIG.eraserWidth;
+  highlighterWidth: number = CANVAS_CONFIG.highlighterWidth;
 
 
 
@@ -130,6 +133,7 @@ export class PdfDrawingService {
           context.globalCompositeOperation = 'source-over';
           context.strokeStyle = "rgba(255, 255, 255, 1)";
           context.fillStyle = "rgba(255, 255, 255, 1)";
+          context.lineWidth = data.tool.width + this.eraserWidth
         }
         else if (data.tool.type === "highlighter") {
           context.globalCompositeOperation = 'xor';
@@ -137,6 +141,7 @@ export class PdfDrawingService {
           context.lineCap = "round";
           context.fillStyle = data.tool.color;
           context.strokeStyle = data.tool.color;
+          context.lineWidth = data.tool.width + this.highlighterWidth
         }
         context.beginPath();
         if (i === 2) {

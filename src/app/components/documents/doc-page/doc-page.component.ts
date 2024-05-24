@@ -4,6 +4,7 @@ import { DocumentService } from '../../../services/document/document.service';
 import { RenderingService } from '../../../services/rendering/rendering.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RoleSocketService } from '../../../services/socket/role/role-socket.service';
+import { PdfDrawingService } from '../../../services/socket/pdf_drawing/pdf-drawing.service';
 
 @Component({
   selector: 'app-doc-page',
@@ -30,7 +31,8 @@ export class DocPageComponent {
 
   constructor(private docService: DocumentService,
     private renderingService: RenderingService,
-    private roleSocketService: RoleSocketService) {
+    private roleSocketService: RoleSocketService,
+    private pdfDrawingService: PdfDrawingService) {
     effect(() => {
       this.doc = this.docService._doc();
       this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
@@ -94,6 +96,8 @@ export class DocPageComponent {
   // 페이지 선택
   clickThumb(page: number) {
     if (page == this.currentPageNum) return; // 동일 page click은 무시
+
+    this.pdfDrawingService.stopQueue(); // <-- 그려지고 있는게 있으면 중단
 
     this.docService.updateCurrentPageNum(page); // page num 업데이트
     this.currentPageNum = page;

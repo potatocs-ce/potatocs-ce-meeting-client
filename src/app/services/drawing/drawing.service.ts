@@ -1,6 +1,7 @@
 import { Injectable, effect } from '@angular/core';
 import { VideoService } from '../video/video.service';
 import { ToggleService } from '../toggle/toggle.service';
+import { CANVAS_CONFIG } from '../../../config/config';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class DrawingService {
   pen_width: number = 0;
 
 
-  eraserWidth: number = 15;
-  highlighterWidth: number = 10;
+  eraserWidth: number = CANVAS_CONFIG.eraserWidth;
+  highlighterWidth: number = CANVAS_CONFIG.highlighterWidth;
 
   constructor(private toggleService: ToggleService) {
     effect(() => {

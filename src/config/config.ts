@@ -28,7 +28,8 @@ export const CANVAS_CONFIG = {
         textarea: [20, 28, 32],
         text: [20, 28, 32],
     },
-    sidebarContainerWidth: 100
+    sidebarContainerWidth: 100,
+    highlighterWidth: 15
 };
 
 export const CANVAS_EVENT = {
