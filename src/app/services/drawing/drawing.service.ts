@@ -11,6 +11,10 @@ export class DrawingService {
   color: string = '';
   pen_width: number = 0;
 
+
+  eraserWidth: number = 15;
+  highlighterWidth: number = 10;
+
   constructor(private toggleService: ToggleService) {
     effect(() => {
       this.mode = this.toggleService.toggle_drawing_mode();
@@ -68,7 +72,7 @@ export class DrawingService {
         // 
 
 
-        this.eraserMarker(context, [points[0], points[1]], tool.width);
+        this.eraserMarker(context, [points[0], points[1]], (tool.width + this.eraserWidth));
         break;
       case 'highlighter':
         context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
@@ -77,7 +81,7 @@ export class DrawingService {
         context.lingJoin = 'round';
         context.beginPath();
         context.fillStyle = tool.color;
-        context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, true);
+        context.arc(points[0], points[1], (tool.width + this.highlighterWidth) / 2, 0, Math.PI * 2, true);
         // context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
         context.fill();
 
@@ -208,12 +212,13 @@ export class DrawingService {
         context.clearRect(0, 0, context.canvas.width / zoomScale, context.canvas.height / zoomScale);
         context.fillStyle = 'white';
         context.strokeStyle = 'white';
+        context.lineWidth = (tool.width + this.eraserMarker);
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
+          context.arc(points[0], points[1], (tool.width + this.eraserMarker) / 2, 0, Math.PI * 2, !0);
           context.fill();
           context.closePath();
-          this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], tool.width);
+          this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], (tool.width + this.eraserMarker));
           break;
         }
 
@@ -238,14 +243,15 @@ export class DrawingService {
         context.lineJoin = 'round';
         context.fillStyle = tool.color;
         context.strokeStyle = tool.color;
+        context.lineWidth = (tool.width + this.highlighterWidth)
         context.clearRect(0, 0, context.canvas.width / zoomScale, context.canvas.height / zoomScale);
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
+          context.arc(points[0], points[1], (tool.width + this.highlighterWidth) / 2, 0, Math.PI * 2, !0);
           // context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
           context.fill();
           context.closePath();
-          this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], tool.width);
+          this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], (tool.width + this.highlighterWidth));
           break;
         }
 
@@ -259,7 +265,7 @@ export class DrawingService {
         context.quadraticCurveTo(points[2 * i], points[2 * i + 1], points[2 * (i + 1)], points[2 * (i + 1) + 1]);
         context.stroke();
         context.closePath();
-        this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], tool.width);
+        this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], (tool.width + this.highlighterWidth));
         break;
       default:
         break;
@@ -301,9 +307,10 @@ export class DrawingService {
     switch (tool.type) {
       case 'pen':
       case 'eraser':
+        if (tool.type == 'eraser') context.lineWidth = (tool.width + this.eraserWidth)
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
+          context.arc(points[0], points[1], (tool.width + this.eraserMarker) / 2, 0, Math.PI * 2, !0);
           context.fill();
           context.closePath();
           return;
@@ -381,10 +388,11 @@ export class DrawingService {
         context.lineJoin = 'round';
         context.fillStyle = tool.color;
         context.strokeStyle = tool.color;
+        context.lineWidth = (tool.width + this.highlighterWidth)
 
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
+          context.arc(points[0], points[1], (tool.width + this.highlighterWidth) / 2, 0, Math.PI * 2, !0);
           // context.fillRect(points[0] - (tool.width / 2), points[1] - (tool.width / 2), tool.width, tool.width);
           context.fill();
           context.closePath();

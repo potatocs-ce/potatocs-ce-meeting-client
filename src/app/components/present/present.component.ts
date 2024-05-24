@@ -121,11 +121,7 @@ export class PresentComponent {
     const data_canvas: any = document.getElementById('data_canvas');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
 
-    if (this.tool.type == 'eraser') {
-      this.tool.width += 15;
-    } else if (this.tool.type == 'highlighter') {
-      this.tool.width += 10;
-    }
+
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }
