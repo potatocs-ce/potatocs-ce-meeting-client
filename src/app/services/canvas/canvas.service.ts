@@ -348,11 +348,13 @@ export class CanvasService {
       } else {
         const drawingData = this.docService.drawingData();
         const drawingEventSet = drawingData.find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;
+        const drawingEventSetIndex = drawingData.findIndex((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id);
         // 있으면 넣어놓고 없으면 안넣고
 
         if (drawingEventSet) {
 
           drawingEventSet.push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, page: this.docService.pageBuffer()[this.docService.lastDocNum()] })
+          drawingData[drawingEventSetIndex].drawings = drawingEventSet
           this.docService.drawingData.set([...drawingData])
         } else {
           this.docService.drawingData.update((data: any) => {

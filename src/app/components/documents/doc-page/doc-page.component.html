@@ -11,7 +11,7 @@
                 <!-- 여기에 판서 드로잉 부분 작성 -->
                 <div class="thumb_canvas_container">
                     <canvas [id]="'thumb_data_canvas' + (i+1)"></canvas>
-                    <canvas id="thumb_drawing_canvas"></canvas>
+                    <canvas [id]="'thumb_drawing_canvas' + (i+1)"></canvas>
                 </div>
 
                 @if(currentPageNum === i ) {

@@ -101,7 +101,7 @@ export class VideoDrawingService {
     const target_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.target_canvas')
     const context: any = target_canvas.getContext('2d');
 
-    console.log(target_canvas.width, target_canvas.height)
+
 
     const data = this.dataArray[0]
 

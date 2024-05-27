@@ -35,6 +35,7 @@ export class DocPageComponent {
     private pdfDrawingService: PdfDrawingService) {
     effect(() => {
       this.doc = this.docService._doc();
+      this.docService.drawingData()
       this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
       setTimeout(() => {
         this.renderThumbnails()
@@ -44,12 +45,18 @@ export class DocPageComponent {
 
 
     effect(() => {
+
       const data = this.docService.thumbData();
 
       if (!this.docService._doc().length) return
 
       this.renderThumbnailBox(data);
     })
+
+
+    // effect(() => {
+    //   console.log(this.docService.drawingData())
+    // })
   }
 
 
@@ -88,11 +95,19 @@ export class DocPageComponent {
       // 없으면 undefined.
       const drawingEvents = drawingEventSet?.filter((item: any) => item.page === i + 1);
       const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
-
+      const drawingCanvas = document.getElementById(`thumb_drawing_canvas${i + 1}`) as HTMLCanvasElement;
       dataCanvas.width = this.thumbArray[i].width;
       dataCanvas.height = this.thumbArray[1].height;
+
+      drawingCanvas.width = this.thumbArray[i].width;
+      drawingCanvas.height = this.thumbArray[1].height;
+
+
       const ctx: any = dataCanvas.getContext("2d");
+      const drawing_ctx: any = drawingCanvas.getContext('2d');
       ctx.setTransform(this.thumbArray[i].scale, 0, 0, this.thumbArray[i].scale, 0, 0);
+      drawing_ctx.setTransform(this.thumbArray[i].scale, 0, 0, this.thumbArray[i].scale, 0, 0);
+
       this.renderingService.renderBoard(dataCanvas, this.thumbArray[i].scale, drawingEvents);
 
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb_${i + 1}`), this.docService.lastDocNum() + 1, i + 1);
