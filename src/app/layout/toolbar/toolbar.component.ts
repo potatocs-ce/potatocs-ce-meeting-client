@@ -9,6 +9,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { RoleSocketService } from '../../services/socket/role/role-socket.service';
+import { DialogService } from '../../services/dialog/dialog.service';
+import { Socket } from 'ngx-socket-io';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-toolbar',
   standalone: true,
@@ -45,7 +49,10 @@ export class ToolbarComponent {
     private videoService: VideoService,
     private mediasoupService: MediasoupService,
     private meetingService: MeetingService,
-    private roleSocketService: RoleSocketService) {
+    private roleSocketService: RoleSocketService,
+    private dialogService: DialogService,
+    private router: Router,
+  ) {
     // effect for toggleService
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
@@ -147,5 +154,20 @@ export class ToolbarComponent {
     } else {
       this.mediasoupService.closeProducer('audioType')
     }
+  }
+
+
+  meetingExit() {
+    this.dialogService.openDialogConfirm('Would you like to leave the room?').subscribe((result: any) => {
+      if (result) {
+        this.mediasoupService.exit()
+        if (window.opener) {
+          window.close()
+        } else {
+          this.router.navigate([`/`])
+        }
+
+      }
+    })
   }
 }
