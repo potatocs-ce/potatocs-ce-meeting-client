@@ -25,6 +25,7 @@ export class RenderingService {
 
     // 1/2 scale로 설정 (임시)
     const viewport = pdfPage.getViewport({ scale: 0.5 });
+    console.log(tmpCanvas)
     tmpCanvas.width = viewport.width;
     tmpCanvas.height = viewport.height;
 
@@ -48,6 +49,10 @@ export class RenderingService {
       return false;
     }
   }
+
+  // renderThumbBoard(thumbCanvas: any, docNum: any, pageNum: any) {
+  //   const numPage
+  // }
 
 
   getThumbnailSize(pdfNum: any, pageNum: any) {
@@ -83,6 +88,7 @@ export class RenderingService {
     console.log('>> render Board: ', drawingEvents)
     const targetCtx = targetCanvas.getContext('2d');
     const scale = zoomScale || 1;
+
     targetCtx.clearRect(0, 0, targetCanvas.width / scale, targetCanvas.height / scale);
     /*----------------------------------------
       해당 page의 drawing 정보가 있는 경우

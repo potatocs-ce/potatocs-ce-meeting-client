@@ -9,7 +9,7 @@ export class ToggleService {
   toggle_mode = signal<string>('group')
 
   // 비디오, 문서(판서) 모드 토글 [video, document]
-  toggle_video_whiteboard = signal<string>('video')
+  toggle_video_whiteboard = signal<string>('document')
 
 
   // 화면 공유 중인지 확인 토글

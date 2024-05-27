@@ -73,6 +73,7 @@ export class DocPageComponent {
     this.thumbArray = [];
     for (let i = 0; i < this.doc.length; i++) {
       const thumbSize = this.renderingService.getThumbnailSize(this.docService.lastDocNum() + 1, i + 1);
+
       this.thumbArray.push(thumbSize);
     };
 
@@ -82,15 +83,25 @@ export class DocPageComponent {
     })
 
     for (let i = 0; i < this.doc.length; i++) {
+      const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings
+
+      // 없으면 undefined.
+      const drawingEvents = drawingEventSet?.filter((item: any) => item.page === i + 1);
+      const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
+
+      dataCanvas.width = this.thumbArray[i].width;
+      dataCanvas.height = this.thumbArray[1].height;
+      const ctx: any = dataCanvas.getContext("2d");
+      ctx.setTransform(this.thumbArray[i].scale, 0, 0, this.thumbArray[i].scale, 0, 0);
+      this.renderingService.renderBoard(dataCanvas, this.thumbArray[i].scale, drawingEvents);
+
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb_${i + 1}`), this.docService.lastDocNum() + 1, i + 1);
     }
-
   }
 
   // 폴더 리스트로 돌아가기
   backToFileList() {
     this.docService._doc.set([]);
-
   }
 
   // 페이지 선택
@@ -101,7 +112,6 @@ export class DocPageComponent {
 
     this.docService.updateCurrentPageNum(page); // page num 업데이트
     this.currentPageNum = page;
-
 
     this.roleSocketService.presentStatus();
   }

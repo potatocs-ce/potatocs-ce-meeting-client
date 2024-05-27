@@ -250,7 +250,6 @@ export class WhiteboardComponent {
     * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
     ****************************************************/
     if (imgElement) {
-
       ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
     }
   }
