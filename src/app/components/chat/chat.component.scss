@@ -39,8 +39,9 @@
             overflow: auto;
 
             display: flex;
-            padding: 0 10px;
+            padding: 5px;
             flex-direction: column;
+            box-sizing: border-box;
             gap: 0.5rem;
         }
 
