@@ -248,9 +248,14 @@ export class PdfDrawingService {
 
 
     const data_canvas: any = document.getElementById(`thumb_data_canvas${data.page}`)
-    const data_context: any = data_canvas.getContext('2d');
+
     const target_canvas: any = document.getElementById(`thumb_drawing_canvas${data.page}`)
+
+
+    if (data_canvas == null || target_canvas == null) return;
+
     const context: any = target_canvas.getContext('2d');
+    const data_context: any = data_canvas.getContext('2d');
 
 
 

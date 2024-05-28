@@ -25,7 +25,7 @@ export class RenderingService {
 
     // 1/2 scale로 설정 (임시)
     const viewport = pdfPage.getViewport({ scale: 0.5 });
-    console.log(tmpCanvas)
+
     tmpCanvas.width = viewport.width;
     tmpCanvas.height = viewport.height;
 
