@@ -33,31 +33,40 @@ export class DocPageComponent {
     private renderingService: RenderingService,
     private roleSocketService: RoleSocketService,
     private pdfDrawingService: PdfDrawingService) {
+    // 현재 문서 목록 업데이트 
     effect(() => {
       this.doc = this.docService._doc();
-      this.docService.drawingData()
-      this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
+      // 
+
       setTimeout(() => {
         this.renderThumbnails()
       })
     })
 
 
-
+    // 썸네일 업데이트 + 페이지 업데이트
     effect(() => {
-
       const data = this.docService.thumbData();
-
+      this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
       if (!this.docService._doc().length) return
 
       this.renderThumbnailBox(data);
     })
 
+    // 판서 정보 업데이트 
+    effect(() => {
+      this.docService.drawingData();
+      if (this.thumbArray.length != 0) {
+        console.log(this.thumbArray, this.currentPageNum)
+        const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;
+        const drawingEvents = drawingEventSet?.filter((item: any) => item.page === this.currentPageNum + 1);
+        const dataCanvas = document.getElementById(`thumb_data_canvas${this.currentPageNum + 1}`) as HTMLCanvasElement;
+        this.renderingService.renderBoard(dataCanvas, this.thumbArray[this.currentPageNum].scale, drawingEvents);
+      }
+    })
 
-    // effect(() => {
-    //   console.log(this.docService.drawingData())
-    // })
   }
+
 
 
 
