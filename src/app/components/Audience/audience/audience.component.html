@@ -1,6 +1,6 @@
 <div class="audience_container">
     @for(stream of videoList; track stream){
     <app-audience-video [socket_id]="stream.socket_id" [stream]="stream.stream" [name]="stream.name" [id]="stream.id"
-        [user_id]="stream.user_id"></app-audience-video>
+        [user_id]="stream.user_id" [screen]="stream.screen"></app-audience-video>
     }
 </div>

@@ -34,6 +34,7 @@ export class PresentComponent {
   tool: any = { type: 'pen', color: 'black' }
 
   observer_target: any;
+  screen: any;
 
   constructor(
     private host: ElementRef,
@@ -120,9 +121,6 @@ export class PresentComponent {
   setCanvas() {
     const data_canvas: any = document.getElementById('data_canvas');
     const drawing_canvas: any = document.getElementById('drawing_canvas');
-
-
-
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)
   }
 
@@ -276,8 +274,10 @@ export class PresentComponent {
 
 
     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
+      if (data.screen == this.videoStream?.screen) {
+        this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+      }
 
-      this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
     })
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)

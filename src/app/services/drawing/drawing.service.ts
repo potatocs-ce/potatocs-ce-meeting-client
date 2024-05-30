@@ -213,13 +213,13 @@ export class DrawingService {
         context.clearRect(0, 0, context.canvas.width / zoomScale, context.canvas.height / zoomScale);
         context.fillStyle = 'white';
         context.strokeStyle = 'white';
-        context.lineWidth = (tool.width + this.eraserMarker);
+        context.lineWidth = (tool.width + this.eraserWidth);
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], (tool.width + this.eraserMarker) / 2, 0, Math.PI * 2, !0);
+          context.arc(points[0], points[1], (tool.width + this.eraserWidth) / 2, 0, Math.PI * 2, !0);
           context.fill();
           context.closePath();
-          this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], (tool.width + this.eraserMarker));
+          this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], (tool.width + this.eraserWidth));
           break;
         }
 
@@ -235,7 +235,7 @@ export class DrawingService {
         context.closePath();
 
 
-        this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], tool.width);
+        this.eraserMarker(context, [points[2 * (len - 1)], points[2 * (len - 1) + 1]], (tool.width + this.eraserWidth));
         break;
 
       case 'highlighter':
@@ -311,7 +311,7 @@ export class DrawingService {
         if (tool.type == 'eraser') context.lineWidth = (tool.width + this.eraserWidth)
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], (tool.width + this.eraserMarker) / 2, 0, Math.PI * 2, !0);
+          context.arc(points[0], points[1], (tool.width + this.eraserWidth) / 2, 0, Math.PI * 2, !0);
           context.fill();
           context.closePath();
           return;

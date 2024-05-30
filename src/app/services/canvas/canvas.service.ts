@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { CANVAS_CONFIG } from '../../../config/config';
 import { DocumentService } from '../document/document.service';
 import { ToggleService } from '../toggle/toggle.service';
+import { VideoService } from '../video/video.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class CanvasService {
     private meetingService: MeetingService,
     private authService: AuthService,
     private docService: DocumentService,
-    private toggleService: ToggleService
+    private toggleService: ToggleService,
+    private videoService: VideoService
   ) {
 
   }
@@ -329,7 +331,8 @@ export class CanvasService {
 
 
       if (this.toggleService.toggle_video_whiteboard() == 'video') {
-        this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id() })
+        console.log(this.videoService.presentVideoStream().screen)
+        this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id(), screen: this.videoService.presentVideoStream().screen })
       } else {
         this.socket.emit('draw:document', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, user_id: this.authService.getTokenInfo()._id, doc_id: this.docService._docList()[this.docService.lastDocNum()]._id, pageNum: this.docService.pageBuffer()[this.docService.lastDocNum()], meeting_id: this.meetingService.meeting_room_id() })
       }

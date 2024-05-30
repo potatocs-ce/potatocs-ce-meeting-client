@@ -7,6 +7,7 @@ import { MeetingService } from '../meeting/meeting.service';
 import { AuthService } from '../auth/auth.service';
 import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
 import { UserService } from '../../api/user/user.service';
+import { DialogService } from '../dialog/dialog.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,8 @@ export class MediasoupService {
     private meetingService: MeetingService,
     private authService: AuthService,
     private meetingServiceAPI: MeetingServiceAPI,
-    private userService: UserService
+    private userService: UserService,
+    private dialogService: DialogService
   ) {
     effect(() => {
       this.nowVideo = this.videoService.nowVideoId();
@@ -146,12 +148,14 @@ export class MediasoupService {
         // server에 producer를 생성하라고 요청
         this.producerTransport.on(
           'produce',
-          async ({ kind, rtpParameters }: any, callback: any, errback: any) => {
+          async ({ kind, rtpParameters, appData }: any, callback: any, errback: any) => {
+            console.log(kind, rtpParameters, appData)
             try {
               await this.socket.emit('produce', {
                 producerTransportId: this.producerTransport.id,
                 kind,
-                rtpParameters
+                rtpParameters,
+                screen: appData.screen
               }, ({ producer_id, name, type }: any) => {
 
                 callback({ id: producer_id })
@@ -263,8 +267,8 @@ export class MediasoupService {
 
 
 
-        for (let { producer_id, producer_socket_id } of data) {
-          await this.consume(producer_id, producer_socket_id)
+        for (let { producer_id, producer_socket_id, screen } of data) {
+          await this.consume(producer_id, producer_socket_id, screen)
         }
       }
     )
@@ -343,17 +347,18 @@ export class MediasoupService {
   }
 
   // consume 즉, 수신 설정
-  async consume(producer_id: any, producer_socket_id: string) {
+  async consume(producer_id: any, producer_socket_id: string, screen: boolean) {
 
     this.getConsumeStream(producer_id, producer_socket_id).then(
       ({ consumer, stream, kind, name, user_id }: any) => {
         this.consumers.set(consumer.id, consumer)
         console.log(this.meetingService.meeting_info().currentMembers)
         if (kind === 'video') {
+
           if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
-            this.videoService.presentVideoStream.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id })
+            this.videoService.presentVideoStream.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id, screen })
           } else {
-            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id }])
+            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id, screen }])
           }
         } else {
           this.videoService.audioStream.set([...this.videoService.audioStream(), { id: consumer.id, stream, user_id, socket_id: producer_socket_id }])
@@ -540,7 +545,9 @@ export class MediasoupService {
       }
       let producer: any = undefined
       try {
+        params.appData = { screen }
         producer = await this.producerTransport.produce(params)
+
       } catch (err) {
         window.alert(err)
       }
@@ -550,9 +557,9 @@ export class MediasoupService {
       if (!audio) {
         // 현재 발표 칸에 비디오가 없으면
         if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
-          this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)' })
+          this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen })
         } else {
-          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)' }])
+          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen }])
         }
       }
 
@@ -584,7 +591,11 @@ export class MediasoupService {
         // this.isScreen = false;
         this.toggleService.toggle_screen_share.set(false)
       }
+      if (err == 'DOMException: Could not start video source') {
+        this.dialogService.openDialogNegative('This camera is using.')
+      }
       console.log('Produce error:', err)
+
     }
   }
 

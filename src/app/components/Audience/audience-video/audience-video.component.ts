@@ -52,6 +52,7 @@ export class AudienceVideoComponent {
   @Input() id: any = '';
   @Input() socket_id: any = '';
   @Input() user_id: any = '';
+  @Input() screen: any = '';
 
 
 
@@ -91,7 +92,9 @@ export class AudienceVideoComponent {
     data_context.setTransform(zoomScale, 0, 0, zoomScale, 0, 0)
 
     this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
-      this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+      if (data.screen == this.screen) {
+        this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+      }
     })
   }
 }

@@ -59,7 +59,7 @@ export class DocListComponent {
 
 
     if (files[0].size > 12000000) {
-      // this.dialogService.openDialogNegative(`This file is too large. Maximum file size is 12MB.`);
+      this.dialogService.openDialogNegative(`This file is too large. Maximum file size is 12MB.`);
       console.log('너무 큽니다')
       return;
     }
@@ -68,7 +68,7 @@ export class DocListComponent {
     // 파일 유효성 검사
     const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
     if (ext.toLowerCase() != 'pdf') {
-      //  this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
+      this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
       console.log('pdf file을 업로드 해주세요')
     } else {
       this.docApiService.uploadFile(this.meetingService.meeting_room_id(), files).subscribe((res: any) => {
