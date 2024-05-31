@@ -1,0 +1,59 @@
+@import '../../setting.scss';
+
+.survey_container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .survey_header {
+        font-size: 10pt;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        margin-bottom: 5px;
+        margin-top: 4px;
+        margin-left: 10px;
+
+        padding-bottom: 5px;
+        color: white;
+        border-bottom: 1px solid rgba(48, 51, 56, 255);
+
+        .mat-icon {
+            color: rgba(114, 118, 125, 255);
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+    }
+
+    .survey_section {
+        flex: 1;
+        overflow: auto;
+
+        .survey_list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: white;
+            padding: 0px 5px;
+            margin: 0px;
+        }
+
+        .add_button_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+
+
+            .add_survey_button {
+                color: white;
+            }
+        }
+
+    }
+}
