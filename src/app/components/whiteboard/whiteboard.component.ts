@@ -97,6 +97,16 @@ export class WhiteboardComponent {
       // this.checkClickMode()
     })
 
+    effect(() => {
+      this.meetingService.skipList()
+      untracked(() => {
+        const drawingEvents = this.docService.getDrawingEvents();
+
+        this.renderingService.renderBoard(this.userCanvas, this.zoomScale, drawingEvents);
+      })
+
+    })
+
   }
 
 

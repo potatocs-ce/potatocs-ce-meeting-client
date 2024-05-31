@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DocumentService } from '../document/document.service';
 import { CANVAS_CONFIG } from '../../../config/config';
 import { DrawingService } from '../drawing/drawing.service';
+import { MeetingService } from '../meeting/meeting.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +10,8 @@ export class RenderingService {
 
   constructor(
     private documentService: DocumentService,
-    private drawingService: DrawingService
+    private drawingService: DrawingService,
+    private meetingService: MeetingService
   ) { }
 
   isPageRendering = false;
@@ -100,7 +102,11 @@ export class RenderingService {
       // console.log('renderBoard -------------------222222222')
 
       for (const item of drawingEvents) {
-        this.drawingService.end(targetCtx, item.drawingEvent.points, item.drawingEvent.tool, item.txt, scale);
+        console.log(item)
+        if (!this.meetingService.skipList().includes(item.userId)) {
+          this.drawingService.end(targetCtx, item.drawingEvent.points, item.drawingEvent.tool, item.txt, scale);
+        }
+
       }
     }
   }

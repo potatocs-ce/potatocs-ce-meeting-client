@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, NgZone, effect } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, effect, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -89,6 +89,26 @@ export class PresentComponent {
       this.checkClickMode()
     })
 
+
+    effect(() => {
+      this.meetingService.skipList()
+      untracked(() => {
+        if (!this.firstRender) {
+
+          const data_canvas: any = document.getElementById('data_canvas');
+          const data_context: any = data_canvas.getContext('2d');
+          data_context.clearRect(0, 0, data_canvas.width, data_canvas.height);
+          this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
+            if (data.screen == this.videoStream?.screen) {
+              if (!this.meetingService.skipList().includes(data.userId)) {
+                this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+              }
+            }
+          })
+        }
+      })
+
+    })
   }
   width$ = new BehaviorSubject<number>(0);
   observer: any;
@@ -275,9 +295,10 @@ export class PresentComponent {
 
     this.videoDrawingService.drawVarArray()[this.videoStream?.user_id]?.forEach((data: any) => {
       if (data.screen == this.videoStream?.screen) {
-        this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+        if (!this.meetingService.skipList().includes(data.userId)) {
+          this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
+        }
       }
-
     })
 
     this.canvasService.addEventHandler(drawing_canvas, data_canvas, this.tool, this.zoomScale)

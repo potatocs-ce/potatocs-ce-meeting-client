@@ -9,10 +9,19 @@
             <article class="member_info">
                 <span class="name" [ngClass]="member.online ? 'active': ''">{{member.member_id.name}}</span>
                 <span class="role" [ngClass]="member.online ? 'active_role': ''">{{member.role}}</span>
+
             </article>
 
-            <article>
-                <button [disabled]="!member.online" [matMenuTriggerFor]="memberMenu"
+            <article class="button_container">
+                <button class="visibility_button" (click)="checkVisibility(member)" [disabled]="!member.online">
+                    @if(!skipList.includes(member.member_id._id)){
+                    <mat-icon fontSet="material-symbols-outlined">visibility</mat-icon>
+                    }@else {
+                    <mat-icon fontSet="material-symbols-outlined">visibility_off</mat-icon>
+                    }
+
+                </button>
+                <button class="menu_button" [disabled]="!member.online" [matMenuTriggerFor]="memberMenu"
                     mat-icon-button><mat-icon>more_vert</mat-icon></button>
                 <mat-menu #memberMenu="matMenu">
                     <section class="menu_button_section">

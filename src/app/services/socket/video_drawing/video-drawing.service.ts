@@ -4,6 +4,7 @@ import { Socket } from 'ngx-socket-io';
 import { AuthService } from '../../auth/auth.service';
 import { DocumentService } from '../../document/document.service';
 import { CANVAS_CONFIG } from '../../../../config/config';
+import { MeetingService } from '../../meeting/meeting.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,17 +29,18 @@ export class VideoDrawingService {
     private drawingService: DrawingService,
     private socket: Socket,
     private authService: AuthService,
-
+    private meetingService: MeetingService
   ) {
     this.socket.on('draw:video', async (data: any) => {
 
       if (this.drawVarArray()[data.target_id]) {
-        this.drawVarArray()[data.target_id].push({ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id });
+        this.drawVarArray()[data.target_id].push({ drawingEvent: data.drawingEvent, userId: data.user_id, screen: data.screen });
       } else {
-        this.drawVarArray()[data.target_id] = [{ drawingEvent: data.drawingEvent, userId: this.authService.getTokenInfo()._id }];
+        this.drawVarArray()[data.target_id] = [{ drawingEvent: data.drawingEvent, userId: data.user_id, screen: data.screen }];
       }
       this.lastUser.push(data.target_id)
       this.drawVarArray.set({ ...this.drawVarArray() })
+      console.log(this.drawVarArray())
       this.dataArray.push(data.drawingEvent);
       if (this.dataArray.length == 1) {
         this.drawingQueue();
@@ -94,7 +96,12 @@ export class VideoDrawingService {
     if (!this.dataArray.length) return;
     // console.log(this.lastUser())
     // console.log(document.getElementById(this.lastUser()))
-
+    if (this.meetingService.skipList().includes(this.lastUser[0])) {
+      this.dataArray.shift()
+      this.lastUser.shift()
+      this.drawingQueue()
+      return
+    }
 
     const data_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.data_canvas')
     const data_context: any = data_canvas.getContext('2d');

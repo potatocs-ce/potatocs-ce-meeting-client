@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, QueryList, ViewChildren, effect } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, effect, untracked } from '@angular/core';
 import { DocumentService } from '../../../services/document/document.service';
 import { RenderingService } from '../../../services/rendering/rendering.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RoleSocketService } from '../../../services/socket/role/role-socket.service';
 import { PdfDrawingService } from '../../../services/socket/pdf_drawing/pdf-drawing.service';
+import { MeetingService } from '../../../services/meeting/meeting.service';
 
 @Component({
   selector: 'app-doc-page',
@@ -32,7 +33,8 @@ export class DocPageComponent {
   constructor(private docService: DocumentService,
     private renderingService: RenderingService,
     private roleSocketService: RoleSocketService,
-    private pdfDrawingService: PdfDrawingService) {
+    private pdfDrawingService: PdfDrawingService,
+    private meetingService: MeetingService) {
     // 현재 문서 목록 업데이트 
     effect(() => {
       this.doc = this.docService._doc();
@@ -65,6 +67,20 @@ export class DocPageComponent {
       }
     })
 
+
+    effect(() => {
+      this.meetingService.skipList();
+      untracked(() => {
+
+        for (let i = 0; i < this.doc.length; i++) {
+          const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings
+          const drawingEvents = drawingEventSet?.filter((item: any) => item.page === i + 1);
+          const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
+          this.renderingService.renderBoard(dataCanvas, this.thumbArray[i].scale, drawingEvents);
+        }
+
+      })
+    })
   }
 
 

@@ -3,6 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { DocumentService } from '../../document/document.service';
 import { DrawingService } from '../../drawing/drawing.service';
 import { CANVAS_CONFIG } from '../../../../config/config';
+import { MeetingService } from '../../meeting/meeting.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class PdfDrawingService {
   constructor(
     private socket: Socket,
     private docService: DocumentService,
-    private drawingService: DrawingService) {
+    private drawingService: DrawingService,
+    private meetingService: MeetingService) {
     this.socket.on('draw:document', async (data: any) => {
       const drawingData = this.docService.drawingData();
       const drawingEventSet = drawingData.find((data2: any) => data2._id == data.doc_id)?.drawings;
@@ -43,7 +45,7 @@ export class PdfDrawingService {
       }
 
 
-      this.dataArray.push({ ...data.drawingEvent, page: data.pageNum, doc_id: data.doc_id });
+      this.dataArray.push({ ...data.drawingEvent, page: data.pageNum, doc_id: data.doc_id, userId: data.user_id });
       if (this.dataArray.length == 1) {
         this.drawingQueue();
       }
@@ -82,6 +84,13 @@ export class PdfDrawingService {
     if (!this.dataArray.length) return;
     // console.log(this.lastUser())
     // console.log(document.getElementById(this.lastUser()))
+
+
+    if (this.meetingService.skipList().includes(this.dataArray[0].userId)) {
+      this.dataArray.shift()
+      return
+    }
+
     this.ThumbdrawingQueue();
 
 
@@ -99,6 +108,8 @@ export class PdfDrawingService {
       this.dataArray.shift()
       return
     }
+
+
 
     // this.drawingService.end(data_context,firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
 

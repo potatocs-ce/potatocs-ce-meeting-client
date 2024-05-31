@@ -22,6 +22,8 @@ export class GroupComponent {
   currentMembers: any;
   currentMembersCount: any = 0;
 
+  skipList: any = [];
+
   constructor(private meetingService: MeetingService,
     private meetingServiceAPI: MeetingServiceAPI,
     private roleSocketService: RoleSocketService,
@@ -50,6 +52,11 @@ export class GroupComponent {
         return meeting_info
       })
 
+    })
+
+
+    effect(() => {
+      this.skipList = this.meetingService.skipList();
     })
   }
 
@@ -83,5 +90,21 @@ export class GroupComponent {
 
   getParticipantState() {
     const meetingId = this.meetingService.meeting_room_id();
+  }
+
+
+  checkVisibility(member: any) {
+    this.meetingService.skipList.update((list: any) => {
+      if (!list.includes(member.member_id._id)) {
+        list.push(member.member_id._id)
+      } else {
+        list = list.filter(((l: any) =>
+          l != member.member_id._id
+        ))
+      }
+      return [...list]
+    })
+
+
   }
 }

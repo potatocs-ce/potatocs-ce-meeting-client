@@ -13,4 +13,8 @@ export class MeetingService {
   meeting_info = signal<any>(undefined);
 
   meeting_chat_info = signal<any>(undefined);
+
+
+  // 판서 정보 안보여줄 데이터 변수
+  skipList = signal<any>([]);
 }
