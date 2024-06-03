@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    color: white;
 
     .survey_header {
         font-size: 10pt;
@@ -33,6 +34,53 @@
     .survey_section {
         flex: 1;
         overflow: auto;
+
+        .survey_card {
+            display: flex;
+            flex-direction: column;
+
+            background-color: $icon_button_color;
+            padding: 0.3rem;
+            border-radius: 0.3rem;
+            gap: 0.7rem;
+
+            .survey_card_top {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+
+                .survey_title {
+                    color: $main_logo_color;
+                    font-weight: bold;
+                }
+
+                .survey_description {
+                    font-size: 9pt;
+                }
+            }
+
+
+            .survey_card_bottom {
+                display: flex;
+                justify-content: space-between;
+                font-size: 8pt;
+
+                color: rgba(114, 118, 125, 255);
+
+                .participant {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .mat-icon {
+                        width: 13px;
+                        height: 13px;
+                        font-size: 13px;
+                    }
+
+                }
+            }
+        }
 
         .survey_list {
             display: flex;

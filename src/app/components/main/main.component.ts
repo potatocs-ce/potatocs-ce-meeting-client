@@ -18,6 +18,8 @@ import { DocApiService } from '../../api/doc/doc-api.service';
 import { DocumentService } from '../../services/document/document.service';
 import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing.service';
 import { ChatSocketService } from '../../services/socket/chat/chat-socket.service';
+import { SurveyApiService } from '../../api/survey/survey-api.service';
+import { SurveyService } from '../../services/survey/survey.service';
 
 @Component({
   selector: 'app-main',
@@ -57,7 +59,9 @@ export class MainComponent {
     private docService: DocumentService,
     private videoDrawingService: VideoDrawingService,
     private pdfDrawingServie: PdfDrawingService,
-    private chatSocketService: ChatSocketService) {
+    private chatSocketService: ChatSocketService,
+    private surveyApiService: SurveyApiService,
+    private surveyService: SurveyService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
@@ -89,6 +93,11 @@ export class MainComponent {
       // console.log(params)
       this.meetingService.meeting_room_id.set(params.id)
     });
+
+    // 현재까지의 설문조사 정보 가져오기
+    this.surveyApiService.getSurveys(this.meetingService.meeting_room_id()).subscribe((res: any) => {
+      this.surveyService.surveys.set(res);
+    })
 
 
 

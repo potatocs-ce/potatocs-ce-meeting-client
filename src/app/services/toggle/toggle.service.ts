@@ -6,7 +6,7 @@ import { Injectable, signal } from '@angular/core';
 export class ToggleService {
 
   // 오른쪽 메뉴 모드 토글 [group, chat, survey, close]
-  toggle_mode = signal<string>('group')
+  toggle_mode = signal<string>('survey')
 
   // 비디오, 문서(판서) 모드 토글 [video, document]
   toggle_video_whiteboard = signal<string>('video')
