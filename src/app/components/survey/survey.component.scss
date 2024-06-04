@@ -49,10 +49,41 @@
                 flex: 1;
                 flex-direction: column;
 
-                .survey_title {
-                    color: $main_logo_color;
-                    font-weight: bold;
+
+                .survey_title_section {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .survey_title {
+                        color: $main_logo_color;
+                        font-weight: bold;
+                    }
+
+                    .survey_buttons {
+                        display: flex;
+                        gap: 0.4rem;
+
+                        button {
+                            background-color: transparent;
+                            padding: 0px;
+                            border: none;
+                            cursor: pointer;
+                        }
+
+
+                        .mat-icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 18px;
+                            height: 18px;
+                            font-size: 13px;
+                            color: white;
+                        }
+                    }
                 }
+
+
 
                 .survey_description {
                     font-size: 9pt;
@@ -76,6 +107,10 @@
                         width: 13px;
                         height: 13px;
                         font-size: 13px;
+                    }
+
+                    .active {
+                        color: green;
                     }
 
                 }

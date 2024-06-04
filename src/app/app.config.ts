@@ -10,7 +10,10 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from './environments/environment';
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-
+import {
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 export function tokenGetter() {
   return localStorage.getItem(environment.tokenName);
 }
@@ -18,6 +21,7 @@ export function tokenGetter() {
 const config: SocketIoConfig = { url: 'ws://localhost:3000/', options: { transports: ['websocket'], path: '/socket/' } };
 export const appConfig: ApplicationConfig = {
   providers: [
+
     importProvidersFrom(
       JwtModule.forRoot({
         config: {
@@ -35,5 +39,5 @@ export const appConfig: ApplicationConfig = {
       SocketIoModule.forRoot(config),
 
     ),
-    provideRouter(routes), provideHttpClient(withInterceptorsFromDi()), provideAnimationsAsync()]
+    provideRouter(routes), provideHttpClient(withInterceptorsFromDi()), provideCharts(withDefaultRegisterables()), provideAnimationsAsync()]
 };

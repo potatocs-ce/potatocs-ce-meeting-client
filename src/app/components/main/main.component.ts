@@ -92,29 +92,40 @@ export class MainComponent {
     this.route.params.subscribe((params: any) => {
       // console.log(params)
       this.meetingService.meeting_room_id.set(params.id)
+
+
+      // 현재까지의 설문조사 정보 가져오기
+      this.surveyApiService.getSurveys(params.id).subscribe((res: any) => {
+        this.surveyService.surveys.set(res);
+      })
+
+      // meetingId 로 db에 있는 채팅 정보 가져오기
+      this.meetingServiceApi.getMeetingChat(params.id).subscribe((res: any) => {
+        this.meetingService.meeting_chat_info.set(res)
+      })
+
+
+      // doc 리스트 조회
+      this.docSerciceApi.getDocList(params.id).subscribe((res: any) => {
+        this.docService.generatePdfData(res);
+      })
+
+
+      // doc 판서 리스트 조회
+      this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
+        this.docService.generateDrawingData(res);
+      })
+
     });
 
-    // 현재까지의 설문조사 정보 가져오기
-    this.surveyApiService.getSurveys(this.meetingService.meeting_room_id()).subscribe((res: any) => {
-      this.surveyService.surveys.set(res);
-    })
 
 
 
-    // meetingId 로 db에 있는 채팅 정보 가져오기
-    this.meetingServiceApi.getMeetingChat(this.meetingService.meeting_room_id()).subscribe((res: any) => {
-      this.meetingService.meeting_chat_info.set(res)
-    })
 
-    // doc 리스트 조회
-    this.docSerciceApi.getDocList(this.meetingService.meeting_room_id()).subscribe((res: any) => {
-      this.docService.generatePdfData(res);
-    })
 
-    // doc 판서 리스트 조회
-    this.docSerciceApi.getDrawingList(this.meetingService.meeting_room_id()).subscribe((res: any) => {
-      this.docService.generateDrawingData(res);
-    })
+
+
+
 
 
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {

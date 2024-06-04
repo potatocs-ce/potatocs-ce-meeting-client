@@ -4,22 +4,36 @@
         <span>survey</span>
     </section>
     <section class="survey_section">
-        <div class="survey_card">
+        @for(i of survayService.surveys(); track i) {
+        <div class="survey_card" (click)="startSurvey(i._id, i.participated)">
             <article class="survey_card_top">
-                <section class="survey_title">하나</section>
+
+                <section class="survey_title_section">
+                    <div class="survey_title">{{i.title}}</div>
+                    @if(user_id == i.userId) {
+                    <div class="survey_buttons">
+                        <button (click)="editSurvey(i._id); $event.stopPropagation()"><mat-icon>edit</mat-icon></button>
+                        <button
+                            (click)="removeSurvey(i._id); $event.stopPropagation()"><mat-icon>delete</mat-icon></button>
+                    </div>
+                    }
+                </section>
                 <section class="survey_description">
-                    하나 예제
+                    {{i.description}}
                 </section>
             </article>
             <article class="survey_card_bottom">
                 <section class="participant">
-                    <mat-icon>check</mat-icon>
+
+                    <mat-icon [ngClass]="i.participated ? 'active': ''">check</mat-icon>
                 </section>
                 <section class="created_at">
-                    2024-06-03
+                    {{i.createdAt | date}}
                 </section>
             </article>
         </div>
+        }
+
         <div class="add_button_container">
             <button (click)="addSurvey()" mat-icon-button class="add_survey_button">
                 <mat-icon>add</mat-icon>
