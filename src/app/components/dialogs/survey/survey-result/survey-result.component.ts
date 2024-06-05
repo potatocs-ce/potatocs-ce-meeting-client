@@ -21,14 +21,7 @@ export class SurveyResultComponent {
   result: any = {};
   organized_result: any = {};
   chart_data: any = [];
-  my_data: any = [{
-
-    labels: ["option 1"],
-    datasets: [{
-      data: '1',
-    }],
-
-  }]
+  my_data: any = []
 
   constructor(private surveyService: SurveyApiService,
     private route: ActivatedRoute,

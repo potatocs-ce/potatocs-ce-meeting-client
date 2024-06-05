@@ -43,11 +43,17 @@
             padding: 0.3rem;
             border-radius: 0.3rem;
             gap: 0.7rem;
+            margin-bottom: 0.5rem;
+
+            &:hover {
+                background-color: rgba(79, 84, 92, 0.8);
+            }
 
             .survey_card_top {
                 display: flex;
                 flex: 1;
                 flex-direction: column;
+
 
 
                 .survey_title_section {

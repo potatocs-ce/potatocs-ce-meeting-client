@@ -19,7 +19,12 @@ export class SurveyService {
 
   openAddSurveyDialog() {
     const dialogRef = this.dialog.open(AddSurveyComponent, {
-      'maxHeight': '100vh'
+      autoFocus: false,
+      maxWidth: '700px',
+      maxHeight: '95vh',
+      width: '95%',
+
+
     })
 
     return dialogRef.afterClosed();
@@ -31,7 +36,11 @@ export class SurveyService {
       data: {
         _id
       },
-      autoFocus: false
+      autoFocus: false,
+
+      maxWidth: '700px',
+      maxHeight: '95vh',
+      width: '95%',
     })
     return dialogRef.afterClosed();
   }
@@ -41,7 +50,11 @@ export class SurveyService {
       data: {
         _id
       },
-      autoFocus: false
+      autoFocus: false,
+
+      maxWidth: '700px',
+      maxHeight: '95vh',
+      width: '95%',
     })
     return dialogRef.afterClosed();
   }
@@ -52,7 +65,10 @@ export class SurveyService {
       data: {
         _id
       },
-      autoFocus: false
+      autoFocus: false,
+      maxWidth: '700px',
+      maxHeight: '95vh',
+      width: '95%',
     })
 
     return dialogRef.afterClosed();
