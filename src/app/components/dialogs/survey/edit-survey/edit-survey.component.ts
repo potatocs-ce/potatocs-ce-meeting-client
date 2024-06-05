@@ -110,7 +110,7 @@ export class EditSurveyComponent {
   // 제출
   submit() {
     console.log(this.title, this.description, this.cards)
-    this.surveyService.editSurvey(this.survey_id, { title: this.title, description: this.description, cards: this.cards }).subscribe((res: any) => {
+    this.surveyService.editSurvey(this.data._id, { title: this.title, description: this.description, cards: this.cards }).subscribe((res: any) => {
       if (res.status) {
         window.alert('설문지가 수정되었습니다.')
         // this.router.navigate(['/'])

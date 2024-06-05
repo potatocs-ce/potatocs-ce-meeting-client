@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { SurveyService } from '../../services/survey/survey.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { SurveyApiService } from '../../api/survey/survey-api.service';
 
 @Component({
   selector: 'app-survey',
@@ -15,7 +16,7 @@ import { AuthService } from '../../services/auth/auth.service';
 export class SurveyComponent {
   surveys: any;
   user_id: string = '';
-  constructor(public survayService: SurveyService, private authService: AuthService) {
+  constructor(public survayService: SurveyService, private authService: AuthService, private surveyApiService: SurveyApiService) {
     effect(() => {
       this.surveys = this.survayService.surveys();
 
@@ -51,6 +52,8 @@ export class SurveyComponent {
 
 
   removeSurvey(_id: string) {
+    this.surveyApiService.deleteSurvey(_id).subscribe((result: any) => {
 
+    })
   }
 }
