@@ -33,7 +33,24 @@
 
     .survey_section {
         flex: 1;
-        overflow: auto;
+
+        position: relative;
+
+        .survey_absolute_container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+
+            -ms-overflow-style: none;
+            /* 인터넷 익스플로러 */
+            scrollbar-width: none;
+
+            /* 파이어폭스 */
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
 
         .survey_card {
             display: flex;

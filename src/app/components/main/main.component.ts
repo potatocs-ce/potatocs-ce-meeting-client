@@ -20,6 +20,7 @@ import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing
 import { ChatSocketService } from '../../services/socket/chat/chat-socket.service';
 import { SurveyApiService } from '../../api/survey/survey-api.service';
 import { SurveyService } from '../../services/survey/survey.service';
+import { SurveySocketService } from '../../services/socket/survey/survey-socket.service';
 
 @Component({
   selector: 'app-main',
@@ -61,7 +62,8 @@ export class MainComponent {
     private pdfDrawingServie: PdfDrawingService,
     private chatSocketService: ChatSocketService,
     private surveyApiService: SurveyApiService,
-    private surveyService: SurveyService) {
+    private surveyService: SurveyService,
+    private surveySocketService: SurveySocketService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();

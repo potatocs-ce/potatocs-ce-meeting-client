@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CardComponent } from '../../../public/card/card.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MeetingService } from '../../../../services/meeting/meeting.service';
 import { SurveyApiService } from '../../../../api/survey/survey-api.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SurveySocketService } from '../../../../services/socket/survey/survey-socket.service';
 
 @Component({
   selector: 'app-add-survey',
@@ -52,7 +54,11 @@ export class AddSurveyComponent {
   constructor(
     private surveyApiService: SurveyApiService,
     private router: Router,
-    private meetingService: MeetingService) {
+    private meetingService: MeetingService,
+    public dialogRef: MatDialogRef<AddSurveyComponent>,
+    private surveyService: SurveyService,
+    private surveySocketService: SurveySocketService,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
 
   }
 
@@ -101,7 +107,17 @@ export class AddSurveyComponent {
       if (res.status) {
         window.alert('설문지가 등록되었습니다.');
         // this.router.navigate(['/']);
+        // 내 리스트 업데이트
+        this.surveyService.surveys.set(res.data);
+        // 다른 사람들에게 리스트 업데이트 알림
+        this.surveySocketService.updateSurvey();
+        this.onNoClick();
       }
     })
+  }
+
+  // 다이어로그 끄기 함수
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }
