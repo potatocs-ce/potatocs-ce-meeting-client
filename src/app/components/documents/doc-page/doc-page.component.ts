@@ -122,10 +122,10 @@ export class DocPageComponent {
       const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
       const drawingCanvas = document.getElementById(`thumb_drawing_canvas${i + 1}`) as HTMLCanvasElement;
       dataCanvas.width = this.thumbArray[i].width;
-      dataCanvas.height = this.thumbArray[1].height;
+      dataCanvas.height = this.thumbArray[i].height;
 
       drawingCanvas.width = this.thumbArray[i].width;
-      drawingCanvas.height = this.thumbArray[1].height;
+      drawingCanvas.height = this.thumbArray[i].height;
 
 
       const ctx: any = dataCanvas.getContext("2d");
