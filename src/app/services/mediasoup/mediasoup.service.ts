@@ -282,7 +282,6 @@ export class MediasoupService {
 
     this.socket.on(
       'user_join', async (data: any) => {
-        console.log(data)
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;

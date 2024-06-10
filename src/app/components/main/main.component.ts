@@ -82,7 +82,7 @@ export class MainComponent {
 
     effect(async () => {
       if (this.meetingService.meeting_room_id() !== '' && this.meetingService.meeting_room_id() !== undefined) {
-        console.log(this.meetingService.meeting_room_id())
+        // console.log(this.meetingService.meeting_room_id())
         await this.mediasoupService.joinRoom()
       }
     })
