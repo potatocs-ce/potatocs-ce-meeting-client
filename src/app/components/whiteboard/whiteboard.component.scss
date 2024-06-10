@@ -141,7 +141,7 @@ canvas {
 
     button {
         display: flex;
-        align-items: center;
+        align-items: center !important;
         justify-content: center;
         border-radius: 5rem;
         width: 25px;
@@ -181,7 +181,7 @@ canvas {
         width: 13px;
         height: 13px;
         margin: 0px 3px;
-
+        border-radius: 5rem;
 
 
         p {
@@ -200,10 +200,10 @@ canvas {
     }
 
     .width_button {
-        background-color: rgb(216, 216, 216);
-        // border: 1px solid black;
-        border: none;
+
         margin: 0px 3px;
+        background-color: $main_background_color;
+        border-radius: 5rem;
 
         .check {
             width: 10px;
@@ -213,17 +213,17 @@ canvas {
 
     .big {
         width: 15px;
-        height: 15px;
+        height: 5px;
     }
 
     .medium {
         width: 13px;
-        height: 13px;
+        height: 4px;
     }
 
     .small {
         width: 11px;
-        height: 11px;
+        height: 3px;
         // margin-bottom: 10px;
     }
 

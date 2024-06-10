@@ -44,73 +44,39 @@
             <div class="divide"></div>
 
 
-
-            <button (click)="setColor('black')" class="color_button" style="background-color: black;">
-                @if(tool.color == 'black'){
-                <p> <i class="fas fa-check check"></i></p>
-
-                }
+            <!-- 색 선택 영역 -->
+            <button mat-icon-button (click)="setColor('black')" [ngClass]="tool.color == 'black' ? 'active': ''">
+                <p class="color_button" style="background-color: black;"> </p>
             </button>
 
-
-
-            <button (click)="setColor('red')" class="color_button" style="background-color: red;">
-                @if(tool.color == 'red'){
-                <p><i class="fas fa-check check"></i></p>
-                }
+            <button mat-icon-button (click)="setColor('red')" [ngClass]="tool.color == 'red' ? 'active': ''">
+                <p class="color_button" style="background-color: red;"></p>
             </button>
 
-            <button (click)="setColor('blue')" class="color_button" style="background-color: blue;">
-                @if(tool.color == 'blue'){
-                <p>
-                    <i class="fas fa-check check"></i>
-                </p>
-
-                }
+            <button mat-icon-button (click)="setColor('blue')" [ngClass]="tool.color == 'blue' ? 'active': ''">
+                <p class="color_button" style="background-color: blue;"></p>
             </button>
 
-            <button (click)="setColor('green')" class="color_button" style="background-color: green;">
-                @if(tool.color == 'green'){
-                <p>
-                    <i class="fas fa-check check"></i>
-                </p>
-
-                }
+            <button mat-icon-button (click)="setColor('green')" [ngClass]="tool.color == 'green' ? 'active': ''">
+                <p class="color_button" style="background-color: green;"></p>
             </button>
 
-            <button (click)="setColor('yellow')" class="color_button" style="background-color: yellow;">
-                @if(tool.color == 'yellow'){
-                <p>
-                    <i class="fas fa-check check" style="color: black"></i>
-                </p>
-
-                }
+            <button mat-icon-button (click)="setColor('yellow')" [ngClass]="tool.color == 'yellow' ? 'active': ''">
+                <p class="color_button" style="background-color: yellow;"></p>
             </button>
-
             <div class="divide"></div>
 
-            <button (click)="setWidth(10)" class="width_button big">
-                @if(tool.width == 10){
-                <p>
-                    <i class="fas fa-check check" style="color: black"></i>
-                </p>
-                }
+            <!-- 선 굵기 지정 영역 -->
+            <button mat-icon-button (click)="setWidth(10)" [ngClass]="tool.width == 10 ? 'active': ''">
+                <p class="width_button big"></p>
             </button>
 
-            <button (click)="setWidth(5)" class="width_button medium">
-                @if(tool.width == 5){
-                <p>
-                    <i class="fas fa-check check" style="color: black"></i>
-                </p>
-                }
+            <button mat-icon-button (click)="setWidth(5)" [ngClass]="tool.width == 5 ? 'active': ''">
+                <p class="width_button medium"></p>
             </button>
 
-            <button (click)="setWidth(1)" class="width_button small">
-                @if(tool.width == 1){
-                <p>
-                    <i class="fas fa-check check" style="color: black"></i>
-                </p>
-                }
+            <button mat-icon-button (click)="setWidth(1)" [ngClass]="tool.width == 1 ? 'active': ''">
+                <p class="width_button small"></p>
             </button>
 
 
