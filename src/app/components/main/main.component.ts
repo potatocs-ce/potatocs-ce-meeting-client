@@ -109,7 +109,6 @@ export class MainComponent {
 
       // doc 리스트 조회
       this.docSerciceApi.getDocList(params.id).subscribe((res: any) => {
-
         this.docService.generatePdfData(res);
       })
 
@@ -118,17 +117,7 @@ export class MainComponent {
       this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
         this.docService.generateDrawingData(res);
       })
-
     });
-
-
-
-
-
-
-
-
-
 
 
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
@@ -140,7 +129,6 @@ export class MainComponent {
             if (this.videoService.audioDevices().length == 0) {
               this.videoService.nowAudioId.set(device.deviceId);
             }
-
             this.videoService.audioDevices.set([...this.videoService.audioDevices(), { label: device.label, deviceId: device.deviceId }])
           }
           // 비디오 타입인 경우
@@ -154,12 +142,7 @@ export class MainComponent {
           }
         })
       })
-
     }
-
-
-
-
   }
 
   async ngAfterViewInit() {

@@ -104,9 +104,12 @@ export class ToolbarComponent {
     // 문서 모드이면
     if (mode == 'document') {
       const stream = this.videoService.presentVideoStream();
+      if (stream) {
+        this.videoService.presentVideoStream.set(undefined)
+        this.videoService.audienceVideoStream.set([stream, ...this.videoService.audienceVideoStream()])
+      }
 
-      this.videoService.presentVideoStream.set(undefined)
-      this.videoService.audienceVideoStream.set([stream, ...this.videoService.audienceVideoStream()])
+
     } else {
       // 아니면
       let temp_audience = this.videoService.audienceVideoStream()

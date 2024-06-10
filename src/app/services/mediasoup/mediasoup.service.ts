@@ -98,7 +98,7 @@ export class MediasoupService {
 
   // mediasoup 연결 시도
   async loadDevice(routerRtpCapabilities: any) {
-    console.log('연결 시도')
+    // console.log('연결 시도')
     let device;
     try {
       device = new mediasoupClient.Device()
