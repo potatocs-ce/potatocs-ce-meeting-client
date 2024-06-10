@@ -84,7 +84,7 @@
             width: 13px;
             height: 13px;
             margin: 0px 3px;
-
+            border-radius: 5rem;
 
 
             p {
@@ -103,10 +103,12 @@
         }
 
         .width_button {
-            background-color: rgb(216, 216, 216);
+            // background-color: rgb(216, 216, 216);
             // border: 1px solid black;
-            border: none;
+            background-color: black;
+
             margin: 0px 3px;
+            border-radius: 5rem;
 
             .check {
                 width: 10px;
@@ -116,17 +118,17 @@
 
         .big {
             width: 15px;
-            height: 15px;
+            height: 5px;
         }
 
         .medium {
             width: 13px;
-            height: 13px;
+            height: 4px;
         }
 
         .small {
             width: 11px;
-            height: 11px;
+            height: 3px;
             // margin-bottom: 10px;
         }
 
