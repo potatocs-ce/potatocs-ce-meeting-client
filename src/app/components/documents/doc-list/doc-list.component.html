@@ -3,6 +3,13 @@
         <i class="fas fa-folder my_icon"></i>
         <span>File List</span>
     </div>
+    @if(docService.docDataLoading()){
+    <div class="spinner_container">
+        <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+    </div>
+
+    }@else{
+
     <div class="doc_list_container">
 
         @for(doc of docService._docList(); track doc; let i = $index) {
@@ -29,4 +36,6 @@
                 accept=".pdf" />
         </div>
     </div>
+    }
+
 </div>

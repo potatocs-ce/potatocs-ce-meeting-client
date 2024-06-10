@@ -11,6 +11,7 @@ import { DialogService } from '../../../services/dialog/dialog.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RoleSocketService } from '../../../services/socket/role/role-socket.service';
 import { PdfDrawingService } from '../../../services/socket/pdf_drawing/pdf-drawing.service';
+
 @Component({
   selector: 'app-doc-list',
   standalone: true,

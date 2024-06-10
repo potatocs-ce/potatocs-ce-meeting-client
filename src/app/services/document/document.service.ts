@@ -16,6 +16,9 @@ export class DocumentService {
 
   drawingData: any = signal<Array<any>>([]); // 문서별 판서 정보 저장용
 
+
+  docDataLoading: any = signal<boolean>(false); // true면 로딩중.. false면 로딩 아님 
+
   // 썸네일에 현재 보고있는 네모 박스 보여주는 변수
   /**
    * ratio: 가로, 세로 비율
@@ -80,6 +83,9 @@ export class DocumentService {
 
     const bufferArray = [];
     const pageBuffer = [];
+
+    this.docDataLoading.set(true);
+
     for (let i = 0; i < result.length; i++) {
       const updatedTime = result[i].updatedAt;
 
@@ -106,7 +112,7 @@ export class DocumentService {
         bufferArray[i] = this._docList()[i]
       }
     }
-
+    this.docDataLoading.set(false);
     this.pageBuffer.set(pageBuffer);
     this._docList.set(bufferArray);
 

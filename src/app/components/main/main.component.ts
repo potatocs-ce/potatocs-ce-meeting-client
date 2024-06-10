@@ -109,6 +109,7 @@ export class MainComponent {
 
       // doc 리스트 조회
       this.docSerciceApi.getDocList(params.id).subscribe((res: any) => {
+
         this.docService.generatePdfData(res);
       })
 
