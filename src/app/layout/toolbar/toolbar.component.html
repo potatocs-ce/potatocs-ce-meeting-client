@@ -66,11 +66,13 @@
 
         @if(toggle_video_whiteboard == 'video'){
         <button (click)="changeVideoDocument('document')" mat-icon-button class="circle_button">
-            <i class="fa-solid fa-file"></i>
+
+            <mat-icon fontSet="material-symbols-outlined">autorenew</mat-icon>
         </button>
         }@else if(toggle_video_whiteboard == 'document'){
         <button (click)="changeVideoDocument('video')" mat-icon-button class="circle_button">
-            <i class="fa-regular fa-file-video"></i>
+            <!-- <i class="fa-regular fa-file-video"></i> -->
+            <mat-icon fontSet="material-symbols-outlined">autorenew</mat-icon>
         </button>
         }
 
