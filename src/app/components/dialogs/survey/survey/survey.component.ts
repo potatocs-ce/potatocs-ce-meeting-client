@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { SurveySocketService } from '../../../../services/socket/survey/survey-socket.service';
 @Component({
   selector: 'app-survey',
   standalone: true,
@@ -24,12 +25,17 @@ export class SurveyComponent {
   survey: any = {};
   result: any = {};
 
-  constructor(private surveyService: SurveyApiService, private route: ActivatedRoute, private router: Router, public dialogRef: MatDialogRef<SurveyComponent>,
+  constructor(private surveyApiService: SurveyApiService,
+    private surveyService: SurveyService,
+    private route: ActivatedRoute,
+    private router: Router,
+    public dialogRef: MatDialogRef<SurveyComponent>,
+    private surveySocketService: SurveySocketService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
 
-    this.surveyService.getSurvey(this.data._id).subscribe((res: any) => {
+    this.surveyApiService.getSurvey(this.data._id).subscribe((res: any) => {
       this.survey = res;
       this.survey.cards.map((card: any) => {
         this.result[`${card.index}`] = [];
@@ -57,17 +63,26 @@ export class SurveyComponent {
         return;
       }
     }
-    console.log(this.data._id, this.result)
-    this.surveyService.survey(this.data._id, this.result).subscribe((res: any) => {
+
+    // console.log(this.data._id, this.result)
+    this.surveyApiService.survey(this.data._id, this.result).subscribe((res: any) => {
       if (res.status) {
         window.alert("응답이 기록되었습니다.")
         // this.router.navigate(['/'])
+        // 내 리스트 업데이트
+
+        this.surveySocketService.updateSurvey();
+        this.onNoClick();
       }
     })
   }
 
   back() {
     // this.router.navigate(['/'])
+    this.onNoClick();
   }
-
+  // 다이어로그 끄기 함수
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }

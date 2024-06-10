@@ -13,7 +13,7 @@ export class SurveyApiService {
   }
 
   getSurveys(meetingId: any) {
-    console.log(meetingId)
+
     return this.http.get(this.baseUrl + `/survey/meeting/` + meetingId)
   }
 
@@ -22,6 +22,7 @@ export class SurveyApiService {
   }
 
   survey(_id: string, result: any) {
+
     return this.http.post(this.baseUrl + '/survey/' + _id, result);
   }
 
