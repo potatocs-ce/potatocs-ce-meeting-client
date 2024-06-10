@@ -28,7 +28,8 @@
             </button>
             <button (click)="toggleAudio()" [ngClass]="toggle_audio ? 'active_circle_button':''" mat-icon-button
                 class="circle_button">
-                <i class="fa fa-microphone icon"></i>
+                <!-- <i class="fa fa-microphone icon"></i> -->
+                <mat-icon fontSet="material-symbols-outlined">mic</mat-icon>
             </button>
         </section>
         <section matRipple class="main_button_option_section">
@@ -55,13 +56,14 @@
             </button>
             <button (click)="toggleVideo()" mat-icon-button class="circle_button"
                 [ngClass]="toggle_video ? 'active_circle_button':''">
-                <i class="fa fa-solid fa-video-camera"></i>
+                <!-- <i class="fa fa-solid fa-video-camera"></i> -->
+                <mat-icon fontSet="material-symbols-outlined">videocam</mat-icon>
             </button>
         </section>
         <button (click)="screenShare()" mat-icon-button class="circle_button"
             [ngClass]="toggle_screen_share ? 'active_circle_button':''">
 
-            <mat-icon inline="true">present_to_all</mat-icon>
+            <mat-icon fontSet="material-symbols-outlined" inline="true">screen_share</mat-icon>
         </button>
 
         @if(toggle_video_whiteboard == 'video'){
