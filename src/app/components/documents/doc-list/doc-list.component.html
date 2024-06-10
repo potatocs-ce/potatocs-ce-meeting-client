@@ -23,7 +23,11 @@
                 <img #thumb id="thumb{{i+1}}" class="thumbBg" width="140" />
                 <div class="doc_cover"></div>
             </section>
+            <section class="doc_page_section">
+                <span>{{'('}} {{docService.pageBuffer()[i]}} /
+                    {{docService._docList()[i]?.pdfDoc._pdfInfo.numPages}} {{')'}}</span>
 
+            </section>
         </div>
         }
 

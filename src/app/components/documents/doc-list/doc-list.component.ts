@@ -35,12 +35,13 @@ export class DocListComponent {
       this.docService._docList()
       setTimeout(() => {
         this.renderFileList();
+        // this.currentPageNum = this.docService.pageBuffer()[this.docService.lastDocNum()] - 1
       }, 0)
     })
   }
 
   async renderFileList() {
-
+    console.log(this.docService._docList()[0]?.pdfDoc._pdfInfo.numPages)
     for (let i = 0; i < this.docService._docList().length; i++) {
       await this.renderingService.renderThumbBackground(document.getElementById(`thumb${i + 1}`), i + 1, 1);
     };
