@@ -16,6 +16,7 @@ import { MeetingService } from '../../../../services/meeting/meeting.service';
 import { SurveyApiService } from '../../../../api/survey/survey-api.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SurveySocketService } from '../../../../services/socket/survey/survey-socket.service';
+import { DialogService } from '../../../../services/dialog/dialog.service';
 
 @Component({
   selector: 'app-add-survey',
@@ -58,6 +59,7 @@ export class AddSurveyComponent {
     public dialogRef: MatDialogRef<AddSurveyComponent>,
     private surveyService: SurveyService,
     private surveySocketService: SurveySocketService,
+    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
   }
@@ -104,14 +106,18 @@ export class AddSurveyComponent {
   submit() {
     // console.log({ title: this.title, description: this.description, cards: this.cards })
     this.surveyApiService.addSurvey({ title: this.title, description: this.description, cards: this.cards, meetingId: this.meetingService.meeting_room_id() }).subscribe((res: any) => {
+      console.log(res)
       if (res.status) {
-        window.alert('설문지가 등록되었습니다.');
+        this.dialogService.openDialogPositive('success to add a survey')
+        // window.alert('설문지가 등록되었습니다.');
         // this.router.navigate(['/']);
         // 내 리스트 업데이트
         // this.surveyService.surveys.set(res.data);
         // 다른 사람들에게 리스트 업데이트 알림
         this.surveySocketService.updateSurvey();
         this.onNoClick();
+      } else {
+        this.dialogService.openDialogNegative('Failed to add a survey...')
       }
     })
   }
