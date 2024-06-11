@@ -445,6 +445,7 @@ export class MediasoupService {
       case this.mediaType.audio:
 
         deviceId = deviceId;
+        this.videoService.audioLoading.set(true);
         mediaConstraints = {
           audio: {
             deviceId: deviceId
@@ -455,6 +456,7 @@ export class MediasoupService {
         break;
       case this.mediaType.video:
         deviceId = deviceId;
+        this.videoService.videoLoading.set(true);
         if (deviceId != '') {
           mediaConstraints = {
             audio: false,
@@ -561,6 +563,9 @@ export class MediasoupService {
           this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen }])
         }
         this.toggleService.toggle_video.set(true);
+        this.videoService.videoLoading.set(false);
+      } else {
+        this.videoService.audioLoading.set(false);
       }
 
       producer.on('trackended', () => {
@@ -596,7 +601,16 @@ export class MediasoupService {
 
       console.log('Produce error:', err)
 
-
+      switch (type) {
+        case this.mediaType.audio:
+          this.videoService.audioLoading.set(false);
+          break;
+        case this.mediaType.video:
+          this.videoService.videoLoading.set(false);
+          break;
+        default:
+          break;
+      }
     }
   }
 

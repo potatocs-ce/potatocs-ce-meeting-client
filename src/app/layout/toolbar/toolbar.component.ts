@@ -12,11 +12,12 @@ import { RoleSocketService } from '../../services/socket/role/role-socket.servic
 import { DialogService } from '../../services/dialog/dialog.service';
 import { Socket } from 'ngx-socket-io';
 import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatRippleModule, MatMenuModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatRippleModule, MatMenuModule, MatProgressSpinnerModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
@@ -46,7 +47,7 @@ export class ToolbarComponent {
 
   constructor(
     private toggleService: ToggleService,
-    private videoService: VideoService,
+    public videoService: VideoService,
     private mediasoupService: MediasoupService,
     private meetingService: MeetingService,
     private roleSocketService: RoleSocketService,
@@ -139,6 +140,7 @@ export class ToolbarComponent {
 
   // 비디오 끄기 켜기
   async toggleVideo() {
+    if (this.videoService.videoLoading()) return;
     this.toggleService.toggle_video.set(!this.toggle_video);
 
     if (!this.toggle_video) {
@@ -150,6 +152,7 @@ export class ToolbarComponent {
   }
 
   async toggleAudio() {
+    if (this.videoService.audioLoading()) return;
     this.toggleService.toggle_audio.set(!this.toggle_audio);
 
     if (!this.toggle_audio) {

@@ -29,7 +29,12 @@
             <button (click)="toggleAudio()" [ngClass]="toggle_audio ? 'active_circle_button':''" mat-icon-button
                 class="circle_button">
                 <!-- <i class="fa fa-microphone icon"></i> -->
+                @if(videoService.audioLoading()) {
+                <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+                }@else {
                 <mat-icon fontSet="material-symbols-outlined">mic</mat-icon>
+                }
+
             </button>
         </section>
         <section matRipple class="main_button_option_section">
@@ -57,7 +62,13 @@
             <button (click)="toggleVideo()" mat-icon-button class="circle_button"
                 [ngClass]="toggle_video ? 'active_circle_button':''">
                 <!-- <i class="fa fa-solid fa-video-camera"></i> -->
+                @if(videoService.videoLoading()){
+                <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+                }@else {
                 <mat-icon fontSet="material-symbols-outlined">videocam</mat-icon>
+                }
+
+
             </button>
         </section>
         <button (click)="screenShare()" mat-icon-button class="circle_button"

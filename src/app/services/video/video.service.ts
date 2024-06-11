@@ -28,6 +28,12 @@ export class VideoService {
   audioStream = signal<Array<any>>([]);
 
 
+
+  // 현재 비디오 & 오디오 로딩
+  videoLoading: any = signal<boolean>(false);
+  audioLoading: any = signal<boolean>(false);
+
+
   // 벤 리스트
 
   // 유저 비디오 가져오기
