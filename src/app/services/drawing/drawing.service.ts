@@ -47,6 +47,7 @@ export class DrawingService {
   start(context: any, points: any, tool: any, sourceCanvas: any) {
     switch (tool.type) {
       case 'pen':
+        console.log(tool.width)
         // 기존 캔버스 콘텐츠 위에 새 모양을 그림
         context.globalCompositeOperation = 'source-over';
         // 선의 끝을 둥글게 처리
@@ -311,7 +312,10 @@ export class DrawingService {
         if (tool.type == 'eraser') context.lineWidth = (tool.width + this.eraserWidth)
         if (len < 3) {
           context.beginPath();
-          context.arc(points[0], points[1], (tool.width + this.eraserWidth) / 2, 0, Math.PI * 2, !0);
+          if (tool.type == 'eraser')
+            context.arc(points[0], points[1], (tool.width + this.eraserWidth) / 2, 0, Math.PI * 2, !0);
+          else
+            context.arc(points[0], points[1], tool.width / 2, 0, Math.PI * 2, !0);
           context.fill();
           context.closePath();
           return;
