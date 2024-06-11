@@ -49,6 +49,8 @@ $gray_color: rgb(201, 201, 201);
             gap: 1rem;
 
             input {
+                border: none;
+                border-radius: 0;
                 border-bottom: 1px solid $gray_color;
                 padding-bottom: 0.7rem;
                 transition: all 0.3s;
@@ -149,6 +151,8 @@ $gray_color: rgb(201, 201, 201);
 
             .item_title_input {
                 flex: 1;
+                border: none;
+                border-radius: 0;
                 border-bottom: 1px solid $gray_color;
                 transition: all 0.3s;
                 font-size: 11pt !important;

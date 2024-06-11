@@ -124,6 +124,10 @@ $chat_front-theme: mat.define-light-theme((color: (primary: $chat_front-primary,
             typography: mat.define-typography-config(),
             density: 0));
 
+.mat-flat-button {
+    border-radius: 5rem !important;
+}
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
@@ -171,6 +175,10 @@ li,
 ul {
     list-style: none;
     padding-left: 0;
+}
+
+.mat-mdc-unelevated-button {
+    border-radius: 5rem !important;
 }
 
 ::-webkit-scrollbar {
