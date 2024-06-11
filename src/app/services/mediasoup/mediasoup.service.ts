@@ -560,6 +560,7 @@ export class MediasoupService {
         } else {
           this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen }])
         }
+        this.toggleService.toggle_video.set(true);
       }
 
       producer.on('trackended', () => {
@@ -584,7 +585,7 @@ export class MediasoupService {
 
       this.producerLabel.set(type, producer.id)
 
-      this.toggleService.toggle_video.set(true);
+
     } catch (err: any) {
       if (type == this.mediaType.screen) {
         // this.isScreen = false;
