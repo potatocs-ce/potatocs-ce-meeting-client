@@ -608,7 +608,7 @@ export class MediasoupService {
     }
 
     let producer_id = this.producerLabel.get(type)
-    console.log('Close producer', producer_id)
+    console.log('Close producer', producer_id, type)
 
     this.socket.emit('producerClosed', {
       producer_id
@@ -619,6 +619,11 @@ export class MediasoupService {
     this.producerLabel.delete(type)
 
     if (type !== this.mediaType.audio) {
+      if (type == 'screenType') {
+        this.toggleService.toggle_screen_share.set(false);
+      } else {
+        this.toggleService.toggle_video.set(false);
+      }
       let elem: any = document.getElementsByClassName(producer_id)[0]
       elem.srcObject.getTracks().forEach(function (track: any) {
         track.stop()
