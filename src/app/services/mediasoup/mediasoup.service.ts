@@ -590,10 +590,11 @@ export class MediasoupService {
         // this.isScreen = false;
         this.toggleService.toggle_screen_share.set(false)
       }
-      if (err == 'DOMException: Could not start video source') {
-        this.dialogService.openDialogNegative('This camera is using.')
-      }
+
+      this.dialogService.openDialogNegative(err)
+
       console.log('Produce error:', err)
+
 
     }
   }

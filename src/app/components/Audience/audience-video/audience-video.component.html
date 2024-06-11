@@ -11,12 +11,12 @@
     </article>
 
     <!-- 이름 등 정보  -->
-    <article class="menu_container">
+    <article class="menu_container" [class]="socket_id">
         @if(toggle_video_whiteboard != 'document') {
         <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
             <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #videoMenu="matMenu" xPosition="before" [class]="socket_id">
+        <mat-menu #videoMenu="matMenu" xPosition="before">
             <button mat-menu-item (click)="goToPresent()">
                 <mat-icon>co_present</mat-icon>
                 <span>presenter</span>
