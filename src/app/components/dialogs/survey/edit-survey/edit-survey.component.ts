@@ -11,6 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DialogService } from '../../../../services/dialog/dialog.service';
+import { SurveySocketService } from '../../../../services/socket/survey/survey-socket.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-edit-survey',
@@ -25,7 +28,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     CdkDrag,
     MatSlideToggleModule,
     MatSliderModule,
-    DragDropModule],
+    DragDropModule,
+    MatProgressSpinnerModule],
   templateUrl: './edit-survey.component.html',
   styleUrl: './edit-survey.component.scss'
 })
@@ -45,19 +49,21 @@ export class EditSurveyComponent {
 
 
 
+  // 로딩
+  loading: boolean = true;
+
   constructor(
     private surveyService: SurveyApiService,
     private route: ActivatedRoute,
     private router: Router,
     public dialogRef: MatDialogRef<EditSurveyComponent>,
+    private dialogService: DialogService,
+    private surveySocketService: SurveySocketService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-
-
-
     this.surveyService.getSurvey(this.data._id).subscribe((res: any) => {
-      console.log(res)
+      this.loading = false;
       this.title = res.title;
       this.description = res.description;
       this.cards = res.cards;
@@ -112,9 +118,18 @@ export class EditSurveyComponent {
     console.log(this.title, this.description, this.cards)
     this.surveyService.editSurvey(this.data._id, { title: this.title, description: this.description, cards: this.cards }).subscribe((res: any) => {
       if (res.status) {
-        window.alert('설문지가 수정되었습니다.')
-        // this.router.navigate(['/'])
+        this.dialogService.openDialogPositive('Success to edit a survey');
+        // 다른 사람들에게 리스트 업데이트 알림
+        this.surveySocketService.updateSurvey();
+        this.onNoClick();
+      } else {
+        this.dialogService.openDialogNegative('Failed to edit a survey...')
       }
     })
+  }
+
+  // 다이어로그 끄기 함수 
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

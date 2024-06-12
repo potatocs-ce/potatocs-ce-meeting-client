@@ -13,10 +13,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { SurveySocketService } from '../../../../services/socket/survey/survey-socket.service';
+import { DialogService } from '../../../../services/dialog/dialog.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-survey',
   standalone: true,
-  imports: [RouterModule, CommonModule, CardComponent, MatIconModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule,],
+  imports: [RouterModule, CommonModule, CardComponent, MatIconModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, MatProgressSpinnerModule],
   templateUrl: './survey.component.html',
   styleUrl: './survey.component.scss'
 })
@@ -25,17 +27,21 @@ export class SurveyComponent {
   survey: any = {};
   result: any = {};
 
+  loading: boolean = true;
+
   constructor(private surveyApiService: SurveyApiService,
     private surveyService: SurveyService,
     private route: ActivatedRoute,
     private router: Router,
     public dialogRef: MatDialogRef<SurveyComponent>,
     private surveySocketService: SurveySocketService,
+    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
 
     this.surveyApiService.getSurvey(this.data._id).subscribe((res: any) => {
+      this.loading = false;
       this.survey = res;
       this.survey.cards.map((card: any) => {
         this.result[`${card.index}`] = [];
@@ -59,7 +65,8 @@ export class SurveyComponent {
   submit() {
     for (let card of this.survey.cards) {
       if (card.required && this.result[card.index].length == 0) {
-        window.alert('필수 항목 미입력: ' + card.item_title)
+        // window.alert('필수 항목 미입력: ' + card.item_title)
+        this.dialogService.openDialogNegative('Required field not entered: ' + card.item_title)
         return;
       }
     }
@@ -67,12 +74,14 @@ export class SurveyComponent {
     // console.log(this.data._id, this.result)
     this.surveyApiService.survey(this.data._id, this.result).subscribe((res: any) => {
       if (res.status) {
-        window.alert("응답이 기록되었습니다.")
+        this.dialogService.openDialogPositive('Response has been saved')
         // this.router.navigate(['/'])
         // 내 리스트 업데이트
 
         this.surveySocketService.updateSurvey();
         this.onNoClick();
+      } else {
+        this.dialogService.openDialogNegative('There was an issue saveing the response')
       }
     })
   }

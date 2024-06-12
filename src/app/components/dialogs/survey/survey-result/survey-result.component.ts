@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { CardComponent } from '../../../public/card/card.component';
 import { BaseChartDirective } from 'ng2-charts';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-survey-result',
   standalone: true,
-  imports: [CommonModule, CardComponent, BaseChartDirective],
+  imports: [CommonModule, CardComponent, BaseChartDirective, MatProgressSpinnerModule],
   templateUrl: './survey-result.component.html',
   styleUrl: './survey-result.component.scss',
 
@@ -21,7 +22,9 @@ export class SurveyResultComponent {
   result: any = {};
   organized_result: any = {};
   chart_data: any = [];
-  my_data: any = []
+  my_data: any = [];
+
+  loading: boolean = true;
 
   constructor(private surveyService: SurveyApiService,
     private route: ActivatedRoute,
@@ -40,7 +43,7 @@ export class SurveyResultComponent {
 
 
   ngOnInit() {
-    console.log('start')
+
     this.surveyService.getSurvey(this.data._id).subscribe((res: any) => {
       this.survey = res;
 
@@ -78,10 +81,10 @@ export class SurveyResultComponent {
         })
 
         this.my_data = test;
-        console.log(this.my_data)
+        this.loading = false;
       })
     })
-    console.log('end', this.my_data)
+
   }
 
 

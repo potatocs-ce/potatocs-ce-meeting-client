@@ -33,6 +33,10 @@
             }
         </section>
         <section class="button_section">
+            @if(loading) {
+            <div class="spinner_container">
+                <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+            </div>}
             <button (click)="back(); $event.preventDefault()" mat-flat-button>cancel</button>
             <button class="submit_button" type="submit" mat-flat-button><mat-icon
                     style="color: white;">send</mat-icon>submit</button>

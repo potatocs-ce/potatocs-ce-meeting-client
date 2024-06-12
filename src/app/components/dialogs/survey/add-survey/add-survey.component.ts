@@ -106,13 +106,8 @@ export class AddSurveyComponent {
   submit() {
     // console.log({ title: this.title, description: this.description, cards: this.cards })
     this.surveyApiService.addSurvey({ title: this.title, description: this.description, cards: this.cards, meetingId: this.meetingService.meeting_room_id() }).subscribe((res: any) => {
-      console.log(res)
       if (res.status) {
-        this.dialogService.openDialogPositive('success to add a survey')
-        // window.alert('설문지가 등록되었습니다.');
-        // this.router.navigate(['/']);
-        // 내 리스트 업데이트
-        // this.surveyService.surveys.set(res.data);
+        this.dialogService.openDialogPositive('Success to add a survey')
         // 다른 사람들에게 리스트 업데이트 알림
         this.surveySocketService.updateSurvey();
         this.onNoClick();

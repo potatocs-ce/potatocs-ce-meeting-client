@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { SurveyService } from '../../services/survey/survey.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { SurveyApiService } from '../../api/survey/survey-api.service';
+import { DialogService } from '../../services/dialog/dialog.service';
+import { SurveySocketService } from '../../services/socket/survey/survey-socket.service';
 
 @Component({
   selector: 'app-survey',
@@ -16,7 +18,12 @@ import { SurveyApiService } from '../../api/survey/survey-api.service';
 export class SurveyComponent {
   surveys: any;
   user_id: string = '';
-  constructor(public survayService: SurveyService, private authService: AuthService, private surveyApiService: SurveyApiService) {
+  constructor(
+    public survayService: SurveyService,
+    private authService: AuthService,
+    private surveyApiService: SurveyApiService,
+    private dialogService: DialogService,
+    private surveySocketService: SurveySocketService) {
     effect(() => {
       this.surveys = this.survayService.surveys();
 
@@ -53,7 +60,12 @@ export class SurveyComponent {
 
   removeSurvey(_id: string) {
     this.surveyApiService.deleteSurvey(_id).subscribe((result: any) => {
-
+      if (result.status) {
+        this.dialogService.openDialogPositive('Success to remove a survey')
+        this.surveySocketService.updateSurvey();
+      } else {
+        this.dialogService.openDialogPositive('Failed to remove a survey')
+      }
     })
   }
 }

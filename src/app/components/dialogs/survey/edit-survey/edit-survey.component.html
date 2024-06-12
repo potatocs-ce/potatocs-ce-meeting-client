@@ -1,7 +1,9 @@
 <form class="add_container" (ngSubmit)="submit()">
+
+
     <section class="input_section">
         <app-card>
-            <!-- <div class='line'></div> -->
+            <div class='line'></div>
             <section class="input_title_section">
                 <input class="title" placeholder="Title of survey" [(ngModel)]="title" name="title" required />
                 <input class="description" placeholder="Description of survey contents" [(ngModel)]="description"
@@ -72,6 +74,10 @@
 
 
     <section class=" button_section">
+        @if(loading) {
+        <div class="spinner_container">
+            <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+        </div>}
         <button mat-flat-button (click)="addCard();$event.preventDefault()">
             <mat-icon
                 style="color: black; font-size: 24px; width: 24px; height: 24px; margin-right: 4px;">add</mat-icon>add
