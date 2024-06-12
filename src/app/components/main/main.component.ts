@@ -50,7 +50,7 @@ export class MainComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private toggleService: ToggleService,
+    public toggleService: ToggleService,
     @Inject(PLATFORM_ID) private _platform: Object,
     private videoService: VideoService,
     private mediasoupService: MediasoupService,

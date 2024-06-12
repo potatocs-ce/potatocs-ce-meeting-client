@@ -87,7 +87,8 @@ export class DocPageComponent {
 
 
   renderThumbnailBox(data: any) {
-    if (!this.thumbArray.length) return
+    if (this.thumbArray.length == 0) return
+
     const scrollRatio = this.thumbArray[this.currentPageNum].width / data.coverWidth;
     this.thumbWindowSize = {
       width: this.thumbArray[this.currentPageNum].width * data.ratio.w + 'px',

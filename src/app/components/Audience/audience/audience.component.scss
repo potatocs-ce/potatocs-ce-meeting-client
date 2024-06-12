@@ -1,9 +1,13 @@
+@import '../../../setting.scss';
+
 .audience_container {
     display: inline-flex;
     gap: 0.5rem;
     overflow-x: auto;
     width: 100%;
     flex-wrap: nowrap;
+    position: relative;
+
 
     .audience_video {
         display: flex;
@@ -15,5 +19,34 @@
         height: 150px;
         width: 300px;
         flex-shrink: 0;
+    }
+
+    .audience_toggle_button {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        color: white;
+        background-color: $icon_button_color;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        .mat-mdc-button-touch-target {
+            width: 30px !important;
+            height: 30px !important;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px !important;
+            height: 15px;
+            font-size: 11pt;
+        }
     }
 }
