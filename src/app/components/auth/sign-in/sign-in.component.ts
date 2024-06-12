@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DialogService } from '../../../services/dialog/dialog.service';
 
 interface LoginFormData {
   email: string;
@@ -37,7 +38,7 @@ export class SignInComponent {
     private authService: AuthService,
     private userService: UserService,
     private fb: FormBuilder,
-    // private dialogService: DialogService,
+    private dialogService: DialogService,
   ) {
     this.form = this.fb.group(
       {
@@ -66,19 +67,20 @@ export class SignInComponent {
   }
 
   signIn() {
-    console.log(this.signInFormData);
+
     this.userService.signIn(this.signInFormData).subscribe(
       (data: any) => {
         if (data.message != null && data.message != '') {
           console.log(data.message);
         }
         // alert('successfully signed in');
-        // console.log(this.params)
+
         // this.router.navigateByUrl(this.params.params)
-        this.router.navigate([`${this.params.params}`]);
+        console.log('머선일이구')
+        this.router.navigate([`room/${this.params.params}`]);
       },
       (err: any) => {
-        console.log(err.error);
+        console.log(err);
         this.errorAlert(err.error.message);
       }
     )
@@ -86,15 +88,15 @@ export class SignInComponent {
 
   errorAlert(err: any) {
     switch (err) {
-      // case 'not found':
-      //   this.dialogService.openDialogNegative('The email does not exist. Try again.');
-      //   break;
-      // case 'mismatch':
-      //   this.dialogService.openDialogNegative('Password is incorrect. Try again.');
-      //   break;
-      // case 'retired':
-      //   this.dialogService.openDialogNegative(`An employee who's retired at the company.`);
-      //   break;
+      case 'not found':
+        this.dialogService.openDialogNegative('The email does not exist. Try again.');
+        break;
+      case 'mismatch':
+        this.dialogService.openDialogNegative('Password is incorrect. Try again.');
+        break;
+      case 'retired':
+        this.dialogService.openDialogNegative(`An employee who's retired at the company.`);
+        break;
     }
   };
 }

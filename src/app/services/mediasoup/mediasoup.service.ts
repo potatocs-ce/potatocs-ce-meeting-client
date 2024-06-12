@@ -673,6 +673,9 @@ export class MediasoupService {
       this.socket.off('disconnect')
       this.socket.off('newProducers')
       this.socket.off('consumerClosed')
+      this.consumers = new Map()
+      this.producers = new Map()
+      this.producerLabel = new Map()
     }
 
     if (!offline) {

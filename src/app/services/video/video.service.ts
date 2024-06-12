@@ -78,4 +78,31 @@ export class VideoService {
     this.presentVideoStream.set(undefined);
     this.toggleService.toggle_video.set(false);
   }
+
+  clearData() {
+    // 장치 리스트
+    this.videoDeivces.set([])
+    this.audioDevices.set([])
+    // 현재 내 비디오, 오디오
+    this.nowVideoId.set('')
+    this.nowAudioId.set('')
+
+    // 현재 발표 비디오 스트림
+    this.presentVideoStream.set(undefined)
+
+
+    // 현재 청중들 비디오 스트림
+    this.audienceVideoStream.set([]);
+
+
+    // 현재 오디오 스트림
+    this.audioStream.set([]);
+
+
+
+    // 현재 비디오 & 오디오 로딩
+    this.videoLoading.set(false);
+    this.audioLoading.set(false);
+
+  }
 }

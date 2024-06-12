@@ -9,11 +9,12 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from './environments/environment';
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {
   provideCharts,
   withDefaultRegisterables,
 } from 'ng2-charts';
+import { HttpInterceptorService } from './api/interceptor/http-interceptor.service';
 export function tokenGetter() {
   return localStorage.getItem(environment.tokenName);
 }
@@ -39,5 +40,13 @@ export const appConfig: ApplicationConfig = {
       SocketIoModule.forRoot(config),
 
     ),
-    provideRouter(routes), provideHttpClient(withInterceptorsFromDi()), provideCharts(withDefaultRegisterables()), provideAnimationsAsync()]
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true
+    },
+    provideRouter(routes),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideCharts(withDefaultRegisterables()),
+    provideAnimationsAsync()]
 };
