@@ -430,7 +430,52 @@ export class MediasoupService {
 
   }
 
+  async requestCameraAccess(deviceId: any) {
+    try {
+      // 카메라 스트림 요청
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId } });
+      // alert('Camera access granted.');
+      // 권한이 부여되었으므로, 스트림을 종료합니다.
+      stream.getTracks().forEach(track => track.stop());
+      return true
+    } catch (err: any) {
+      if (err.name === 'NotAllowedError') {
+        this.dialogService.openDialogNegative('Camera access was denied. Please grant camera access and try again.');
+      } else if (err.name === 'NotFoundError') {
+        this.dialogService.openDialogNegative('No camera was found on this device.');
+      } else {
+        this.dialogService.openDialogNegative('An unexpected error occurred: ' + err.message);
+      }
+      this.toggleService.toggle_video.set(false);
+      this.videoService.videoLoading.set(false);
+      return false;
+    }
+  }
 
+  async requestAudioAccess(deviceId: any) {
+    try {
+      // 오디오 스트림 요청
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { deviceId }
+      });
+      // 권한이 부여되었으므로, 스트림을 종료합니다.
+      stream.getTracks().forEach(track => track.stop());
+      return true;
+    } catch (err: any) {
+      if (err.name === 'NotAllowedError') {
+        this.dialogService.openDialogNegative('Audio access was denied. Please grant audio access and try again.');
+      } else if (err.name === 'NotFoundError') {
+        this.dialogService.openDialogNegative('No audio input device was found on this device.');
+      } else if (err.name === 'OverconstrainedError') {
+        this.dialogService.openDialogNegative('The specified constraints could not be satisfied by any available devices.');
+      } else {
+        this.dialogService.openDialogNegative('An unexpected error occurred: ' + err.message);
+      }
+      this.toggleService.toggle_audio.set(false);
+      this.videoService.audioLoading.set(false);
+      return false;
+    }
+  }
 
   //====== MAIN FUNCTION
   async produce(type: any, deviceId: any = null) {
@@ -457,6 +502,9 @@ export class MediasoupService {
       case this.mediaType.video:
         deviceId = deviceId;
         this.videoService.videoLoading.set(true);
+
+
+
         if (deviceId != '') {
           mediaConstraints = {
             audio: false,
@@ -499,6 +547,11 @@ export class MediasoupService {
         return;
     }
 
+    // 카메라 접근 확인
+    if (type == this.mediaType.video && !await this.requestCameraAccess(deviceId)) return
+    // 오디오 접근 여부 확인
+    else if (type == this.mediaType.audio && !await this.requestAudioAccess(deviceId)) return
+
 
     if (!this.device.canProduce('video') && !audio) {
       console.error('Cannot produce video')
@@ -508,7 +561,7 @@ export class MediasoupService {
       console.log('Producer already exists fot this type ' + type);
       return
     }
-    console.log('Mediacontraints:', mediaConstraints);
+    // console.log('Mediacontraints:', mediaConstraints);
 
     let stream;
 
@@ -599,7 +652,7 @@ export class MediasoupService {
 
       this.dialogService.openDialogNegative(err)
 
-      console.log('Produce error:', err)
+      // console.log('Produce error:', err)
 
       switch (type) {
         case this.mediaType.audio:
