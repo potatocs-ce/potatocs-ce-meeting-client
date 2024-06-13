@@ -28,6 +28,16 @@ export class AudienceVideoComponent {
 
   zoomScale: number = 1;
 
+
+
+
+  @Input() stream: any = '';
+  @Input() name: any = '';
+  @Input() id: any = '';
+  @Input() socket_id: any = '';
+  @Input() user_id: any = '';
+  @Input() screen: any = '';
+
   constructor(
     private videoService: VideoService,
     private videoDrawingService: VideoDrawingService,
@@ -55,10 +65,12 @@ export class AudienceVideoComponent {
         const data_context: any = data_canvas.getContext('2d');
 
         data_context.clearRect(0, 0, data_canvas.width / this.zoomScale, data_canvas.height / this.zoomScale);
+
         this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
           if (data.screen == this.screen) {
 
             if (!this.meetingService.skipList().includes(data.userId)) {
+
               this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
             }
           }
@@ -69,12 +81,7 @@ export class AudienceVideoComponent {
 
 
 
-  @Input() stream: any = '';
-  @Input() name: any = '';
-  @Input() id: any = '';
-  @Input() socket_id: any = '';
-  @Input() user_id: any = '';
-  @Input() screen: any = '';
+
 
 
 

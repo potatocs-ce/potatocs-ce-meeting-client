@@ -117,6 +117,17 @@ export class MainComponent {
       this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
         this.docService.generateDrawingData(res);
       })
+
+      this.meetingServiceApi.getVideoDrawings(params.id).subscribe((res: any) => {
+
+        const object = res.reduce((acc: any, value: any, index: any) =>
+          ({ ...acc, [value._id]: value.data })
+          , {});
+
+
+
+        this.videoDrawingService.drawVarArray.set(object)
+      })
     });
 
 
@@ -147,13 +158,7 @@ export class MainComponent {
 
   async ngAfterViewInit() {
     // await this.mediasoupService.joinRoom()
-    this.meetingServiceApi.getVideoDrawings(this.meetingService.meeting_room_id()).subscribe((res: any) => {
-      const object = res.reduce((acc: any, value: any, index: any) =>
-        ({ ...acc, [value._id]: value.data })
-        , {});
 
-      this.videoDrawingService.drawVarArray.set(object)
-    })
 
   }
 

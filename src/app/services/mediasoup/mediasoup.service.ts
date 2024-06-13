@@ -349,9 +349,9 @@ export class MediasoupService {
   async consume(producer_id: any, producer_socket_id: string, screen: boolean) {
 
     this.getConsumeStream(producer_id, producer_socket_id).then(
-      ({ consumer, stream, kind, name, user_id }: any) => {
+      ({ consumer, stream, kind, name, user_id, screen }: any) => {
         this.consumers.set(consumer.id, consumer)
-        console.log(this.meetingService.meeting_info().currentMembers)
+        console.log('스크린', screen)
         if (kind === 'video') {
 
           if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
@@ -395,7 +395,7 @@ export class MediasoupService {
         producer_socket_id
       }, async (data: any) => {
         try {
-          console.log(data)
+
           const { id, kind, rtpParameters } = data.params;
 
 
@@ -413,13 +413,14 @@ export class MediasoupService {
           stream.addTrack(consumer.track)
 
 
-          console.log(consumer, stream, kind)
+          console.log(consumer, stream, kind, data.screen)
           resolve({
             consumer,
             stream,
             kind,
             name: data.name,
-            user_id: data.user_id
+            user_id: data.user_id,
+            screen: data.screen
           })
         } catch (error) {
           reject(error);
