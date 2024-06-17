@@ -88,6 +88,12 @@
 
     <div class="present_section_container">
         <section id="present" class="present_section">
+            @if(!videoStream?.stream){
+            <div class="present_profile_video_container">
+                <mat-icon>account_circle</mat-icon>
+            </div>
+            }
+
 
             <!-- 비디오 -->
             <video id="present_video" [class]="videoStream?.id" #present_video (resize)="videoResize($event.target)"
@@ -98,6 +104,7 @@
             <article class="menu_container" [class]="videoStream?.user_id+'menu'"
                 [ngClass]="tool.type === 'click' ? 'main':''">
 
+                @if(videoStream?.stream) {
                 <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
@@ -107,6 +114,8 @@
                         <span>screenshot</span>
                     </button>
                 </mat-menu>
+                }
+
                 @if(videoStream?.name){
                 <div class="video_user_name">
                     {{videoStream?.name}}
