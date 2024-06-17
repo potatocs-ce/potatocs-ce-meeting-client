@@ -297,14 +297,14 @@ export class MediasoupService {
           meetingInfo.currentMembers.filter((data: any) => data.online).map((user: any) => {
 
             if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.meetingService.present_user_info()) {
-              this.meetingService.present_user_info.set({ user_id: user.member_id._id, name: user.member_id.name, screen: false })
+              this.meetingService.present_user_info.set({ user_id: user.member_id._id, name: user.member_id.name, screen: false, profile: user.member_id.profile_img })
             } else if (!this.meetingService.users_info().some((users: any) => users.user_id == user.member_id._id) &&
               this.meetingService.present_user_info().user_id != user.member_id._id) {
 
-              this.meetingService.users_info.set([...this.meetingService.users_info(), { user_id: user.member_id._id, name: user.member_id.name, screen: false }])
+              this.meetingService.users_info.set([...this.meetingService.users_info(), { user_id: user.member_id._id, name: user.member_id.name, screen: false, profile: user.member_id.profile_img }])
             }
           })
-          console.log(this.meetingService.present_user_info(), this.meetingService.users_info())
+          // console.log(this.meetingService.present_user_info(), this.meetingService.users_info())
         })
       }
     )
