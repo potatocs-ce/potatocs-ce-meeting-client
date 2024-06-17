@@ -2,7 +2,8 @@
     <div class="audience_container" [style]="toggleService.toggle_audience() ? '' : 'visibility: hidden;'">
         @for(stream of videoList; track stream){
         <app-audience-video [socket_id]="stream.socket_id" [stream]="stream.stream" [name]="stream.name"
-            [id]="stream.id" [user_id]="stream.user_id" [screen]="stream.screen"></app-audience-video>
+            [id]="stream.id" [user_id]="stream.user_id" [screen]="stream.screen"
+            [profile]="stream.profile"></app-audience-video>
         }
     </div>
 

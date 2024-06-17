@@ -90,7 +90,12 @@
         <section id="present" class="present_section">
             @if(!videoStream?.stream){
             <div class="present_profile_video_container">
+                @if(videoStream?.profile) {
+                <img class="profile_img" [src]="videoStream?.profile" alt="">
+                }@else {
                 <mat-icon>account_circle</mat-icon>
+                }
+
             </div>
             }
 

@@ -49,7 +49,7 @@ export class PresentComponent {
     private socket: Socket) {
     effect(() => {
       this.videoStream = this.meetingService.present_user_info()
-      console.log(this.videoStream)
+
       if (this.videoStream == undefined) {
 
         // this.observer.unobserve(document.getElementsByClassName('present_container')[0]);

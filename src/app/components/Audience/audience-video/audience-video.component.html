@@ -13,7 +13,12 @@
     }@else {
     <!-- 스트립이 없는 경우 -->
     <div class="user_video_profile_container">
+        @if(profile) {
+        <img class="profile_img" [src]="profile" alt="">
+        }@else {
         <mat-icon>account_circle</mat-icon>
+        }
+
     </div>
     }
 

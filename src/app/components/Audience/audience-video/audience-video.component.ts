@@ -35,6 +35,7 @@ export class AudienceVideoComponent {
   @Input() socket_id: any = '';
   @Input() user_id: any = '';
   @Input() screen: any = '';
+  @Input() profile: any = undefined;
 
   constructor(
     private videoService: VideoService,
