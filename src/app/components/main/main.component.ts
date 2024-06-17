@@ -21,6 +21,7 @@ import { ChatSocketService } from '../../services/socket/chat/chat-socket.servic
 import { SurveyApiService } from '../../api/survey/survey-api.service';
 import { SurveyService } from '../../services/survey/survey.service';
 import { SurveySocketService } from '../../services/socket/survey/survey-socket.service';
+import { DeviceCheckComponent } from '../device-check/device-check.component';
 
 @Component({
   selector: 'app-main',
@@ -29,7 +30,7 @@ import { SurveySocketService } from '../../services/socket/survey/survey-socket.
     ToolbarComponent, MenuComponent,
     PresentComponent, AudienceComponent,
     WhiteboardComponent, DocumentsComponent,
-    AudioComponent],
+    AudioComponent, DeviceCheckComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
@@ -54,7 +55,7 @@ export class MainComponent {
     @Inject(PLATFORM_ID) private _platform: Object,
     private videoService: VideoService,
     private mediasoupService: MediasoupService,
-    private meetingService: MeetingService,
+    public meetingService: MeetingService,
     private meetingServiceApi: MeetingServiceAPI,
     private docSerciceApi: DocApiService,
     private docService: DocumentService,
@@ -71,7 +72,7 @@ export class MainComponent {
 
     //
     effect(() => {
-      this.audience_video = this.videoService.audienceVideoStream();
+      this.audience_video = this.meetingService.users_info();
     })
 
     //
@@ -156,11 +157,6 @@ export class MainComponent {
     }
   }
 
-  async ngAfterViewInit() {
-    // await this.mediasoupService.joinRoom()
-
-
-  }
 
   //청중 모드에 동영상 추가
 

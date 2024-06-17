@@ -332,7 +332,7 @@ export class CanvasService {
 
       if (this.toggleService.toggle_video_whiteboard() == 'video') {
         // console.log(this.videoService.presentVideoStream().screen)
-        this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id(), screen: this.videoService.presentVideoStream().screen })
+        this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id(), screen: this.meetingService.present_user_info().screen })
       } else {
         this.socket.emit('draw:document', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, user_id: this.authService.getTokenInfo()._id, doc_id: this.docService._docList()[this.docService.lastDocNum()]._id, pageNum: this.docService.pageBuffer()[this.docService.lastDocNum()], meeting_id: this.meetingService.meeting_room_id() })
       }
@@ -343,9 +343,9 @@ export class CanvasService {
         let drawVarArray = this.videoDrawingService.drawVarArray();
 
         if (drawVarArray[sourceCanvas.parentNode.id]) {
-          drawVarArray[sourceCanvas.parentNode.id].push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, screen: this.videoService.presentVideoStream().screen })
+          drawVarArray[sourceCanvas.parentNode.id].push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, screen: this.meetingService.present_user_info().screen })
         } else {
-          drawVarArray[sourceCanvas.parentNode.id] = [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, screen: this.videoService.presentVideoStream().screen }];
+          drawVarArray[sourceCanvas.parentNode.id] = [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, screen: this.meetingService.present_user_info().screen }];
         }
         this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
       } else {

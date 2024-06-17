@@ -1,5 +1,5 @@
 <div class="app_meeting_container">
-
+    <!-- <app-device-check></app-device-check> -->
     <!-- 메인 기능들이 들어갈 부분 -->
     <div class="main_container">
         <!-- 판서, 영상 통화 등 -->
@@ -10,7 +10,7 @@
                 <section id="present_section" class="present_section">
                     <app-present></app-present>
                 </section>
-                @if(audience_video.length != 0 && toggle_video_whiteboard == 'video'){
+                @if(meetingService.users_info().length != 0 && toggle_video_whiteboard == 'video'){
                 <section class="audience_section"
                     [style]="toggleService.toggle_audience() ? '' : 'position: absolute; bottom: 0; width: 100%'">
                     <app-audience></app-audience>
@@ -28,7 +28,7 @@
                         <section class="whiteboard_section">
                             <app-whiteboard></app-whiteboard>
                         </section>
-                        @if(audience_video.length != 0 && toggle_video_whiteboard == 'document'){
+                        @if(meetingService.users_info().length != 0 && toggle_video_whiteboard == 'document'){
                         <section class="audience_section"
                             [style]="toggleService.toggle_audience() ? '' : 'position: absolute; bottom: 0; width: 100%'">
                             <app-audience></app-audience>
@@ -53,7 +53,8 @@
     </section>
     <section class="audio_section" id="audio_section">
         @for(stream of audioStreams; track stream) {
-        <app-audio [id]="stream.id" [stream]="stream.stream" [socket_id]="stream.socket_id"></app-audio>
+        <app-audio [user_id]="stream.user_id" [id]="stream.id" [stream]="stream.stream"
+            [socket_id]="stream.socket_id"></app-audio>
         }
     </section>
 </div>

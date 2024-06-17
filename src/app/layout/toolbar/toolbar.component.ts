@@ -104,20 +104,20 @@ export class ToolbarComponent {
 
     // 문서 모드이면
     if (mode == 'document') {
-      const stream = this.videoService.presentVideoStream();
+      const stream = this.meetingService.present_user_info();
       if (stream) {
-        this.videoService.presentVideoStream.set(undefined)
-        this.videoService.audienceVideoStream.set([stream, ...this.videoService.audienceVideoStream()])
+        this.meetingService.present_user_info.set(undefined)
+        this.meetingService.users_info.set([stream, ...this.meetingService.users_info()])
       }
 
 
     } else {
       // 아니면
-      let temp_audience = this.videoService.audienceVideoStream()
+      let temp_audience = this.meetingService.users_info()
       const stream = temp_audience.shift();
 
-      this.videoService.presentVideoStream.set(stream)
-      this.videoService.audienceVideoStream.set([...temp_audience])
+      this.meetingService.present_user_info.set(stream)
+      this.meetingService.users_info.set([...temp_audience])
     }
 
     this.roleSocketService.presentStatus()

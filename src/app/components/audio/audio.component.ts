@@ -21,7 +21,7 @@ export class AudioComponent {
   @Input() id: string = ''
   @Input() stream: any;
   @Input() socket_id: string = '';
-
+  @Input() user_id: string = '';
 
   ngAfterViewInit() {
     const my_audio = document.getElementsByClassName(this.id)[0] as HTMLAudioElement;
@@ -66,7 +66,7 @@ export class AudioComponent {
       // 임계값 초과 시 콘솔에 로그 출력
       // -20 데시벨
       if (decibel > -20) {
-        const video: any = document.getElementsByClassName(`${this.socket_id}`)[0];
+        const video: any = document.getElementsByClassName(`${this.user_id}menu`)[0];
         if (video) video.style.border = '2px solid rgba(255, 180, 18)'
 
         my_audio.play();

@@ -48,8 +48,8 @@ export class PresentComponent {
     private meetingService: MeetingService,
     private socket: Socket) {
     effect(() => {
-      this.videoStream = this.videoService.presentVideoStream()
-
+      this.videoStream = this.meetingService.present_user_info()
+      console.log(this.videoStream)
       if (this.videoStream == undefined) {
 
         // this.observer.unobserve(document.getElementsByClassName('present_container')[0]);
@@ -269,6 +269,7 @@ export class PresentComponent {
       present.style.height = 'fit-content';
     }
     if (this.firstRender) {
+      this.zoomScale = 1
       console.log(originalWidth, this.zoomScale)
       this.zoomScale = target.clientWidth / originalWidth * this.zoomScale;
       this.firstRender = false;
@@ -331,7 +332,4 @@ export class PresentComponent {
     a.download = 'capture.png';
     a.click();
   }
-
-
-
 }

@@ -5,6 +5,7 @@ import { AudienceVideoComponent } from '../audience-video/audience-video.compone
 import { ToggleService } from '../../../services/toggle/toggle.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MeetingService } from '../../../services/meeting/meeting.service';
 
 @Component({
   selector: 'app-audience',
@@ -15,9 +16,11 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AudienceComponent {
   videoList: Array<any> = [];
-  constructor(private videoService: VideoService, public toggleService: ToggleService) {
+  constructor(private videoService: VideoService, public toggleService: ToggleService, private meetingService: MeetingService) {
     effect(() => {
-      this.videoList = this.videoService.audienceVideoStream();
+      // this.videoList = this.videoService.audienceVideoStream();
+      this.videoList = this.meetingService.users_info();
+
     })
 
 

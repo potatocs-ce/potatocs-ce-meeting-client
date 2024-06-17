@@ -1,17 +1,22 @@
-<div class="video_container">
+<div class="video_container" [style]="stream ? '': 'width: 220px; height: 160px'">
+    @if(stream){
     <!-- 비디오 -->
     <video #targetVideo (resize)="videoResize($event.target)" class="video" [class]="id" [srcObject]="stream"
         autoplay></video>
 
 
     <!-- 캔버스 정보 (판서) -->
-    <article class="audience_canvas_container" [id]="user_id">
+    <article class="audience_canvas_container" [id]="user_id" [ngClass]="screen? 'screen' : 'noScreen'">
         <canvas #data_canvas id="data_canvas" class="data_canvas"></canvas>
         <canvas #target_canvas id="target_canvas" class="target_canvas"></canvas>
     </article>
+    }
+
+
+
 
     <!-- 이름 등 정보  -->
-    <article class="menu_container" [class]="socket_id">
+    <article class="menu_container" [class]="user_id+'menu'">
         @if(toggle_video_whiteboard != 'document') {
         <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
             <mat-icon>more_vert</mat-icon>

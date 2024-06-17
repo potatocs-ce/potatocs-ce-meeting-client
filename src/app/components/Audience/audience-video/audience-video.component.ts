@@ -29,8 +29,6 @@ export class AudienceVideoComponent {
   zoomScale: number = 1;
 
 
-
-
   @Input() stream: any = '';
   @Input() name: any = '';
   @Input() id: any = '';
@@ -45,8 +43,9 @@ export class AudienceVideoComponent {
     private toggleService: ToggleService,
     private meetingService: MeetingService) {
     effect(() => {
-      // this.videoService.audienceVideoStream();
-      if (this.videoService.audienceVideoStream().length) {
+      this.meetingService.users_info();
+      if (this.meetingService.users_info().length) {
+        if (!this.stream) return
         const elem: any = document.getElementsByClassName(this.id)[0];
         elem.playsInline = true;
         elem.autoplay = true;
@@ -62,15 +61,16 @@ export class AudienceVideoComponent {
       this.meetingService.skipList()
       untracked(() => {
         const data_canvas: any = this.data_canvas?.nativeElement;
+
+        if (!data_canvas) return;
+
         const data_context: any = data_canvas.getContext('2d');
 
         data_context.clearRect(0, 0, data_canvas.width / this.zoomScale, data_canvas.height / this.zoomScale);
-
         this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
           if (data.screen == this.screen) {
 
             if (!this.meetingService.skipList().includes(data.userId)) {
-
               this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
             }
           }
@@ -84,18 +84,18 @@ export class AudienceVideoComponent {
 
 
 
-
   goToPresent() {
-    let audienceVideo = this.videoService.audienceVideoStream();
+    let audienceVideo = this.meetingService.users_info();
 
-    const nowVideo = audienceVideo.findIndex((stream) => stream.id == this.id);
 
-    const presentVideo = audienceVideo[nowVideo]
-    audienceVideo.splice(nowVideo, 1)
-    audienceVideo.unshift(this.videoService.presentVideoStream())
+    const nowVideo = audienceVideo.findIndex((stream: any) => stream.id == this.id);
 
-    this.videoService.audienceVideoStream.set(audienceVideo)
-    this.videoService.presentVideoStream.set(presentVideo)
+    const presentVideo = audienceVideo[nowVideo];
+    audienceVideo.splice(nowVideo, 1);
+    audienceVideo.unshift(this.meetingService.present_user_info());
+
+    this.meetingService.users_info.set(audienceVideo);
+    this.meetingService.present_user_info.set(presentVideo);
   }
 
   videoResize(target: any) {

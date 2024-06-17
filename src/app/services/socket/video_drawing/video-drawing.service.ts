@@ -41,7 +41,8 @@ export class VideoDrawingService {
       this.lastUser.push(data.target_id)
       this.drawVarArray.set({ ...this.drawVarArray() })
       console.log(this.drawVarArray())
-      this.dataArray.push(data.drawingEvent);
+
+      this.dataArray.push(data);
       if (this.dataArray.length == 1) {
         this.drawingQueue();
       }
@@ -103,14 +104,22 @@ export class VideoDrawingService {
       return
     }
 
-    const data_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.data_canvas')
+
+    const data = this.dataArray[0].drawingEvent;
+    const screenResult = this.dataArray[0].screen ? 'screen' : 'noScreen';
+
+    const data_canvas: any = document.querySelector('#' + CSS.escape(this.lastUser[0]) + '.' + CSS.escape(screenResult))!.querySelector('.data_canvas');
+
+    // const data_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.data_canvas')
+
     const data_context: any = data_canvas.getContext('2d');
-    const target_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.target_canvas')
+    const target_canvas: any = document.querySelector('#' + CSS.escape(this.lastUser[0]) + '.' + CSS.escape(screenResult))!.querySelector('.target_canvas')
+    // const target_canvas: any = document.getElementById(this.lastUser[0])!.querySelector('.target_canvas')
     const context: any = target_canvas.getContext('2d');
 
 
 
-    const data = this.dataArray[0]
+
 
     // this.drawingService.end(data_context,firstValue[firstValue.length - 1].points, firstValue[firstValue.length - 1].tool)
 

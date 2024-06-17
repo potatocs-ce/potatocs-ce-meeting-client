@@ -78,18 +78,32 @@ export class MediasoupService {
             meetingInfo.userData = userInfo.userData;
 
             this.meetingService.meeting_info.set(meetingInfo);
+
+            // 현재 맴버 리스트
+            meetingInfo.currentMembers.filter((data: any) => data.online).map((user: any) => {
+
+              if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.meetingService.present_user_info()) {
+                this.meetingService.present_user_info.set({ user_id: user.member_id._id, name: user.member_id.name, screen: false })
+              } else if (!this.meetingService.users_info().some((users: any) => users.user_id == user.member_id._id)) {
+                this.meetingService.users_info.set([...this.meetingService.users_info(), { user_id: user.member_id._id, name: user.member_id.name, screen: false }])
+              }
+            })
+            console.log(this.meetingService.present_user_info(), this.meetingService.users_info())
+
+
+
+
+            // 통신을 위해 필요한 미디어 수준 정보 요청 
+            await this.socket.emit('getRouterRtpCapabilities', {}, async (data: any) => {
+              // 초기 연결 설정 producer , consumer 연결 transport 
+              let device = await this.loadDevice(data);
+              this.device = device;
+              await this.initTransports(device);
+
+              // this.produce('videoType')
+            })
           })
 
-
-          // 통신을 위해 필요한 미디어 수준 정보 요청 
-          await this.socket.emit('getRouterRtpCapabilities', {}, async (data: any) => {
-            // 초기 연결 설정 producer , consumer 연결 transport 
-            let device = await this.loadDevice(data);
-            this.device = device;
-            await this.initTransports(device);
-
-            this.produce('videoType')
-          })
         })
       })
     }
@@ -149,7 +163,7 @@ export class MediasoupService {
         this.producerTransport.on(
           'produce',
           async ({ kind, rtpParameters, appData }: any, callback: any, errback: any) => {
-            console.log(kind, rtpParameters, appData)
+            // console.log(kind, rtpParameters, appData)
             try {
               await this.socket.emit('produce', {
                 producerTransportId: this.producerTransport.id,
@@ -157,7 +171,6 @@ export class MediasoupService {
                 rtpParameters,
                 screen: appData.screen
               }, ({ producer_id, name, type }: any) => {
-
                 callback({ id: producer_id })
               })
             } catch (err) {
@@ -259,19 +272,7 @@ export class MediasoupService {
       }
     )
 
-    // 새로운 연결 들어옴
-    this.socket.on(
-      'newProducers',
-      async (data: any) => {
-        console.log('Now Producers', data)
 
-
-
-        for (let { producer_id, producer_socket_id, screen } of data) {
-          await this.consume(producer_id, producer_socket_id, screen)
-        }
-      }
-    )
 
     this.socket.on(
       'disconnect',
@@ -282,6 +283,7 @@ export class MediasoupService {
 
     this.socket.on(
       'user_join', async (data: any) => {
+
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;
@@ -290,6 +292,19 @@ export class MediasoupService {
           meetingInfo.userData = userInfo.userData;
 
           this.meetingService.meeting_info.set(meetingInfo);
+
+          // 현재 맴버 리스트
+          meetingInfo.currentMembers.filter((data: any) => data.online).map((user: any) => {
+
+            if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.meetingService.present_user_info()) {
+              this.meetingService.present_user_info.set({ user_id: user.member_id._id, name: user.member_id.name, screen: false })
+            } else if (!this.meetingService.users_info().some((users: any) => users.user_id == user.member_id._id) &&
+              this.meetingService.present_user_info().user_id != user.member_id._id) {
+
+              this.meetingService.users_info.set([...this.meetingService.users_info(), { user_id: user.member_id._id, name: user.member_id.name, screen: false }])
+            }
+          })
+          console.log(this.meetingService.present_user_info(), this.meetingService.users_info())
         })
       }
     )
@@ -298,6 +313,7 @@ export class MediasoupService {
     this.socket.on(
       'user_exit',
       async (data: any) => {
+
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;
@@ -306,7 +322,38 @@ export class MediasoupService {
           meetingInfo.userData = userInfo.userData;
 
           this.meetingService.meeting_info.set(meetingInfo);
+
+
+
+
+          if (this.meetingService.present_user_info() && this.meetingService.present_user_info().user_id == data.user_id) {
+            this.meetingService.present_user_info.set(undefined);
+
+            if (this.meetingService.users_info().length > 0) {
+              this.meetingService.present_user_info.set(this.meetingService.users_info()[0]);
+              this.meetingService.users_info().shift()
+
+              this.meetingService.users_info.set([...this.meetingService.users_info()])
+            } else {
+              this.meetingService.present_user_info.set(undefined);
+            }
+          } else {
+            const filtered_stream = this.meetingService.users_info().filter((stream: any) => stream.user_id != data.user_id);
+            this.meetingService.users_info.set([...filtered_stream])
+          }
         })
+      }
+    )
+
+    // 새로운 연결 들어옴
+    this.socket.on(
+      'newProducers',
+      async (data: any) => {
+        console.log('Now Producers', data)
+
+        for (let { producer_id, producer_socket_id, screen } of data) {
+          await this.consume(producer_id, producer_socket_id, screen)
+        }
       }
     )
   }
@@ -325,22 +372,68 @@ export class MediasoupService {
       track.stop()
     })
 
-    // presentVideoStream에 있는지, audienceVideoStream에 있는지 찾아야 함
 
-    if (this.videoService.presentVideoStream() != undefined && this.videoService.presentVideoStream().id == consumer_id) {
-      if (this.videoService.audienceVideoStream().length > 0) {
-        this.videoService.presentVideoStream.set(this.videoService.audienceVideoStream()[0]);
-        this.videoService.audienceVideoStream().shift()
+    // 종료하는 대상이 발표를 하고 있는 발표자라면...
+    if (this.meetingService.present_user_info() && this.meetingService.present_user_info().id == consumer_id) {
 
-        this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream()])
+      if (this.meetingService.present_user_info().screen) {
+        if (this.meetingService.users_info().length > 0) {
+          this.meetingService.present_user_info.set(undefined);
+          this.meetingService.present_user_info.set(this.meetingService.users_info()[0]);
+          this.meetingService.users_info().shift()
+
+          this.meetingService.users_info.set([...this.meetingService.users_info()])
+        } else {
+          this.meetingService.present_user_info.set(undefined);
+        }
       } else {
-        this.videoService.presentVideoStream.set(undefined);
+
+        this.meetingService.present_user_info.update((present_user_info: any) => {
+          present_user_info.id = undefined;
+          present_user_info.stream = undefined;
+
+          return { ...present_user_info };
+        })
       }
     } else {
-      const filtered_stream = this.videoService.audienceVideoStream().filter((stream) => stream.id != consumer_id);
-      this.videoService.audienceVideoStream.set([...filtered_stream])
+      // 아니면
+      this.meetingService.users_info.update((users_info: any) => {
+        const index = users_info.findIndex((users: any) => users.id == consumer_id);
+
+
+        if (users_info[index].screen) {
+          const filtered_stream = this.meetingService.users_info().filter((stream: any) => stream.id != consumer_id);
+          return [...filtered_stream]
+        } else {
+          users_info[index].id = undefined;
+          users_info[index].stream = undefined;
+
+          return [...users_info];
+        }
+
+      })
     }
+
+    // presentVideoStream에 있는지, audienceVideoStream에 있는지 찾아야 함
+
+    // if (this.videoService.presentVideoStream() != undefined && this.videoService.presentVideoStream().id == consumer_id) {
+    //   if (this.videoService.audienceVideoStream().length > 0) {
+    //     this.videoService.presentVideoStream.set(this.videoService.audienceVideoStream()[0]);
+    //     this.videoService.audienceVideoStream().shift()
+
+    //     this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream()])
+    //   } else {
+    //     this.videoService.presentVideoStream.set(undefined);
+    //   }
+    // } else {
+    //   const filtered_stream = this.videoService.audienceVideoStream().filter((stream) => stream.id != consumer_id);
+    //   this.videoService.audienceVideoStream.set([...filtered_stream])
+    // }
     // elem.remove();
+
+
+
+
 
     this.consumers.delete(consumer_id)
   }
@@ -351,14 +444,41 @@ export class MediasoupService {
     this.getConsumeStream(producer_id, producer_socket_id).then(
       ({ consumer, stream, kind, name, user_id, screen }: any) => {
         this.consumers.set(consumer.id, consumer)
-        console.log('스크린', screen)
+
         if (kind === 'video') {
 
-          if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
-            this.videoService.presentVideoStream.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id, screen })
+          // if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
+          //   this.videoService.presentVideoStream.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id, screen })
+          // } else {
+          //   this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id, screen }])
+          // }
+
+
+          if (screen == false) {
+            if (this.meetingService.present_user_info()?.user_id == user_id) {
+              // 유저 발표 칸에 내가 들어있고, 화면 공유 모드가 아니면
+              this.meetingService.present_user_info.set({ ...this.meetingService.present_user_info(), id: consumer.id, socket_id: producer_socket_id, stream })
+            } else if (this.meetingService.users_info().some((users_info: any) => users_info.user_id == user_id)) {
+              // 유저들 칸에 내가 들어있으면 그 데이터에 produce stream 데이터 입히기
+              this.meetingService.users_info.update((users_info: any) => {
+                const index = users_info.findIndex((user: any) => user.user_id == user_id);
+
+                users_info[index] = { ...users_info[index], id: consumer.id, stream, socket_id: producer_socket_id }
+
+                return [...users_info]
+              })
+            }
+
           } else {
-            this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id, screen }])
+            // 화면 공유 모드를 넣으려고 하는거면 칸 하나를 더 마련해야 함
+            if (!this.meetingService.present_user_info()) {
+              // 유저 발표 칸에 아무도 없고, 화면 공유 모드이면
+              this.meetingService.present_user_info.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id, screen })
+            } else {
+              this.meetingService.users_info.set([...this.meetingService.users_info(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id, screen }])
+            }
           }
+
         } else {
           this.videoService.audioStream.set([...this.videoService.audioStream(), { id: consumer.id, stream, user_id, socket_id: producer_socket_id }])
 
@@ -564,7 +684,7 @@ export class MediasoupService {
     }
     // console.log('Mediacontraints:', mediaConstraints);
 
-    let stream;
+    let stream: any;
 
     try {
       // 스크린 공유인 경우
@@ -610,12 +730,39 @@ export class MediasoupService {
       this.producers.set(producer.id, producer)
       // 비디오라면
       if (!audio) {
-        // 현재 발표 칸에 비디오가 없으면
-        if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
-          this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen })
+
+        if (screen == false) {
+          if (this.meetingService.present_user_info()?.user_id == this.authService.getTokenInfo()._id) {
+            // 유저 발표 칸에 내가 들어있고, 화면 공유 모드가 아니면
+            this.meetingService.present_user_info.set({ ...this.meetingService.present_user_info(), id: producer.id, stream })
+          } else if (this.meetingService.users_info().some((users_info: any) => users_info.user_id == this.authService.getTokenInfo()._id)) {
+            // 유저들 칸에 내가 들어있으면 그 데이터에 produce stream 데이터 입히기
+            this.meetingService.users_info.update((users_info: any) => {
+              const index = users_info.findIndex((user: any) => user.user_id == this.authService.getTokenInfo()._id);
+
+              users_info[index] = { ...users_info[index], id: producer.id, stream }
+
+              return [...users_info]
+            })
+          }
+
         } else {
-          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen }])
+
+          // 화면 공유 모드를 넣으려고 하는거면 칸 하나를 더 마련해야 함
+          if (!this.meetingService.present_user_info()) {
+            // 유저 발표 칸에 아무도 없고, 화면 공유 모드이면
+            this.meetingService.present_user_info.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name, screen })
+          } else {
+            this.meetingService.users_info.set([...this.meetingService.users_info(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name, screen }])
+          }
         }
+
+
+        // if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
+        //   this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen })
+        // } else {
+        //   this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen }])
+        // }
         this.toggleService.toggle_video.set(true);
         this.videoService.videoLoading.set(false);
       } else {
@@ -698,21 +845,48 @@ export class MediasoupService {
       elem.srcObject.getTracks().forEach(function (track: any) {
         track.stop()
       })
-      if (this.videoService.presentVideoStream() && this.videoService.presentVideoStream().id == producer_id) {
-        // this.videoService.presentVideoStream.set(undefined);
 
-        if (this.videoService.audienceVideoStream().length > 0) {
-          this.videoService.presentVideoStream.set(this.videoService.audienceVideoStream()[0]);
-          this.videoService.audienceVideoStream().shift()
+      if (type != 'screenType') {
+        // 종료하는 대상이 발표를 하고 있는 발표자라면...
+        if (this.meetingService.present_user_info() && this.meetingService.present_user_info().id == producer_id) {
 
-          this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream()])
+          this.meetingService.present_user_info.update((present_user_info: any) => {
+            present_user_info.id = undefined;
+            present_user_info.stream = undefined;
+
+            return { ...present_user_info };
+          })
+
         } else {
-          this.videoService.presentVideoStream.set(undefined);
+          // 아니면
+          this.meetingService.users_info.update((users_info: any) => {
+            const index = users_info.findIndex((users: any) => users.id == producer_id);
+            users_info[index].id = undefined;
+            users_info[index].stream = undefined;
+
+            return [...users_info];
+          })
         }
       } else {
-        const filtered_stream = this.videoService.audienceVideoStream().filter((stream) => stream.id != producer_id);
-        this.videoService.audienceVideoStream.set([...filtered_stream])
+        if (this.meetingService.present_user_info() && this.meetingService.present_user_info().id == producer_id) {
+          if (this.meetingService.users_info().length > 0) {
+            this.meetingService.present_user_info.set(undefined);
+            this.meetingService.present_user_info.set(this.meetingService.users_info()[0]);
+            this.meetingService.users_info().shift()
+
+            this.meetingService.users_info.set([...this.meetingService.users_info()])
+          } else {
+            this.meetingService.present_user_info.set(undefined);
+          }
+
+        } else {
+          const filtered_stream = this.meetingService.users_info().filter((stream: any) => stream.id != producer_id);
+          this.meetingService.users_info.set([...filtered_stream])
+        }
       }
+
+
+
     }
   }
 

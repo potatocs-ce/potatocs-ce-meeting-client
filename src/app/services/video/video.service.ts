@@ -16,12 +16,12 @@ export class VideoService {
   nowVideoId: any = signal<string>('');
   nowAudioId = signal<string>('');
 
-  // 현재 발표 비디오 스트림
-  presentVideoStream = signal<any>(undefined);
+  // // 현재 발표 비디오 스트림
+  // presentVideoStream = signal<any>(undefined);
 
 
-  // 현재 청중들 비디오 스트림
-  audienceVideoStream = signal<Array<any>>([]);
+  // // 현재 청중들 비디오 스트림
+  // audienceVideoStream = signal<Array<any>>([]);
 
 
   // 현재 오디오 스트림
@@ -53,9 +53,9 @@ export class VideoService {
           }
         }
       })
-      this.presentVideoStream.set(stream);
+      // this.presentVideoStream.set(stream);
 
-      this.audienceVideoStream.set([...this.audienceVideoStream(), stream])
+      // this.audienceVideoStream.set([...this.audienceVideoStream(), stream])
       this.toggleService.toggle_video.set(true);
     } catch (err) {
       console.error(err)
@@ -63,19 +63,19 @@ export class VideoService {
   }
 
   stopVideo = async () => {
-    const stream = this.presentVideoStream();
+    // const stream = this.presentVideoStream();
 
-    if (stream) {
-      const tracks = stream.getTracks();
+    // if (stream) {
+    //   const tracks = stream.getTracks();
 
-      // 각 트랙에 대해 중지 메서드 호출
-      tracks.forEach((track: any) => {
-        track.stop();
-      });
-    }
+    //   // 각 트랙에 대해 중지 메서드 호출
+    //   tracks.forEach((track: any) => {
+    //     track.stop();
+    //   });
+    // }
 
 
-    this.presentVideoStream.set(undefined);
+    // this.presentVideoStream.set(undefined);
     this.toggleService.toggle_video.set(false);
   }
 
@@ -87,12 +87,12 @@ export class VideoService {
     this.nowVideoId.set('')
     this.nowAudioId.set('')
 
-    // 현재 발표 비디오 스트림
-    this.presentVideoStream.set(undefined)
+    // // 현재 발표 비디오 스트림
+    // this.presentVideoStream.set(undefined)
 
 
-    // 현재 청중들 비디오 스트림
-    this.audienceVideoStream.set([]);
+    // // 현재 청중들 비디오 스트림
+    // this.audienceVideoStream.set([]);
 
 
     // 현재 오디오 스트림
