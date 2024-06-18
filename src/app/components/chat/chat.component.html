@@ -34,8 +34,8 @@
     </section>
     <form class="input_section" (ngSubmit)="submitChat()">
 
-        <input [(ngModel)]="chatContent" [ngModelOptions]="{standalone: true}" />
-        <button mat-icon-button><mat-icon>send</mat-icon></button>
+        <input style="outline: none;" [(ngModel)]="chatContent" type="text" [ngModelOptions]="{standalone: true}" />
+        <button mat-icon-button><mat-icon fontSet="material-symbols-outlined">arrow_upward_alt</mat-icon></button>
 
     </form>
 </div>

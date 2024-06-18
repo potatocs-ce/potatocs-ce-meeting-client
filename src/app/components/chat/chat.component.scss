@@ -81,11 +81,25 @@
     .input_section {
         display: flex;
         gap: 0.1rem;
+        background-color: white;
+        border-radius: 5rem;
 
         input {
             flex: 1;
             width: 100%;
-            border: 1px solid $main_color;
+            // border: 1px solid $main_color;
+            border-top-left-radius: 5rem;
+            border-bottom-left-radius: 5rem;
+            outline: none !important;
+
+
+            &:hover {
+                border: none;
+            }
+
+            &:focus {
+                border: none;
+            }
         }
 
 
