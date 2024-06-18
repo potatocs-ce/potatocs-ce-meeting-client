@@ -105,16 +105,21 @@ export class AddSurveyComponent {
   // 제출
   submit() {
     // console.log({ title: this.title, description: this.description, cards: this.cards })
-    this.surveyApiService.addSurvey({ title: this.title, description: this.description, cards: this.cards, meetingId: this.meetingService.meeting_room_id() }).subscribe((res: any) => {
-      if (res.status) {
-        this.dialogService.openDialogPositive('Success to add a survey')
-        // 다른 사람들에게 리스트 업데이트 알림
-        this.surveySocketService.updateSurvey();
-        this.onNoClick();
-      } else {
-        this.dialogService.openDialogNegative('Failed to add a survey...')
-      }
-    })
+    if (this.title == '') {
+      this.dialogService.openDialogNegative('Title is required')
+    } else {
+      this.surveyApiService.addSurvey({ title: this.title, description: this.description, cards: this.cards, meetingId: this.meetingService.meeting_room_id() }).subscribe((res: any) => {
+        if (res.status) {
+          this.dialogService.openDialogPositive('Success to add a survey')
+          // 다른 사람들에게 리스트 업데이트 알림
+          this.surveySocketService.updateSurvey();
+          this.onNoClick();
+        } else {
+          this.dialogService.openDialogNegative('Failed to add a survey...')
+        }
+      })
+    }
+
   }
 
   // 다이어로그 끄기 함수
