@@ -1,5 +1,14 @@
 @import '../../../setting.scss';
 
+
+
+.audience_top {
+    display: flex;
+    align-items: center;
+    border-radius: 0.5rem;
+    background-color: rgb(10, 10, 10);
+}
+
 .audience_container {
     display: inline-flex;
     gap: 0.5rem;
