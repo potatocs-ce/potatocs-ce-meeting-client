@@ -1,4 +1,4 @@
-<div class='audience_top'>
+<div class='audience_top' [style]="toggleService.toggle_audience() ? '' : 'height: 0px; overflow: hidden;'">
     <div class="audience_container" [style]="toggleService.toggle_audience() ? '' : 'visibility: hidden;'">
         @for(stream of videoList; track stream){
         <app-audience-video [socket_id]="stream.socket_id" [stream]="stream.stream" [name]="stream.name"

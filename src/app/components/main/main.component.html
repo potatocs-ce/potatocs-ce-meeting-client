@@ -34,7 +34,7 @@
                         </section>
                         @if(meetingService.users_info().length != 0 && toggle_video_whiteboard == 'document'){
                         <section class="audience_section"
-                            [style]="toggleService.toggle_audience() ? '' : 'position: absolute; bottom: 0; width: 100%'">
+                            [style]="toggleService.toggle_audience() ? 'position: absolute; bottom: 0; width: 100%' : 'position: absolute; bottom: 0; width: 100%'">
                             <app-audience></app-audience>
                         </section>
                         }
