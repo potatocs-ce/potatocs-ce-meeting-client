@@ -20,4 +20,8 @@ export class MeetingService {
   present_user_info = signal<any>(undefined);
   // 참가 중인 유저들 리스트
   users_info = signal<any>([]);
+
+  device_check: any = signal<any>(false);
+
+
 }

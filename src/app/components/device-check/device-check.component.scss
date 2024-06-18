@@ -95,7 +95,10 @@ listing {
 
 .card-container {
     height: 100vh;
-    background: linear-gradient(#e8edff, #fff2f9);
+    // background: linear-gradient(#e8edff, #fff2f9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 mat-card {
@@ -180,7 +183,7 @@ mat-card {
     width: 160px;
     height: 90px;
     border-radius: 2px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+    // box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
     overflow: hidden;
 }
 
@@ -264,7 +267,8 @@ video {
     display: inline-block;
     height: 44px;
     padding: 0 40px;
-    background-color: #09f;
+    // background-color: #09f;
+
     font-weight: bold;
     font-size: 15px;
     color: white;

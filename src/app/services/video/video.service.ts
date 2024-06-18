@@ -9,12 +9,18 @@ export class VideoService {
   constructor(private toggleService: ToggleService) { }
 
   // 장치 리스트
-  videoDeivces = signal<Array<object>>([]);
-  audioDevices = signal<Array<object>>([]);
+  videoDeivces = signal<Array<any>>([]);
+  audioDevices = signal<Array<any>>([]);
+  speakerDevices = signal<Array<any>>([]);
 
   // 현재 내 비디오, 오디오
   nowVideoId: any = signal<string>('');
-  nowAudioId = signal<string>('');
+  nowAudioId: any = signal<string>('');
+  nowSpeakerId: any = signal<string>('');
+
+  audioDeviceExist: any = signal<boolean>(true);
+  videoDeviceExist: any = signal<boolean>(true);
+
 
   // // 현재 발표 비디오 스트림
   // presentVideoStream = signal<any>(undefined);

@@ -88,7 +88,7 @@ export class MediasoupService {
                 this.meetingService.users_info.set([...this.meetingService.users_info(), { user_id: user.member_id._id, name: user.member_id.name, screen: false, profile: user.member_id.profile_img }])
               }
             })
-            console.log(this.meetingService.present_user_info(), this.meetingService.users_info())
+            // console.log(this.meetingService.present_user_info(), this.meetingService.users_info())
 
 
 
@@ -100,7 +100,12 @@ export class MediasoupService {
               this.device = device;
               await this.initTransports(device);
 
-              // this.produce('videoType')
+
+
+              if (this.videoService.videoDeviceExist()) {
+                this.produce('videoType');
+                this.produce('audioType');
+              }
             })
           })
 
@@ -401,12 +406,12 @@ export class MediasoupService {
         const index = users_info.findIndex((users: any) => users.id == consumer_id);
 
 
-        if (users_info[index].screen) {
+        if (users_info[index]?.screen) {
           const filtered_stream = this.meetingService.users_info().filter((stream: any) => stream.id != consumer_id);
           return [...filtered_stream]
         } else {
-          users_info[index].id = undefined;
-          users_info[index].stream = undefined;
+          users_info[index]?.id ? users_info[index].id = undefined : '';
+          users_info[index]?.stream ? users_info[index].stream = undefined : '';
 
           return [...users_info];
         }
@@ -430,10 +435,6 @@ export class MediasoupService {
     //   this.videoService.audienceVideoStream.set([...filtered_stream])
     // }
     // elem.remove();
-
-
-
-
 
     this.consumers.delete(consumer_id)
   }
@@ -604,6 +605,7 @@ export class MediasoupService {
 
     deviceId = deviceId == null ? this.nowVideo : deviceId;
 
+
     let mediaConstraints: any = {};
     let audio = false;
     let screen = false;
@@ -614,6 +616,8 @@ export class MediasoupService {
         this.videoService.audioLoading.set(true);
         mediaConstraints = {
           audio: {
+            'echoCancellation': true,
+            'noiseSuppression': true,
             deviceId: deviceId
           },
           video: false
@@ -631,11 +635,11 @@ export class MediasoupService {
             audio: false,
             video: {
               width: {
-                min: 640,
+                min: 320,
                 ideal: 1920
               },
               height: {
-                min: 400,
+                min: 200,
                 ideal: 1080
               },
               deviceId: deviceId,
@@ -646,11 +650,11 @@ export class MediasoupService {
             audio: false,
             video: {
               width: {
-                min: 640,
+                min: 320,
                 ideal: 1920
               },
               height: {
-                min: 400,
+                min: 200,
                 ideal: 1080
               },
               facingMode: { exact: "user" },
@@ -682,13 +686,19 @@ export class MediasoupService {
       console.log('Producer already exists fot this type ' + type);
       return
     }
-    // console.log('Mediacontraints:', mediaConstraints);
+    console.log('Mediacontraints:', mediaConstraints);
 
     let stream: any;
 
     try {
       // 스크린 공유인 경우
-      stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints)
+      stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints).catch((error: any) => {
+        if (error.name === 'OverconstrainedError') {
+          console.error('The constraint ' + error.constraint + ' is not satisfied by any available camera.');
+        } else {
+          console.error('Error accessing camera: ', error);
+        }
+      })
 
       // 오디오 공유인 경우
       const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
@@ -745,7 +755,8 @@ export class MediasoupService {
               return [...users_info]
             })
           }
-
+          this.toggleService.toggle_video.set(true);
+          this.videoService.videoLoading.set(false);
         } else {
 
           // 화면 공유 모드를 넣으려고 하는거면 칸 하나를 더 마련해야 함
@@ -756,16 +767,8 @@ export class MediasoupService {
             this.meetingService.users_info.set([...this.meetingService.users_info(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name, screen }])
           }
         }
-
-
-        // if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.videoService.presentVideoStream()) {
-        //   this.videoService.presentVideoStream.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen })
-        // } else {
-        //   this.videoService.audienceVideoStream.set([...this.videoService.audienceVideoStream(), { id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name + '(me)', screen }])
-        // }
-        this.toggleService.toggle_video.set(true);
-        this.videoService.videoLoading.set(false);
       } else {
+        this.toggleService.toggle_audio.set(true);
         this.videoService.audioLoading.set(false);
       }
 
@@ -793,6 +796,7 @@ export class MediasoupService {
 
 
     } catch (err: any) {
+      console.error(err);
       if (type == this.mediaType.screen) {
         // this.isScreen = false;
         this.toggleService.toggle_screen_share.set(false)
@@ -816,9 +820,7 @@ export class MediasoupService {
   }
 
 
-
-
-  closeProducer(type: any) {
+  async closeProducer(type: any) {
     if (!this.producerLabel.has(type)) {
       console.log('There is no producer for this type ' + type)
       return

@@ -84,7 +84,7 @@ export class MainComponent {
     effect(async () => {
       if (this.meetingService.meeting_room_id() !== '' && this.meetingService.meeting_room_id() !== undefined) {
 
-        await this.mediasoupService.joinRoom()
+        // await this.mediasoupService.joinRoom()
       }
     })
 
@@ -129,37 +129,74 @@ export class MainComponent {
 
         this.videoDrawingService.drawVarArray.set(object)
       })
+
+
+
+
+      navigator.mediaDevices.addEventListener('devicechange', async event => {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        await this.convertDeviceObject(devices)
+      });
     });
 
 
-    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-      navigator.mediaDevices.enumerateDevices().then((devices: any) => {
-        devices.forEach(async (device: any) => {
-          // 오디오 타입인 경우
-          if ('audioinput' === device.kind) {
-            // 만약 첫 값이면
-            if (this.videoService.audioDevices().length == 0) {
-              this.videoService.nowAudioId.set(device.deviceId);
-            }
-            this.videoService.audioDevices.set([...this.videoService.audioDevices(), { label: device.label, deviceId: device.deviceId }])
-          }
-          // 비디오 타입인 경우
-          else if ('videoinput' === device.kind) {
-            // 만약 첫 값이면
-            if (this.videoService.videoDeivces().length == 0) {
-              // 현재 디바이스 넣기
-              this.videoService.nowVideoId.set(device.deviceId);
-            }
-            this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
-          }
-        })
-      })
-    }
+    // if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
+    //   navigator.mediaDevices.enumerateDevices().then((devices: any) => {
+    //     devices.forEach(async (device: any) => {
+    //       // 오디오 타입인 경우
+    //       if ('audioinput' === device.kind) {
+    //         // 만약 첫 값이면
+    //         if (this.videoService.audioDevices().length == 0) {
+    //           this.videoService.nowAudioId.set(device.deviceId);
+    //         }
+    //         this.videoService.audioDevices.set([...this.videoService.audioDevices(), { label: device.label, deviceId: device.deviceId }])
+    //       }
+    //       // 비디오 타입인 경우
+    //       else if ('videoinput' === device.kind) {
+    //         // 만약 첫 값이면
+    //         if (this.videoService.videoDeivces().length == 0) {
+    //           // 현재 디바이스 넣기
+    //           this.videoService.nowVideoId.set(device.deviceId);
+    //         }
+    //         this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
+    //       }
+    //     })
+    //   })
+    // }
   }
 
 
   //청중 모드에 동영상 추가
+  async convertDeviceObject(devices: any) {
+    // 장치값 초기화
 
+
+    this.videoService.audioDevices.set([]);
+
+    this.videoService.videoDeivces.set([]);
+
+    this.videoService.speakerDevices.set([]);
+
+    devices.forEach((device: any) => {
+      if (device.kind == 'audioinput') {
+
+        this.videoService.audioDevices.set([...this.videoService.audioDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+      } else if (device.kind == 'videoinput') {
+
+        this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+      } else if (device.kind == 'audiooutput') {
+
+        this.videoService.speakerDevices.set([...this.videoService.speakerDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+      }
+    })
+
+
+    this.videoService.nowAudioId.set(this.videoService.audioDevices()[0]!.deviceId)
+
+    this.videoService.nowVideoId.set(this.videoService.videoDeivces()[0]!.deviceId)
+
+    this.videoService.nowSpeakerId.set(this.videoService.speakerDevices()[0]!.deviceId)
+  }
 
 
 }

@@ -109,7 +109,13 @@ export class AudienceVideoComponent {
 
     const canvas_container: any = document.getElementsByClassName('audience_canvas_container')[0];
 
-    this.zoomScale = this.videoHeight / target.videoHeight * zoomScale;
+    // 비디오 해상도 계산
+    const aspectRatio = target.videoWidth / target.videoHeight;
+    // 새로운 세로 높이 계산
+    const newHeight = 320 / aspectRatio;
+
+
+    this.zoomScale = this.videoHeight / newHeight * zoomScale;
 
     target.style.height = `${this.videoHeight}px`;
 

@@ -68,8 +68,11 @@ export class ToolbarComponent {
       this.video_list = this.videoService.videoDeivces();
       this.audio_list = this.videoService.audioDevices();
 
-      this.now_audio = this.videoService.nowAudioId();
-      this.now_video = this.videoService.nowVideoId();
+      if (this.videoService.nowAudioId() && this.videoService.nowVideoId()) {
+        this.now_audio = this.videoService.nowAudioId();
+        this.now_video = this.videoService.nowVideoId();
+      }
+
     })
 
     // effect for meetingService
@@ -127,13 +130,21 @@ export class ToolbarComponent {
   // 마이크 선택
   selectAudio(deviceId: string) {
     this.videoService.nowAudioId.set(deviceId);
+
+
   }
 
   // 비디오 카메라 선택
   async selectVideo(deviceId: string) {
 
     this.videoService.nowVideoId.set(deviceId);
+    if (this.toggleService.toggle_video()) {
+      // 만약 이미 비디오가 켜진 상태라면
+      await this.mediasoupService.closeProducer('videoType');
 
+      this.mediasoupService.produce('videoType')
+
+    }
   }
 
 

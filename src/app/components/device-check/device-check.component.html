@@ -1,4 +1,4 @@
-<div class="card-container" fxLayoutAlign="center center" fxLayout="column">
+<div class="card-container">
     <mat-card class="deviceSetContent">
         <header class="device_set_header">
             <h4>Device test</h4>
@@ -11,16 +11,16 @@
                 <h6 class="titleRec cam">Camera</h6>
                 <div class="contentRec">
                     <div class="deviceList camera">
-                        <!-- <select class="selectBox ellipsis" [(ngModel)]="selectedVideoDevice"
+                        <select class="selectBox ellipsis" [(ngModel)]="selectedVideoDevice"
                             (ngModelChange)="selectDevice()">
                             <option class="deviceItem ellipsis" *ngFor="let videoDevice of videoDevices"
                                 [ngValue]="videoDevice">{{videoDevice?.label}}</option>
-                        </select> -->
+                        </select>
                     </div>
                     <div class="device_play" data-audio-volume="0" data-video-status="playing">
-                        <!-- <div class="video">
+                        <div class="video">
                             <video #video autoplay="" muted=""></video>
-                        </div> -->
+                        </div>
 
                         <div class="video">
                             <video #video autoplay loop muted playsinline [srcObject]="localStream$|async"></video>
@@ -29,7 +29,9 @@
 
                         <!-- 카메라 On / Off -->
                         <section class="example-section txRec">
-                            <!-- <mat-checkbox class="example-margin selectBox ellipsis" [(ngModel)]="isChecked" (change)="checkValue(isChecked?cameraOff : cameraOn)">Click to turn off the camera!</mat-checkbox> -->
+                            <mat-checkbox class="example-margin selectBox ellipsis" [(ngModel)]="isChecked"
+                                (change)="checkValue(isChecked?cameraOff : cameraOn)">Click to turn off the
+                                camera!</mat-checkbox>
 
                             <!-- <mat-checkbox class="camera desc video-playing-desc subTx camera" [(ngModel)]="isChecked"
                                 (change)="checkValue(isChecked?cameraOff : cameraOn)">
@@ -59,13 +61,13 @@
                 <div class="contentRec">
                     <div class="device-play" data-audio-volume="0" data-video-status="playing">
                         <div class="deviceList mic">
-                            <!-- <select class="selectBox ellipsis" #miceDeivce [(ngModel)]="selectedMiceDevice"
+                            <select class="selectBox ellipsis" #miceDeivce [(ngModel)]="selectedMiceDevice"
                                 (ngModelChange)="selectDevice()">
                                 <option class="deviceItem ellipsis" *ngFor="let miceDevice of miceDevices"
                                     [ngValue]="miceDevice">
                                     {{miceDevice?.label}}
                                 </option>
-                            </select> -->
+                            </select>
                         </div>
                         <!-- txRec 오디오 스트림바 -->
 
@@ -107,11 +109,11 @@
                 <div class="contentRec">
                     <div class="device-play" data-audio-volume="0" data-video-status="playing">
                         <div class="deviceList">
-                            <!-- <select class="selectBox ellipsis" [(ngModel)]="selectedSpeakerDevice"
+                            <select class="selectBox ellipsis" [(ngModel)]="selectedSpeakerDevice"
                                 (ngModelChange)="selectDevice()">
                                 <option class="deviceItem ellipsis" *ngFor="let speakerDevice of speakerDevices"
                                     [ngValue]="speakerDevice">{{speakerDevice?.label}}</option>
-                            </select> -->
+                            </select>
                         </div>
 
                         <div class="txRec">
@@ -149,7 +151,7 @@
 
 
             <footer class="btnsRec">
-                <button class="btnConfirm" mat-raised-button color="primary" (click)="joinMeetingRoom()"> Join</button>
+                <button class="btnConfirm" mat-flat-button color="primary" (click)="joinMeetingRoom()"> Join</button>
             </footer>
 
         </section>

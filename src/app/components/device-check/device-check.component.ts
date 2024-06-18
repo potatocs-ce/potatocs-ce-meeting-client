@@ -1,29 +1,32 @@
 import { Component, ElementRef, ViewChild, effect } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { VideoService } from '../../services/video/video.service';
+import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
 @Component({
   selector: 'app-device-check',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatCheckboxModule],
+  imports: [CommonModule, MatCardModule, MatCheckboxModule, FormsModule, MatButtonModule],
   templateUrl: './device-check.component.html',
   styleUrl: './device-check.component.scss'
 })
 export class DeviceCheckComponent {
-  miceDevices: any = [];
-  videoDevices: any = [];
-  speakerDevices: any = [];
+  miceDevices: any = []; // 마이크 장치 리스트 
+  videoDevices: any = []; // 카메라 리스트
+  speakerDevices: any = []; // 스피커 장치 리스트
   devicesInfo: any;
-  selectedMiceDevice: any;
-  selectedVideoDevice: any;
-  selectedSpeakerDevice: any;
+  selectedMiceDevice: any; // 선택된 마이크 장치
+  selectedVideoDevice: any; // 선택된 카메라 장치
+  selectedSpeakerDevice: any; // 선택된 스피커 장치
   selectedDevices: any;
   audioDeviceExist: boolean = true;
   videoDeviceExist: boolean = true;
@@ -52,7 +55,9 @@ export class DeviceCheckComponent {
     // private devicesInfoService: DevicesInfoService,
     private meetingService: MeetingService,
     private route: ActivatedRoute,
-    // private webrtcService: WebRTCService
+    // private webrtcService: WebRTCService,
+    private videoService: VideoService,
+    private mediasoupService: MediasoupService
   ) {
     // this.localStream$ = this.webrtcService.localStream$;
     effect(() => {
@@ -121,28 +126,39 @@ export class DeviceCheckComponent {
     // 장치값 초기화
 
     this.miceDevices = []
+    this.videoService.audioDevices.set([]);
     this.videoDevices = []
+    this.videoService.videoDeivces.set([]);
     this.speakerDevices = []
+    this.videoService.speakerDevices.set([]);
 
     devices.forEach((device: any) => {
       if (device.kind == 'audioinput') {
         this.miceDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
+        this.videoService.audioDevices.set([...this.videoService.audioDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
       } else if (device.kind == 'videoinput') {
         this.videoDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
+        this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
       } else if (device.kind == 'audiooutput') {
         this.speakerDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
+        this.videoService.speakerDevices.set([...this.videoService.speakerDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
       }
     })
 
     this.selectedMiceDevice = this.miceDevices[0];
+    this.videoService.nowAudioId.set(this.miceDevices[0].deviceId)
     this.selectedVideoDevice = this.videoDevices[0];
+    this.videoService.nowVideoId.set(this.videoDevices[0].deviceId)
     this.selectedSpeakerDevice = this.speakerDevices[0];
+    this.videoService.nowSpeakerId.set(this.speakerDevices[0].deviceId)
   }
 
   // 장치의 연결 유무
   checkDevice() {
-    this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false
-    this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false
+    this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false;
+    this.miceDevices[0].id ? this.videoService.audioDeviceExist.set(true) : this.videoService.audioDeviceExist.set(false)
+    this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false;
+    this.videoDevices[0].id ? this.videoService.videoDeviceExist.set(true) : this.videoService.videoDeviceExist.set(false)
   }
 
   // select 창에서 장치를 선택하거나, 목록이 바뀌었을 경우 실행 
@@ -155,17 +171,23 @@ export class DeviceCheckComponent {
       audioDeviceExist: this.audioDeviceExist,
       videoDeviceExist: this.videoDeviceExist
     }
-    console.log(this.devicesInfo)
+
+
+    this.videoService.nowVideoId.set(this.selectedVideoDevice.id);
+    this.videoService.nowAudioId.set(this.selectedMiceDevice.id);
+
+
+
     // this.devicesInfoService.setDevicesInfo(this.devicesInfo);
     this.changeMediaStream();
 
     if (typeof this.video.sinkId !== 'undefined') {
-      this.video.setSinkId(this.selectedSpeakerDevice?.id).then(() => {
-        console.log('succes speaker device')
-      })
-        .catch((error: any) => {
-          console.log(error)
-        })
+      // this.video.setSinkId(this.selectedSpeakerDevice?.id).then(() => {
+      //   console.log('succes speaker device')
+      // })
+      //   .catch((error: any) => {
+      //     console.log(error)
+      //   })
     }
   }
 
@@ -175,10 +197,12 @@ export class DeviceCheckComponent {
   checkValue(event: any) {
     if (event == false) {
       this.videoDeviceExist = false;
+      this.videoService.videoDeviceExist.set(false)
       // web-rtc 컴포넌트에 있는 비디오 스트림 설정 변경
       this.selectDevice();
     } else {
       this.videoDeviceExist = true;
+      this.videoService.videoDeviceExist.set(true)
       this.selectDevice();
     }
   }
@@ -186,9 +210,21 @@ export class DeviceCheckComponent {
 
 
   // 채널 참가 main component로 이동
-  joinMeetingRoom() {
+  async joinMeetingRoom() {
     // this.eventBusService.emit(new EventData('join', ''));
     // this.eventBusService.emit(new EventData('deviceCheck', ''))
+
+    // 지금 stream 데이터 종료
+    const stream = this.video.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach(function (track: any) {
+
+      track.stop()
+    })
+
+    await this.mediasoupService.joinRoom();
+
+    this.meetingService.device_check.set(true);
   }
 
   // video에 스트림 추출
@@ -220,6 +256,11 @@ export class DeviceCheckComponent {
     };
     try {
       // await this.webrtcService.getMediaStream(options);
+      const stream = await navigator.mediaDevices.getUserMedia(options);
+
+      this.video.srcObject = stream;
+
+
       // 브라우저가 장치의 권한 부여 시 목록 수정
       this.deviceCheck();
     } catch (e) {
@@ -244,9 +285,14 @@ export class DeviceCheckComponent {
         framerate: { max: 24, min: 24 }
       } : false
     };
-    console.log(options)
+
     try {
       // await this.webrtcService.getMediaStream(options);
+      const stream = await navigator.mediaDevices.getUserMedia(options);
+
+      this.video.srcObject = stream;
+
+
     } catch (e) {
       console.log(e);
     }
@@ -345,7 +391,12 @@ export class DeviceCheckComponent {
     // unsubscribe all subscription
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-
+    navigator.mediaDevices.removeEventListener('devicechange', async event => {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      await this.convertDeviceObject(devices)
+      this.checkDevice()
+      this.selectDevice();
+    });
   }
 }
 

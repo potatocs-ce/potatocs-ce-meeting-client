@@ -243,7 +243,7 @@ export class PresentComponent {
       this.firstRender = true;
     }
 
-    const originalWidth = target?.videoWidth;
+    const originalWidth = 320;
 
 
     this.isWidth = undefined

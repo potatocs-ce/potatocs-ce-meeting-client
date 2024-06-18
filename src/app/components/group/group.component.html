@@ -13,7 +13,7 @@
             </article>
 
             <article class="button_container">
-                <button class="visibility_button" (click)="checkVisibility(member)" [disabled]="!member.online">
+                <button class="visibility_button" (click)="checkVisibility(member)">
                     @if(!skipList.includes(member.member_id._id)){
                     <mat-icon fontSet="material-symbols-outlined">visibility</mat-icon>
                     }@else {
