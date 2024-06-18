@@ -472,7 +472,7 @@ export class MediasoupService {
 
           } else {
             // 화면 공유 모드를 넣으려고 하는거면 칸 하나를 더 마련해야 함
-            if (!this.meetingService.present_user_info()) {
+            if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.meetingService.present_user_info()) {
               // 유저 발표 칸에 아무도 없고, 화면 공유 모드이면
               this.meetingService.present_user_info.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id, screen })
             } else {
@@ -760,7 +760,7 @@ export class MediasoupService {
         } else {
 
           // 화면 공유 모드를 넣으려고 하는거면 칸 하나를 더 마련해야 함
-          if (!this.meetingService.present_user_info()) {
+          if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.meetingService.present_user_info()) {
             // 유저 발표 칸에 아무도 없고, 화면 공유 모드이면
             this.meetingService.present_user_info.set({ id: producer.id, stream, user_id: this.authService.getTokenInfo()._id, name: this.authService.getTokenInfo().name, screen })
           } else {
