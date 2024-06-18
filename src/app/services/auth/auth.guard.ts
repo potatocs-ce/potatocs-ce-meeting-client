@@ -8,6 +8,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
+
   const routePath = route.routeConfig?.path;
 
   if (!auth.isAuthenticated()) {
@@ -18,6 +19,11 @@ export const authGuard: CanActivateFn = (route, state) => {
     } else {
 
       router.navigate(['/sign-in'], { queryParams: { params: state.url } })
+    }
+  } else {
+    if (routePath == '' || routePath == 'sign-in' || routePath == 'sign-up') {
+
+      window.history.back()
     }
   }
   return true;

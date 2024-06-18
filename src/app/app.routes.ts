@@ -8,7 +8,8 @@ export const routes: Routes = [
 
     {
         path: 'sign-in',
-        component: SignInComponent
+        component: SignInComponent,
+        canActivate: [authGuard]
     },
     {
         path: 'room/:id',

@@ -76,7 +76,7 @@ export class SignInComponent {
         // alert('successfully signed in');
 
         // this.router.navigateByUrl(this.params.params)
-        console.log('머선일이구')
+
         this.router.navigate([`/${this.params.params}`]);
       },
       (err: any) => {
