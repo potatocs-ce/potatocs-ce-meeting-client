@@ -32,6 +32,7 @@ export class ChatComponent {
     // chat_info
     effect(() => {
       this.chat_info = this.meetingService.meeting_chat_info();
+
       setTimeout(() => {
         this.scrollToBottom();
       })

@@ -70,6 +70,10 @@
 
             .content_section {
                 color: white;
+
+                article {
+                    word-wrap: break-word;
+                }
             }
         }
     }
