@@ -215,12 +215,19 @@ export class DeviceCheckComponent {
     // this.eventBusService.emit(new EventData('deviceCheck', ''))
 
     // 지금 stream 데이터 종료
-    const stream = this.video.srcObject;
-    const tracks = stream.getTracks();
-    tracks.forEach(function (track: any) {
 
-      track.stop()
-    })
+    try {
+      const stream = this.video.srcObject;
+      const tracks = stream.getTracks() || undefined;
+      tracks.forEach(function (track: any) {
+
+        track.stop()
+      })
+    } catch (err) {
+      console.log(err)
+    }
+
+
 
     await this.mediasoupService.joinRoom();
 
