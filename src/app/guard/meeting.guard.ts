@@ -1,10 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
-import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
-import { AuthService } from '../auth/auth.service';
-import { UserService } from '../../api/user/user.service';
-import { MeetingService } from './meeting.service';
+
+
+import { MeetingServiceAPI } from '../api/meeting/meetingAPI.service';
+import { MeetingService } from '../services/meeting/meeting.service';
+import { AuthService } from '../services/auth/auth.service';
+import { UserService } from '../api/user/user.service';
 
 export const meetingGuard: CanActivateFn = async (route, state) => {
   const meetingApiService = inject(MeetingServiceAPI)
@@ -14,7 +16,10 @@ export const meetingGuard: CanActivateFn = async (route, state) => {
 
 
   try {
-    const meetingInfo: any = await lastValueFrom(meetingApiService.getMeetingInfo(route.params['id']))
+    const meetingInfo: any = await lastValueFrom(meetingApiService.getMeetingInfo(route.params['id'])).catch((err) => {
+      // meetingInfo 를 받아올 수 없으면 이전 페이지로 돌려버림
+      window.history.back()
+    })
 
     const userId = authService.getTokenInfo()._id;
 
@@ -33,6 +38,9 @@ export const meetingGuard: CanActivateFn = async (route, state) => {
       const index = meetingInfo.enlistedMembers.findIndex((item: any) =>
         item._id == userId
       )
+
+
+
 
       // 찾아 봤는데 없으면
       if (index < 0) {

@@ -8,18 +8,18 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 import { JwtModule } from '@auth0/angular-jwt';
-import { environment } from './environments/environment';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {
   provideCharts,
   withDefaultRegisterables,
 } from 'ng2-charts';
 import { HttpInterceptorService } from './api/interceptor/http-interceptor.service';
+import { environment } from '../environments/environment';
 export function tokenGetter() {
   return localStorage.getItem(environment.tokenName);
 }
 
-const config: SocketIoConfig = { url: 'ws://localhost:3000/', options: { transports: ['websocket'], path: '/socket/' } };
+const config: SocketIoConfig = { url: 'ws://localhost:3300/', options: { transports: ['websocket'], path: '/socket/' } };
 export const appConfig: ApplicationConfig = {
   providers: [
 

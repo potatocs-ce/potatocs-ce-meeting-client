@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './services/auth/auth.guard';
+import { authGuard } from './guard/auth.guard';
 import { SignInComponent } from './components/auth/sign-in/sign-in.component';
 import { MainComponent } from './components/main/main.component';
-import { meetingGuard } from './services/meeting/meeting.guard';
+import { meetingGuard } from './guard/meeting.guard';
+
 
 export const routes: Routes = [
 
