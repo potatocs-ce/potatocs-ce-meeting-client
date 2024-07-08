@@ -17,7 +17,7 @@
 
     flex-wrap: nowrap;
     position: relative;
-    // margin: 0 auto;
+    margin: 0 auto;
 
 
 
@@ -38,7 +38,7 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    z-index: 10;
+    z-index: 11;
     color: white;
     background-color: $icon_button_color;
     width: 30px;

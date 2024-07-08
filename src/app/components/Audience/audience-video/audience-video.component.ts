@@ -22,7 +22,7 @@ export class AudienceVideoComponent {
 
   @ViewChild('targetVideo') target_video: ElementRef | undefined;
 
-  videoHeight: number = 160;
+  videoHeight: number = 135;
 
   toggle_video_whiteboard: string = '';
 

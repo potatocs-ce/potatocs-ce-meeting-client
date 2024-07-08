@@ -476,6 +476,7 @@ export class MediasoupService {
               // 유저 발표 칸에 아무도 없고, 화면 공유 모드이면
               this.meetingService.present_user_info.set({ id: consumer.id, user_id, stream, name, socket_id: producer_socket_id, screen })
             } else {
+
               this.meetingService.users_info.set([...this.meetingService.users_info(), { id: consumer.id, stream, user_id, name, socket_id: producer_socket_id, screen }])
             }
           }
