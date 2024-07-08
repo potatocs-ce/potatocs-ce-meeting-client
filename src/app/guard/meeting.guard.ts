@@ -18,7 +18,8 @@ export const meetingGuard: CanActivateFn = async (route, state) => {
   try {
     const meetingInfo: any = await lastValueFrom(meetingApiService.getMeetingInfo(route.params['id'])).catch((err) => {
       // meetingInfo 를 받아올 수 없으면 이전 페이지로 돌려버림
-      window.history.back()
+      // window.history.back()
+      console.log('meetingInfo를 받아올 수 없음')
     })
 
     const userId = authService.getTokenInfo()._id;

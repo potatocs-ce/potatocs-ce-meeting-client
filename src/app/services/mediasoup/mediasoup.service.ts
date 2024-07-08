@@ -732,7 +732,7 @@ export class MediasoupService {
       try {
         params.appData = { screen }
         producer = await this.producerTransport.produce(params)
-
+        console.log(producer)
       } catch (err) {
         window.alert(err)
       }

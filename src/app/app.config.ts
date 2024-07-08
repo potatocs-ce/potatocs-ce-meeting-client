@@ -19,7 +19,7 @@ export function tokenGetter() {
   return localStorage.getItem(environment.tokenName);
 }
 
-const config: SocketIoConfig = { url: 'ws://localhost:3300/', options: { transports: ['websocket'], path: '/socket/' } };
+const config: SocketIoConfig = { url: 'wss://test-potatocs-lb.com', options: { transports: ['websocket'], path: '/socket/' } };
 export const appConfig: ApplicationConfig = {
   providers: [
 
