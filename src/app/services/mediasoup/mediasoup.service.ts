@@ -565,7 +565,7 @@ export class MediasoupService {
       if (err.name === 'NotAllowedError') {
         this.dialogService.openDialogNegative('Camera access was denied. Please grant camera access and try again.');
       } else if (err.name === 'NotFoundError') {
-        this.dialogService.openDialogNegative('No camera was found on this device.');
+        // this.dialogService.openDialogNegative('No camera was found on this device.');
       } else {
         this.dialogService.openDialogNegative('An unexpected error occurred: ' + err.message);
       }
@@ -588,7 +588,7 @@ export class MediasoupService {
       if (err.name === 'NotAllowedError') {
         this.dialogService.openDialogNegative('Audio access was denied. Please grant audio access and try again.');
       } else if (err.name === 'NotFoundError') {
-        this.dialogService.openDialogNegative('No audio input device was found on this device.');
+        // this.dialogService.openDialogNegative('No audio input device was found on this device.');
       } else if (err.name === 'OverconstrainedError') {
         this.dialogService.openDialogNegative('The specified constraints could not be satisfied by any available devices.');
       } else {
