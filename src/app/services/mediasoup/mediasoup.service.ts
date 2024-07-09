@@ -692,6 +692,7 @@ export class MediasoupService {
     let stream: any;
 
     try {
+
       // 스크린 공유인 경우
       stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints).catch((error: any) => {
         if (error.name === 'OverconstrainedError') {
@@ -797,10 +798,11 @@ export class MediasoupService {
 
 
     } catch (err: any) {
-      console.error(err);
+
       if (type == this.mediaType.screen) {
         // this.isScreen = false;
         this.toggleService.toggle_screen_share.set(false)
+        if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') return
       }
 
       this.dialogService.openDialogNegative(err)

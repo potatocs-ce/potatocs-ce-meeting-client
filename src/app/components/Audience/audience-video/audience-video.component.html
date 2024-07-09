@@ -1,4 +1,4 @@
-<div class="video_container" [style]="stream ? '': 'width: 220px; height: 135px'">
+<div class="video_container" [style]="stream ? '': 'width: 180px; height: 135px'">
     @if(stream){
     <!-- 비디오 -->
     <video #targetVideo (resize)="videoResize($event.target)" class="video" [class]="id" [srcObject]="stream"

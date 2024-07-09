@@ -102,11 +102,9 @@ export class RenderingService {
       // console.log('renderBoard -------------------222222222')
 
       for (const item of drawingEvents) {
-        console.log(item)
         if (!this.meetingService.skipList().includes(item.userId)) {
           this.drawingService.end(targetCtx, item.drawingEvent.points, item.drawingEvent.tool, item.txt, scale);
         }
-
       }
     }
   }

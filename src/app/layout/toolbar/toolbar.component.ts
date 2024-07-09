@@ -92,6 +92,7 @@ export class ToolbarComponent {
 
   // 화면 공유
   screenShare() {
+
     this.toggleService.toggle_screen_share.set(!this.toggle_screen_share)
 
     if (!this.toggle_screen_share) {
