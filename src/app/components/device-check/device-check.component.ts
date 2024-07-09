@@ -288,8 +288,17 @@ export class DeviceCheckComponent {
         } : false,
       video: this.videoDeviceExist ? {
         deviceId: this.selectedVideoDevice?.id,
-        width: 320,
-        framerate: { max: 24, min: 24 }
+        video: {
+          width: {
+            min: 320,
+            ideal: 1920
+          },
+          height: {
+            min: 200,
+            ideal: 1080
+          },
+          facingMode: { exact: "user" },
+        }
       } : false
     };
 
@@ -310,6 +319,7 @@ export class DeviceCheckComponent {
       audio: true,
       video: false
     };
+
 
     navigator.mediaDevices.getUserMedia(constraints)
       .then(res => this.handleSuccess(res))
