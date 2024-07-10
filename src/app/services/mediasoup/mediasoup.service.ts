@@ -68,6 +68,11 @@ export class MediasoupService {
       await this.socket.emit('createRoom', { room_id }, async (response: any) => {
         // 방 참가
         await this.socket.emit('join', { name, room_id, user_id }, async (response: any) => {
+
+
+
+
+
           this.joined = true;
 
           // 방 참가 시 유저 업데이트도 같이 진행
@@ -103,8 +108,10 @@ export class MediasoupService {
 
 
               if (this.videoService.videoDeviceExist()) {
-                this.produce('videoType');
-                this.produce('audioType');
+                this.videoService.videoLoading.set(true);
+                this.videoService.audioLoading.set(true);
+                await this.produce('videoType');
+                await this.produce('audioType');
               }
             })
           })

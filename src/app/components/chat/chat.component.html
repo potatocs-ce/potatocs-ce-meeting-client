@@ -11,7 +11,7 @@
                     <span class="name">
                         {{item.chatMember}}
                         @if(item.userId == user_id){
-                        (me)
+                        <div class="dot"></div>
                         }
                     </span>
                     <!-- @if(item.userId == user_id){
@@ -19,7 +19,7 @@
                     } -->
 
                     <span class="time">
-                        {{item.createdAt | date}}
+                        {{item.createdAt | date:'yyyy-MM-dd hh:mm a'}}
                     </span>
                 </section>
                 <section class="content_section">

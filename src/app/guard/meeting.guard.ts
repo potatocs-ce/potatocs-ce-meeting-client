@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 
 
@@ -13,13 +13,13 @@ export const meetingGuard: CanActivateFn = async (route, state) => {
   const meetingService = inject(MeetingService)
   const authService = inject(AuthService)
   const userService = inject(UserService)
-
+  const router = inject(Router);
 
   try {
     const meetingInfo: any = await lastValueFrom(meetingApiService.getMeetingInfo(route.params['id'])).catch((err) => {
       // meetingInfo 를 받아올 수 없으면 이전 페이지로 돌려버림
-      // window.history.back()
-      console.log('meetingInfo를 받아올 수 없음')
+      router.navigate(['/'])
+      // console.log('meetingInfo를 받아올 수 없음')
     })
 
     const userId = authService.getTokenInfo()._id;
