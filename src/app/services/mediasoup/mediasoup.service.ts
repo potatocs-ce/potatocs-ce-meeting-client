@@ -8,6 +8,8 @@ import { AuthService } from '../auth/auth.service';
 import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
 import { UserService } from '../../api/user/user.service';
 import { DialogService } from '../dialog/dialog.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +31,9 @@ export class MediasoupService {
     private authService: AuthService,
     private meetingServiceAPI: MeetingServiceAPI,
     private userService: UserService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private _snackBar: MatSnackBar
+
   ) {
     effect(() => {
       this.nowVideo = this.videoService.nowVideoId();
@@ -295,7 +299,8 @@ export class MediasoupService {
 
     this.socket.on(
       'user_join', async (data: any) => {
-
+        console.log(data);
+        this._snackBar.open(`${data.name} has joined`, 'ok', { horizontalPosition: 'start' });
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;
@@ -716,20 +721,40 @@ export class MediasoupService {
       }
 
       if (!audio && !screen) {
+        // 원래 처음 bitrate 설정
+        // params.encodings = [
+        //   {
+        //     rid: 'r0',
+        //     maxBitrate: 100000,
+        //     scalabilityMode: 'S2T3'
+        //   },
+        //   {
+        //     rid: 'r1',
+        //     maxBitrate: 300000,
+        //     scalabilityMode: 'S2T3'
+        //   },
+        //   {
+        //     rid: 'r2',
+        //     maxBitrate: 3600000,
+        //     scalabilityMode: 'S2T3'
+        //   },
+        // ]
+
+        // 비트레이트 제한을 절반 정도로 낮춤
         params.encodings = [
           {
             rid: 'r0',
-            maxBitrate: 100000,
+            maxBitrate: 50000,
             scalabilityMode: 'S2T3'
           },
           {
             rid: 'r1',
-            maxBitrate: 300000,
+            maxBitrate: 150000,
             scalabilityMode: 'S2T3'
           },
           {
             rid: 'r2',
-            maxBitrate: 3600000,
+            maxBitrate: 1800000,
             scalabilityMode: 'S2T3'
           },
         ]
