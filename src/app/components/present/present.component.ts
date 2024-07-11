@@ -184,16 +184,19 @@ export class PresentComponent {
   clearDrawing() {
     // 여기 한 번 확인 물어보는 로직 추가
     if (window.confirm('Do you want to delete all drawings on the current page?')) {
+
       this.meetingApiService.clearVideoDrawing(this.meetingService.meeting_room_id(), this.videoStream?.user_id).subscribe((res: any) => {
-        if (res.message == 'success') {
-          // 여기서 userId 판서 정보 일단 다 지우기
-          this.videoDrawingService.drawVarArray()[this.videoStream?.user_id] = [];
-          const video_target: any = document.getElementById('data_canvas');
-          const target_context: any = video_target.getContext('2d');
-          target_context.clearRect(0, 0, video_target.width, video_target.height);
-          this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: video_target.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
+        if (res.message != 'success') {
+          console.error('실패')
         }
       })
+
+      // 여기서 userId 판서 정보 일단 다 지우기
+      this.videoDrawingService.drawVarArray()[this.videoStream?.user_id] = [];
+      const video_target: any = document.getElementById('data_canvas');
+      const target_context: any = video_target.getContext('2d');
+      target_context.clearRect(0, 0, video_target.width, video_target.height);
+      this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: video_target.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
     }
   }
 
