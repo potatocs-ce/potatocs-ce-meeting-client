@@ -40,7 +40,6 @@ export class GroupComponent {
       this.currentMembersCount = 0;
       this.currentMembers = this.meetingInfo.currentMembers;
       this.currentMembers.forEach((currentMember: any) => {
-        console.log(currentMember)
         if (currentMember.online == true) {
           this.currentMembersCount += 1; // online: true일 경우 ++
         }
