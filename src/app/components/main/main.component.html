@@ -55,12 +55,15 @@
     <!-- 툴바 부분 -->
     <section class="toolbar_section">
         <app-toolbar></app-toolbar>
+
+
+        <div class="audio_section" id="audio_section">
+            @for(stream of audioStreams; track stream) {
+            <app-audio [user_id]="stream.user_id" [id]="stream.id" [stream]="stream.stream"
+                [socket_id]="stream.socket_id"></app-audio>
+            }
+        </div>
     </section>
-    <section class="audio_section" id="audio_section">
-        @for(stream of audioStreams; track stream) {
-        <app-audio [user_id]="stream.user_id" [id]="stream.id" [stream]="stream.stream"
-            [socket_id]="stream.socket_id"></app-audio>
-        }
-    </section>
+
 </div>
 }
