@@ -721,43 +721,26 @@ export class MediasoupService {
       }
 
       if (!audio && !screen) {
-        // 원래 처음 bitrate 설정
-        // params.encodings = [
-        //   {
-        //     rid: 'r0',
-        //     maxBitrate: 100000,
-        //     scalabilityMode: 'S2T3'
-        //   },
-        //   {
-        //     rid: 'r1',
-        //     maxBitrate: 300000,
-        //     scalabilityMode: 'S2T3'
-        //   },
-        //   {
-        //     rid: 'r2',
-        //     maxBitrate: 3600000,
-        //     scalabilityMode: 'S2T3'
-        //   },
-        // ]
 
-        // 비트레이트 제한을 절반 정도로 낮춤
         params.encodings = [
           {
             rid: 'r0',
-            maxBitrate: 50000,
+            maxBitrate: 100000,
             scalabilityMode: 'S2T3'
           },
           {
             rid: 'r1',
-            maxBitrate: 150000,
+            maxBitrate: 300000,
             scalabilityMode: 'S2T3'
           },
           {
             rid: 'r2',
-            maxBitrate: 1800000,
+            maxBitrate: 3600000,
             scalabilityMode: 'S2T3'
           },
         ]
+
+
         params.codecOptions = {
           videoGoogleStartBitrate: 1000
         }
