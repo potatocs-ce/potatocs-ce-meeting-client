@@ -16,6 +16,7 @@ import { Socket } from 'ngx-socket-io';
 import { DocApiService } from '../../api/doc/doc-api.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing.service';
+import { ToggleService } from '../../services/toggle/toggle.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -71,7 +72,8 @@ export class WhiteboardComponent {
     private socket: Socket,
     private docApiService: DocApiService,
     private meetingService: MeetingService,
-    private pdfDrawingService: PdfDrawingService
+    private pdfDrawingService: PdfDrawingService,
+    private toggleService: ToggleService
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
@@ -314,9 +316,7 @@ export class WhiteboardComponent {
       this.docApiService.clearDocDrawing(this.meetingService.meeting_room_id(), this.docService._docList()[this.docService.lastDocNum()]._id, this.lastPage).subscribe((res: any) => {
         this.docService.generateDrawingData(res);
 
-        const canvas_target: any = document.getElementById('canvasUser');
-        const target_context: any = canvas_target.getContext('2d');
-        target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+
 
         // this.pageRender(this.docService.lastDocNum(), this.lastPage, this.zoomScale)
 
@@ -332,6 +332,11 @@ export class WhiteboardComponent {
         // }
       })
     }
+
+
+    const canvas_target: any = document.getElementById('canvasUser');
+    const target_context: any = canvas_target.getContext('2d');
+    target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
   }
 
   /**
@@ -379,5 +384,12 @@ export class WhiteboardComponent {
         this.docService.updateCurrentPageNum(lastPage - 1);
         break;
     }
+  }
+
+
+  toggleDoc() {
+    console.log('토글 토글!!!');
+
+    this.toggleService.toggle_doc_menu.set(!this.toggleService.toggle_doc_menu())
   }
 }

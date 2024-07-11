@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect } from '@angular/core';
+import { Component, effect, HostListener } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
@@ -89,6 +89,22 @@ export class ToolbarComponent {
 
     this.toggleService.toggle_mode.set(mode);
   }
+
+  ngOnInit() {
+    const initialWidth = window.innerWidth;
+    if (initialWidth < 620) {
+      this.toggleService.toggle_mode.set('close');
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (event.target.innerWidth < 620) {
+      this.toggleService.toggle_mode.set('close');
+      this.toggleService.toggle_doc_menu.set(false);
+    }
+  }
+
 
   // 화면 공유
   screenShare() {

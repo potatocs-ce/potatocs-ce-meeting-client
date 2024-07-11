@@ -1,5 +1,13 @@
 @import '../../setting.scss';
 
+.menu_ul {
+    margin: 0;
+
+    .menu_span {
+        font-size: 11pt;
+    }
+}
+
 .toolbar_container {
     display: flex;
 
@@ -95,6 +103,10 @@
             align-items: center;
             cursor: pointer;
         }
+
+
+
+
     }
 
     .call_end {
@@ -151,4 +163,23 @@
     //     background-color: rgba(0, 21, 79, 0.2) !important;
     // }
 
+}
+
+.mobile_button {
+    display: none !important;
+}
+
+@media screen and (max-width: 620px) {
+    .meeting_title_section {
+        display: none !important;
+    }
+
+    .option_buttons_section {
+        display: none !important;
+    }
+
+
+    .mobile_button {
+        display: flex !important;
+    }
 }

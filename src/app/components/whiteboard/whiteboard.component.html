@@ -1,130 +1,138 @@
 <div class="whiteboard_container">
     <!-- 그리기, 문서 활용 도구 모음 -->
     <section class="whiteboard_menu_section">
-        <div class="button_container">
-            <button (click)="setType('click')" mat-icon-button [ngClass]="tool.type == 'click' ? 'active': ''">
-                <!-- <i class="fa fa-arrow-pointer"></i> -->
-                <mat-icon fontSet="material-symbols-outlined">open_with</mat-icon>
-            </button>
-            <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
-                <!-- <mat-icon>draw</mat-icon> -->
-                <mat-icon fontSet="material-symbols-outlined">stylus_note</mat-icon>
-            </button>
-            <button (click)="setType('highlighter')" mat-icon-button
-                [ngClass]="tool.type == 'highlighter' ? 'active': ''">
-                <!-- <i class="fa-solid fa-highlighter"></i> -->
-                <mat-icon fontSet="material-symbols-outlined">ink_highlighter</mat-icon>
-            </button>
-            <button (click)="setType('eraser')" (dblclick)="clearDrawing()" mat-icon-button
-                [ngClass]=" tool.type=='eraser' ? 'active' : ''">
+        <button class="doc_toggle_button" (click)="toggleDoc()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <div class="whiteboard_menu">
+            <div class="button_container">
+                <button (click)="setType('click')" mat-icon-button [ngClass]="tool.type == 'click' ? 'active': ''">
+                    <!-- <i class="fa fa-arrow-pointer"></i> -->
+                    <mat-icon fontSet="material-symbols-outlined">open_with</mat-icon>
+                </button>
+                <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
+                    <!-- <mat-icon>draw</mat-icon> -->
+                    <mat-icon fontSet="material-symbols-outlined">stylus_note</mat-icon>
+                </button>
+                <button (click)="setType('highlighter')" mat-icon-button
+                    [ngClass]="tool.type == 'highlighter' ? 'active': ''">
+                    <!-- <i class="fa-solid fa-highlighter"></i> -->
+                    <mat-icon fontSet="material-symbols-outlined">ink_highlighter</mat-icon>
+                </button>
+                <button (click)="setType('eraser')" (dblclick)="clearDrawing()" mat-icon-button
+                    [ngClass]=" tool.type=='eraser' ? 'active' : ''">
 
-                <mat-icon fontSet="material-symbols-outlined">ink_eraser</mat-icon>
-            </button>
-            <button mat-icon-button [matMenuTriggerFor]="shape"
-                [ngClass]="tool.type == 'line' || tool.type == 'circle' || tool.type == 'rectangle' ? 'active': ''">
-                <mat-icon fontSet="material-symbols-outlined">category</mat-icon>
-            </button>
+                    <mat-icon fontSet="material-symbols-outlined">ink_eraser</mat-icon>
+                </button>
+                <button mat-icon-button [matMenuTriggerFor]="shape"
+                    [ngClass]="tool.type == 'line' || tool.type == 'circle' || tool.type == 'rectangle' ? 'active': ''">
+                    <mat-icon fontSet="material-symbols-outlined">category</mat-icon>
+                </button>
 
-            <!-- 그리기 도구 -->
-            <mat-menu #shape="matMenu" class="my-menu">
-                <article class="shape_tool">
-                    <button (click)="setType('line')" mat-icon-button [ngClass]="tool.type == 'line' ? 'active': ''">
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                    <button (click)="setType('circle')" mat-icon-button [ngClass]="tool.type == 'circle'? 'active': ''">
-                        <mat-icon>panorama_fish_eye</mat-icon>
-                    </button>
-                    <button (click)="setType('rectangle')" mat-icon-button
-                        [ngClass]="tool.type == 'rectangle' ? 'active': ''">
-                        <mat-icon>crop_din</mat-icon>
-                    </button>
-                </article>
-            </mat-menu>
+                <!-- 그리기 도구 -->
+                <mat-menu #shape="matMenu" class="my-menu">
+                    <article class="shape_tool">
+                        <button (click)="setType('line')" mat-icon-button
+                            [ngClass]="tool.type == 'line' ? 'active': ''">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                        <button (click)="setType('circle')" mat-icon-button
+                            [ngClass]="tool.type == 'circle'? 'active': ''">
+                            <mat-icon>panorama_fish_eye</mat-icon>
+                        </button>
+                        <button (click)="setType('rectangle')" mat-icon-button
+                            [ngClass]="tool.type == 'rectangle' ? 'active': ''">
+                            <mat-icon>crop_din</mat-icon>
+                        </button>
+                    </article>
+                </mat-menu>
 
-            <div class="divide"></div>
-
-
-            <!-- 색 선택 영역 -->
-            <button mat-icon-button (click)="setColor('black')" [ngClass]="tool.color == 'black' ? 'active': ''">
-                <p class="color_button" style="background-color: black;"> </p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('red')" [ngClass]="tool.color == 'red' ? 'active': ''">
-                <p class="color_button" style="background-color: red;"></p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('blue')" [ngClass]="tool.color == 'blue' ? 'active': ''">
-                <p class="color_button" style="background-color: blue;"></p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('green')" [ngClass]="tool.color == 'green' ? 'active': ''">
-                <p class="color_button" style="background-color: green;"></p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('yellow')" [ngClass]="tool.color == 'yellow' ? 'active': ''">
-                <p class="color_button" style="background-color: yellow;"></p>
-            </button>
-            <div class="divide"></div>
-
-            <!-- 선 굵기 지정 영역 -->
-            <button mat-icon-button (click)="setWidth(10)" [ngClass]="tool.width == 10 ? 'active': ''">
-                <p class="width_button big"></p>
-            </button>
-
-            <button mat-icon-button (click)="setWidth(5)" [ngClass]="tool.width == 5 ? 'active': ''">
-                <p class="width_button medium"></p>
-            </button>
-
-            <button mat-icon-button (click)="setWidth(1)" [ngClass]="tool.width == 1 ? 'active': ''">
-                <p class="width_button small"></p>
-            </button>
+                <div class="divide"></div>
 
 
-            <div class="divide"></div>
+                <!-- 색 선택 영역 -->
+                <button mat-icon-button (click)="setColor('black')" [ngClass]="tool.color == 'black' ? 'active': ''">
+                    <p class="color_button" style="background-color: black;"> </p>
+                </button>
 
-            <!-- 판서 화면 가득 채우기 -->
-            <button mat-icon-button (click)="clickZoom('fitToWidth')">
-                <mat-icon fontSet="material-symbols-outlined">fullscreen</mat-icon>
-            </button>
+                <button mat-icon-button (click)="setColor('red')" [ngClass]="tool.color == 'red' ? 'active': ''">
+                    <p class="color_button" style="background-color: red;"></p>
+                </button>
 
-            <!-- 페이지에 맞추기 -->
-            <button mat-icon-button (click)="clickZoom('fitToPage')">
-                <mat-icon fontSet="material-symbols-outlined">fit_screen</mat-icon>
-            </button>
+                <button mat-icon-button (click)="setColor('blue')" [ngClass]="tool.color == 'blue' ? 'active': ''">
+                    <p class="color_button" style="background-color: blue;"></p>
+                </button>
+
+                <button mat-icon-button (click)="setColor('green')" [ngClass]="tool.color == 'green' ? 'active': ''">
+                    <p class="color_button" style="background-color: green;"></p>
+                </button>
+
+                <button mat-icon-button (click)="setColor('yellow')" [ngClass]="tool.color == 'yellow' ? 'active': ''">
+                    <p class="color_button" style="background-color: yellow;"></p>
+                </button>
+                <div class="divide"></div>
+
+                <!-- 선 굵기 지정 영역 -->
+                <button mat-icon-button (click)="setWidth(10)" [ngClass]="tool.width == 10 ? 'active': ''">
+                    <p class="width_button big"></p>
+                </button>
+
+                <button mat-icon-button (click)="setWidth(5)" [ngClass]="tool.width == 5 ? 'active': ''">
+                    <p class="width_button medium"></p>
+                </button>
+
+                <button mat-icon-button (click)="setWidth(1)" [ngClass]="tool.width == 1 ? 'active': ''">
+                    <p class="width_button small"></p>
+                </button>
 
 
-            <!-- 확대 -->
-            <button mat-icon-button (click)="clickZoom('zoomIn')">
-                <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
-            </button>
+                <div class="divide"></div>
 
-            <!-- 축소 -->
-            <button mat-icon-button (click)="clickZoom('zoomOut')">
-                <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
-            </button>
+                <!-- 판서 화면 가득 채우기 -->
+                <button mat-icon-button (click)="clickZoom('fitToWidth')">
+                    <mat-icon fontSet="material-symbols-outlined">fullscreen</mat-icon>
+                </button>
 
-            <div class="divide"></div>
+                <!-- 페이지에 맞추기 -->
+                <button mat-icon-button (click)="clickZoom('fitToPage')">
+                    <mat-icon fontSet="material-symbols-outlined">fit_screen</mat-icon>
+                </button>
 
 
-            <!-- 첫 페이지 -->
-            <button mat-icon-button (click)="pageMove('first')">
-                <mat-icon fontSet="material-symbols-outlined">first_page</mat-icon>
-            </button>
-            <!-- 이전 페이지 -->
-            <button mat-icon-button (click)="pageMove('prev')">
-                <mat-icon fontSet="material-symbols-outlined">chevron_left</mat-icon>
-            </button>
+                <!-- 확대 -->
+                <button mat-icon-button (click)="clickZoom('zoomIn')">
+                    <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
+                </button>
 
-            <!-- 다음 페이지 -->
-            <button mat-icon-button (click)="pageMove('next')">
-                <mat-icon fontSet="material-symbols-outlined">chevron_right</mat-icon>
-            </button>
+                <!-- 축소 -->
+                <button mat-icon-button (click)="clickZoom('zoomOut')">
+                    <mat-icon fontSet="material-symbols-outlined">remove</mat-icon>
+                </button>
 
-            <!-- 마지막 페이지 -->
-            <button mat-icon-button (click)="pageMove('last')">
-                <mat-icon fontSet="material-symbols-outlined">last_page</mat-icon>
-            </button>
+                <div class="divide"></div>
+
+
+                <!-- 첫 페이지 -->
+                <button mat-icon-button (click)="pageMove('first')">
+                    <mat-icon fontSet="material-symbols-outlined">first_page</mat-icon>
+                </button>
+                <!-- 이전 페이지 -->
+                <button mat-icon-button (click)="pageMove('prev')">
+                    <mat-icon fontSet="material-symbols-outlined">chevron_left</mat-icon>
+                </button>
+
+                <!-- 다음 페이지 -->
+                <button mat-icon-button (click)="pageMove('next')">
+                    <mat-icon fontSet="material-symbols-outlined">chevron_right</mat-icon>
+                </button>
+
+                <!-- 마지막 페이지 -->
+                <button mat-icon-button (click)="pageMove('last')">
+                    <mat-icon fontSet="material-symbols-outlined">last_page</mat-icon>
+                </button>
+            </div>
         </div>
+
     </section>
 
 
