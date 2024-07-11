@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { RoleSocketService } from '../../services/socket/role/role-socket.service';
 import { Socket } from 'ngx-socket-io';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-group',
@@ -24,10 +25,14 @@ export class GroupComponent {
 
   skipList: any = [];
 
+
+  user_id: any; // 이건 현재 로그인한 사용자의 사용자 아이디
+
   constructor(private meetingService: MeetingService,
     private meetingServiceAPI: MeetingServiceAPI,
     private roleSocketService: RoleSocketService,
-    private socket: Socket) {
+    private socket: Socket,
+    private authService: AuthService) {
 
     // effect for meetingService 
     effect(() => {
@@ -35,6 +40,7 @@ export class GroupComponent {
       this.currentMembersCount = 0;
       this.currentMembers = this.meetingInfo.currentMembers;
       this.currentMembers.forEach((currentMember: any) => {
+        console.log(currentMember)
         if (currentMember.online == true) {
           this.currentMembersCount += 1; // online: true일 경우 ++
         }
@@ -62,7 +68,7 @@ export class GroupComponent {
 
 
   ngOnInit() {
-
+    this.user_id = this.authService.getTokenInfo()._id;
   }
 
   ngAfterViewInit() {

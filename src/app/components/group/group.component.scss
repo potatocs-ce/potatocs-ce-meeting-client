@@ -53,6 +53,8 @@
 
             .name {
                 font-weight: bold;
+                display: flex;
+
             }
 
             .active {
@@ -132,4 +134,13 @@
 
 
     }
+}
+
+
+
+.dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 1rem;
+    background-color: green;
 }

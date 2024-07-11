@@ -7,7 +7,12 @@
         @for(member of currentMembers; track member; let i = $index) {
         <li class="group_list">
             <article class="member_info">
-                <span class="name" [ngClass]="member.online ? 'active': ''">{{member.member_id.name}}</span>
+                <span class="name" [ngClass]="member.online ? 'active': ''">{{member.member_id.name}}
+                    @if(member.member_id._id == user_id){
+                    <div class="dot"></div>
+                    }
+                </span>
+
                 <span class="role" [ngClass]="member.online ? 'active_role': ''">{{member.role}}</span>
 
             </article>
