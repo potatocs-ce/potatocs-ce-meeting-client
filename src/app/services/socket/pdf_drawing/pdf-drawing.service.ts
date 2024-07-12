@@ -25,6 +25,11 @@ export class PdfDrawingService {
     private docService: DocumentService,
     private drawingService: DrawingService,
     private meetingService: MeetingService) {
+
+  }
+
+
+  monitDrawing() {
     this.socket.on('draw:document', async (data: any) => {
       const drawingData = this.docService.drawingData();
       const drawingEventSet = drawingData.find((data2: any) => data2._id == data.doc_id)?.drawings;
@@ -65,6 +70,7 @@ export class PdfDrawingService {
 
     })
   }
+
 
   clearDrawing(meetingId: string, result: any, docId: string, page: number) {
     this.socket.emit('draw:doc_clear', { meetingId, result, docId, page })

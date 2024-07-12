@@ -299,8 +299,8 @@ export class MediasoupService {
 
     this.socket.on(
       'user_join', async (data: any) => {
-        console.log(data);
-        this._snackBar.open(`${data.name} has joined`, 'ok', { horizontalPosition: 'start' });
+
+        this._snackBar.open(`${data.name} has joined`, 'ok', { horizontalPosition: 'start', duration: 5000 });
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;
@@ -330,7 +330,7 @@ export class MediasoupService {
     this.socket.on(
       'user_exit',
       async (data: any) => {
-
+        this._snackBar.open(`${data.name} has left`, 'ok', { horizontalPosition: 'start', duration: 5000 });
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;
@@ -706,13 +706,23 @@ export class MediasoupService {
     try {
 
       // 스크린 공유인 경우
-      stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints).catch((error: any) => {
-        if (error.name === 'OverconstrainedError') {
-          console.error('The constraint ' + error.constraint + ' is not satisfied by any available camera.');
-        } else {
-          console.error('Error accessing camera: ', error);
+      stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints)
+
+
+      if (!stream) {
+        this.dialogService.openDialogNegative('Stream information could not be found. Please try again later.');
+        switch (type) {
+          case this.mediaType.audio:
+            this.videoService.audioLoading.set(false);
+            break;
+          case this.mediaType.video:
+            this.videoService.videoLoading.set(false);
+            break;
+          default:
+            break;
         }
-      })
+        return
+      };
 
       // 오디오 공유인 경우
       const track = audio ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]

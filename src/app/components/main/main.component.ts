@@ -91,7 +91,7 @@ export class MainComponent {
   }
 
   ngOnInit() {
-
+    this.pdfDrawingServie.monitDrawing();
     this.route.params.subscribe((params: any) => {
       // console.log(params)
       this.meetingService.meeting_room_id.set(params.id)
