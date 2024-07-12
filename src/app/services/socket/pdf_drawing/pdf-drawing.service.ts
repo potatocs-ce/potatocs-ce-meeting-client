@@ -35,11 +35,7 @@ export class PdfDrawingService {
       const drawingEventSet = drawingData.find((data2: any) => data2._id == data.doc_id)?.drawings;
       // 있으면 넣어놓고 없으면 안넣고
 
-
-
-
       if (drawingEventSet) {
-
         drawingEventSet.push({ drawingEvent: data.drawingEvent, userId: data.user_id, page: data.pageNum })
         this.docService.drawingData.set([...drawingData])
       } else {
@@ -65,10 +61,6 @@ export class PdfDrawingService {
         const target_context: any = canvas_target.getContext('2d');
         target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
       }
-
-
-
-
     })
   }
 
