@@ -97,11 +97,28 @@
         </button>
         }
 
-
-        <button mat-icon-button class="circle_button mobile_button">
-            <!-- <i class="fa-regular fa-file-video"></i> -->
+        <!-- 모바일 버전에서 메뉴를 보여주기 위한 버튼 -->
+        <button mat-icon-button class="circle_button mobile_button" [matMenuTriggerFor]="menuList">
             <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
         </button>
+        <mat-menu #menuList="matMenu">
+            <ul class='menu_ul'>
+
+                <li class="mat_item_button" mat-menu-item (click)="openMobileMenuDialog('group')">
+                    <span class="menu_span"><i class="fa-solid fa-user"></i>group</span>
+                </li>
+
+                <li class="mat_item_button" mat-menu-item (click)="openMobileMenuDialog('chat')">
+                    <span class="menu_span"><i class="fa-solid fa-message"></i>chat</span>
+                </li>
+
+                <li class="mat_item_button" mat-menu-item (click)="openMobileMenuDialog('survey')">
+                    <span class="menu_span"><i class="fa-solid fa-list-check"></i>survey</span>
+                </li>
+            </ul>
+
+        </mat-menu>
+
 
 
         <button mat-icon-button class="circle_button call_end" (click)="meetingExit()">

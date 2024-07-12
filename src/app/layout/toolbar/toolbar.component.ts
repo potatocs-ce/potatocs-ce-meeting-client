@@ -204,4 +204,18 @@ export class ToolbarComponent {
       }
     })
   }
+
+  openMobileMenuDialog(menu: string) {
+    switch (menu) {
+      case 'group':
+        this.dialogService.openMobileGroupDialog()
+        break;
+      case 'chat':
+        this.dialogService.openMobileChatDialog()
+        break;
+      case 'survey':
+        this.dialogService.openMobileSurveyDialog();
+        break;
+    }
+  }
 }
