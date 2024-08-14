@@ -238,7 +238,7 @@ export class WhiteboardComponent {
 
   setCanvas() {
     const data_canvas: any = this.userCanvas;
-    const drawing_canvas: any = this.rxCanvasCover;
+    const drawing_canvas: any = this.coverCanvas;
 
 
 
