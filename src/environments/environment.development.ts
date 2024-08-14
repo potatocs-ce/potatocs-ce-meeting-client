@@ -1,6 +1,6 @@
 export const environment = {
     localhostUrl: 'localhost:3300',
-    apiUrl: 'https://localhost:3300/apim/v1',
+    apiUrl: 'http://localhost:3300/room/apim/v1',
     tokenName: 'coop',
     production: false
 };

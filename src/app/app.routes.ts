@@ -13,7 +13,7 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
-        path: 'room/:id',
+        path: ':id',
         component: MainComponent,
         canActivate: [authGuard, meetingGuard]
     },

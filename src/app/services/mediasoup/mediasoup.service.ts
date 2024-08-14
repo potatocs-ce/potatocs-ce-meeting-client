@@ -579,7 +579,7 @@ export class MediasoupService {
       } else if (err.name === 'NotFoundError') {
         // this.dialogService.openDialogNegative('No camera was found on this device.');
       } else {
-        this.dialogService.openDialogNegative('An unexpected error occurred: ' + err.message);
+        this.dialogService.openDialogNegative('An unexpected error occurred: ' + err);
       }
       this.toggleService.toggle_video.set(false);
       this.videoService.videoLoading.set(false);
@@ -615,8 +615,12 @@ export class MediasoupService {
   //====== MAIN FUNCTION
   async produce(type: any, deviceId: any = null) {
 
+    if (type == 'videoType') {
+      deviceId = deviceId == null ? this.nowVideo : deviceId;
+    } else if (type == "audioType") {
+      deviceId = deviceId == null ? this.nowAudio : deviceId;
+    }
 
-    deviceId = deviceId == null ? this.nowVideo : deviceId;
 
 
     let mediaConstraints: any = {};
@@ -658,21 +662,6 @@ export class MediasoupService {
               deviceId: deviceId,
             }
           }
-        } else {
-          mediaConstraints = {
-            audio: false,
-            video: {
-              width: {
-                min: 320,
-                ideal: 1920
-              },
-              height: {
-                min: 200,
-                ideal: 1080
-              },
-              facingMode: { exact: "user" },
-            }
-          }
         }
 
         break;
@@ -708,7 +697,7 @@ export class MediasoupService {
       // 스크린 공유인 경우
       stream = screen ? await navigator.mediaDevices.getDisplayMedia() : await navigator.mediaDevices.getUserMedia(mediaConstraints)
 
-
+      console.log(stream)
       if (!stream) {
         this.dialogService.openDialogNegative('Stream information could not be found. Please try again later.');
         switch (type) {
@@ -830,6 +819,14 @@ export class MediasoupService {
         if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') return
       }
 
+
+      if (err.name == 'NotReadableError' && err.message == 'Could not start video source') {
+        setTimeout(() => {
+          alert('retry')
+          this.produce(type, deviceId);
+          return;
+        }, 1000)
+      }
       this.dialogService.openDialogNegative(err)
 
       // console.log('Produce error:', err)

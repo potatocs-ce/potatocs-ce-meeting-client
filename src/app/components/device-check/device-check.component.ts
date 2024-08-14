@@ -48,7 +48,7 @@ export class DeviceCheckComponent {
   @ViewChild('video', { static: true }) public videoRef: ElementRef | any;
 
   video: any;
-
+  stream: any;
   constructor(
     // private eventBusService: EventBusService,
     public fb: FormBuilder,
@@ -86,6 +86,10 @@ export class DeviceCheckComponent {
     this.deviceChangeCheck();
   }
 
+  ngOnDestory() {
+    this.stream.getTracks().forEach((track: any) => track.stop())
+  }
+
   // 컴퓨터에 연결된 장치 목록
   async deviceCheck() {
     // console.log(this.instantMeter)
@@ -119,6 +123,7 @@ export class DeviceCheckComponent {
       this.selectDevice();
     });
   }
+
 
 
   // 모든 미디어 장치 분리해서 Object로 저장
@@ -194,16 +199,43 @@ export class DeviceCheckComponent {
 
 
   // device check 화면에서 카메라 On / Off 유무
-  checkValue(event: any) {
+  async checkValue(event: any) {
     if (event == false) {
-      this.videoDeviceExist = false;
-      this.videoService.videoDeviceExist.set(false)
-      // web-rtc 컴포넌트에 있는 비디오 스트림 설정 변경
-      this.selectDevice();
+      // this.videoDeviceExist = false;
+      // this.videoService.videoDeviceExist.set(false)
+      // // web-rtc 컴포넌트에 있는 비디오 스트림 설정 변경
+      // this.selectDevice();
+      this.stream.getTracks().forEach((track: any) => track.stop())
+      this.video.srcObject = null;
     } else {
-      this.videoDeviceExist = true;
-      this.videoService.videoDeviceExist.set(true)
-      this.selectDevice();
+      const options = {
+        audio:
+          this.audioDeviceExist ? {
+            'echoCancellation': true,
+            'noiseSuppression': true,
+            deviceId: this.selectedMiceDevice?.id,
+          } : false,
+        video: this.videoDeviceExist ? {
+          deviceId: this.selectedVideoDevice?.id,
+          video: {
+            width: {
+              min: 320,
+              ideal: 1920
+            },
+            height: {
+              min: 200,
+              ideal: 1080
+            },
+            facingMode: { exact: "user" },
+          }
+        } : false
+      };
+      this.stream = await navigator.mediaDevices.getUserMedia(options);
+      this.video.srcObject = this.stream;
+
+      // this.videoDeviceExist = true;
+      // this.videoService.videoDeviceExist.set(true)
+      // this.selectDevice();
     }
   }
 
@@ -219,10 +251,14 @@ export class DeviceCheckComponent {
     try {
       const stream = this.video.srcObject;
       const tracks = stream.getTracks() || undefined;
+
       tracks.forEach(function (track: any) {
 
         track.stop()
       })
+
+
+
     } catch (err) {
       console.log(err)
     }
@@ -233,6 +269,8 @@ export class DeviceCheckComponent {
 
     this.meetingService.device_check.set(true);
   }
+
+
 
   // video에 스트림 추출
   async getLocalMediaStream() {
@@ -257,15 +295,24 @@ export class DeviceCheckComponent {
         } : false,
       video: this.videoDeviceExist ? {
         deviceId: this.selectedVideoDevice?.id,
-        width: 320,
-        framerate: { max: 24, min: 24 }
+        video: {
+          width: {
+            min: 320,
+            ideal: 1920
+          },
+          height: {
+            min: 200,
+            ideal: 1080
+          },
+          facingMode: { exact: "user" },
+        }
       } : false
     };
     try {
       // await this.webrtcService.getMediaStream(options);
-      const stream = await navigator.mediaDevices.getUserMedia(options);
+      // await this.videoService.setStream(options);
 
-      this.video.srcObject = stream;
+      // this.video.srcObject = this.videoService.getStream();
 
 
       // 브라우저가 장치의 권한 부여 시 목록 수정
@@ -288,25 +335,24 @@ export class DeviceCheckComponent {
         } : false,
       video: this.videoDeviceExist ? {
         deviceId: this.selectedVideoDevice?.id,
-        video: {
-          width: {
-            min: 320,
-            ideal: 1920
-          },
-          height: {
-            min: 200,
-            ideal: 1080
-          },
-          facingMode: { exact: "user" },
-        }
+
+        width: {
+          min: 320,
+          ideal: 1920
+        },
+        height: {
+          min: 200,
+          ideal: 1080
+        },
+
       } : false
     };
 
     try {
       // await this.webrtcService.getMediaStream(options);
-      const stream = await navigator.mediaDevices.getUserMedia(options);
+      this.stream = await navigator.mediaDevices.getUserMedia(options);
 
-      this.video.srcObject = stream;
+      this.video.srcObject = this.stream;
 
 
     } catch (e) {
@@ -315,16 +361,16 @@ export class DeviceCheckComponent {
   }
 
   async extractAudioStream() {
-    const constraints = {
-      audio: true,
-      video: false
-    };
+    // const constraints = {
+    //   audio: true,
+    //   video: false
+    // };
 
 
-    navigator.mediaDevices.getUserMedia(constraints)
-      .then(res => this.handleSuccess(res))
-      .then(result => this.deviceCheck())
-      .catch(error => this.handleError(error));
+    // navigator.mediaDevices.getUserMedia(constraints)
+    //   .then(res => this.handleSuccess(res))
+    //   .then(result => this.deviceCheck())
+    //   .catch(error => this.handleError(error));
 
   }
 
