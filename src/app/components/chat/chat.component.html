@@ -33,9 +33,16 @@
 
     </section>
     <form class="input_section" (ngSubmit)="submitChat()">
-
-        <input style="outline: none;" [(ngModel)]="chatContent" type="text" [ngModelOptions]="{standalone: true}" />
-        <button mat-icon-button><mat-icon fontSet="material-symbols-outlined">arrow_upward_alt</mat-icon></button>
+        <div class="image_section">
+            <!-- 이미지 영역 -->
+        </div>
+        <div class="textarea_section">
+            <mat-icon (click)="openScreenCaptureDialog()"
+                fontSet="material-symbols-outlined">screenshot_region</mat-icon>
+            <textarea #myTextarea (ngModelChange)="handleResizeHeight(myTextarea)" style="outline: none;"
+                [(ngModel)]="chatContent" type="text" [ngModelOptions]="{standalone: true}" rows="1"></textarea>
+            <mat-icon fontSet="material-symbols-outlined">send</mat-icon>
+        </div>
 
     </form>
 </div>

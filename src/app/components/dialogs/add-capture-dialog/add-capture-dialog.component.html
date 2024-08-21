@@ -1,0 +1,81 @@
+<div class="add_capture_container">
+    <section class="dialog_header">
+        <div class="dialog_title">
+            <h3>추가 다이어로그</h3>
+        </div>
+        <div class="dialog_close_button">
+            <mat-icon (click)="closeModal()">close</mat-icon>
+        </div>
+    </section>
+    <section class="dialog_body">
+        <div class="dialog_drawing_tools">
+            <div class="button_container">
+                <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
+                    <!-- <mat-icon>draw</mat-icon> -->
+                    <mat-icon fontSet="material-symbols-outlined">stylus_note</mat-icon>
+                </button>
+                <button (click)="setType('eraser')" (dblclick)="clearDrawing()" mat-icon-button
+                    [ngClass]=" tool.type=='eraser' ? 'active' : ''">
+
+                    <mat-icon fontSet="material-symbols-outlined">ink_eraser</mat-icon>
+                </button>
+
+                <!-- 구분선 -->
+                <div class="divide"></div>
+
+
+                <!-- 색 선택 영역 -->
+                <button mat-icon-button (click)="setColor('black')" [ngClass]="tool.color == 'black' ? 'active': ''">
+                    <p class="color_button" style="background-color: black;"> </p>
+                </button>
+
+                <button mat-icon-button (click)="setColor('red')" [ngClass]="tool.color == 'red' ? 'active': ''">
+                    <p class="color_button" style="background-color: red;"></p>
+                </button>
+
+                <button mat-icon-button (click)="setColor('blue')" [ngClass]="tool.color == 'blue' ? 'active': ''">
+                    <p class="color_button" style="background-color: blue;"></p>
+                </button>
+
+                <button mat-icon-button (click)="setColor('green')" [ngClass]="tool.color == 'green' ? 'active': ''">
+                    <p class="color_button" style="background-color: green;"></p>
+                </button>
+
+                <button mat-icon-button (click)="setColor('yellow')" [ngClass]="tool.color == 'yellow' ? 'active': ''">
+                    <p class="color_button" style="background-color: yellow;"></p>
+                </button>
+
+                <!-- 구분선 -->
+                <div class="divide"></div>
+
+                <!-- 선 굵기 지정 영역 -->
+                <button mat-icon-button (click)="setWidth(10)" [ngClass]="tool.width == 10 ? 'active': ''">
+                    <p class="width_button big"></p>
+                </button>
+
+                <button mat-icon-button (click)="setWidth(5)" [ngClass]="tool.width == 5 ? 'active': ''">
+                    <p class="width_button medium"></p>
+                </button>
+
+                <button mat-icon-button (click)="setWidth(1)" [ngClass]="tool.width == 1 ? 'active': ''">
+                    <p class="width_button small"></p>
+                </button>
+
+            </div>
+        </div>
+        <div class="dialog_whiteboard">
+            <section id="canvas_section" class="canvas_section">
+                <img #capturedImage id="capturedImage" [src]="dataURL" />
+                <!-- 데이터가 보여질 캔버스 -->
+                <canvas id="add_data_canvas" class="data_canvas"></canvas>
+                <!-- 그림 그리는 부분 -->
+                <canvas id="add_drawing_canvas" class="drawing_canvas"></canvas>
+            </section>
+        </div>
+    </section>
+    <section class="dialog_footer">
+        <div classe="dialog_buttons_container">
+            <button (click)="save()" mat-flat-button>save</button>
+        </div>
+    </section>
+</div>
