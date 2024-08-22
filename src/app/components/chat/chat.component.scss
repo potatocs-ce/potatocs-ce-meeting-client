@@ -182,6 +182,10 @@
 
 
         .image_section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+
             .div_card {
                 position: relative;
                 height: 50px;
@@ -196,6 +200,16 @@
                     position: absolute;
                     top: 0;
                     left: 0;
+                }
+
+                .deleteButton {
+                    position: absolute;
+
+                    color: white;
+                    right: -8px;
+                    top: -6px;
+                    font-size: 14pt;
+                    ;
                 }
             }
         }
