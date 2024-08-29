@@ -331,12 +331,13 @@ export class WhiteboardComponent {
         //   this.socket.emit('draw:video_clear', { room_id: this.meetingService.meeting_room_id(), target_id: video_target.parentNode.id, meeting_id: this.meetingService.meeting_room_id() })
         // }
       })
+      const canvas_target: any = document.getElementById('canvasUser');
+      const target_context: any = canvas_target.getContext('2d');
+      target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
     }
 
 
-    const canvas_target: any = document.getElementById('canvasUser');
-    const target_context: any = canvas_target.getContext('2d');
-    target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+
   }
 
   /**
