@@ -16,7 +16,10 @@ export class SurveySocketService {
     private meetingService: MeetingService,
     private authService: AuthService) {
     this.socket.on('updateSurveyList', (res: any) => {
-      this.surveyService.surveys.set(res);
+      // this.surveyService.surveys.set(res);
+      this.surveyApiService.getSurveys(this.meetingService.meeting_room_id()).subscribe((res: any) => {
+        this.surveyService.surveys.set(res);
+      })
     })
   }
 
