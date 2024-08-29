@@ -1,0 +1,14 @@
+#dialog_content {
+    position: relative;
+}
+
+.captured_dialog_header {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+
+    .mat-icon {
+        cursor: pointer;
+    }
+}

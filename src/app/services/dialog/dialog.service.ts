@@ -7,6 +7,7 @@ import { GroupDialogComponent } from '../../components/dialogs/mobile/group-dial
 import { ChatDialogComponent } from '../../components/dialogs/mobile/chat-dialog/chat-dialog.component';
 import { SurveyDialogComponent } from '../../components/dialogs/mobile/survey-dialog/survey-dialog.component';
 import { AddCaptureDialogComponent } from '../../components/dialogs/add-capture-dialog/add-capture-dialog.component';
+import { CaptureDialogComponent } from '../../components/dialogs/capture-dialog/capture-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,13 @@ export class DialogService {
   // 캡쳐 추가용 다이어로그
   openCaptureDialog() {
     const dialogRef = this.dialog.open(AddCaptureDialogComponent);
+    return dialogRef.afterClosed();
+  }
+
+  openCapturedDialog(data: any) {
+    const dialogRef = this.dialog.open(CaptureDialogComponent, {
+      data
+    });
     return dialogRef.afterClosed();
   }
 }

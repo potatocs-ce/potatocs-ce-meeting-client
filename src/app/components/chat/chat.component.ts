@@ -122,6 +122,10 @@ export class ChatComponent {
               canvas.style.position = 'absolute';
               canvas.style.top = '0';
               canvas.style.left = '0';
+              canvas.addEventListener('click', () => {
+                // console.log(img, canvas)
+                this.openCapturedDialog(data2);
+              })
               data2.canvas = canvas
 
               const content_images_div = document.createElement('div');
@@ -290,7 +294,10 @@ export class ChatComponent {
     })
   }
 
-  checkImgloaded(obj: any) {
-    console.log('로드', obj)
+  // 캔버스 클릭하면
+  openCapturedDialog(data: any): void {
+    this.dialogService.openCapturedDialog(data).subscribe((res: any) => {
+
+    })
   }
 }

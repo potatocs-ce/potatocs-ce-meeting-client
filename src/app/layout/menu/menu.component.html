@@ -1,9 +1,13 @@
 <div class="menu_container">
-    @if(toggle_mode == 'group'){
-    <app-group></app-group>
-    }@else if(toggle_mode == 'chat') {
-    <app-chat></app-chat>
-    }@else if(toggle_mode == 'survey') {
-    <app-survey></app-survey>
-    }
+
+    <div [style]="toggle_mode == 'group' ? '' : 'visibility: hidden'">
+        <app-group></app-group>
+    </div>
+
+    <div [style]="toggle_mode == 'chat' ? '' : 'visibility: hidden'">
+        <app-chat></app-chat>
+    </div>
+    <div [style]="toggle_mode == 'survey' ? '' : 'visibility: hidden'">
+        <app-survey></app-survey>
+    </div>
 </div>
