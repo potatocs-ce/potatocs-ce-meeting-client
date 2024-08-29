@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
@@ -40,7 +40,33 @@ export class MeetingServiceAPI {
   }
 
   // 채팅 생성
-  createChat(data: any) {
-    return this.http.post(this.baseUrl + '/meeting/createChat', data);
+  createChat(data: any, files: any) {
+    const formData = new FormData();
+
+    // 텍스트 데이터 추가
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key]);
+      }
+    }
+
+    console.log(files)
+    files.map((data: any, index: number) => {
+      formData.append(`strings[${index}]`, JSON.stringify(data))
+      formData.append('files', data.blob, `image${index}.png`)
+    })
+
+    return this.http.post(this.baseUrl + '/meeting/createChat', formData);
+  }
+
+  getChatImage(key: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/pdf',
+      Accept: 'application/pdf',
+    });
+    return this.http.get(this.baseUrl + '/meeting/' + key, {
+      headers: headers,
+      responseType: 'blob',
+    })
   }
 }

@@ -18,7 +18,8 @@ export class AddCaptureDialogComponent {
 
   tool: any = { type: 'pen', color: 'black', width: 1 }
   zoomScale: number = 1;
-  dataURL: string = '';
+  dataURL: any;
+  blob: any;
   img_width: number = 0;
   img_height: number = 0;
 
@@ -35,16 +36,18 @@ export class AddCaptureDialogComponent {
 
   ngOnInit() {
     this.getCapturedImage();
-    this.setCanvas()
+
   }
   observer: any;
   observer_target: any;
   ngAfterViewInit() {
     this.observer = new ResizeObserver(entries => {
       this.zone.run(() => {
-        const video_target: any = document.getElementById('capturedImage');
+        setTimeout(() => {
+          const video_target: any = document.getElementById('capturedImage');
 
-        this.imageResize(video_target)
+          this.imageResize(video_target)
+        }, 0); // 렌더링 후에 실행되도록 설정
       });
     });
 
@@ -53,7 +56,12 @@ export class AddCaptureDialogComponent {
     this.observer.observe(this.observer_target);
   }
 
-
+  ngOnDestroy() {
+    if (this.observer && this.observer_target) {
+      this.observer.unobserve(this.observer_target); // 관찰 중지
+      this.observer.disconnect(); // observer 해제
+    }
+  }
   /**
    * 현재 비디오 이미지로 캡쳐
    */
@@ -65,17 +73,36 @@ export class AddCaptureDialogComponent {
     canvas.height = e.clientHeight;
 
     canvas.getContext('2d')?.drawImage(e, 0, 0, canvas.width, canvas.height);
-    this.dataURL = canvas.toDataURL('image/png');
+    this.blob = this.base64ToBlob(canvas.toDataURL('image/png'), 'image/png');
+    this.dataURL = URL.createObjectURL(this.blob);
+    this.setCanvas()
+  }
 
 
+  base64ToBlob(base64: any, contentType = '', sliceSize = 512) {
+    base64 = base64.split(',')[1];
 
-    // const a = document.createElement('a');
-    // a.href = dataURL;
-    // a.download = 'capture.png';
-    // a.click();
+    const byteCharacters = atob(base64); // Base64를 디코딩하여 이진 데이터로 변환
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
   }
 
   imageResize(target_image: any) {
+
     const data_canvas: any = document.getElementById('add_data_canvas');
     const drawing_canvas: any = document.getElementById('add_drawing_canvas');
     const canvas_section: any = document.getElementById('canvas_section');
@@ -160,9 +187,10 @@ export class AddCaptureDialogComponent {
       width: this.img_width,
       height: this.img_height,
       dataURL: this.dataURL,
+      blob: this.blob,
       drawingDatas: this.stackImageService.drawingStack()
     }
-
+    this.stackImageService.drawingStack.set([]);
     this.dialogRef.close(data);
   }
 }

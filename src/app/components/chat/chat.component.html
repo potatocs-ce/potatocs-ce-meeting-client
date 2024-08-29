@@ -5,7 +5,7 @@
     </section>
     <section class="chat_section">
         <section class="chat_scroll_section" #target>
-            @for(item of chat_info; track item) {
+            <!-- @for(item of chat_info; track item;let idx1 = $index) {
             <div class="chat">
                 <section class="name_section">
                     <span class="name">
@@ -14,9 +14,7 @@
                         <div class="dot"></div>
                         }
                     </span>
-                    <!-- @if(item.userId == user_id){
-                    <button><mat-icon>delete</mat-icon></button>
-                    } -->
+
 
                     <span class="time">
                         {{item.createdAt | date:'yyyy-MM-dd hh:mm a'}}
@@ -27,8 +25,17 @@
                         {{item.chatContent}}
                     </article>
                 </section>
+                <section class="content_image">
+                    @for(image of item.images; track image ; let idx2 = $index) {
+                    <div class="content_images_div " #imageElement>
+                        <img class="chat_image" [id]="'img-' + idx1 + '-' + idx2" [src]="image.blob " width="160"
+                            alt="Image">
+
+                    </div>
+                    }
+                </section>
             </div>
-            }
+            } -->
         </section>
 
     </section>
@@ -41,7 +48,7 @@
                 fontSet="material-symbols-outlined">screenshot_region</mat-icon>
             <textarea #myTextarea (ngModelChange)="handleResizeHeight(myTextarea)" style="outline: none;"
                 [(ngModel)]="chatContent" type="text" [ngModelOptions]="{standalone: true}" rows="1"></textarea>
-            <mat-icon fontSet="material-symbols-outlined">send</mat-icon>
+            <button type="submit"><mat-icon fontSet="material-symbols-outlined">send</mat-icon></button>
         </div>
 
     </form>

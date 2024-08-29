@@ -62,9 +62,9 @@ export class ChatDialogComponent {
       chatContent: this.chatContent
     }
 
-    this.meetingServiceApi.createChat(data).subscribe((res) => {
-      this.chatSocketService.sendChat(res);
-    })
+    // this.meetingServiceApi.createChat(data).subscribe((res) => {
+    //   this.chatSocketService.sendChat(res);
+    // })
 
     this.chatContent = '';
   }

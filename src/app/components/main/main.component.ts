@@ -22,6 +22,7 @@ import { SurveyApiService } from '../../api/survey/survey-api.service';
 import { SurveyService } from '../../services/survey/survey.service';
 import { SurveySocketService } from '../../services/socket/survey/survey-socket.service';
 import { DeviceCheckComponent } from '../device-check/device-check.component';
+import { DrawingService } from '../../services/drawing/drawing.service';
 
 @Component({
   selector: 'app-main',
@@ -64,7 +65,8 @@ export class MainComponent {
     private chatSocketService: ChatSocketService,
     private surveyApiService: SurveyApiService,
     private surveyService: SurveyService,
-    private surveySocketService: SurveySocketService) {
+    private surveySocketService: SurveySocketService,
+    private drawingService: DrawingService) {
     effect(() => {
       this.toggle_mode = this.toggleService.toggle_mode();
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
@@ -104,6 +106,12 @@ export class MainComponent {
 
       // meetingId 로 db에 있는 채팅 정보 가져오기
       this.meetingServiceApi.getMeetingChat(params.id).subscribe((res: any) => {
+        // for (let i = 0; i < res.length; i++) {
+        //   for (let j = 0; j < res[i].images.length; j++) {
+
+        //   }
+        // }
+
         this.meetingService.meeting_chat_info.set(res)
       })
 

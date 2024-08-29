@@ -115,6 +115,14 @@
                 border: none;
                 resize: none;
             }
+
+            button {
+                width: fit-content;
+                height: fit-content;
+                padding: none;
+                background-color: transparent;
+                border: none;
+            }
         }
 
         input {
@@ -214,4 +222,22 @@
             }
         }
     }
+}
+
+.content_image {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.content_images_div {
+    position: relative;
+}
+
+
+.chat_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
 }
