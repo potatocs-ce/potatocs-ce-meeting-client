@@ -330,11 +330,15 @@ export class MediasoupService {
     this.socket.on(
       'user_exit',
       async (data: any) => {
-        this._snackBar.open(`${data.name} has left`, 'ok', { horizontalPosition: 'start', duration: 5000 });
+
+
         // 방 참가 시 유저 업데이트도 같이 진행
         this.meetingServiceAPI.getMeetingInfo(data.room_id).subscribe(async (data2: any) => {
           const meetingInfo: any = data2;
           const userInfo: any = await this.userService.getUserInfo(data.user_id).toPromise();
+
+          // snackBar로 어떤 유저가 방을 나갔는지 표현
+          this._snackBar.open(`${userInfo.userData.name} has left`, 'ok', { horizontalPosition: 'start', duration: 5000 });
 
           meetingInfo.userData = userInfo.userData;
 
