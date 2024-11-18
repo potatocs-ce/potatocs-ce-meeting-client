@@ -333,11 +333,9 @@ export class WhiteboardComponent {
       })
       const canvas_target: any = document.getElementById('canvasUser');
       const target_context: any = canvas_target.getContext('2d');
-      target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+      const zoomScale = this.zoomService.zoomScale()
+      target_context.clearRect(0, 0, canvas_target.width / zoomScale, canvas_target.height / zoomScale);
     }
-
-
-
   }
 
   /**

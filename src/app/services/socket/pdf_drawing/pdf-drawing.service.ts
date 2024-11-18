@@ -4,6 +4,7 @@ import { DocumentService } from '../../document/document.service';
 import { DrawingService } from '../../drawing/drawing.service';
 import { CANVAS_CONFIG } from '../../../../config/config';
 import { MeetingService } from '../../meeting/meeting.service';
+import { ZoomService } from '../../zoom/zoom.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class PdfDrawingService {
     private socket: Socket,
     private docService: DocumentService,
     private drawingService: DrawingService,
-    private meetingService: MeetingService) {
+    private meetingService: MeetingService,
+    private zoomService: ZoomService) {
 
   }
 
@@ -52,14 +54,17 @@ export class PdfDrawingService {
       }
     })
 
-
+    // 판서 전체 지우기
     this.socket.on('draw:doc_clear', async (data: any) => {
 
       this.docService.generateDrawingData(data.result);
       if (this.docService._docList()[this.docService.lastDocNum()]?._id == data.docId && this.docService.pageBuffer()[this.docService.lastDocNum()] == data.page) {
         const canvas_target: any = document.getElementById('canvasUser');
         const target_context: any = canvas_target.getContext('2d');
-        target_context.clearRect(0, 0, canvas_target.width, canvas_target.height);
+        const zoomScale = this.zoomService.zoomScale();
+        console.log(canvas_target.width / zoomScale, canvas_target.height / zoomScale)
+
+        target_context.clearRect(0, 0, canvas_target.width / zoomScale, canvas_target.height / zoomScale);
       }
     })
   }
@@ -90,7 +95,7 @@ export class PdfDrawingService {
       return
     }
 
-    this.ThumbdrawingQueue();
+    // this.ThumbdrawingQueue();
 
 
     const data_canvas: any = document.getElementById('canvasUser')
@@ -129,8 +134,8 @@ export class PdfDrawingService {
         context.arc(data.points[0], data.points[1], data.tool.width / 2, 0, Math.PI * 2, !0);
         context.fill();
         context.closePath();
-
-        context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+        const zoomScale = this.zoomService.zoomScale();
+        context.clearRect(0, 0, target_canvas.width / zoomScale, target_canvas.height / zoomScale);
         this.drawingService.end(data_context, data.points, data.tool)
         this.dataArray.shift()
         this.drawingQueue()
@@ -180,8 +185,8 @@ export class PdfDrawingService {
         if (i === pointsLength) {
           clearInterval(this.stop);
           this.stop = null;
-
-          context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+          const zoomScale = this.zoomService.zoomScale();
+          context.clearRect(0, 0, target_canvas.width / zoomScale, target_canvas.height / zoomScale);
 
           // 최종 target에 그리기
           this.drawingService.end(data_context, data.points, data.tool)
@@ -296,8 +301,8 @@ export class PdfDrawingService {
         context.arc(data.points[0], data.points[1], data.tool.width / 2, 0, Math.PI * 2, !0);
         context.fill();
         context.closePath();
-
-        context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+        const zoomScale = this.zoomService.zoomScale();
+        context.clearRect(0, 0, target_canvas.width / zoomScale, target_canvas.height / zoomScale);
         this.drawingService.end(data_context, data.points, data.tool)
 
 
@@ -347,8 +352,8 @@ export class PdfDrawingService {
         if (i === pointsLength) {
           clearInterval(this.thumbStop);
           this.thumbStop = null;
-
-          context.clearRect(0, 0, target_canvas.width, target_canvas.height);
+          const zoomScale = this.zoomService.zoomScale();
+          context.clearRect(0, 0, target_canvas.width / zoomScale, target_canvas.height / zoomScale);
 
           // 최종 target에 그리기
           this.drawingService.end(data_context, data.points, data.tool)

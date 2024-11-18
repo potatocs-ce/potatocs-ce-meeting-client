@@ -48,14 +48,15 @@ export class VideoService {
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: false, video: {
+          // frameRate: { max: 15 },  // 프레임 속도를 낮추기
           deviceId: id,
           width: {
-            min: 640,
-            ideal: 1920
+            min: 320,
+            ideal: 640
           },
           height: {
-            min: 400,
-            ideal: 1080
+            min: 200,
+            ideal: 400
           }
         }
       })

@@ -59,15 +59,16 @@ export class DocPageComponent {
     effect(() => {
       this.docService.drawingData();
       if (this.thumbArray.length != 0) {
-        console.log(this.thumbArray, this.currentPageNum)
+        console.log(this.thumbArray, this.currentPageNum, '뭐지')
         const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;
         const drawingEvents = drawingEventSet?.filter((item: any) => item.page === this.currentPageNum + 1);
         const dataCanvas = document.getElementById(`thumb_data_canvas${this.currentPageNum + 1}`) as HTMLCanvasElement;
+
         this.renderingService.renderBoard(dataCanvas, this.thumbArray[this.currentPageNum].scale, drawingEvents);
       }
     })
 
-
+    // 처음 들어왔을 때 
     effect(() => {
       this.meetingService.skipList();
       untracked(() => {
@@ -76,6 +77,7 @@ export class DocPageComponent {
           const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings
           const drawingEvents = drawingEventSet?.filter((item: any) => item.page === i + 1);
           const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
+
           this.renderingService.renderBoard(dataCanvas, this.thumbArray[i].scale, drawingEvents);
         }
 

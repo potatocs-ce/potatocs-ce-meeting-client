@@ -73,11 +73,11 @@ export class DeviceCheckComponent {
     // 브라우저 체크
     this.browserCheck();
 
-    // 웹캠으로 부터 스트림 추출
-    this.getLocalMediaStream();
-
     // 컴퓨터에 연결된 장치 목록
     this.deviceCheck();
+
+    // 웹캠으로 부터 스트림 추출
+    this.getLocalMediaStream();
 
     // 오디오 스트림 바
     this.extractAudioStream();
@@ -97,21 +97,29 @@ export class DeviceCheckComponent {
     // https://webrtc.org/getting-started/media-devices#using-promises
     // https://simpl.info/getusermedia/sources/
     // https://levelup.gitconnected.com/share-your-screen-with-webrtc-video-call-with-webrtc-step-5-b3d7890c8747
-    await navigator.mediaDevices.enumerateDevices().then(async (devices) => {
-      console.log('-------------------- device list ------------------------');
-      console.log(devices)
-      // 장치 목록 객체화
-      this.convertDeviceObject(devices)
-      console.log(this.miceDevices)
-      console.log(this.videoDevices)
-      console.log(this.speakerDevices)
-      // 장치 연결, 권한 유무
-      this.checkDevice()
 
-      this.selectDevice();
-    }).catch(function (err) {
-      console.log(err);
-    });
+    navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    }).then(async (stream) => {
+      await navigator.mediaDevices.enumerateDevices().then(async (devices) => {
+        console.log('-------------------- device list ------------------------');
+        console.log(devices)
+        // 장치 목록 객체화
+        this.convertDeviceObject(devices)
+        console.log(this.miceDevices)
+        console.log(this.videoDevices)
+        console.log(this.speakerDevices)
+        // 장치 연결, 권한 유무
+        this.checkDevice()
+
+        this.selectDevice();
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }).catch(error => {
+      console.error('Error accessing media devices:', error);
+    })
   }
 
   // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 변경
@@ -326,6 +334,7 @@ export class DeviceCheckComponent {
   // 권한 확인 유무 관련해서 이슈때문에 change시 새로운 함수 사용
   async changeMediaStream() {
     // const options = { audio: true, video: true };
+
     const options = {
       audio:
         this.audioDeviceExist ? {
@@ -348,9 +357,12 @@ export class DeviceCheckComponent {
       } : false
     };
 
+
     try {
+      console.log(this.videoDeviceExist, this.audioDeviceExist, this.selectedMiceDevice, this.selectedVideoDevice)
       // await this.webrtcService.getMediaStream(options);
       this.stream = await navigator.mediaDevices.getUserMedia(options);
+
 
       this.video.srcObject = this.stream;
 

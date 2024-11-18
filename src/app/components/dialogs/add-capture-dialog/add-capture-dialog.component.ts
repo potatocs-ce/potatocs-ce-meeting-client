@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, NgZone } from '@angular/core';
+import { Component, effect, Inject, NgZone } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ToolService } from '../../../services/tool/tool.service';
 import { CanvasService } from '../../../services/canvas/canvas.service';
 import { StackImageService } from '../../../services/stackImage/stack-image.service';
+import { ToggleService } from '../../../services/toggle/toggle.service';
 
 @Component({
   selector: 'app-add-capture-dialog',
@@ -23,15 +24,20 @@ export class AddCaptureDialogComponent {
   img_width: number = 0;
   img_height: number = 0;
 
+  toggle_video_whiteboard: string = '';
+
   constructor(
     private toolService: ToolService,
     private canvasService: CanvasService,
     private zone: NgZone,
     private stackImageService: StackImageService,
     public dialogRef: MatDialogRef<AddCaptureDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private toggleService: ToggleService
   ) {
-
+    effect(() => {
+      this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
+    })
   }
 
   ngOnInit() {
@@ -44,7 +50,10 @@ export class AddCaptureDialogComponent {
     this.observer = new ResizeObserver(entries => {
       this.zone.run(() => {
         setTimeout(() => {
+
+          // document 모드인지, video 모드인지 구분 필요
           const video_target: any = document.getElementById('capturedImage');
+
 
           this.imageResize(video_target)
         }, 0); // 렌더링 후에 실행되도록 설정
@@ -66,11 +75,34 @@ export class AddCaptureDialogComponent {
    * 현재 비디오 이미지로 캡쳐
    */
   getCapturedImage() {
-    const e: any = document.getElementById('present_video')
-    // console.log(e);
+    let e: any;
+
+    if (this.toggleService.toggle_video_whiteboard() == 'video') {
+      e = document.getElementById('present_video')
+    } else {
+      e = document.getElementsByClassName('video')[0]
+
+    }
+
+
+    // 현재 화면 크기
+    const screenWidth = window.innerWidth;
+    const maxCanvasWidth = 1000; // 최대 너비 제한
+    let canvasWidth = Math.min(screenWidth * 0.9, maxCanvasWidth); // 화면 90% 또는 1200px 중 작은 값
+
+    // 비디오 비율 계산
+    const videoWidth = e.videoWidth || e.clientWidth; // 비디오의 원래 너비
+    const videoHeight = e.videoHeight || e.clientHeight; // 비디오의 원래 높이
+    const aspectRatio = videoWidth / videoHeight;
+
+
+    // 높이 계산 (비율 유지)
+    const canvasHeight = canvasWidth / aspectRatio;
+
+
     const canvas = document.createElement('canvas');
-    canvas.width = e.clientWidth;
-    canvas.height = e.clientHeight;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
 
     canvas.getContext('2d')?.drawImage(e, 0, 0, canvas.width, canvas.height);
     this.blob = this.base64ToBlob(canvas.toDataURL('image/png'), 'image/png');

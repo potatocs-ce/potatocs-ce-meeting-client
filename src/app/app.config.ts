@@ -22,7 +22,8 @@ export function tokenGetter() {
 
 
 
-const config: SocketIoConfig = { url: 'wss://test-potatocs-lb.com', options: { transports: ['websocket'], path: '/room/socket/' } };
+// const config: SocketIoConfig = { url: 'wss://test-potatocs-lb.com', options: { transports: ['websocket'], path: '/room/socket/' } };
+const config: SocketIoConfig = { url: 'localhost:3300', options: { transports: ['websocket'], path: '/socket/' } };
 export const appConfig: ApplicationConfig = {
   providers: [
 

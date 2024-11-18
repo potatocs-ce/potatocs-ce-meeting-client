@@ -289,7 +289,6 @@ export class ChatComponent {
         this.stackImageService.imageStack.update((data: any) => {
           return [...data, res]
         })
-
       }
     })
   }

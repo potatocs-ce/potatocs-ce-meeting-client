@@ -1,4 +1,4 @@
-import { Injectable, effect } from '@angular/core';
+import { Injectable, effect, signal } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { VideoService } from '../video/video.service';
 import * as mediasoupClient from "mediasoup-client";
@@ -41,7 +41,7 @@ export class MediasoupService {
     })
   }
 
-  joined: boolean = false;
+  joined = signal<boolean>(false);
 
   rc: any = null;
 
@@ -55,6 +55,9 @@ export class MediasoupService {
   consumers = new Map()
   producers = new Map()
   producerLabel = new Map()
+
+
+  deviceStream: any = signal<any>(undefined);
 
 
   // 방 참가 함수
@@ -77,7 +80,7 @@ export class MediasoupService {
 
 
 
-          this.joined = true;
+          this.joined.set(true);
 
           // 방 참가 시 유저 업데이트도 같이 진행
           this.meetingServiceAPI.getMeetingInfo(room_id).subscribe(async (data: any) => {
@@ -105,18 +108,22 @@ export class MediasoupService {
             // 통신을 위해 필요한 미디어 수준 정보 요청 
             await this.socket.emit('getRouterRtpCapabilities', {}, async (data: any) => {
               // 초기 연결 설정 producer , consumer 연결 transport 
-              let device = await this.loadDevice(data);
+              let device = await this.loadDevice(data)
               this.device = device;
-              await this.initTransports(device);
 
 
-
-              if (this.videoService.videoDeviceExist()) {
-                this.videoService.videoLoading.set(true);
-                this.videoService.audioLoading.set(true);
-                await this.produce('videoType');
-                await this.produce('audioType');
+              if (!this.device) {
+                console.error('Device가 초기화되지 않았습니다.');
+                return;
               }
+
+              await this.initTransports(this.device);
+
+
+
+
+
+
             })
           })
 
@@ -162,6 +169,16 @@ export class MediasoupService {
         // transport 생성 
         // producer = 제공자, 내가 보내는 전송 선 생성
         this.producerTransport = device.createSendTransport(data)
+
+
+        if (!this.producerTransport) {
+          console.error('Producer transport가 초기화되지 않았습니다.');
+          return;
+        }
+
+
+
+
 
         // 연결
         this.producerTransport.on(
@@ -273,6 +290,15 @@ export class MediasoupService {
         await this.socket.emit('getProducers');
 
         this.initSockets()
+
+
+        // 처음에 연결 설정이 완료되면 카메라, 오디오 연결 시도
+        if (this.videoService.videoDeviceExist()) {
+          this.videoService.videoLoading.set(true);
+          this.videoService.audioLoading.set(true);
+          await this.produce('videoType');
+          await this.produce('audioType');
+        }
       })
     }
   }
@@ -751,7 +777,9 @@ export class MediasoupService {
       let producer: any = undefined
       try {
         params.appData = { screen }
+
         producer = await this.producerTransport.produce(params)
+
         console.log(producer)
       } catch (err) {
         window.alert(err)
@@ -924,7 +952,7 @@ export class MediasoupService {
 
   // 나가기 함수
   exit(offline = false) {
-    this.joined = false;
+    this.joined.set(false);
     // this.socket.emit('exitRoom', ())
     let clean = () => {
       this.consumerTransport.close();

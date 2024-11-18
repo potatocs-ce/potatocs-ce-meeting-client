@@ -1,4 +1,4 @@
-@if(!meetingService.device_check()){
+@if(!this.mediasoupService.joined()){
 <app-device-check></app-device-check>
 }@else {
 
@@ -56,7 +56,6 @@
     <!-- 툴바 부분 -->
     <section class="toolbar_section">
         <app-toolbar></app-toolbar>
-
 
         <div class="audio_section" id="audio_section">
             @for(stream of audioStreams; track stream) {

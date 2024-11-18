@@ -55,7 +55,7 @@ export class MainComponent {
     public toggleService: ToggleService,
     @Inject(PLATFORM_ID) private _platform: Object,
     private videoService: VideoService,
-    private mediasoupService: MediasoupService,
+    public mediasoupService: MediasoupService,
     public meetingService: MeetingService,
     private meetingServiceApi: MeetingServiceAPI,
     private docSerciceApi: DocApiService,
@@ -90,19 +90,47 @@ export class MainComponent {
       }
     })
 
+
+    effect(() => {
+      // socket 연결에 성공 했으면 관련 정보 받아옴
+      if (this.mediasoupService.joined()) {
+        this.route.params.subscribe((params: any) => {
+          // doc 판서 리스트 조회
+          this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
+            this.docService.generateDrawingData(res);
+          })
+
+          // doc 리스트 조회
+          this.docSerciceApi.getDocList(params.id).subscribe((res: any) => {
+            this.docService.generatePdfData(res);
+          })
+
+          // 현재까지의 설문조사 정보 가져오기
+          this.surveyApiService.getSurveys(params.id).subscribe((res: any) => {
+            this.surveyService.surveys.set(res);
+          })
+
+
+
+
+          this.meetingServiceApi.getVideoDrawings(params.id).subscribe((res: any) => {
+            const object = res.reduce((acc: any, value: any, index: any) =>
+              ({ ...acc, [value._id]: value.data })
+              , {});
+
+            this.videoDrawingService.drawVarArray.set(object)
+          })
+          this.pdfDrawingServie.monitDrawing();
+        })
+      }
+    })
   }
 
   ngOnInit() {
-    this.pdfDrawingServie.monitDrawing();
+
     this.route.params.subscribe((params: any) => {
       // console.log(params)
       this.meetingService.meeting_room_id.set(params.id)
-
-
-      // 현재까지의 설문조사 정보 가져오기
-      this.surveyApiService.getSurveys(params.id).subscribe((res: any) => {
-        this.surveyService.surveys.set(res);
-      })
 
       // meetingId 로 db에 있는 채팅 정보 가져오기
       this.meetingServiceApi.getMeetingChat(params.id).subscribe((res: any) => {
@@ -111,33 +139,8 @@ export class MainComponent {
 
         //   }
         // }
-
         this.meetingService.meeting_chat_info.set(res)
       })
-
-
-      // doc 리스트 조회
-      this.docSerciceApi.getDocList(params.id).subscribe((res: any) => {
-        this.docService.generatePdfData(res);
-      })
-
-
-      // doc 판서 리스트 조회
-      this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
-        this.docService.generateDrawingData(res);
-      })
-
-      this.meetingServiceApi.getVideoDrawings(params.id).subscribe((res: any) => {
-
-        const object = res.reduce((acc: any, value: any, index: any) =>
-          ({ ...acc, [value._id]: value.data })
-          , {});
-
-
-
-        this.videoDrawingService.drawVarArray.set(object)
-      })
-
 
 
 

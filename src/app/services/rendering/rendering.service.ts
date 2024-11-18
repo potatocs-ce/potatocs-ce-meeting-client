@@ -90,6 +90,7 @@ export class RenderingService {
     console.log('>> render Board: ', drawingEvents)
     const targetCtx = targetCanvas.getContext('2d');
     const scale = zoomScale || 1;
+    console.log(zoomScale, targetCanvas.width / scale, targetCanvas.height / scale)
 
     targetCtx.clearRect(0, 0, targetCanvas.width / scale, targetCanvas.height / scale);
     /*----------------------------------------
@@ -99,7 +100,6 @@ export class RenderingService {
 
     // console.log('draw --------------------', drawingEvents)
     if (drawingEvents && drawingEvents.length > 0) {
-      // console.log('renderBoard -------------------222222222')
 
       for (const item of drawingEvents) {
         if (!this.meetingService.skipList().includes(item.userId)) {
