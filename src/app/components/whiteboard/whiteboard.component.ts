@@ -87,8 +87,6 @@ export class WhiteboardComponent {
           this.pageRender(lastDocNum, this.lastPage, this.zoomScale)
           this.onResize();
         })
-
-
       }
     }, { allowSignalWrites: true })
 

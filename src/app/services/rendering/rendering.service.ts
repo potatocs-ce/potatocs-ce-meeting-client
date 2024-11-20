@@ -100,7 +100,6 @@ export class RenderingService {
 
     // console.log('draw --------------------', drawingEvents)
     if (drawingEvents && drawingEvents.length > 0) {
-
       for (const item of drawingEvents) {
         if (!this.meetingService.skipList().includes(item.userId)) {
           this.drawingService.end(targetCtx, item.drawingEvent.points, item.drawingEvent.tool, item.txt, scale);

@@ -30,6 +30,8 @@ export class DocPageComponent {
   @ViewChildren('thumbWindow') thumbWindowRef: QueryList<ElementRef> | any;
 
 
+  updateKey: any = undefined;
+
   constructor(private docService: DocumentService,
     private renderingService: RenderingService,
     private roleSocketService: RoleSocketService,
@@ -55,16 +57,21 @@ export class DocPageComponent {
       this.renderThumbnailBox(data);
     })
 
+
+
     // 판서 정보 업데이트 
     effect(() => {
-      this.docService.drawingData();
+      this.docService.drawingData()
       if (this.thumbArray.length != 0) {
-        console.log(this.thumbArray, this.currentPageNum, '뭐지')
-        const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;
-        const drawingEvents = drawingEventSet?.filter((item: any) => item.page === this.currentPageNum + 1);
-        const dataCanvas = document.getElementById(`thumb_data_canvas${this.currentPageNum + 1}`) as HTMLCanvasElement;
+        // 바뀐 페이지 번호를 알아야지
+        for (let i = 0; i < this.doc.length; i++) {
+          const drawingEventSet = this.docService.drawingData().find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings
+          const drawingEvents = drawingEventSet?.filter((item: any) => item.page === i + 1);
+          const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
 
-        this.renderingService.renderBoard(dataCanvas, this.thumbArray[this.currentPageNum].scale, drawingEvents);
+          this.renderingService.renderBoard(dataCanvas, this.thumbArray[i].scale, drawingEvents);
+          this.updateKey = this.docService.drawingData();
+        }
       }
     })
 
@@ -79,6 +86,7 @@ export class DocPageComponent {
           const dataCanvas = document.getElementById(`thumb_data_canvas${i + 1}`) as HTMLCanvasElement;
 
           this.renderingService.renderBoard(dataCanvas, this.thumbArray[i].scale, drawingEvents);
+          this.updateKey = this.docService.drawingData();
         }
 
       })

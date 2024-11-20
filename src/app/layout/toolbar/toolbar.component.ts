@@ -159,7 +159,7 @@ export class ToolbarComponent {
       // 만약 이미 비디오가 켜진 상태라면
       await this.mediasoupService.closeProducer('videoType');
 
-      this.mediasoupService.produce('videoType')
+      this.mediasoupService.produce('videoType', deviceId)
 
     }
   }

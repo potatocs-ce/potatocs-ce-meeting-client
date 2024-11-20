@@ -18,14 +18,16 @@
 
 
     .doc_toggle_button {
-        width: 28px;
-        height: 28px;
-        background-color: white;
+        width: 18px;
+        height: 18px;
+        // background-color: white;
         border: none;
-        border-radius: 50%;
+        background-color: transparent;
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
+        padding: 0;
 
 
         .mat-icon {
@@ -35,6 +37,7 @@
             width: 15px;
             height: 15px;
             font-size: 15px;
+            color: white;
         }
     }
 

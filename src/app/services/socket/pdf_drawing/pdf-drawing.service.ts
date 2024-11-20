@@ -6,6 +6,7 @@ import { CANVAS_CONFIG } from '../../../../config/config';
 import { MeetingService } from '../../meeting/meeting.service';
 import { ZoomService } from '../../zoom/zoom.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,27 +27,28 @@ export class PdfDrawingService {
     private docService: DocumentService,
     private drawingService: DrawingService,
     private meetingService: MeetingService,
-    private zoomService: ZoomService) {
+    private zoomService: ZoomService,
+  ) {
 
   }
 
 
   monitDrawing() {
     this.socket.on('draw:document', async (data: any) => {
+      console.log('드로우 doc', data)
       const drawingData = this.docService.drawingData();
       const drawingEventSet = drawingData.find((data2: any) => data2._id == data.doc_id)?.drawings;
       // 있으면 넣어놓고 없으면 안넣고
-
+      console.log(drawingEventSet)
       if (drawingEventSet) {
         drawingEventSet.push({ drawingEvent: data.drawingEvent, userId: data.user_id, page: data.pageNum })
         this.docService.drawingData.set([...drawingData])
       } else {
-        this.docService.drawingData.update((data: any) => {
-          data.push({ _id: data.doc_id, drawings: [{ drawingEvent: data.drawingEvent, userId: data.user_id, page: data.pageNum }] })
-          return [...data]
+        this.docService.drawingData.update((data3: any) => {
+          data3.push({ _id: data.doc_id, drawings: [{ drawingEvent: data.drawingEvent, userId: data.user_id, page: data.pageNum }] })
+          return [...data3]
         })
       }
-
 
       this.dataArray.push({ ...data.drawingEvent, page: data.pageNum, doc_id: data.doc_id, userId: data.user_id });
       if (this.dataArray.length == 1) {
@@ -274,8 +276,6 @@ export class PdfDrawingService {
 
 
 
-
-
     if (data.doc_id != this.docService._docList()[this.docService.lastDocNum()]?._id) {
       return
     }
@@ -293,7 +293,7 @@ export class PdfDrawingService {
     context.lineWidth = data.tool.width;
 
 
-
+    console.log(data)
 
     if (data.tool.type === "pen" || data.tool.type === "eraser" || data.tool.type === "highlighter") {
       if (pointsLength < 3) {
@@ -304,10 +304,7 @@ export class PdfDrawingService {
         const zoomScale = this.zoomService.zoomScale();
         context.clearRect(0, 0, target_canvas.width / zoomScale, target_canvas.height / zoomScale);
         this.drawingService.end(data_context, data.points, data.tool)
-
-
         return;
-
       }
 
       let i = 2;
