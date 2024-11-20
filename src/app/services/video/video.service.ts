@@ -39,8 +39,8 @@ export class VideoService {
   videoLoading: any = signal<boolean>(false);
   audioLoading: any = signal<boolean>(false);
 
-
-  // 벤 리스트
+  // 비디오 처음 접근시 켜진 상태 or 꺼진 상태
+  check_video_onoff: any = signal<boolean>(false);
 
   // 유저 비디오 가져오기
   getUserVideo = async (id: string) => {

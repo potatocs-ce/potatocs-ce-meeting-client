@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, effect } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { debounceTime, fromEvent, Subject, takeUntil } from 'rxjs';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,8 +9,19 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { VideoService } from '../../services/video/video.service';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
+interface MediaStreamConstraints {
+  audio: MediaTrackConstraints | boolean;
+  video: MediaTrackConstraints | boolean;
+}
+
+interface DeviceInfo {
+  kind: string;
+  label: string;
+  id: string;
+}
 
 @Component({
   selector: 'app-device-check',
@@ -23,7 +34,9 @@ export class DeviceCheckComponent {
   miceDevices: any = []; // 마이크 장치 리스트 
   videoDevices: any = []; // 카메라 리스트
   speakerDevices: any = []; // 스피커 장치 리스트
+
   devicesInfo: any;
+
   selectedMiceDevice: any; // 선택된 마이크 장치
   selectedVideoDevice: any; // 선택된 카메라 장치
   selectedSpeakerDevice: any; // 선택된 스피커 장치
@@ -47,8 +60,18 @@ export class DeviceCheckComponent {
 
   @ViewChild('video', { static: true }) public videoRef: ElementRef | any;
 
+  private readonly destroy$ = new Subject<void>();
+  private readonly deviceChange$ = new Subject<void>();
+  private currentStream: MediaStream | null = null;
+  private mediaStreamCache = new Map<string, MediaStream>();
+
+
   video: any;
   stream: any;
+
+
+  check_video_onoff: boolean = false;
+
   constructor(
     // private eventBusService: EventBusService,
     public fb: FormBuilder,
@@ -57,107 +80,124 @@ export class DeviceCheckComponent {
     private route: ActivatedRoute,
     // private webrtcService: WebRTCService,
     private videoService: VideoService,
-    private mediasoupService: MediasoupService
+    private mediasoupService: MediasoupService,
+    private snackBar: MatSnackBar,
   ) {
-    // this.localStream$ = this.webrtcService.localStream$;
-    effect(() => {
-
-    })
+    // 디바운스된 디바이스 변경 처리
+    this.deviceChange$
+      .pipe(
+        debounceTime(300), // 300ms 디바운스
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.handleDeviceChange();
+      })
   }
+
+
 
   ngOnInit() {
     this.meetingId = this.route.snapshot.params['id'];
 
     this.video = this.videoRef.nativeElement;
 
-    // 브라우저 체크
-    this.browserCheck();
+    this.initializeDeviceMonitoring();
+    this.initializeDevices();
 
-    // 컴퓨터에 연결된 장치 목록
-    this.deviceCheck();
 
-    // 웹캠으로 부터 스트림 추출
-    this.getLocalMediaStream();
-
-    // 오디오 스트림 바
-    this.extractAudioStream();
-
-    // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 수정
-    this.deviceChangeCheck();
+    // // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 수정
+    // this.deviceChangeCheck();
   }
 
-  ngOnDestory() {
-    this.stream.getTracks().forEach((track: any) => track.stop())
-  }
 
-  // 컴퓨터에 연결된 장치 목록
-  async deviceCheck() {
-    // console.log(this.instantMeter)
-    // https://developer.mozilla.org/ko/docs/Web/API/MediaDevices/enumerateDevices
-    // https://webrtc.org/getting-started/media-devices#using-promises
-    // https://simpl.info/getusermedia/sources/
-    // https://levelup.gitconnected.com/share-your-screen-with-webrtc-video-call-with-webrtc-step-5-b3d7890c8747
-
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    }).then(async (stream) => {
-      await navigator.mediaDevices.enumerateDevices().then(async (devices) => {
-        console.log('-------------------- device list ------------------------');
-        console.log(devices)
-        // 장치 목록 객체화
-        this.convertDeviceObject(devices)
-        console.log(this.miceDevices)
-        console.log(this.videoDevices)
-        console.log(this.speakerDevices)
-        // 장치 연결, 권한 유무
-        this.checkDevice()
-
-        this.selectDevice();
-      }).catch(function (err) {
-        console.log(err);
+  private initializeDeviceMonitoring(): void {
+    // devicechange 이벤트에 대한 디바운스된 핸들러 설정
+    fromEvent(navigator.mediaDevices, 'devicechange')
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.deviceChange$.next();
       });
-    }).catch(error => {
-      console.error('Error accessing media devices:', error);
-    })
-  }
-
-  // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 변경
-  deviceChangeCheck() {
-    navigator.mediaDevices.addEventListener('devicechange', async event => {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      await this.convertDeviceObject(devices)
-      this.checkDevice()
-      this.selectDevice();
-    });
   }
 
 
+  private async initializeDevices(): Promise<void> {
+    try {
+      await this.updateDeviceList();
+      await this.initializeMediaStream();
+    } catch (error) {
+      console.error('Failed to initialize devices:', error);
+      // 적절한 에러 처리 및 사용자 알림
+    }
+  }
 
-  // 모든 미디어 장치 분리해서 Object로 저장
-  convertDeviceObject(devices: any) {
-    // 장치값 초기화
 
-    this.miceDevices = []
+  private async updateDeviceList(): Promise<void> {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+
     this.videoService.audioDevices.set([]);
-    this.videoDevices = []
     this.videoService.videoDeivces.set([]);
-    this.speakerDevices = []
     this.videoService.speakerDevices.set([]);
 
-    devices.forEach((device: any) => {
-      if (device.kind == 'audioinput') {
-        this.miceDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
-        this.videoService.audioDevices.set([...this.videoService.audioDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
-      } else if (device.kind == 'videoinput') {
-        this.videoDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
-        this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
-      } else if (device.kind == 'audiooutput') {
-        this.speakerDevices.push({ kind: device.kind, label: device.label, id: device.deviceId });
-        this.videoService.speakerDevices.set([...this.videoService.speakerDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
-      }
-    })
 
+    // 디바이스 목록 업데이트 로직
+    this.miceDevices = devices.filter(device => device.kind === 'audioinput')
+      .map(device => {
+        this.videoService.audioDevices.set([...this.videoService.audioDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+        return {
+          kind: device.kind,
+          label: device.label,
+          id: device.deviceId
+        }
+      });
+
+    this.videoDevices = devices.filter(device => device.kind === 'videoinput')
+      .map(device => {
+        this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+        return {
+          kind: device.kind,
+          label: device.label,
+          id: device.deviceId
+        }
+      });
+
+    this.speakerDevices = devices.filter(device => device.kind === 'audiooutput')
+      .map(device => {
+        this.videoService.speakerDevices.set([...this.videoService.speakerDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+        return {
+          kind: device.kind,
+          label: device.label,
+          id: device.deviceId
+        }
+      });
+
+    // 디바이스 권한이 없는 경우
+    if (!this.videoDevices[0]?.label && this.videoDevices[0]?.kind == 'videoinput') {
+      try {
+        // 명시적인 권한 요청
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+
+        // 권한이 승인되면 스트림 정리
+        stream.getTracks().forEach(track => track.stop());
+
+
+        await this.initializeDevices();
+
+        this.snackBar.open('Media device permissions granted.', 'OK', {
+          duration: 3000
+        });
+      } catch (error) {
+        this.handlePermissionDenied(error);
+      }
+    }
+
+
+    // 초기 선택 디바이스 설정
     this.selectedMiceDevice = this.miceDevices[0];
     this.videoService.nowAudioId.set(this.miceDevices[0].deviceId)
     this.selectedVideoDevice = this.videoDevices[0];
@@ -166,86 +206,153 @@ export class DeviceCheckComponent {
     this.videoService.nowSpeakerId.set(this.speakerDevices[0].deviceId)
   }
 
-  // 장치의 연결 유무
-  checkDevice() {
-    this.miceDevices[0].id ? this.audioDeviceExist = true : this.audioDeviceExist = false;
-    this.miceDevices[0].id ? this.videoService.audioDeviceExist.set(true) : this.videoService.audioDeviceExist.set(false)
-    this.videoDevices[0].id ? this.videoDeviceExist = true : this.videoDeviceExist = false;
-    this.videoDevices[0].id ? this.videoService.videoDeviceExist.set(true) : this.videoService.videoDeviceExist.set(false)
-  }
 
-  // select 창에서 장치를 선택하거나, 목록이 바뀌었을 경우 실행 
-  selectDevice() {
-    console.log('-------------demvice Change ---------------')
-    this.devicesInfo = {
-      selectedVideoDeviceId: this.selectedVideoDevice?.id,
-      selectedMiceDeviceId: this.selectedMiceDevice?.id,
-      selectedSpeakerDeviceId: this.selectedSpeakerDevice?.id,
-      audioDeviceExist: this.audioDeviceExist,
-      videoDeviceExist: this.videoDeviceExist
+  private handlePermissionDenied(error?: any): void {
+    let message = 'Media device permissions denied.';
+
+    if (error instanceof DOMException) {
+      switch (error.name) {
+        case 'NotAllowedError':
+          message = 'User denied media device access.';
+          break;
+        case 'NotFoundError':
+          message = 'No media devices found.';
+          break;
+        case 'NotReadableError':
+          message = 'Cannot access media devices.';
+          break;
+        default:
+          message = `Error accessing media devices: ${error.message}`;
+      }
     }
 
+    this.snackBar.open(message, '확인', {
+      duration: 5000,
+      panelClass: ['error-snackbar']
+    });
+  }
 
+
+  private async initializeMediaStream(): Promise<void> {
+    if (!this.selectedVideoDevice || !this.selectedMiceDevice) return;
+
+    const constraints = this.createConstraints();
+    const cacheKey = this.createCacheKey(constraints);
+
+    try {
+      let stream = this.mediaStreamCache.get(cacheKey);
+
+      if (!stream) {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        this.mediaStreamCache.set(cacheKey, stream);
+      }
+
+      this.currentStream = stream;
+      this.updateVideoElement(stream);
+    } catch (error) {
+      console.error('Failed to initialize media stream:', error);
+      // 적절한 에러 처리 및 사용자 알림
+    }
+  }
+
+
+  private createConstraints(): MediaStreamConstraints {
     this.videoService.nowVideoId.set(this.selectedVideoDevice.id);
     this.videoService.nowAudioId.set(this.selectedMiceDevice.id);
+    return {
+      audio: this.selectedMiceDevice ? {
+        deviceId: { exact: this.selectedMiceDevice.id },
+        echoCancellation: true,
+        noiseSuppression: true
+      } : false,
+      video: this.selectedVideoDevice ? {
+        deviceId: { exact: this.selectedVideoDevice.id },
+        width: { ideal: 320 },
+        height: { ideal: 240 }
+      } : false
+    };
+  }
+
+
+  private createCacheKey(constraints: MediaStreamConstraints): string {
+    return JSON.stringify({
+      audioId: this.selectedMiceDevice?.id,
+      videoId: this.selectedVideoDevice?.id
+    });
+  }
+
+  private updateVideoElement(stream: MediaStream): void {
+    const videoElement = this.videoRef.nativeElement;
+    if (videoElement.srcObject !== stream) {
+      videoElement.srcObject = stream;
+    }
+  }
+
+
+  // 디바이스 변경 처리
+  private async handleDeviceChange(): Promise<void> {
+    const oldDevices = {
+      audio: this.selectedMiceDevice?.id,
+      video: this.selectedVideoDevice?.id
+    };
+
+    await this.updateDeviceList();
 
 
 
-    // this.devicesInfoService.setDevicesInfo(this.devicesInfo);
-    this.changeMediaStream();
 
-    if (typeof this.video.sinkId !== 'undefined') {
-      // this.video.setSinkId(this.selectedSpeakerDevice?.id).then(() => {
-      //   console.log('succes speaker device')
-      // })
-      //   .catch((error: any) => {
-      //     console.log(error)
-      //   })
+
+
+    const devicesChanged =
+      oldDevices.audio !== this.selectedMiceDevice?.id ||
+      oldDevices.video !== this.selectedVideoDevice?.id;
+
+    if (devicesChanged) {
+      await this.initializeMediaStream();
     }
   }
 
 
 
-  // device check 화면에서 카메라 On / Off 유무
-  async checkValue(event: any) {
-    if (event == false) {
-      // this.videoDeviceExist = false;
-      // this.videoService.videoDeviceExist.set(false)
-      // // web-rtc 컴포넌트에 있는 비디오 스트림 설정 변경
-      // this.selectDevice();
-      this.stream.getTracks().forEach((track: any) => track.stop())
-      this.video.srcObject = null;
-    } else {
-      const options = {
-        audio:
-          this.audioDeviceExist ? {
-            'echoCancellation': true,
-            'noiseSuppression': true,
-            deviceId: this.selectedMiceDevice?.id,
-          } : false,
-        video: this.videoDeviceExist ? {
-          deviceId: this.selectedVideoDevice?.id,
-          video: {
-            width: {
-              min: 320,
-              ideal: 1920
-            },
-            height: {
-              min: 200,
-              ideal: 1080
-            },
-            facingMode: { exact: "user" },
-          }
-        } : false
-      };
-      this.stream = await navigator.mediaDevices.getUserMedia(options);
-      this.video.srcObject = this.stream;
 
-      // this.videoDeviceExist = true;
-      // this.videoService.videoDeviceExist.set(true)
-      // this.selectDevice();
+
+
+  // 디바이스 선택 변경 처리
+  async onDeviceSelectionChange(): Promise<void> {
+    if (this.currentStream) {
+      // 현재 스트림의 모든 트랙 중지
+      this.currentStream.getTracks().forEach(track => track.stop());
     }
+
+    // 캐시에서 이전 스트림들 정리
+    for (const [key, stream] of this.mediaStreamCache) {
+      stream.getTracks().forEach(track => track.stop());
+      this.mediaStreamCache.delete(key);
+    }
+
+    await this.initializeMediaStream();
   }
+
+
+
+
+  ngOnDestroy(): void {
+    // 모든 스트림 정리
+    if (this.currentStream) {
+      this.currentStream.getTracks().forEach(track => track.stop());
+    }
+
+    // 캐시된 모든 스트림 정리
+    for (const [, stream] of this.mediaStreamCache) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    this.mediaStreamCache.clear();
+
+    // RxJS 구독 정리
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 
 
 
@@ -255,162 +362,99 @@ export class DeviceCheckComponent {
     // this.eventBusService.emit(new EventData('deviceCheck', ''))
 
     // 지금 stream 데이터 종료
-
     try {
       const stream = this.video.srcObject;
-      const tracks = stream.getTracks() || undefined;
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach((track: any) => track.stop());
+      }
 
-      tracks.forEach(function (track: any) {
-
-        track.stop()
-      })
-
-
-
-    } catch (err) {
-      console.log(err)
+      await this.mediasoupService.joinRoom();
+      this.meetingService.device_check.set(true);
+    } catch (error) {
+      console.error('Error joining meeting room:', error);
+      // 에러 처리
     }
-
-
-
-    await this.mediasoupService.joinRoom();
-
-    this.meetingService.device_check.set(true);
   }
 
 
-
-  // video에 스트림 추출
-  async getLocalMediaStream() {
-    // const options = {
-    //     audio: {
-    //         'echoCancellation': true,
-    //         'noiseSuppression': true,
-    //         deviceId: this.selectedMiceDevice?.id
-    //     },
-    //     video: {
-    //         deviceId: this.selectedVideoDevice?.id,
-    //         width: 320,
-    //         framerate: { max: 24, min: 24 }
-    //     }
-    // };
-    const options = {
-      audio:
-        this.audioDeviceExist ? {
-          'echoCancellation': true,
-          'noiseSuppression': true,
-          deviceId: this.selectedMiceDevice?.id,
-        } : false,
-      video: this.videoDeviceExist ? {
-        deviceId: this.selectedVideoDevice?.id,
-        video: {
-          width: {
-            min: 320,
-            ideal: 1920
-          },
-          height: {
-            min: 200,
-            ideal: 1080
-          },
-          facingMode: { exact: "user" },
+  async toggleDevices(isChecked: boolean): Promise<void> {
+    try {
+      if (isChecked) {
+        // 디바이스 끄기 
+        if (this.currentStream) {
+          this.currentStream.getTracks().forEach(track => track.stop());
         }
-      } : false
-    };
-    try {
-      // await this.webrtcService.getMediaStream(options);
-      // await this.videoService.setStream(options);
+        // 캐시된 스트림 정리
+        for (const [key, stream] of this.mediaStreamCache) {
+          stream.getTracks().forEach(track => track.stop());
+          this.mediaStreamCache.delete(key);
+        }
+        // 비디오 엘리먼트 스트림 제거
+        this.videoRef.nativeElement.srcObject = null;
+        this.currentStream = null;
+        this.videoService.check_video_onoff.set(true);
 
-      // this.video.srcObject = this.videoService.getStream();
+        this.snackBar.open('Camera and microphone deactivated.', 'OK', {
+          duration: 3000
+        });
 
+      } else {
+        // 디바이스 켜기
+        if (!this.selectedVideoDevice || !this.selectedMiceDevice) {
+          this.snackBar.open('No devices selected.', 'OK', {
+            duration: 3000
+          });
+          return;
+        }
 
-      // 브라우저가 장치의 권한 부여 시 목록 수정
-      this.deviceCheck();
-    } catch (e) {
-      console.log(e);
+        const constraints = this.createConstraints();
+        let stream: MediaStream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
+          const cacheKey = this.createCacheKey(constraints);
+
+          this.mediaStreamCache.set(cacheKey, stream);
+          this.currentStream = stream;
+          this.updateVideoElement(stream);
+          this.videoService.check_video_onoff.set(false);
+
+          this.snackBar.open('Camera and microphone activated.', 'OK', {
+            duration: 3000
+          });
+
+        } catch (error: any) {
+          let errorMessage = 'Error activating devices.';
+
+          if (error.name === 'NotAllowedError') {
+            errorMessage = 'Camera/microphone access denied.';
+          } else if (error.name === 'NotFoundError') {
+            errorMessage = 'Selected devices not found.';
+          } else if (error.name === 'NotReadableError') {
+            errorMessage = 'Devices already in use by another application.';
+          }
+
+          this.snackBar.open(errorMessage, 'OK', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+
+          // 에러 발생 시 체크박스 상태 되돌리기
+          this.isChecked = true;
+          this.videoService.check_video_onoff.set(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling devices:', error);
+      this.snackBar.open('Error occurred while changing device state.', 'OK', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
     }
   }
 
-  // select에서 장치 변경 시 stream 변경
-  // 권한 확인 유무 관련해서 이슈때문에 change시 새로운 함수 사용
-  async changeMediaStream() {
-    // const options = { audio: true, video: true };
-
-    const options = {
-      audio:
-        this.audioDeviceExist ? {
-          'echoCancellation': true,
-          'noiseSuppression': true,
-          deviceId: this.selectedMiceDevice?.id,
-        } : false,
-      video: this.videoDeviceExist ? {
-        deviceId: this.selectedVideoDevice?.id,
-
-        width: {
-          min: 320,
-          ideal: 1920
-        },
-        height: {
-          min: 200,
-          ideal: 1080
-        },
-
-      } : false
-    };
 
 
-    try {
-      console.log(this.videoDeviceExist, this.audioDeviceExist, this.selectedMiceDevice, this.selectedVideoDevice)
-      // await this.webrtcService.getMediaStream(options);
-      this.stream = await navigator.mediaDevices.getUserMedia(options);
-
-
-      this.video.srcObject = this.stream;
-
-
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  async extractAudioStream() {
-    // const constraints = {
-    //   audio: true,
-    //   video: false
-    // };
-
-
-    // navigator.mediaDevices.getUserMedia(constraints)
-    //   .then(res => this.handleSuccess(res))
-    //   .then(result => this.deviceCheck())
-    //   .catch(error => this.handleError(error));
-
-  }
-
-  handleSuccess(stream: any) {
-    // Put variables in global scope to make them available to the
-    // browser console.
-    const AudioContext = window.AudioContext
-    let audioContext = new AudioContext();
-    // const soundMeter = new SoundMeter(audioContext);
-
-    const that = this;
-    // soundMeter.connectToSource(stream, function (e) {
-
-    //     if (e) {
-    //         alert(e);
-    //         return;
-    //     }
-    //     that.soundMeterInterval = setInterval(() => {
-    //         (<HTMLInputElement>document.getElementById("instantMeter")).value = soundMeter.slow.toFixed(2);
-    //     }, 10);
-    // });
-
-
-  }
-
-  handleError(error: any) {
-    console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
-  }
 
   // 브라우저 체크
   browserCheck() {
@@ -460,59 +504,4 @@ export class DeviceCheckComponent {
 
     return this.browserInfo = browser;
   }
-
-  ngOnDestroy() {
-    clearInterval(this.soundMeterInterval);
-    // unsubscribe all subscription
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    navigator.mediaDevices.removeEventListener('devicechange', async event => {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      await this.convertDeviceObject(devices)
-      this.checkDevice()
-      this.selectDevice();
-    });
-  }
 }
-
-
-
-// function SoundMeter(context: any) {
-//   this.context = context;
-//   this.instant = 0.0;
-//   this.slow = 0.0;
-//   this.script = context.createScriptProcessor(2048, 1, 1);
-//   const that = this;
-//   this.script.onaudioprocess = function (event) {
-//     const input = event.inputBuffer.getChannelData(0);
-//     let i;
-//     let sum = 0.0;
-//     let clipcount = 0;
-//     for (i = 0; i < input.length; ++i) {
-//       sum += input[i] * input[i];
-//       if (Math.abs(input[i]) > 0.99) {
-//         clipcount += 1;
-//       }
-//     }
-//     that.instant = (Math.sqrt(sum / input.length)) * 3;
-//     that.slow = 0.7 * that.slow + 0.3 * that.instant;
-//   };
-// }
-
-// SoundMeter.prototype.connectToSource = function (stream, callback) {
-//   console.log('SoundMeter connecting');
-//   try {
-//     this.mic = this.context.createMediaStreamSource(stream);
-//     this.mic.connect(this.script);
-//     // necessary to make sample run, but should not be.
-//     this.script.connect(this.context.destination);
-//     if (typeof callback !== 'undefined') {
-//       callback(null);
-//     }
-//   } catch (e) {
-//     console.error(e);
-//     if (typeof callback !== 'undefined') {
-//       callback(e);
-//     }
-//   }
-// }

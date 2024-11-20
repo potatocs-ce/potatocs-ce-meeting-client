@@ -118,12 +118,6 @@ export class MediasoupService {
               }
 
               await this.initTransports(this.device);
-
-
-
-
-
-
             })
           })
 
@@ -293,7 +287,7 @@ export class MediasoupService {
 
 
         // 처음에 연결 설정이 완료되면 카메라, 오디오 연결 시도
-        if (this.videoService.videoDeviceExist()) {
+        if (this.videoService.videoDeviceExist() && !this.videoService.check_video_onoff()) {
           this.videoService.videoLoading.set(true);
           this.videoService.audioLoading.set(true);
           await this.produce('videoType');
@@ -644,7 +638,7 @@ export class MediasoupService {
 
   //====== MAIN FUNCTION
   async produce(type: any, deviceId: any = null) {
-
+    console.log(deviceId)
     if (type == 'videoType') {
       deviceId = deviceId == null ? this.nowVideo : deviceId;
     } else if (type == "audioType") {
@@ -673,6 +667,7 @@ export class MediasoupService {
         break;
       case this.mediaType.video:
         deviceId = deviceId;
+
         this.videoService.videoLoading.set(true);
 
 
@@ -681,14 +676,8 @@ export class MediasoupService {
           mediaConstraints = {
             audio: false,
             video: {
-              width: {
-                min: 320,
-                ideal: 1920
-              },
-              height: {
-                min: 200,
-                ideal: 1080
-              },
+              width: { ideal: 320 },
+              height: { ideal: 240 },
               deviceId: deviceId,
             }
           }
@@ -853,11 +842,11 @@ export class MediasoupService {
 
 
       if (err.name == 'NotReadableError' && err.message == 'Could not start video source') {
-        setTimeout(() => {
-          alert('retry')
-          this.produce(type, deviceId);
-          return;
-        }, 1000)
+        // setTimeout(() => {
+        //   alert('retry')
+        //   this.produce(type, deviceId);
+        //   return;
+        // }, 1000)
       }
       this.dialogService.openDialogNegative(err)
 

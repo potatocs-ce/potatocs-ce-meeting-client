@@ -12,7 +12,7 @@
                 <div class="contentRec">
                     <div class="deviceList camera">
                         <select class="selectBox ellipsis" [(ngModel)]="selectedVideoDevice"
-                            (ngModelChange)="selectDevice()">
+                            (ngModelChange)="onDeviceSelectionChange()">
                             <option class="deviceItem ellipsis" *ngFor="let videoDevice of videoDevices"
                                 [ngValue]="videoDevice">{{videoDevice?.label}}</option>
                         </select>
@@ -30,7 +30,7 @@
                         <!-- 카메라 On / Off -->
                         <section class="example-section txRec">
                             <mat-checkbox class="example-margin selectBox ellipsis" [(ngModel)]="isChecked"
-                                (change)="checkValue(isChecked?cameraOff : cameraOn)">Click to turn off the
+                                (change)="toggleDevices($event.checked)">Click to turn off the
                                 camera!</mat-checkbox>
 
                             <!-- <mat-checkbox class="camera desc video-playing-desc subTx camera" [(ngModel)]="isChecked"
@@ -62,7 +62,7 @@
                     <div class="device-play" data-audio-volume="0" data-video-status="playing">
                         <div class="deviceList mic">
                             <select class="selectBox ellipsis" #miceDeivce [(ngModel)]="selectedMiceDevice"
-                                (ngModelChange)="selectDevice()">
+                                (ngModelChange)="onDeviceSelectionChange()">
                                 <option class="deviceItem ellipsis" *ngFor="let miceDevice of miceDevices"
                                     [ngValue]="miceDevice">
                                     {{miceDevice?.label}}
@@ -110,7 +110,7 @@
                     <div class="device-play" data-audio-volume="0" data-video-status="playing">
                         <div class="deviceList">
                             <select class="selectBox ellipsis" [(ngModel)]="selectedSpeakerDevice"
-                                (ngModelChange)="selectDevice()">
+                                (ngModelChange)="onDeviceSelectionChange()">
                                 <option class="deviceItem ellipsis" *ngFor="let speakerDevice of speakerDevices"
                                     [ngValue]="speakerDevice">{{speakerDevice?.label}}</option>
                             </select>
@@ -136,18 +136,18 @@
 
 
             <!-- 브라우저 정보 -->
-            <div class="browserRec" data-type="chrome">
+            <!-- <div class="browserRec" data-type="chrome">
                 <h6 class="titleRec">Browser information</h6>
-                <div class="contentRec browserData">
-                    <!-- 최신 브라우저 일때 -->
-                    <div class="browserInfo chrome">
+                <div class="contentRec browserData"> -->
+            <!-- 최신 브라우저 일때 -->
+            <!-- <div class="browserInfo chrome">
                         <p class="browserTx">{{ browserInfo.name }} {{ browserInfo.version }}</p>
                     </div>
                 </div>
-                <div class="browserTest">
-                    <p>🔈 The live meeting in Mac system is under testing.</p>
+                <div class="browserTest"> -->
+            <!-- <p>🔈 The live meeting in Mac system is under testing.</p>
                 </div>
-            </div>
+            </div> -->
 
 
             <footer class="btnsRec">
