@@ -23,6 +23,10 @@ export class MediasoupService {
 
   nowVideo: any = ''
   nowAudio: any = ''
+
+
+
+  private participantsSyncInterval: any;
   constructor(
     private socket: Socket,
     private videoService: VideoService,
@@ -58,6 +62,62 @@ export class MediasoupService {
 
 
   deviceStream: any = signal<any>(undefined);
+  private startParticipantsSync() {
+    this.participantsSyncInterval = setInterval(async () => {
+      if (!this.joined()) return;
+
+      const room_id = this.meetingService.meeting_room_id();
+      try {
+        const meetingInfo = await this.meetingServiceAPI.getMeetingInfo(room_id).toPromise();
+        this.syncParticipants(meetingInfo);
+      } catch (error) {
+        console.error('Failed to sync participants:', error);
+      }
+    }, 10000); // 5초마다 동기화
+  }
+
+
+  private async syncParticipants(meetingInfo: any) {
+    const currentMembers = meetingInfo.currentMembers.filter((data: any) => data.online);
+    const currentUserIds = new Set(currentMembers.map((m: any) => m.member_id._id));
+
+    // 현재 표시된 참가자들과 실제 참가자들 동기화
+    const displayedUsers = [...this.meetingService.users_info()];
+    const presentUser = this.meetingService.present_user_info();
+
+    // 누락된 참가자 추가
+    for (const member of currentMembers) {
+      const userId = member.member_id._id;
+      if (!displayedUsers.some(u => u.user_id === userId) &&
+        (!presentUser || presentUser.user_id !== userId)) {
+        const userInfo: any = await this.userService.getUserInfo(userId).toPromise();
+        console.log(userInfo)
+        // this.addParticipant(userInfo);
+        this._snackBar.open(`${userInfo.userData.name} has joined`, 'ok', { horizontalPosition: 'start', duration: 5000 });
+        // 방 참가 시 유저 업데이트도 같이 진행
+
+
+        this.meetingService.meeting_info.set(meetingInfo);
+
+        // 현재 맴버 리스트
+        meetingInfo.currentMembers.filter((data: any) => data.online).map(async (user: any) => {
+
+          if (this.toggleService.toggle_video_whiteboard() != 'document' && !this.meetingService.present_user_info()) {
+            this.meetingService.present_user_info.set({ user_id: user.member_id._id, name: user.member_id.name, screen: false, profile: user.member_id.profile_img })
+          } else if (!this.meetingService.users_info().some((users: any) => users.user_id == user.member_id._id) &&
+            this.meetingService.present_user_info()?.user_id != user.member_id._id) {
+            this.meetingService.users_info.set([...this.meetingService.users_info(), { user_id: user.member_id._id, name: user.member_id.name, screen: false, profile: user.member_id.profile_img }])
+          }
+          await this.socket.emit('getProducers');
+        })
+
+      }
+    }
+
+    // 없어진 참가자 제거
+    // this.removeInactiveParticipants(currentUserIds);
+  }
+
 
 
   // 방 참가 함수
@@ -70,15 +130,12 @@ export class MediasoupService {
 
     if (this.rc && this.rc.isOpen()) {
       console.log('Already connected to a room')
+      return;
     } else {
       // 방 생성
       await this.socket.emit('createRoom', { room_id }, async (response: any) => {
         // 방 참가
         await this.socket.emit('join', { name, room_id, user_id }, async (response: any) => {
-
-
-
-
 
           this.joined.set(true);
 
@@ -124,6 +181,11 @@ export class MediasoupService {
         })
       })
     }
+
+
+
+    // 참가자 목록 주기적 동기화 시작
+    this.startParticipantsSync();
   }
 
 
@@ -393,7 +455,20 @@ export class MediasoupService {
         console.log('Now Producers', data)
 
         for (let { producer_id, producer_socket_id, screen } of data) {
-          await this.consume(producer_id, producer_socket_id, screen)
+          try {
+            // 이미 존재하는 consumer인지 확인
+            if (this.consumers.has(producer_id)) {
+              console.log('Consumer already exists:', producer_id);
+              continue;
+            }
+
+            // consumer 생성 및 스트림 처리
+            await this.consume(producer_id, producer_socket_id, screen);
+          } catch (error) {
+            console.error('Failed to consume producer:', producer_id, error);
+            // 실패한 producer는 계속 진행하고 나머지 처리
+            continue;
+          }
         }
       }
     )
@@ -638,14 +713,13 @@ export class MediasoupService {
 
   //====== MAIN FUNCTION
   async produce(type: any, deviceId: any = null) {
-    console.log(deviceId)
+
     if (type == 'videoType') {
       deviceId = deviceId == null ? this.nowVideo : deviceId;
     } else if (type == "audioType") {
       deviceId = deviceId == null ? this.nowAudio : deviceId;
     }
-
-
+    console.log(deviceId)
 
     let mediaConstraints: any = {};
     let audio = false;
@@ -952,6 +1026,9 @@ export class MediasoupService {
       this.consumers = new Map()
       this.producers = new Map()
       this.producerLabel = new Map()
+      if (this.participantsSyncInterval) {
+        clearInterval(this.participantsSyncInterval);
+      }
     }
 
     if (!offline) {

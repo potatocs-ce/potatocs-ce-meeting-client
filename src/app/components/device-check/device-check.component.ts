@@ -299,10 +299,6 @@ export class DeviceCheckComponent {
     await this.updateDeviceList();
 
 
-
-
-
-
     const devicesChanged =
       oldDevices.audio !== this.selectedMiceDevice?.id ||
       oldDevices.video !== this.selectedVideoDevice?.id;

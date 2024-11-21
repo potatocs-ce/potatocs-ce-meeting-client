@@ -14,17 +14,19 @@ export class DocSocketService {
       console.log('<--- [SOCKET] check:document');
       this.docSerciceApi.getDocList(this.meetingService.meeting_room_id()).subscribe((res: any) => {
         this.docService.generatePdfData(res);
+        console.log(this.docService.pageBuffer())
       })
     });
   }
 
   // 문서가 업데이트 됐다고 전파
   updatedDoc(meetingId: string) {
+    // console.log('와우')
     this.socket.emit('check:documents', meetingId);
+
     this.docSerciceApi.getDocList(this.meetingService.meeting_room_id()).subscribe((res: any) => {
       this.docService.generatePdfData(res);
+      console.log(this.docService.pageBuffer())
     })
   }
-
-
 }

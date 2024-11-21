@@ -109,11 +109,14 @@ export class DocumentService {
           return err;
         }
       } else {
+        pageBuffer[i] = this.pageBuffer()[i];
         bufferArray[i] = this._docList()[i]
       }
     }
+
     this.docDataLoading.set(false);
     this.pageBuffer.set(pageBuffer);
+
     this._docList.set(bufferArray);
 
     return;
