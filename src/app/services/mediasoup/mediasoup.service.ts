@@ -63,7 +63,7 @@ export class MediasoupService {
 
   deviceStream: any = signal<any>(undefined);
   private startParticipantsSync() {
-    this.participantsSyncInterval = setInterval(async () => {
+    this.participantsSyncInterval = setTimeout(async () => {
       if (!this.joined()) return;
 
       const room_id = this.meetingService.meeting_room_id();
@@ -175,6 +175,8 @@ export class MediasoupService {
               }
 
               await this.initTransports(this.device);
+              // 참가자 목록 주기적 동기화 시작
+              this.startParticipantsSync();
             })
           })
 
@@ -184,8 +186,7 @@ export class MediasoupService {
 
 
 
-    // 참가자 목록 주기적 동기화 시작
-    this.startParticipantsSync();
+
   }
 
 
@@ -667,7 +668,13 @@ export class MediasoupService {
   async requestCameraAccess(deviceId: any) {
     try {
       // 카메라 스트림 요청
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId } });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId,
+          width: { ideal: 320 },
+          height: { ideal: 240 }
+        }
+      });
       // alert('Camera access granted.');
       // 권한이 부여되었으므로, 스트림을 종료합니다.
       stream.getTracks().forEach(track => track.stop());

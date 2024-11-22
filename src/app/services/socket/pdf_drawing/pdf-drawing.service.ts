@@ -35,11 +35,11 @@ export class PdfDrawingService {
 
   monitDrawing() {
     this.socket.on('draw:document', async (data: any) => {
-      console.log('드로우 doc', data)
+      // console.log('드로우 doc', data)
       const drawingData = this.docService.drawingData();
       const drawingEventSet = drawingData.find((data2: any) => data2._id == data.doc_id)?.drawings;
       // 있으면 넣어놓고 없으면 안넣고
-      console.log(drawingEventSet)
+      // console.log(drawingEventSet)
       if (drawingEventSet) {
         drawingEventSet.push({ drawingEvent: data.drawingEvent, userId: data.user_id, page: data.pageNum })
         this.docService.drawingData.set([...drawingData])
@@ -51,9 +51,12 @@ export class PdfDrawingService {
       }
 
       this.dataArray.push({ ...data.drawingEvent, page: data.pageNum, doc_id: data.doc_id, userId: data.user_id });
-      if (this.dataArray.length == 1) {
-        this.drawingQueue();
-      }
+      // if (this.dataArray.length == 1) {
+      //   this.drawingQueue();
+      // }
+
+      // 2024-11-22 수정 문제 생기면 위쪽으로 변경할것!!!
+      this.drawingQueue();
     })
 
     // 판서 전체 지우기
