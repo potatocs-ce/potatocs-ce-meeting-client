@@ -8,7 +8,6 @@ import { CanvasService } from '../../services/canvas/canvas.service';
 import { DrawingService } from '../../services/drawing/drawing.service';
 import { ToolService } from '../../services/tool/tool.service';
 import { BehaviorSubject } from 'rxjs';
-import { VideoDrawingService } from '../../services/socket/video_drawing/video-drawing.service';
 import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { Socket } from 'ngx-socket-io';
@@ -43,7 +42,6 @@ export class PresentComponent {
     private canvasService: CanvasService,
     private drawingService: DrawingService,
     private toolService: ToolService,
-    private videoDrawingService: VideoDrawingService,
     private meetingApiService: MeetingServiceAPI,
     private meetingService: MeetingService,
     private socket: Socket) {

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DrawingService } from '../drawing/drawing.service';
 import { Socket } from 'ngx-socket-io';
-import { VideoDrawingService } from '../socket/video_drawing/video-drawing.service';
 import { MeetingService } from '../meeting/meeting.service';
 import { AuthService } from '../auth/auth.service';
 import { CANVAS_CONFIG } from '../../../config/config';
@@ -18,7 +17,7 @@ export class CanvasService {
 
   constructor(private socket: Socket,
     private drawingService: DrawingService,
-    private videoDrawingService: VideoDrawingService,
+
     private meetingService: MeetingService,
     private authService: AuthService,
     private docService: DocumentService,
@@ -334,7 +333,7 @@ export class CanvasService {
 
       if (this.toggleService.toggle_video_whiteboard() == 'video') {
         // console.log(this.videoService.presentVideoStream().screen)
-        this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id(), screen: this.meetingService.present_user_info().screen })
+        // this.socket.emit('draw:video', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, target_id: sourceCanvas.parentNode.id, user_id: this.authService.getTokenInfo()._id, meeting_id: this.meetingService.meeting_room_id(), screen: this.meetingService.present_user_info().screen })
       } else {
         this.socket.emit('draw:document', { room_id: this.meetingService.meeting_room_id(), data: drawingEvent, user_id: this.authService.getTokenInfo()._id, doc_id: this.docService._docList()[this.docService.lastDocNum()]._id, pageNum: this.docService.pageBuffer()[this.docService.lastDocNum()], meeting_id: this.meetingService.meeting_room_id() })
       }
@@ -342,14 +341,7 @@ export class CanvasService {
       // 정보 저장
       if (this.toggleService.toggle_video_whiteboard() == 'video') {
 
-        let drawVarArray = this.videoDrawingService.drawVarArray();
 
-        if (drawVarArray[sourceCanvas.parentNode.id]) {
-          drawVarArray[sourceCanvas.parentNode.id].push({ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, screen: this.meetingService.present_user_info().screen })
-        } else {
-          drawVarArray[sourceCanvas.parentNode.id] = [{ drawingEvent: drawingEvent, userId: this.authService.getTokenInfo()._id, screen: this.meetingService.present_user_info().screen }];
-        }
-        this.videoDrawingService.drawVarArray.set({ ...drawVarArray })
       } else {
         const drawingData = this.docService.drawingData();
         const drawingEventSet = drawingData.find((data: any) => this.docService._docList()[this.docService.lastDocNum()]?._id == data._id)?.drawings;

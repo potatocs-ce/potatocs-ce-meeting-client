@@ -68,6 +68,7 @@ export class RoleSocketService {
     })
   }
 
+
   presentStatus() {
     // mode, doc, page가 변경되었고, 로그인한 유저의 role이 presenter이면 emit
     const nowUser = this.meetingService.meeting_info().currentMembers.find((member: any) => member.member_id._id == this.authService.getTokenInfo()._id)

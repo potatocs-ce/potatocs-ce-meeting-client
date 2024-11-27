@@ -13,7 +13,7 @@ import { VideoService } from '../../services/video/video.service';
 import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
-import { VideoDrawingService } from '../../services/socket/video_drawing/video-drawing.service';
+
 import { DocApiService } from '../../api/doc/doc-api.service';
 import { DocumentService } from '../../services/document/document.service';
 import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing.service';
@@ -60,7 +60,7 @@ export class MainComponent {
     private meetingServiceApi: MeetingServiceAPI,
     private docSerciceApi: DocApiService,
     private docService: DocumentService,
-    private videoDrawingService: VideoDrawingService,
+
     private pdfDrawingServie: PdfDrawingService,
     private chatSocketService: ChatSocketService,
     private surveyApiService: SurveyApiService,
@@ -95,6 +95,8 @@ export class MainComponent {
       // socket 연결에 성공 했으면 관련 정보 받아옴
       if (this.mediasoupService.joined()) {
         this.route.params.subscribe((params: any) => {
+
+
           // doc 판서 리스트 조회
           this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
             this.docService.generateDrawingData(res);
@@ -109,6 +111,7 @@ export class MainComponent {
           this.surveyApiService.getSurveys(params.id).subscribe((res: any) => {
             this.surveyService.surveys.set(res);
           })
+
 
           // pdf 드로잉 모니터링
           this.pdfDrawingServie.monitDrawing();

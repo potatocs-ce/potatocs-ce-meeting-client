@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { VideoService } from '../../../services/video/video.service';
-import { VideoDrawingService } from '../../../services/socket/video_drawing/video-drawing.service';
+
 import { DrawingService } from '../../../services/drawing/drawing.service';
 import { ToggleService } from '../../../services/toggle/toggle.service';
 import { MeetingService } from '../../../services/meeting/meeting.service';
@@ -36,7 +36,7 @@ export class AudienceVideoComponent {
 
   constructor(
     private videoService: VideoService,
-    private videoDrawingService: VideoDrawingService,
+
     private drawingService: DrawingService,
     private toggleService: ToggleService,
     private meetingService: MeetingService) {
@@ -64,6 +64,9 @@ export class AudienceVideoComponent {
 
 
   goToPresent() {
+
+    if (this.toggle_video_whiteboard == 'document') return
+
     let audienceVideo = this.meetingService.users_info();
 
 
