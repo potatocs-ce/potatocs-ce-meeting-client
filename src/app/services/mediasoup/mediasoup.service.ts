@@ -345,6 +345,8 @@ export class MediasoupService {
                 break;
 
               case 'failed':
+                // 여기에 handleNetworkError 추가
+                this.handleNetworkError({ type: this.ERROR_TYPES.NETWORK.TRANSPORT_CLOSED });
                 this.producerTransport.close()
                 break;
 
@@ -398,6 +400,8 @@ export class MediasoupService {
                 break;
 
               case 'failed':
+                // 여기에 handleNetworkError 추가
+                this.handleNetworkError({ type: this.ERROR_TYPES.NETWORK.TRANSPORT_CLOSED });
                 this.consumerTransport.close()
                 break;
 
@@ -994,6 +998,9 @@ export class MediasoupService {
         if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') return
       }
 
+      // 새로운 에러 처리 사용
+      await this.handleStreamError(err, type);
+
 
       if (err.name == 'NotReadableError' && err.message == 'Could not start video source') {
         // setTimeout(() => {
@@ -1121,6 +1128,169 @@ export class MediasoupService {
         })
     } else {
       clean()
+    }
+  }
+
+
+
+  // 에러 타입 정의
+  private readonly ERROR_TYPES = {
+    DEVICE: {
+      NOT_FOUND: 'NotFoundError',
+      NOT_ALLOWED: 'NotAllowedError',
+      NOT_READABLE: 'NotReadableError',
+      OVERCONSTRAINED: 'OverconstrainedError'
+    },
+    NETWORK: {
+      TRANSPORT_CLOSED: 'TransportClosedError',
+      CONNECTION_ERROR: 'ConnectionError'
+    }
+  };
+
+  // 새로운 에러 처리 메서드들
+  private async handleStreamError(error: any, type: string) {
+    console.error(`Stream error (${type}):`, error);
+    this.videoService.videoLoading.set(false);
+    this.videoService.audioLoading.set(false);
+
+    switch (error.name) {
+      case this.ERROR_TYPES.DEVICE.NOT_FOUND:
+        if (type === this.mediaType.video) {
+          this.dialogService.openDialogNegative('카메라를 찾을 수 없습니다. 카메라가 연결되어 있는지 확인해주세요.');
+          this.toggleService.toggle_video.set(false);
+        } else if (type === this.mediaType.audio) {
+          this.dialogService.openDialogNegative('마이크를 찾을 수 없습니다. 마이크가 연결되어 있는지 확인해주세요.');
+          this.toggleService.toggle_audio.set(false);
+        }
+        break;
+
+      case this.ERROR_TYPES.DEVICE.NOT_ALLOWED:
+        const deviceType = type === this.mediaType.video ? '카메라' : '마이크';
+        this.dialogService.openDialogNegative(
+          `${deviceType} 접근 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해주세요.`
+        );
+        if (type === this.mediaType.video) {
+          this.toggleService.toggle_video.set(false);
+        } else {
+          this.toggleService.toggle_audio.set(false);
+        }
+        break;
+
+      case this.ERROR_TYPES.DEVICE.NOT_READABLE:
+        if (error.message === 'Could not start video source') {
+          await this.handleDeviceBusyError(type);
+        } else {
+          this.dialogService.openDialogNegative('장치에 접근할 수 없습니다. 다른 프로그램에서 사용 중이지 않은지 확인해주세요.');
+        }
+        break;
+
+      case this.ERROR_TYPES.DEVICE.OVERCONSTRAINED:
+        await this.handleOverconstrainedError(type);
+        break;
+
+      default:
+        this.dialogService.openDialogNegative('예기치 못한 오류가 발생했습니다. 페이지를 새로고침하거나 다시 접속해주세요.');
+        break;
+    }
+  }
+
+  private async handleDeviceBusyError(type: string) {
+    const maxRetries = 3;
+    let retryCount = 0;
+
+    const retry = async () => {
+      try {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.log(`Retrying ${type} connection... Attempt ${retryCount}`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          await this.produce(type);
+        } else {
+          this.dialogService.openDialogNegative(
+            '장치 연결에 실패했습니다. 장치가 다른 프로그램에서 사용 중이지 않은지 확인 후 다시 시도해주세요.'
+          );
+        }
+      } catch (error) {
+        if (retryCount < maxRetries) {
+          await retry();
+        }
+      }
+    };
+
+    await retry();
+  }
+
+  private async handleOverconstrainedError(type: string) {
+    try {
+      if (type === this.mediaType.video) {
+        await this.produce(type, this.nowVideo);
+      } else {
+        throw new Error('Unexpected device type');
+      }
+    } catch (error) {
+      this.dialogService.openDialogNegative(
+        '장치가 요구되는 설정을 지원하지 않습니다. 다른 장치를 사용해주세요.'
+      );
+    }
+  }
+
+  // 네트워크 에러 처리
+  private async handleNetworkError(error: any) {
+    console.error('Network error:', error);
+
+    if (error.type === this.ERROR_TYPES.NETWORK.TRANSPORT_CLOSED) {
+      await this.handleTransportError();
+    } else {
+      this.dialogService.openDialogNegative(
+        '네트워크 연결에 문제가 발생했습니다. 연결 상태를 확인해주세요.'
+      );
+    }
+  }
+
+  private async handleTransportError() {
+    try {
+      // 기존 연결 정리
+      await this.cleanupCurrentConnection();
+
+      // 재연결 시도
+      await this.reconnect();
+    } catch (error) {
+      console.error('Reconnection failed:', error);
+      this.dialogService.openDialogNegative(
+        '연결 재시도에 실패했습니다. 페이지를 새로고침해주세요.'
+      );
+    }
+  }
+
+  private async cleanupCurrentConnection() {
+    // 기존 연결들 정리
+    if (this.producerTransport) {
+      await this.producerTransport.close();
+    }
+    if (this.consumerTransport) {
+      await this.consumerTransport.close();
+    }
+    this.producers = new Map();
+    this.consumers = new Map();
+  }
+
+  private async reconnect() {
+    const maxRetries = 3;
+    let retryCount = 0;
+
+    while (retryCount < maxRetries) {
+      try {
+        await this.initTransports(this.device);
+        console.log('Reconnection successful');
+        return;
+      } catch (error) {
+        retryCount++;
+        if (retryCount === maxRetries) {
+          throw new Error('Max retry attempts reached');
+        }
+        // 재시도 간격을 점점 늘림
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+      }
     }
   }
 }
