@@ -17,6 +17,7 @@ import { DocApiService } from '../../api/doc/doc-api.service';
 import { MeetingService } from '../../services/meeting/meeting.service';
 import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing.service';
 import { ToggleService } from '../../services/toggle/toggle.service';
+import { RoleSocketService } from '../../services/socket/role/role-socket.service';
 
 @Component({
   selector: 'app-whiteboard',
@@ -73,7 +74,8 @@ export class WhiteboardComponent {
     private docApiService: DocApiService,
     private meetingService: MeetingService,
     private pdfDrawingService: PdfDrawingService,
-    private toggleService: ToggleService
+    private toggleService: ToggleService,
+    private roleSocketService: RoleSocketService
   ) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
     effect(() => {
@@ -381,11 +383,13 @@ export class WhiteboardComponent {
         this.docService.updateCurrentPageNum(lastPage - 1);
         break;
     }
+    this.pdfDrawingService.stopQueue(); // <-- 그려지고 있는게 있으면 중단
+    this.roleSocketService.presentStatus();
   }
 
 
   toggleDoc() {
-    console.log('토글 토글!!!');
+    // console.log('토글 토글!!!');
 
     this.toggleService.toggle_doc_menu.set(!this.toggleService.toggle_doc_menu())
   }
