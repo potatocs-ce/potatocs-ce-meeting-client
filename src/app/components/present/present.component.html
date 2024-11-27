@@ -1,91 +1,4 @@
 <div class="present_container">
-
-    <!-- <section class="present_menu_section">
-        <div class="button_container">
-            <button (click)="setType('click')" mat-icon-button [ngClass]="tool.type == 'click' ? 'active': ''">
-
-                <mat-icon fontSet="material-symbols-outlined">left_click</mat-icon>
-            </button>
-            <button (click)="setType('pen')" mat-icon-button [ngClass]="tool.type == 'pen' ? 'active': ''">
-
-                <mat-icon fontSet="material-symbols-outlined">stylus_note</mat-icon>
-            </button>
-            <button (click)="setType('highlighter')" mat-icon-button
-                [ngClass]="tool.type == 'highlighter' ? 'active': ''">
-
-                <mat-icon fontSet="material-symbols-outlined">ink_highlighter</mat-icon>
-            </button>
-            <button (click)="setType('eraser')" (dblclick)="clearDrawing()" mat-icon-button
-                [ngClass]=" tool.type=='eraser' ? 'active' : ''">
-
-                <mat-icon fontSet="material-symbols-outlined">ink_eraser</mat-icon>
-            </button>
-            <button mat-icon-button [matMenuTriggerFor]="shape"
-                [ngClass]="tool.type == 'line' || tool.type == 'circle' || tool.type == 'rectangle' ? 'active': ''">
-                <mat-icon fontSet="material-symbols-outlined">category</mat-icon>
-            </button>
-
-
-            <mat-menu #shape="matMenu">
-                <article class="shape_tool">
-                    <button (click)="setType('line')" mat-icon-button [ngClass]="tool.type == 'line' ? 'active': ''">
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                    <button (click)="setType('circle')" mat-icon-button [ngClass]="tool.type == 'circle'? 'active': ''">
-                        <mat-icon>panorama_fish_eye</mat-icon>
-                    </button>
-                    <button (click)="setType('rectangle')" mat-icon-button
-                        [ngClass]="tool.type == 'rectangle' ? 'active': ''">
-                        <mat-icon>crop_din</mat-icon>
-                    </button>
-                </article>
-            </mat-menu>
-
-
-            <div class="divide"></div>
-
-
-
-            <button mat-icon-button (click)="setColor('black')" [ngClass]="tool.color == 'black' ? 'active': ''">
-                <p class="color_button" style="background-color: black;"> </p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('red')" [ngClass]="tool.color == 'red' ? 'active': ''">
-                <p class="color_button" style="background-color: red;"></p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('blue')" [ngClass]="tool.color == 'blue' ? 'active': ''">
-                <p class="color_button" style="background-color: blue;"></p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('green')" [ngClass]="tool.color == 'green' ? 'active': ''">
-                <p class="color_button" style="background-color: green;"></p>
-            </button>
-
-            <button mat-icon-button (click)="setColor('yellow')" [ngClass]="tool.color == 'yellow' ? 'active': ''">
-                <p class="color_button" style="background-color: yellow;"></p>
-            </button>
-
-
-            <div class="divide"></div>
-
-
-            <button mat-icon-button (click)="setWidth(10)" [ngClass]="tool.width == 10 ? 'active': ''">
-                <p class="width_button big"></p>
-            </button>
-
-            <button mat-icon-button (click)="setWidth(5)" [ngClass]="tool.width == 5 ? 'active': ''">
-                <p class="width_button medium"></p>
-            </button>
-
-            <button mat-icon-button (click)="setWidth(1)" [ngClass]="tool.width == 1 ? 'active': ''">
-                <p class="width_button small"></p>
-            </button>
-
-        </div>
-    </section> -->
-
-
     <div class="present_section_container">
         <section id="present" class="present_section">
             @if(!videoStream?.stream){
@@ -130,19 +43,7 @@
             </article>
 
 
-            <!-- 캔버스 영역 -->
-            <div class="canvas_container" [style]="videoStream?.stream ? '': 'visibility: hidden;'"
-                [ngClass]="tool.type !== 'click' ? 'main':''">
-                <section class="canvas_section" [id]="videoStream?.user_id"
-                    [ngClass]="videoStream?.screen == true ? 'screen': 'noScreen'">
-                    <!-- 그려진 데이터가 보여질 부분 -->
-                    <canvas id="data_canvas" class="data_canvas"></canvas>
-                    <!-- 상대방으로 부터 수신 받을 판서 데이터가 보여질 부분 -->
-                    <canvas id="target_canvas" class="target_canvas"></canvas>
-                    <!-- 그림 그리는 부분 -->
-                    <canvas id="drawing_canvas" class="drawing_canvas"></canvas>
-                </section>
-            </div>
+
 
 
         </section>

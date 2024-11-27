@@ -17,9 +17,6 @@ import { MeetingService } from '../../../services/meeting/meeting.service';
   styleUrl: './audience-video.component.scss'
 })
 export class AudienceVideoComponent {
-  @ViewChild('data_canvas') data_canvas: ElementRef | undefined;
-  @ViewChild('target_canvas') target_canvas: ElementRef | undefined;
-
   @ViewChild('targetVideo') target_video: ElementRef | undefined;
 
   videoHeight: number = 135;
@@ -58,26 +55,7 @@ export class AudienceVideoComponent {
       this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard()
     })
 
-    effect(() => {
-      this.meetingService.skipList()
-      untracked(() => {
-        const data_canvas: any = this.data_canvas?.nativeElement;
 
-        if (!data_canvas) return;
-
-        const data_context: any = data_canvas.getContext('2d');
-
-        data_context.clearRect(0, 0, data_canvas.width / this.zoomScale, data_canvas.height / this.zoomScale);
-        this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
-          if (data.screen == this.screen) {
-
-            if (!this.meetingService.skipList().includes(data.userId)) {
-              this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
-            }
-          }
-        })
-      })
-    })
   }
 
 
@@ -102,12 +80,6 @@ export class AudienceVideoComponent {
   videoResize(target: any) {
 
     let zoomScale = 1;
-    const data_canvas: any = this.data_canvas?.nativeElement;
-    const data_context: any = data_canvas.getContext('2d');
-    const target_canvas: any = this.target_canvas?.nativeElement;
-    const target_context: any = target_canvas.getContext('2d');
-
-    const canvas_container: any = document.getElementsByClassName('audience_canvas_container')[0];
 
     // 비디오 해상도 계산
     const aspectRatio = target.videoWidth / target.videoHeight;
@@ -119,21 +91,5 @@ export class AudienceVideoComponent {
 
     target.style.height = `${this.videoHeight}px`;
 
-    data_canvas.width = canvas_container.clientWidth;
-    data_canvas.height = canvas_container.clientHeight;
-    target_canvas.width = canvas_container.clientWidth;
-    target_canvas.height = canvas_container.clientHeight;
-
-    target_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
-    data_context.setTransform(this.zoomScale, 0, 0, this.zoomScale, 0, 0)
-
-    this.videoDrawingService.drawVarArray()[this.user_id]?.forEach((data: any) => {
-      if (data.screen == this.screen) {
-
-        if (!this.meetingService.skipList().includes(data.userId)) {
-          this.drawingService.end(data_context, data['drawingEvent'].points, data['drawingEvent'].tool)
-        }
-      }
-    })
   }
 }

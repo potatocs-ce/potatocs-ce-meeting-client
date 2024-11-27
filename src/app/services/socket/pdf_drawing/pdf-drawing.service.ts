@@ -51,12 +51,12 @@ export class PdfDrawingService {
       }
 
       this.dataArray.push({ ...data.drawingEvent, page: data.pageNum, doc_id: data.doc_id, userId: data.user_id });
-      // if (this.dataArray.length == 1) {
-      //   this.drawingQueue();
-      // }
+      if (this.dataArray.length == 1) {
+        this.drawingQueue();
+      }
 
       // 2024-11-22 수정 문제 생기면 위쪽으로 변경할것!!!
-      this.drawingQueue();
+      // this.drawingQueue();
     })
 
     // 판서 전체 지우기
@@ -86,7 +86,13 @@ export class PdfDrawingService {
     this.stop = null;
     this.thumbStop = null;
   }
-
+  // Reset canvas context to default state
+  private resetContext(context: CanvasRenderingContext2D) {
+    context.globalCompositeOperation = 'source-over';
+    context.globalAlpha = 1;
+    context.lineCap = "round";
+    context.lineJoin = 'round';
+  }
 
 
   async drawingQueue() {
@@ -124,7 +130,9 @@ export class PdfDrawingService {
 
     const pointsLength = data.points.length / 2;
 
-
+    // Reset context for new drawing
+    this.resetContext(context);
+    this.resetContext(data_context);
     context.lineCap = "round";
     context.lineJoin = 'round';
     context.globalAlpha = 1;

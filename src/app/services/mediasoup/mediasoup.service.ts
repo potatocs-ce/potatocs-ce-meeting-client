@@ -24,7 +24,70 @@ export class MediasoupService {
   nowVideo: any = ''
   nowAudio: any = ''
 
+  //=========================================================
+  // 클래스 상단에 추가
+  private connectionMonitorInterval: any;
+  // initTransports 메서드 내에 추가
+  private startConnectionMonitoring() {
+    this.connectionMonitorInterval = setInterval(() => {
+      if (!this.joined()) return;
 
+      // 연결 품질 체크
+      this.producers.forEach(producer => {
+        producer.getStats().then((stats: any) => {
+          stats.forEach((stat: any) => {
+            if (stat.bitrate > 0) {
+              // 비트레이트가 너무 낮으면 품질 낮춤
+              if (stat.bitrate < 50000) { // 50kbps
+                this.degradeProducerQuality(producer);
+              }
+            }
+          });
+        });
+      });
+    }, 5000); // 5초마다 체크
+  }
+
+  private degradeProducerQuality(producer: any) {
+    if (producer.kind === 'video') {
+      const currentEncodings = producer.rtpParameters.encodings;
+      if (currentEncodings && currentEncodings[0].maxBitrate > 100000) {
+        producer.updateRtpParameters({
+          encodings: [{
+            maxBitrate: Math.max(100000, currentEncodings[0].maxBitrate * 0.7)
+          }]
+        });
+      }
+    }
+  }
+
+  // 새로 추가할 메서드
+  private async getVideoQuality() {
+    // 현재 연결된 소비자 수에 따른 품질 조정
+    const consumerCount = this.consumers.size;
+
+    if (consumerCount <= 2) {
+      return {
+        width: { ideal: 640 },
+        height: { ideal: 480 },
+        frameRate: { ideal: 30 }
+      };
+    } else if (consumerCount <= 4) {
+      return {
+        width: { ideal: 480 },
+        height: { ideal: 360 },
+        frameRate: { ideal: 24 }
+      };
+    } else {
+      return {
+        width: { ideal: 320 },
+        height: { ideal: 240 },
+        frameRate: { ideal: 15 }
+      };
+    }
+  }
+
+  //======================================================
 
   private participantsSyncInterval: any;
   constructor(
@@ -212,6 +275,7 @@ export class MediasoupService {
 
   // 연결 초기 설정
   async initTransports(device: any) {
+
     // init producerTransport
     {
       await this.socket.emit("createWebRtcTransport", {
@@ -290,6 +354,7 @@ export class MediasoupService {
           }
         )
       })
+
     }
 
     // init consumerTransport
@@ -356,8 +421,14 @@ export class MediasoupService {
           await this.produce('videoType');
           await this.produce('audioType');
         }
+
+
+        // 연결 모니터링 시작
+        this.startConnectionMonitoring();
       })
     }
+
+
   }
 
   initSockets() {
@@ -448,7 +519,7 @@ export class MediasoupService {
         })
       }
     )
-
+    this.socket.off('newProducers'); // 이벤트 중복 방지
     // 새로운 연결 들어옴
     this.socket.on(
       'newProducers',
@@ -754,11 +825,12 @@ export class MediasoupService {
 
 
         if (deviceId != '') {
+          // 네트워크 상태에 따른 동적 품질 설정
+          let quality = await this.getVideoQuality();
           mediaConstraints = {
             audio: false,
             video: {
-              width: { ideal: 320 },
-              height: { ideal: 240 },
+              ...quality,
               deviceId: deviceId,
             }
           }
@@ -820,25 +892,26 @@ export class MediasoupService {
       }
 
       if (!audio && !screen) {
-
-        params.encodings = [
-          {
-            rid: 'r0',
-            maxBitrate: 100000,
-            scalabilityMode: 'S2T3'
-          },
-          {
-            rid: 'r1',
+        const consumerCount = this.consumers.size;
+        if (consumerCount <= 2) {
+          params.encodings = [{
+            maxBitrate: 600000,
+            scaleResolutionDownBy: 1,
+            maxFramerate: 30
+          }];
+        } else if (consumerCount <= 4) {
+          params.encodings = [{
             maxBitrate: 300000,
-            scalabilityMode: 'S2T3'
-          },
-          {
-            rid: 'r2',
-            maxBitrate: 3600000,
-            scalabilityMode: 'S2T3'
-          },
-        ]
-
+            scaleResolutionDownBy: 2,
+            maxFramerate: 24
+          }];
+        } else {
+          params.encodings = [{
+            maxBitrate: 100000,
+            scaleResolutionDownBy: 4,
+            maxFramerate: 15
+          }];
+        }
 
         params.codecOptions = {
           videoGoogleStartBitrate: 1000
@@ -1022,6 +1095,9 @@ export class MediasoupService {
 
   // 나가기 함수
   exit(offline = false) {
+    if (this.connectionMonitorInterval) {
+      clearInterval(this.connectionMonitorInterval);
+    }
     this.joined.set(false);
     // this.socket.emit('exitRoom', ())
     let clean = () => {

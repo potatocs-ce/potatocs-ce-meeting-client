@@ -110,16 +110,7 @@ export class MainComponent {
             this.surveyService.surveys.set(res);
           })
 
-
-
-
-          this.meetingServiceApi.getVideoDrawings(params.id).subscribe((res: any) => {
-            const object = res.reduce((acc: any, value: any, index: any) =>
-              ({ ...acc, [value._id]: value.data })
-              , {});
-
-            this.videoDrawingService.drawVarArray.set(object)
-          })
+          // pdf 드로잉 모니터링
           this.pdfDrawingServie.monitDrawing();
         })
       }

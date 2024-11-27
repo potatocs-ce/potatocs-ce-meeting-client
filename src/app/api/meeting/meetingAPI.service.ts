@@ -29,15 +29,6 @@ export class MeetingServiceAPI {
     return this.http.get(this.baseUrl + '/meeting/getChat/' + meetingId);
   }
 
-  // 비디오 판서 정보 가져오기
-  getVideoDrawings(meetingId: string) {
-    return this.http.get(this.baseUrl + '/meeting/getVideoDrawings/' + meetingId);
-  }
-
-  // 특정 유저의 비디오 판서 클리어
-  clearVideoDrawing(meetingId: string, userId: string) {
-    return this.http.post(this.baseUrl + '/meeting/clearVideoDrawing', { meetingId, userId });
-  }
 
   // 채팅 생성
   createChat(data: any, files: any) {
