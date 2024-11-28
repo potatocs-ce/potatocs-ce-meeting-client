@@ -13,6 +13,7 @@ import { DialogService } from '../../services/dialog/dialog.service';
 import { Socket } from 'ngx-socket-io';
 import { Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-toolbar',
@@ -198,7 +199,7 @@ export class ToolbarComponent {
         if (window.opener) {
           window.close()
         } else {
-          this.router.navigate([`/`])
+          this.router.navigate([environment.thisUrl])
         }
 
       }
