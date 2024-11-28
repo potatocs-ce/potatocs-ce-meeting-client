@@ -95,9 +95,16 @@
         gap: 0.1rem;
         background-color: white;
         border-radius: 5rem;
+        box-sizing: border-box;
+        flex-direction: row;
+
+        .input_container {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
 
         input {
-            flex: 1;
             width: 100%;
             // border: 1px solid $main_color;
             border-top-left-radius: 5rem;
