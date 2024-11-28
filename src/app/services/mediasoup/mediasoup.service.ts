@@ -27,44 +27,106 @@ export class MediasoupService {
   //=========================================================
   // 클래스 상단에 추가
   private connectionMonitorInterval: any;
+  private previousQuality: 'high' | 'low' = 'high';
+
   // initTransports 메서드 내에 추가
   private startConnectionMonitoring() {
-    this.connectionMonitorInterval = setInterval(() => {
+    this.connectionMonitorInterval = setInterval(async () => {
       if (!this.joined()) return;
 
-      // 연결 품질 체크
-      this.producers.forEach(producer => {
-        producer.getStats().then((stats: any) => {
-          stats.forEach((stat: any) => {
-            if (stat.bitrate > 0) {
-              // 비트레이트가 너무 낮으면 품질 낮춤
-              if (stat.bitrate < 50000) { // 50kbps
-                this.degradeProducerQuality(producer);
-              }
+      // 네트워크 상태 체크를 위한 connection 정보 가져오기
+      const stats = await this.producerTransport?.getStats();
+      if (!stats) return;
+
+
+      // 연결 품질 측정
+      let poorConnection = false;
+      stats.forEach((stat: any) => {
+
+        // RTT(Round Trip Time)가 높거나 패킷 손실이 있는 경우
+        if (stat.type === 'candidate-pair' && stat.currentRoundTripTime > 0.5) {
+          poorConnection = true;
+        }
+        if (stat.type === 'outbound-rtp' && stat.packetsLost > 0) {
+          poorConnection = true;
+        }
+      });
+
+      console.log(poorConnection)
+
+      // 현재 활성화된 비디오 producer 찾기
+      const videoProducer = Array.from(this.producers.values())
+        .find((p: any) => p.kind === 'video' && !p.closed);
+
+      if (!videoProducer) return;
+
+
+
+      // 네트워크 상태에 따라 품질 조정
+      if (poorConnection && this.previousQuality === 'high') {
+        // 품질 낮추기
+        const lowQualityConstraints = {
+          width: { ideal: 320 },
+          height: { ideal: 240 },
+          frameRate: { ideal: 15 }
+        };
+
+        try {
+          const newStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              ...lowQualityConstraints,
+              deviceId: this.nowVideo
             }
           });
-        });
-      });
+
+          await videoProducer.replaceTrack({ track: newStream.getVideoTracks()[0] });
+          this.previousQuality = 'low';
+          console.log('Reduced video quality due to poor connection');
+        } catch (error) {
+          console.error('Failed to reduce video quality:', error);
+        }
+      } else if (!poorConnection && this.previousQuality === 'low') {
+        // 품질 높이기
+        const highQualityConstraints = {
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          frameRate: { ideal: 30 }
+        };
+
+        try {
+          const newStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              ...highQualityConstraints,
+              deviceId: this.nowVideo
+            }
+          });
+
+          await videoProducer.replaceTrack({ track: newStream.getVideoTracks()[0] });
+          this.previousQuality = 'high';
+          console.log('Restored video quality due to good connection');
+        } catch (error) {
+          console.error('Failed to restore video quality:', error);
+        }
+      }
+
+
     }, 5000); // 5초마다 체크
   }
 
-  private degradeProducerQuality(producer: any) {
-    if (producer.kind === 'video') {
-      const currentEncodings = producer.rtpParameters.encodings;
-      if (currentEncodings && currentEncodings[0].maxBitrate > 100000) {
-        producer.updateRtpParameters({
-          encodings: [{
-            maxBitrate: Math.max(100000, currentEncodings[0].maxBitrate * 0.7)
-          }]
-        });
-      }
-    }
-  }
 
   // 새로 추가할 메서드
   private async getVideoQuality() {
     // 현재 연결된 소비자 수에 따른 품질 조정
     const consumerCount = this.consumers.size;
+
+    // 이미 네트워크 상태가 좋지 않다고 판단된 경우
+    if (this.previousQuality === 'low') {
+      return {
+        width: { ideal: 320 },
+        height: { ideal: 240 },
+        frameRate: { ideal: 15 }
+      };
+    }
 
     if (consumerCount <= 2) {
       return {
@@ -420,6 +482,23 @@ export class MediasoupService {
 
         // 처음에 연결 설정이 완료되면 카메라, 오디오 연결 시도
         if (this.videoService.videoDeviceExist() && !this.videoService.check_video_onoff()) {
+          // 초기 네트워크 상태 체크
+          const stats = await this.producerTransport?.getStats();
+          let initialPoorConnection = false;
+          if (stats) {
+            stats.forEach((stat: any) => {
+              if (stat.type === 'candidate-pair' && stat.currentRoundTripTime > 0.5) {
+                initialPoorConnection = true;
+              }
+              if (stat.type === 'outbound-rtp' && stat.packetsLost > 0) {
+                initialPoorConnection = true;
+              }
+            });
+          }
+
+          // 초기 상태 설정
+          this.previousQuality = initialPoorConnection ? 'low' : 'high';
+
           this.videoService.videoLoading.set(true);
           this.videoService.audioLoading.set(true);
           await this.produce('videoType');
@@ -722,7 +801,7 @@ export class MediasoupService {
           stream.addTrack(consumer.track)
 
 
-          console.log(consumer, stream, kind, data.screen)
+          // console.log(consumer, stream, kind, data.screen)
           resolve({
             consumer,
             stream,
@@ -823,10 +902,7 @@ export class MediasoupService {
         break;
       case this.mediaType.video:
         deviceId = deviceId;
-
         this.videoService.videoLoading.set(true);
-
-
 
         if (deviceId != '') {
           // 네트워크 상태에 따른 동적 품질 설정
