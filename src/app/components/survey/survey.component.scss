@@ -42,6 +42,8 @@
             width: 100%;
             height: 100%;
             overflow: auto;
+            padding: 10px;
+            box-sizing: border-box;
 
             -ms-overflow-style: none;
             /* 인터넷 익스플로러 */
@@ -58,10 +60,10 @@
             flex-direction: column;
 
             background-color: $icon_button_color;
-            padding: 0.3rem;
+            padding: 8px;
             border-radius: 0.3rem;
-            gap: 0.7rem;
-            margin-bottom: 0.5rem;
+            gap: 10px;
+            margin-bottom: 12px;
 
             &:hover {
                 background-color: rgba(79, 84, 92, 0.8);

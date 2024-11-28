@@ -39,11 +39,11 @@
             height: 100%;
             overflow: auto;
             display: flex;
-            padding: 5px;
+            padding: 10px;
             flex-direction: column;
             box-sizing: border-box;
             gap: 1rem;
-            padding-bottom: 10px;
+            // padding-bottom: 10px;
         }
 
         .chat {
