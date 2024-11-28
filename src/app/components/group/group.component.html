@@ -8,37 +8,39 @@
             @for(member of currentMembers; track member; let i = $index) {
             <li class="group_list">
                 <article class="member_info">
+                    <button class="visibility_button" (click)="checkVisibility(member)">
+                        @if(!skipList.includes(member.member_id._id)){
+                        <mat-icon fontSet="material-symbols-outlined">check_box</mat-icon>
+                        }@else {
+                        <mat-icon fontSet="material-symbols-outlined">check_box_outline_blank</mat-icon>
+                        }
+                    </button>
                     <span class="name" [ngClass]="member.online ? 'active': ''">{{member.member_id.name}}
                         @if(member.member_id._id == user_id){
                         <div class="dot"></div>
                         }
                     </span>
 
-                    <span class="role" [ngClass]="member.online ? 'active_role': ''">{{member.role}}</span>
+
 
                 </article>
 
                 <article class="button_container">
-                    <button class="visibility_button" (click)="checkVisibility(member)">
-                        @if(!skipList.includes(member.member_id._id)){
-                        <mat-icon fontSet="material-symbols-outlined">visibility</mat-icon>
-                        }@else {
-                        <mat-icon fontSet="material-symbols-outlined">visibility_off</mat-icon>
-                        }
-
-                    </button>
-                    <button class="menu_button" [disabled]="!member.online" [matMenuTriggerFor]="memberMenu"
-                        mat-icon-button><mat-icon>more_vert</mat-icon></button>
-                    <mat-menu #memberMenu="matMenu">
+                    <span class="role"
+                        (click)="member.role == 'Presenter'? chooseRole('Participant', i) : chooseRole('Presenter', i)"
+                        [ngClass]="member.online ? 'active_role': ''">{{member.role}}</span>
+                    <!-- <button class="menu_button" [disabled]="!member.online" [matMenuTriggerFor]="memberMenu"
+                        mat-icon-button><mat-icon>more_vert</mat-icon></button> -->
+                    <!-- <mat-menu #memberMenu="matMenu">
                         <section class="menu_button_section">
-                            <button mat-button (click)="chooseRole('Presenter', i)">
+                            <button (click)="chooseRole('Presenter', i)">
                                 Presenter
                             </button>
-                            <button mat-button (click)="chooseRole('Participant', i)">
+                            <button (click)="chooseRole('Participant', i)">
                                 Participant
                             </button>
                         </section>
-                    </mat-menu>
+                    </mat-menu> -->
                 </article>
             </li>
             }
