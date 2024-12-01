@@ -93,6 +93,8 @@ listing {
     vertical-align: baseline;
 }
 
+@import "../../setting.scss";
+
 .card-container {
     height: 100vh;
     // background: linear-gradient(#e8edff, #fff2f9);
@@ -268,7 +270,7 @@ video {
     height: 44px;
     padding: 0 40px;
     // background-color: #09f;
-
+    background-color: $main_color;
     font-weight: bold;
     font-size: 15px;
     color: white;
