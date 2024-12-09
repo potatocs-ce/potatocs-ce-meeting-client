@@ -1,0 +1,64 @@
+@import '../../../setting.scss';
+
+
+
+.audience_top {
+    display: flex;
+    align-items: center;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.audience_container {
+    display: inline-flex;
+    gap: 0.5rem;
+
+
+    flex-wrap: nowrap;
+    position: relative;
+    margin: 0 auto;
+
+
+
+    .audience_video {
+        display: flex;
+        background-color: white;
+        border-radius: 0.5rem;
+
+
+        // 임시로
+        height: 160px;
+        width: 300px;
+        flex-shrink: 0;
+    }
+}
+
+.audience_toggle_button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+    color: white;
+    background-color: $icon_button_color;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    .mat-mdc-button-touch-target {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 15px !important;
+        height: 15px;
+        font-size: 11pt;
+    }
+}

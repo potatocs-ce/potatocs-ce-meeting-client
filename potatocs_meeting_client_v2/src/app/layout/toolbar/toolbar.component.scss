@@ -1,0 +1,188 @@
+@import '../../setting.scss';
+
+.menu_ul {
+    margin: 0;
+
+    .menu_span {
+        font-size: 11pt;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+}
+
+.toolbar_container {
+    display: flex;
+
+
+    .circle_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5rem;
+        width: 40px;
+        height: 40px;
+        background-color: $icon_button_color;
+        color: white;
+        padding: 0;
+        overflow: hidden;
+        z-index: 2;
+
+        &>*[role=img] {
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+        }
+
+        .mat-mdc-button-touch-target {
+            width: 40px !important;
+            height: 40px !important;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            font-size: 14pt;
+        }
+    }
+
+    .active_circle_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5rem;
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        color: black;
+        padding: 0;
+        overflow: hidden;
+        z-index: 2;
+
+        &>*[role=img] {
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+        }
+
+        .mat-mdc-button-touch-target {
+            width: 40px !important;
+            height: 40px !important;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            font-size: 14pt;
+        }
+    }
+
+    .main_button_option_section {
+        width: 66px;
+        background-color: rgba(47, 50, 53, 255);
+        border-radius: 5rem;
+        display: flex;
+
+        align-items: center;
+        z-index: 1;
+
+        border: none;
+
+        .toggle_button {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+            color: white;
+            padding-left: 10px;
+            height: 26px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+
+
+
+    }
+
+    .call_end {
+        width: 56px;
+        background-color: rgb(234, 67, 53);
+    }
+
+    .meeting_title_section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        text-wrap: nowrap;
+
+
+
+        .meeting_title {
+            color: white;
+            // font-weight: bold;
+        }
+    }
+
+    .main_buttons_section {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        text-wrap: nowrap;
+    }
+
+    .option_buttons_section {
+        display: flex;
+        flex: 1;
+        justify-content: end;
+        align-items: center;
+        gap: 0.5rem;
+        text-wrap: nowrap;
+    }
+}
+
+
+.mat_item_button {
+    overflow: hidden !important;
+}
+
+
+.active_mat_item_button {
+    // background-color: rgba(0, 21, 79, 0.1);
+    color: $main_logo_color;
+    // font-weight: bolder !important;
+
+    // &:hover {
+    //     background-color: rgba(0, 21, 79, 0.2) !important;
+    // }
+
+}
+
+.mobile_button {
+    display: none !important;
+}
+
+@media screen and (max-width: 620px) {
+    .meeting_title_section {
+        display: none !important;
+    }
+
+    .option_buttons_section {
+        display: none !important;
+    }
+
+
+    .mobile_button {
+        display: flex !important;
+    }
+}

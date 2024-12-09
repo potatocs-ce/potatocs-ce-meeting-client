@@ -1,0 +1,30 @@
+<div class="doc_container">
+    <section class="button_section">
+        <button (click)="backToFileList()"><mat-icon>chevron_left</mat-icon><span>Doc. List</span></button>
+    </section>
+    <section class="page_section">
+        @for(page of doc; track page; let i = $index) {
+        <div class="thumb_item" (click)="clickThumb(i)">
+            <section class="tumb">
+                <img #thumb id="thumb_{{i+1}}" width={{thumbArray[i]?.width}} height={{thumbArray[i]?.height}} />
+
+                <!-- 여기에 판서 드로잉 부분 작성 -->
+                <div class="thumb_canvas_container">
+                    <canvas [id]="'thumb_data_canvas' + (i+1)"></canvas>
+                    <canvas [id]="'thumb_drawing_canvas' + (i+1)"></canvas>
+                </div>
+
+                @if(currentPageNum === i ) {
+                <div #thumbWindow id="thumb-window"
+                    [ngStyle]="{'width':thumbWindowSize.width, 'height':thumbWindowSize.height}"></div>
+                }
+
+            </section>
+
+            <div class="page_number">
+                {{i + 1}} / {{doc.length }}
+            </div>
+        </div>
+        }
+    </section>
+</div>

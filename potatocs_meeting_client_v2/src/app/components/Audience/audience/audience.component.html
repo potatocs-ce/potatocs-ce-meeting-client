@@ -1,0 +1,17 @@
+<div class='audience_top' [style]="toggleService.toggle_audience() ? '' : 'height: 0px; overflow: hidden;'">
+    <div class="audience_container" [style]="toggleService.toggle_audience() ? '' : 'visibility: hidden;'">
+        @for(stream of videoList; track stream){
+        <app-audience-video [socket_id]="stream.socket_id" [stream]="stream.stream" [name]="stream.name"
+            [id]="stream.id" [user_id]="stream.user_id" [screen]="stream.screen"
+            [profile]="stream.profile"></app-audience-video>
+        }
+    </div>
+
+    <button (click)="toggleAudience()" mat-icon-button class="audience_toggle_button">
+        @if(toggleService.toggle_audience()){
+        <mat-icon>arrow_forward</mat-icon>
+        }@else {
+        <mat-icon>arrow_back</mat-icon>
+        }
+    </button>
+</div>

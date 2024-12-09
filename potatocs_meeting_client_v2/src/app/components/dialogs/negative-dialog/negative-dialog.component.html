@@ -1,0 +1,15 @@
+<div class="confirm-dialog">
+
+    <mat-icon fontSet="material-symbols-outlined" color="primary" class='mat_icon'> cancel</mat-icon>
+
+
+    <p class="confirm-title">Error</p>
+
+    <p class="confirm-content">
+        {{ data.content }}
+    </p>
+
+    <p class="confirm-btn">
+        <button mat-flat-button (click)="closeModal()">Understood</button>
+    </p>
+</div>

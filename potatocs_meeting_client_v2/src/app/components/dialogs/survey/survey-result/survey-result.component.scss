@@ -1,0 +1,21 @@
+.result_container {
+    font-size: 11pt;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .title {
+        font-size: 24pt;
+        margin: 0;
+    }
+
+
+
+
+
+    .spinner_container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

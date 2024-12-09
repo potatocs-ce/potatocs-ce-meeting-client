@@ -1,0 +1,45 @@
+<div class="file_container">
+    <div class="file_list">
+        <i class="fas fa-folder my_icon"></i>
+        <span>File List</span>
+    </div>
+    @if(docService.docDataLoading()){
+    <div class="spinner_container">
+        <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+    </div>
+
+    }@else{
+
+    <div class="doc_list_container">
+
+        @for(doc of docService._docList(); track doc; let i = $index) {
+        <div class="doc_container">
+
+            <section class="doc_title_section">
+                <span class="doc_title">{{doc.originalFileName}}</span>
+                <button (click)="deletePdf(doc._id)" class="doc_close_button"><mat-icon>close</mat-icon></button>
+            </section>
+            <section class="doc_preview_section" (click)="clickPDF(i)">
+                <img #thumb id="thumb{{i+1}}" class="thumbBg" width="140" />
+                <div class="doc_cover"></div>
+            </section>
+            <section class="doc_page_section">
+                <span>{{'('}} {{docService.pageBuffer()[i]}} /
+                    {{docService._docList()[i]?.pdfDoc._pdfInfo.numPages}} {{')'}}</span>
+
+            </section>
+        </div>
+        }
+
+
+
+
+        <div class="add_button">
+            <button mat-icon-button (click)="pdfInput.click()"><mat-icon>add</mat-icon></button>
+            <input #pdfInput type="file" (change)="handleUploadFileChanged($event)" style="display:none;"
+                accept=".pdf" />
+        </div>
+    </div>
+    }
+
+</div>

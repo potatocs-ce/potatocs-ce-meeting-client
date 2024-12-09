@@ -1,0 +1,329 @@
+@import '../../setting.scss';
+
+.whiteboard_container {
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+    width: 100%;
+
+    .whiteboard_menu_section {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        background-color: transparent;
+        align-items: center;
+    }
+
+
+    .doc_toggle_button {
+        width: 18px;
+        height: 18px;
+        // background-color: white;
+        border: none;
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        padding: 0;
+
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            font-size: 15px;
+            color: white;
+        }
+    }
+
+
+    .whiteboard_menu {
+        background-color: white;
+        flex: 1;
+
+        height: 30px;
+        border-radius: 0.2rem;
+    }
+
+    .whiteboard_section {
+        flex: 1;
+        // background-color: white;
+        // border-radius: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .no_doc_alert {
+        position: absolute;
+        color: gray;
+    }
+
+    .canvas_position {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .canvas_container {
+        position: relative;
+        overflow: auto;
+        display: flex;
+
+
+
+        // border-radius: 0.5rem;
+        -ms-overflow-style: none;
+        /* 인터넷 익스플로러 */
+        scrollbar-width: none;
+
+        /* 파이어폭스 */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tmp {
+            position: absolute;
+            display: none;
+        }
+
+        .canvaseBackground {
+            position: absolute;
+            box-sizing: border-box;
+
+        }
+
+        .canvasUser {
+            position: absolute;
+
+        }
+
+        .coverRx {
+            position: absolute;
+
+        }
+
+        .cover {
+            position: absolute;
+
+
+        }
+    }
+}
+
+
+canvas {
+    display: block;
+    /* 기본적으로 캔버스는 inline-block이므로, block으로 변경 */
+    margin: 0;
+    /* 여백 제거 */
+    padding: 0;
+    /* 패딩 제거 */
+    border: 0;
+    /* 테두리 제거 */
+    box-sizing: border-box;
+    /* 패딩과 테두리를 포함한 박스 크기 계산 */
+}
+
+
+
+
+
+.whiteboard_menu {
+    display: flex;
+
+    overflow: auto;
+    -ms-overflow-style: none;
+    /* 인터넷 익스플로러 */
+    scrollbar-width: none;
+
+    /* 파이어폭스 */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    background-color: white;
+    border-radius: 0.2rem;
+    width: 100%;
+    height: 30px;
+
+    .button_container {
+        margin: 0 auto;
+        width: fit-content;
+        height: 100%;
+        padding: 0.3rem 0.2rem;
+        box-sizing: border-box;
+        display: flex;
+        // flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        // transition: all 0.3s ease;
+    }
+
+    button {
+        display: flex;
+        align-items: center !important;
+        justify-content: center;
+        border-radius: 5rem;
+        width: 25px;
+        height: 25px;
+        padding: 0px;
+        // color: rgb(212, 212, 212); 
+        // color: rgba(109, 111, 116, 255);
+        color: $main_background_color;
+        cursor: pointer;
+
+        &>*[role=img] {
+            width: 14px;
+            height: 14px;
+            // font-size: 18px;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            font-size: 15px;
+        }
+    }
+
+    .divide {
+        width: 1px;
+        height: 55%;
+
+        // background-color: rgba(109, 111, 116, 255);
+        background-color: rgb(216, 216, 216);
+    }
+
+    .color_button {
+        border: none;
+        width: 13px;
+        height: 13px;
+        margin: 0px 3px;
+        border-radius: 5rem;
+
+
+        p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .check {
+            width: 9px;
+            height: 9px;
+            // font-size: 8pt;
+            color: white;
+
+        }
+    }
+
+    .width_button {
+
+        margin: 0px 3px;
+        background-color: $main_background_color;
+        border-radius: 5rem;
+
+        .check {
+            width: 10px;
+            height: 10px;
+        }
+    }
+
+    .big {
+        width: 15px;
+        height: 5px;
+    }
+
+    .medium {
+        width: 13px;
+        height: 4px;
+    }
+
+    .small {
+        width: 11px;
+        height: 3px;
+        // margin-bottom: 10px;
+    }
+
+    .active {
+        // color: $main_logo_color;
+        // color: rgba(0, 21, 79, 0.8);
+        // color: white; // color: $main-color;
+        background-color: rgb(238, 238, 238);
+    }
+
+
+}
+
+
+.main {
+    visibility: hidden;
+}
+
+.sub {
+
+    visibility: visible;
+}
+
+
+::ng-deep .mat-mdc-button-touch-target {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+
+
+.shape_tool {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.2rem;
+    width: fit-content;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5rem;
+        width: 25px;
+        height: 25px;
+        padding: 0px;
+        // color: rgb(212, 212, 212); 
+        // color: rgba(109, 111, 116, 255);
+        color: $main_background_color;
+        cursor: pointer;
+
+        &>*[role=img] {
+            width: 14px;
+            height: 14px;
+            // font-size: 18px;
+        }
+
+        .mat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            font-size: 15px;
+        }
+    }
+}
+
+::ng-deep .mat-mdc-menu-panel {
+    min-width: 0px !important;
+}

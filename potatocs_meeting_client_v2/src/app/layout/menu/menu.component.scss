@@ -1,0 +1,19 @@
+@import '../../setting.scss';
+
+.menu_container {
+    background-color: $main_background_color;
+    width: 300px;
+    height: 100%;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    box-sizing: border-box;
+    position: relative;
+
+    >div {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+}

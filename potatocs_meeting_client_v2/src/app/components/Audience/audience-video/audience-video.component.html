@@ -1,0 +1,39 @@
+<div class="video_container" [style]="stream ? '': 'width: 180px; height: 135px'">
+    @if(stream){
+    <!-- 비디오 -->
+    <video #targetVideo (resize)="videoResize($event.target)" class="video" [class]="id" [srcObject]="stream"
+        autoplay></video>
+
+    }@else {
+    <!-- 스트립이 없는 경우 -->
+    <div class="user_video_profile_container">
+        @if(profile) {
+        <img class="profile_img" [src]="profile" alt="">
+        }@else {
+        <mat-icon>account_circle</mat-icon>
+        }
+
+    </div>
+    }
+
+
+
+
+    <!-- 이름 등 정보  -->
+    <article class="menu_container" [class]="user_id+'menu'" (click)="goToPresent()">
+        @if(toggle_video_whiteboard != 'document') {
+        <!-- <button mat-icon-button class="video_menu" [matMenuTriggerFor]="videoMenu">
+            <mat-icon>more_vert</mat-icon>
+        </button> -->
+        <!-- <mat-menu #videoMenu="matMenu" xPosition="before">
+            <button mat-menu-item>
+                <mat-icon>co_present</mat-icon>
+                <span>presenter</span>
+            </button>
+      
+        </mat-menu> -->
+        }
+
+        <div class="video_user_name">{{name}}</div>
+    </article>
+</div>

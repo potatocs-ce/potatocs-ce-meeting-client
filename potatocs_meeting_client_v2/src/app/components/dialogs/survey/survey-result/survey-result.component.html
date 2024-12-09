@@ -1,0 +1,23 @@
+<div class="result_container">
+    <app-card>
+        <h3 class="title">응답: {{result.length}} 개</h3>
+    </app-card>
+    @if(loading) {
+    <div class="spinner_container">
+        <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+    </div>
+    }
+    @for(card of survey.cards; track card; let idx = $index) {
+    <app-card>
+
+        <h4>{{card.item_title}}</h4>
+
+
+
+        <div style="height: 300px;">
+            <canvas baseChart [data]="my_data[idx]" [legend]="false" [options]="chartOptions" [type]="'bar'"></canvas>
+        </div>
+
+    </app-card>
+    }
+</div>

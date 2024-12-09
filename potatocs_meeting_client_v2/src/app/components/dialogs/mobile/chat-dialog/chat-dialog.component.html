@@ -1,0 +1,43 @@
+<div class="chat_container">
+    <section class="chat_header">
+        <i class="fa-solid fa-message my_icon"></i>
+        <span>Chat</span>
+    </section>
+    <section class="chat_section">
+        <section class="chat_scroll_section" #target>
+            @for(item of chat_info; track item) {
+            <!-- <div class="chat">
+                <section class="name_section">
+                    <span class="name">
+                        {{item.chatMember}}
+                        @if(item.userId == user_id){
+                        <div class="dot"></div>
+                        }
+                    </span>
+                    @if(item.userId == user_id){
+                    <button><mat-icon>delete</mat-icon></button>
+                    }
+
+                    <span class="time">
+                        {{item.createdAt | date:'yyyy-MM-dd hh:mm a'}}
+                    </span>
+                </section>
+                <section class="content_section">
+                    <article>
+                        {{item.chatContent}}
+                    </article>
+                </section>
+            </div> -->
+            }
+        </section>
+
+    </section>
+    <form class="input_section" (ngSubmit)="submitChat()">
+        <div class="input_container">
+            <input style="outline: none;" [(ngModel)]="chatContent" type="text" [ngModelOptions]="{standalone: true}" />
+        </div>
+
+        <button mat-icon-button><mat-icon fontSet="material-symbols-outlined">arrow_upward_alt</mat-icon></button>
+
+    </form>
+</div>

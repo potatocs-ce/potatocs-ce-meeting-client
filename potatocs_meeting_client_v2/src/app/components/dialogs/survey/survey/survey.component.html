@@ -1,0 +1,45 @@
+<div class="survey_container">
+    <section class="title_section">
+        <app-card>
+            <div class="line"></div>
+            <section class="title_section">
+                <h3 class="title">{{survey.title}}</h3>
+                <p class="description">{{survey.description}}</p>
+            </section>
+        </app-card>
+    </section>
+
+
+    <form class="input_container" (ngSubmit)="submit()">
+        <section class="input_section">
+            @for(card of survey.cards; track card.index) {
+            <app-card>
+                <h4 class="card_title">
+                    @if(card.required) {
+                    <div class="red_dot">*</div>
+                    }
+                    {{card.item_title}}
+                </h4>
+
+                @for(option of card.item_options; track option) {
+                <li>
+                    <mat-checkbox
+                        [disabled]="!result[card.index].includes(option.index) && result[card.index].length >= card.num_of_answer ? true: false"
+                        (change)="updateResult(card.index, option.index, $event)">{{option.option}}</mat-checkbox>
+                </li>
+                }
+
+            </app-card>
+            }
+        </section>
+        <section class="button_section">
+            @if(loading) {
+            <div class="spinner_container">
+                <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+            </div>}
+            <button (click)="back(); $event.preventDefault()" mat-flat-button>cancel</button>
+            <button class="submit_button" type="submit" mat-flat-button><mat-icon
+                    style="color: white;">send</mat-icon>submit</button>
+        </section>
+    </form>
+</div>

@@ -1,0 +1,142 @@
+<div class="toolbar_container">
+
+    <section class="meeting_title_section">
+        <span class="meeting_title">{{meeting_title}}</span>
+    </section>
+
+    <section class="main_buttons_section">
+        <section matRipple class="main_button_option_section">
+            <mat-menu #audioList="matMenu">
+                <ul class='menu_ul'>
+                    @for(audio of audio_list; track audio) {
+                    <li (click)="selectAudio(audio.deviceId)" class="mat_item_button"
+                        [ngClass]="audio.deviceId == now_audio ? 'active_mat_item_button' : ''" mat-menu-item>
+                        <span class="menu_span">{{audio.label}}</span>
+                    </li>
+                    }
+                </ul>
+
+            </mat-menu>
+            <button class="toggle_button" [matMenuTriggerFor]="audioList" #audio_t="matMenuTrigger">
+                @if(audio_t.menuOpen) {
+                <p>
+                    <i class="fa-solid fa-angle-down"></i>
+                </p>
+
+                }@else{
+                <p>
+                    <i class="fa-solid fa-angle-up"></i>
+                </p>
+
+                }
+
+            </button>
+            <button (click)="toggleAudio()" [ngClass]="toggle_audio ? 'active_circle_button':''" mat-icon-button
+                class="circle_button">
+                <!-- <i class="fa fa-microphone icon"></i> -->
+                @if(videoService.audioLoading()) {
+                <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+                }@else {
+                <mat-icon fontSet="material-symbols-outlined">mic</mat-icon>
+                }
+
+            </button>
+        </section>
+        <section matRipple class="main_button_option_section">
+
+            <mat-menu #videoList="matMenu">
+                <ul class='menu_ul'>
+                    @for(video of video_list; track video) {
+                    <li (click)="selectVideo(video.deviceId)" class="mat_item_button"
+                        [ngClass]="video.deviceId == now_video ? 'active_mat_item_button' : ''" mat-menu-item>
+                        <span class="menu_span">{{video.label}}</span>
+                    </li>
+                    }
+                </ul>
+
+            </mat-menu>
+            <button class="toggle_button" [matMenuTriggerFor]="videoList" #video_t="matMenuTrigger">
+                @if(video_t.menuOpen){
+                <p>
+                    <i class="fa-solid fa-angle-down"></i>
+                </p>
+                }@else {
+                <p>
+                    <i class="fa-solid fa-angle-up"></i>
+                </p>
+                }
+
+            </button>
+            <button (click)="toggleVideo()" mat-icon-button class="circle_button"
+                [ngClass]="toggle_video ? 'active_circle_button':''">
+                <!-- <i class="fa fa-solid fa-video-camera"></i> -->
+                @if(videoService.videoLoading()){
+                <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+                }@else {
+                <mat-icon fontSet="material-symbols-outlined">videocam</mat-icon>
+                }
+
+
+            </button>
+        </section>
+        <button (click)="screenShare()" mat-icon-button class="circle_button"
+            [ngClass]="toggle_screen_share ? 'active_circle_button':''">
+
+            <mat-icon fontSet="material-symbols-outlined" inline="true">screen_share</mat-icon>
+        </button>
+
+        @if(toggle_video_whiteboard == 'video'){
+        <button (click)="changeVideoDocument('document')" mat-icon-button class="circle_button">
+
+            <mat-icon fontSet="material-symbols-outlined">autorenew</mat-icon>
+        </button>
+        }@else if(toggle_video_whiteboard == 'document'){
+        <button (click)="changeVideoDocument('video')" mat-icon-button class="circle_button">
+            <!-- <i class="fa-regular fa-file-video"></i> -->
+            <mat-icon fontSet="material-symbols-outlined">autorenew</mat-icon>
+        </button>
+        }
+
+        <!-- 모바일 버전에서 메뉴를 보여주기 위한 버튼 -->
+        <button mat-icon-button class="circle_button mobile_button" [matMenuTriggerFor]="menuList">
+            <mat-icon fontSet="material-symbols-outlined">more_horiz</mat-icon>
+        </button>
+        <mat-menu #menuList="matMenu">
+            <ul class='menu_ul'>
+
+                <li class="mat_item_button" mat-menu-item (click)="openMobileMenuDialog('group')">
+                    <span class="menu_span"><i class="fa-solid fa-user"></i>group</span>
+                </li>
+
+                <li class="mat_item_button" mat-menu-item (click)="openMobileMenuDialog('chat')">
+                    <span class="menu_span"><i class="fa-solid fa-message"></i>chat</span>
+                </li>
+
+                <li class="mat_item_button" mat-menu-item (click)="openMobileMenuDialog('survey')">
+                    <span class="menu_span"><i class="fa-solid fa-list-check"></i>survey</span>
+                </li>
+            </ul>
+
+        </mat-menu>
+
+
+
+        <button mat-icon-button class="circle_button call_end" (click)="meetingExit()">
+            <mat-icon inline="true" style="font-size: 17pt; width: 30px;">call_end</mat-icon>
+        </button>
+    </section>
+    <section class="option_buttons_section">
+        <button (click)="changeToggleMode('group')" [ngClass]="toggle_mode == 'group'? 'active_circle_button': ''"
+            mat-icon-button class="circle_button">
+            <i class="fa-solid fa-user"></i>
+        </button>
+        <button (click)="changeToggleMode('chat')" [ngClass]="toggle_mode == 'chat'? 'active_circle_button': ''"
+            mat-icon-button class="circle_button">
+            <i class="fa-solid fa-message"></i>
+        </button>
+        <button (click)="changeToggleMode('survey')" [ngClass]="toggle_mode == 'survey'? 'active_circle_button': ''"
+            mat-icon-button class="circle_button">
+            <i class="fa-solid fa-list-check"></i>
+        </button>
+    </section>
+</div>
