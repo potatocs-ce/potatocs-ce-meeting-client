@@ -1,26 +1,71 @@
-<div [hidden]="!deviceCheckMode" class="realTime_container">
-    <div class="header_container">
-        <app-header></app-header>
-    </div>
+@if(!this.mediasoupService.joined()){
+<app-device-check></app-device-check>
+}@else {
 
-    <div [ngClass]="{'toggle': toggle === true}" class="sidebar_container">
-        <app-sidebar></app-sidebar>
-    </div>
+<div class="app_meeting_container">
 
-    <div [ngClass]="{'whiteBoardMode': whiteBoardMode === true}" [ngClass]="{'toggle': toggle === true}"
-        class="right_sidebar_container">
-        <app-right-sidebar></app-right-sidebar>
-    </div>
+    <!-- 메인 기능들이 들어갈 부분 -->
+    <div class="main_container">
+        <!-- 판서, 영상 통화 등 -->
+        <section class="video_section">
 
-    <div [hidden]="whiteBoardMode" class="webRtc_container">
-        <app-web-rtc></app-web-rtc>
-    </div>
-    <div [hidden]="!whiteBoardMode" class="whiteboard_container">
-        <app-white-board></app-white-board>
-    </div>
+            <!-- 비디오 모드인 경우 -->
+            <div class="video_container"
+                [style]="toggle_video_whiteboard == 'video' ? 'z-index: 10' : 'visibility: hidden; z-index: 0'">
+                <section id="present_section" class="present_section">
+                    <app-present></app-present>
+                </section>
+                @if(meetingService.users_info().length != 0 && toggle_video_whiteboard == 'video'){
+                <section class="audience_section"
+                    [style]="toggleService.toggle_audience() ? '' : 'position: absolute; bottom: 0; width: 100%'">
+                    <app-audience></app-audience>
+                </section>
+                }
+            </div>
 
-    <notifier-container></notifier-container>
+            <!-- 판서 모드인 경우 -->
+            <div class="document_container"
+                [style]="toggle_video_whiteboard == 'document' ? 'z-index: 10' : 'visibility: hidden; z-index: 0'">
+                <section class="document_list_section"
+                    [style]="toggleService.toggle_doc_menu() ? 'width: 150px;': 'width: 0px; margin-right: -0.5rem'">
+                    <app-documents></app-documents>
+                </section>
+                <section class="document_section">
+                    <div class="whiteboard_container">
+                        @if(meetingService.users_info().length != 0 && toggle_video_whiteboard == 'document'){
+                        <section class="audience_section"
+                            [style]="toggleService.toggle_audience() ? 'position: absolute; bottom: 0; width: 100%' : 'position: absolute; bottom: 0; width: 100%'">
+                            <app-audience></app-audience>
+                        </section>
+                        }
+                        <section class="whiteboard_section">
+                            <app-whiteboard></app-whiteboard>
+                        </section>
+
+                    </div>
+                </section>
+            </div>
+
+
+
+
+        </section>
+        <!-- 메뉴 -->
+        <section class="menu_section" [ngClass]="toggle_mode != 'close'? 'active' : ''">
+            <app-menu></app-menu>
+        </section>
+    </div>
+    <!-- 툴바 부분 -->
+    <section class="toolbar_section">
+        <app-toolbar></app-toolbar>
+
+        <div class="audio_section" id="audio_section">
+            @for(stream of audioStreams; track stream) {
+            <app-audio [user_id]="stream.user_id" [id]="stream.id" [stream]="stream.stream"
+                [socket_id]="stream.socket_id"></app-audio>
+            }
+        </div>
+    </section>
+
 </div>
-<div *ngIf="!deviceCheckMode" class="realTime_container">
-    <app-device-check></app-device-check>
-</div>
+}

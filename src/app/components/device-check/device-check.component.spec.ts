@@ -8,12 +8,10 @@ describe('DeviceCheckComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeviceCheckComponent ]
+      imports: [DeviceCheckComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(DeviceCheckComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

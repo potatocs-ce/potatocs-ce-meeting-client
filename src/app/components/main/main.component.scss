@@ -1,104 +1,115 @@
-.realTime_container {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    background-color: #eee;
-}
+.app_meeting_container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    gap: 0.5rem;
 
-.header_container {
-    position: fixed;
-    top: 0;
-    z-index: 51;
-    width: 100%;
+    .main_container {
+        flex: 1;
+        display: flex;
+        gap: 0.5rem;
+        // min-width: 500px;
 
-    *:focus {
-        outline: none
+        .video_section {
+
+            flex: 1;
+            // background-color: goldenrod;
+            position: relative;
+
+            .video_container {
+                position: absolute;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                gap: 0.5rem;
+
+
+                .present_section {
+                    flex: 1;
+                    overflow: hidden;
+                    position: relative;
+
+                }
+            }
+
+
+            .document_container {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                gap: 0.5rem;
+
+                .document_list_section {
+                    display: flex;
+                    overflow: hidden;
+                    // transition: all .3s ease-out;
+
+                }
+
+                .document_section {
+                    flex: 1;
+                    position: relative;
+
+
+                    .whiteboard_container {
+                        position: absolute;
+                        display: flex;
+                        width: 100%;
+                        height: 100%;
+                        flex-direction: column;
+                        gap: 0.5rem;
+
+                        .whiteboard_section {
+                            flex: 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        .menu_section {
+            width: 0px;
+            overflow: hidden;
+            margin-left: -0.5rem;
+            transition: width 0.3s ease;
+        }
+
+
+        .audio_section {
+            display: none;
+        }
+
+        .active {
+            width: 300px;
+            margin-left: 0rem;
+            transition: width 0.3s ease;
+        }
     }
 }
 
-.sidebar_container {
-    position: fixed;  
-    background-color: white;
-    width: 100px;
-    z-index: 1;
-    box-shadow: 4px 4px 14px -1px rgba(20, 0, 20, 0.2);
+
+
+
+::ng-deep .mat-mdc-menu-content {
+    padding: 0 !important;
+    border-radius: 0.5rem !important;
+}
+
+
+::ng-deep .mat-mdc-menu-panel {
+    border-radius: 0.5rem !important;
+    max-width: 300px !important;
+}
+
+
+::ng-deep .mat-mdc-menu-item-text {
     overflow: hidden;
-    height: 100vh;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
 }
-
-
-
-
-.webRtc_container {
-    // position: relative;
-    margin: 56px 0 0 100px;
-    width: calc(100% - 400px);
-    height: calc(100vh - 56px);
-
-    -khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-
-
-    //click시 파란색 outline 방지.
-    *:focus {
-        outline: none
-    }    
-}
-
-
-//click시 파란색 outline 방지.
-*:focus {
-    outline: none
-}
-
-
-
-@media screen and (max-width: 780px) {
-    .realTime_container {
-        position: relative;
-        margin: 0;
-        padding: 0;
-        background-color: #282828;
-    }
-
-    .webRtc_container {
-        // margin: 0 0;
-        // height: 100vh;
-        -khtml-user-select: none;
-        -o-user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-    }
-
-    // 왼쪽 사이드 바
-    .sidebar_container {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s, opacity 0.1s linear;
-        width: 60px;
-        z-index: 50;
-    }
-    
-    // 오른쪽 사이드 바
-    .right_sidebar_container {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s, opacity 0.1s linear;
-        z-index: 48;
-    }
-
-    .toggle {
-        visibility: visible;
-        opacity: 1;
-    }
-    
-}
-
-
-
-
-

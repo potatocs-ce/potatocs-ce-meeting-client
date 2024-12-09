@@ -1,176 +1,207 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { ApiService } from 'src/@wb/services/apiService/api.service';
-import { EventBusService } from 'src/@wb/services/eventBus/event-bus.service';
-import { SocketService } from 'src/@wb/services/socket/socket.service';
-import { MeetingInfoService } from 'src/@wb/store/meeting-info.service';
-import { DataStorageService } from 'src/app/services/dataStorage/data-storage.service';
-import { EventData } from 'src/app/services/eventBus/event.class';
-import { MeetingService } from 'src/app/services/meeting/meeting.service';
+import { Component, Inject, PLATFORM_ID, effect } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ToolbarComponent } from '../../layout/toolbar/toolbar.component';
+import { MenuComponent } from '../../layout/menu/menu.component';
+import { AudienceComponent } from '../Audience/audience/audience.component';
+import { PresentComponent } from '../present/present.component';
+import { WhiteboardComponent } from '../whiteboard/whiteboard.component';
+import { DocumentsComponent } from '../documents/documents.component';
+import { AudioComponent } from '../audio/audio.component';
+import { ToggleService } from '../../services/toggle/toggle.service';
+import { VideoService } from '../../services/video/video.service';
+import { MediasoupService } from '../../services/mediasoup/mediasoup.service';
+import { MeetingService } from '../../services/meeting/meeting.service';
+import { MeetingServiceAPI } from '../../api/meeting/meetingAPI.service';
 
-// notifier
-import { NotifierService } from 'angular-notifier';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { DocApiService } from '../../api/doc/doc-api.service';
+import { DocumentService } from '../../services/document/document.service';
+import { PdfDrawingService } from '../../services/socket/pdf_drawing/pdf-drawing.service';
+import { ChatSocketService } from '../../services/socket/chat/chat-socket.service';
+import { SurveyApiService } from '../../api/survey/survey-api.service';
+import { SurveyService } from '../../services/survey/survey.service';
+import { SurveySocketService } from '../../services/socket/survey/survey-socket.service';
+import { DeviceCheckComponent } from '../device-check/device-check.component';
+import { DrawingService } from '../../services/drawing/drawing.service';
 
 @Component({
   selector: 'app-main',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet,
+    ToolbarComponent, MenuComponent,
+    PresentComponent, AudienceComponent,
+    WhiteboardComponent, DocumentsComponent,
+    AudioComponent, DeviceCheckComponent],
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+  styleUrl: './main.component.scss'
 })
-export class MainComponent implements OnInit {
-  id;
-  meetingId: any; // 회의 Object_id
-  meetingData: any; // 회의와 참가자 정보
-  whiteBoardMode = false;
-  deviceCheckMode = false;
-  private unsubscribe$ = new Subject<void>();
-  private socket;
+export class MainComponent {
+  title = 'meeting_front';
+  toggle_mode: string = '';
+  toggle_video_whiteboard: string = '';
 
-  userId: any;
-  meetingClose = false;
+  audience_video: Array<any> = [];
+  audioStreams: Array<any> = [];
 
-  toggle = false;
+  roomInfo: string = ''; // 방 정보 저장용 변수
+  nameInfo: string = '호균-test'; // 이름 정보 저장용 변수
+
+
+
 
   constructor(
-    private eventBusService: EventBusService,
+    private router: Router,
     private route: ActivatedRoute,
-    private dataStorageService: DataStorageService,
-    private apiService: ApiService,
-    private meetingInfoService: MeetingInfoService,
-    private socketService: SocketService,
-    private meetingService: MeetingService,
-    public notifier: NotifierService,
-    private snackbar: MatSnackBar
-  ) {
-    this.socket = this.socketService.socket;
-    this.notifier = notifier;
+    public toggleService: ToggleService,
+    @Inject(PLATFORM_ID) private _platform: Object,
+    private videoService: VideoService,
+    public mediasoupService: MediasoupService,
+    public meetingService: MeetingService,
+    private meetingServiceApi: MeetingServiceAPI,
+    private docSerciceApi: DocApiService,
+    private docService: DocumentService,
+
+    private pdfDrawingServie: PdfDrawingService,
+    private chatSocketService: ChatSocketService,
+    private surveyApiService: SurveyApiService,
+    private surveyService: SurveyService,
+    private surveySocketService: SurveySocketService,
+    private drawingService: DrawingService) {
+    effect(() => {
+      this.toggle_mode = this.toggleService.toggle_mode();
+      this.toggle_video_whiteboard = this.toggleService.toggle_video_whiteboard();
+    })
+
+    //
+    effect(() => {
+      this.audience_video = this.meetingService.users_info();
+    })
+
+    //
+    effect(() => {
+      this.audioStreams = this.videoService.audioStream();
+    })
+
+
+    effect(async () => {
+      if (this.meetingService.meeting_room_id() !== '' && this.meetingService.meeting_room_id() !== undefined) {
+
+        // await this.mediasoupService.joinRoom()
+      }
+    })
+
+
+    effect(() => {
+      // socket 연결에 성공 했으면 관련 정보 받아옴
+      if (this.mediasoupService.joined()) {
+        this.route.params.subscribe((params: any) => {
+
+
+          // doc 판서 리스트 조회
+          this.docSerciceApi.getDrawingList(params.id).subscribe((res: any) => {
+            this.docService.generateDrawingData(res);
+          })
+
+          // doc 리스트 조회
+          this.docSerciceApi.getDocList(params.id).subscribe((res: any) => {
+            this.docService.generatePdfData(res);
+          })
+
+          // 현재까지의 설문조사 정보 가져오기
+          this.surveyApiService.getSurveys(params.id).subscribe((res: any) => {
+            this.surveyService.surveys.set(res);
+          })
+
+
+          // pdf 드로잉 모니터링
+          this.pdfDrawingServie.monitDrawing();
+        })
+      }
+    })
   }
 
-  ngOnInit(): void {
-    // 실시간으로 meeitngInfo를 바라보고 있다.
-    this.meetingInfoService.state$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((meetingInfo) => {
-        if (meetingInfo) {
-          console.log('[[ meetingInfo ]]', meetingInfo);
-          this.meetingId = meetingInfo._id;
-          this.userId = meetingInfo.userData._id;
-        }
-      });
+  ngOnInit() {
 
-    this.meetingId = this.route.snapshot.params['id'];
+    this.route.params.subscribe((params: any) => {
+      // console.log(params)
+      this.meetingService.meeting_room_id.set(params.id)
 
-    /////////////////////////////////////////////////////////////
-    // Meeting status가 'Close'일 경우 모든 권한 제어
-    this.getMeetingStatus(this.meetingId);
-    /////////////////////////////////////////////////////////////
+      // meetingId 로 db에 있는 채팅 정보 가져오기
+      this.meetingServiceApi.getMeetingChat(params.id).subscribe((res: any) => {
+        // for (let i = 0; i < res.length; i++) {
+        //   for (let j = 0; j < res[i].images.length; j++) {
 
-    /////////////////////////////////////////////
-    // Meeting Info 수신
-    // ---> 이 부분은 추후 화상회의 부분에서 적용해야 함
-    ////////////////////////////////////////////////////////////////////
-    if (this.meetingId) {
-      this.socket.emit('join:room', this.meetingId);
-    }
-    // 화이트 보드 컴포넌트에 있는 this.apiService.getMeetingInfo 없애고
-    // main.component에 저장해두기
-    // 그런 다음 데이터를 subscribe 해서 webRTC 부분에 가져오기
-    // 가져와야할 데이터 : userName, id, password는 없애고
-    // 맴버리스트도 가져와서 particpants 수정?
+        //   }
+        // }
+        this.meetingService.meeting_chat_info.set(res)
+      })
 
-    this.eventBusService.on('whiteBoardClick', this.unsubscribe$, () => {
-      console.log('eventBus on whiteBoardClick');
-      if (this.whiteBoardMode == false) {
-        this.whiteBoardMode = true;
-      } else {
-        this.whiteBoardMode = false;
-      }
-    });
 
-    this.eventBusService.on('deviceCheck', this.unsubscribe$, () => {
-      console.log('eventBus on deviceCheck');
-      if (this.deviceCheckMode == false) {
-        this.deviceCheckMode = true;
-      } else {
-        this.deviceCheckMode = false;
-      }
-    });
 
-    this.eventBusService.on('toggle', this.unsubscribe$, () => {
-      console.log('eventBus on toggle');
-      if (this.toggle == false) {
-        this.toggle = true;
-      } else {
-        this.toggle = false;
-      }
-    });
-
-    // 자기 자신 포함 같은 room에 있는 사람들에게 입장했다고 알림
-    this.socket.on('notifier_in', (userName) => {
-      // this.showNotification('info', `${userName} `);
-
-      this.snackbar.open(userName, 'has entered.', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        panelClass: ['entered-snackbar'],
-      });
-    });
-
-    // // 자기 자신 포함 같은 room에 있는 사람들에게 퇴장했다고 알림
-    this.socket.on('notifier_out', (userName) => {
-      // console.log(userName)
-      // this.showNotification('info', `${userName} has left.`);
-
-      this.snackbar.open(userName, 'has left.', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        panelClass: ['left-snackbar'],
+      navigator.mediaDevices.addEventListener('devicechange', async event => {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        await this.convertDeviceObject(devices)
       });
     });
+
+
+    // if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
+    //   navigator.mediaDevices.enumerateDevices().then((devices: any) => {
+    //     devices.forEach(async (device: any) => {
+    //       // 오디오 타입인 경우
+    //       if ('audioinput' === device.kind) {
+    //         // 만약 첫 값이면
+    //         if (this.videoService.audioDevices().length == 0) {
+    //           this.videoService.nowAudioId.set(device.deviceId);
+    //         }
+    //         this.videoService.audioDevices.set([...this.videoService.audioDevices(), { label: device.label, deviceId: device.deviceId }])
+    //       }
+    //       // 비디오 타입인 경우
+    //       else if ('videoinput' === device.kind) {
+    //         // 만약 첫 값이면
+    //         if (this.videoService.videoDeivces().length == 0) {
+    //           // 현재 디바이스 넣기
+    //           this.videoService.nowVideoId.set(device.deviceId);
+    //         }
+    //         this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
+    //       }
+    //     })
+    //   })
+    // }
   }
 
-  /////////////////////////////////////////////////////////////
-  // Meeting status가 'Close'일 경우 모든 권한 제어
-  getMeetingStatus(meetingId) {
-    const data = {
-      meetingId: meetingId,
-    };
 
-    // meeting의 status를 불러온다.
-    this.meetingService.getMeetingStatus(data).subscribe((res: any) => {
-      this.eventBusService.emit(new EventData('meetingStatus', res));
+  //청중 모드에 동영상 추가
+  async convertDeviceObject(devices: any) {
+    // 장치값 초기화
 
-      // meeting의 status가 'Close'일 경우 role 변경
-      if (res.status === 'Close') {
-        const userRoleData = {
-          meetingId: this.meetingId,
-          userId: this.userId,
-          role: 'Participant',
-        };
 
-        this.meetingService.getRoleUpdate(userRoleData).subscribe(() => {
-          const data = {
-            role: 'Participant',
-            status: res.status,
-          };
+    this.videoService.audioDevices.set([]);
 
-          this.eventBusService.emit(new EventData('myRole', data));
-          // meeting status가 'Close'일 경우 role 변경 버튼 안보이게 해서 role 변경 금지
-          this.eventBusService.emit(new EventData('Close', data));
-        });
+    this.videoService.videoDeivces.set([]);
+
+    this.videoService.speakerDevices.set([]);
+
+    devices.forEach((device: any) => {
+      if (device.kind == 'audioinput') {
+
+        this.videoService.audioDevices.set([...this.videoService.audioDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+      } else if (device.kind == 'videoinput') {
+
+        this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
+      } else if (device.kind == 'audiooutput') {
+
+        this.videoService.speakerDevices.set([...this.videoService.speakerDevices(), { kind: device.kind, label: device.label, deviceId: device.deviceId }])
       }
-    });
-  }
-  /////////////////////////////////////////////////////////////
+    })
 
-  /**
-   * Show a notification
-   *
-   * @param {string} type    Notification type
-   * @param {string} message Notification message
-   */
-  showNotification(type: string, message: string): void {
-    this.notifier.notify(type, message);
+
+    this.videoService.nowAudioId.set(this.videoService.audioDevices()[0]!.deviceId)
+
+    this.videoService.nowVideoId.set(this.videoService.videoDeivces()[0]!.deviceId)
+
+    this.videoService.nowSpeakerId.set(this.videoService.speakerDevices()[0]!.deviceId)
   }
+
+
 }
