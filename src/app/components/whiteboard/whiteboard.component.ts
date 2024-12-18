@@ -139,7 +139,6 @@ export class WhiteboardComponent {
 		});
 
 		this.observer_target = this.whiteboardSection;
-
 		this.observer.observe(this.observer_target);
 	}
 
