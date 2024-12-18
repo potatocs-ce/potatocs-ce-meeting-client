@@ -75,8 +75,13 @@ export class DragScrollDirective {
 		};
 
 		this.listenFunc2 = this.renderer.listen(this.el.nativeElement, "pointermove", this.moveEvt.bind(this));
+		// pointermove 이벤트를 감지하여 moveEvt 메서드를 호출하도록 리스너 등록
+
 		this.listenFunc3 = this.renderer.listen(this.el.nativeElement, "pointerup", this.upEvt.bind(this));
+		// pointerup 이벤트를 감지하여 upEvt 메서드를 호출하도록 리스너 등록
+
 		this.listenFunc4 = this.renderer.listen(this.el.nativeElement, "pointerout", this.upEvt.bind(this));
+		// pointerout 이벤트를 감지하여 upEvt 메서드를 호출하도록 리스너 등록
 	}
 
 	moveEvt(evt: any) {
