@@ -1,11 +1,11 @@
 <div class="chat_container">
-    <section class="chat_header">
-        <i class="fa-solid fa-message my_icon"></i>
-        <span>Chat</span>
-    </section>
-    <section class="chat_section">
-        <section class="chat_scroll_section" #target>
-            <!-- @for(item of chat_info; track item;let idx1 = $index) {
+	<section class="chat_header">
+		<i class="fa-solid fa-message my_icon"></i>
+		<span>Chat</span>
+	</section>
+	<section class="chat_section">
+		<section class="chat_scroll_section" #target>
+			<!-- @for(item of chat_info; track item;let idx1 = $index) {
             <div class="chat">
                 <section class="name_section">
                     <span class="name">
@@ -36,20 +36,26 @@
                 </section>
             </div>
             } -->
-        </section>
-
-    </section>
-    <form class="input_section" (ngSubmit)="submitChat()">
-        <div class="image_section">
-            <!-- 이미지 영역 -->
-        </div>
-        <div class="textarea_section">
-            <mat-icon (click)="openScreenCaptureDialog()"
-                fontSet="material-symbols-outlined">screenshot_region</mat-icon>
-            <textarea #myTextarea (ngModelChange)="handleResizeHeight(myTextarea)" style="outline: none;"
-                [(ngModel)]="chatContent" type="text" [ngModelOptions]="{standalone: true}" rows="1"></textarea>
-            <button type="submit"><mat-icon fontSet="material-symbols-outlined">send</mat-icon></button>
-        </div>
-
-    </form>
+		</section>
+	</section>
+	<form class="input_section" (ngSubmit)="submitChat()">
+		<div class="image_section">
+			<!-- 이미지 영역 -->
+		</div>
+		<div class="textarea_section">
+			<mat-icon (click)="openScreenCaptureDialog()" fontSet="material-symbols-outlined"
+				>screenshot_region</mat-icon
+			>
+			<textarea
+				#myTextarea
+				(ngModelChange)="handleResizeHeight(myTextarea)"
+				style="outline: none;"
+				[(ngModel)]="chatContent"
+				type="text"
+				[ngModelOptions]="{standalone: true}"
+				rows="1"
+			></textarea>
+			<button type="submit"><mat-icon fontSet="material-symbols-outlined">send</mat-icon></button>
+		</div>
+	</form>
 </div>
