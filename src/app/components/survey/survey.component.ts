@@ -36,10 +36,19 @@ export class SurveyComponent {
 	}
 
 	startSurvey(_id: string, participant: boolean) {
+		// 설문을 시작하는 함수.
+		// 참가 여부(participant)에 따라 다른 다이얼로그를 열음.
+
 		if (participant) {
-			this.survayService.openSurveyResultDialog(_id).subscribe((result: any) => {});
+			// 사용자가 설문에 참여 중인 경우 설문 결과 다이얼로그를 엶.
+			this.survayService.openSurveyResultDialog(_id).subscribe((result: any) => {
+				// 설문 결과 다이얼로그 작업 후의 결과를 처리할 콜백 (현재는 빈 처리).
+			});
 		} else {
-			this.survayService.openSurveyDialog(_id).subscribe((result: any) => {});
+			// 사용자가 설문에 참여하지 않은 경우 설문 다이얼로그를 엶.
+			this.survayService.openSurveyDialog(_id).subscribe((result: any) => {
+				// 설문 다이얼로그 작업 후의 결과를 처리할 콜백 (현재는 빈 처리).
+			});
 		}
 	}
 
