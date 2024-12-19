@@ -163,14 +163,11 @@ export class PresentComponent {
 		const canvas = document.createElement("canvas");
 		canvas.width = e.clientWidth;
 		canvas.height = e.clientHeight;
-
-		console.log(canvas);
 		canvas.getContext("2d")?.drawImage(e, 0, 0, canvas.width, canvas.height);
 		const dataURL = canvas.toDataURL("image/png");
 		const a = document.createElement("a");
 		a.href = dataURL;
 		a.download = "capture.png";
-		console.log(canvas);
 		a.click();
 	}
 }
