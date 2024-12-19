@@ -159,6 +159,7 @@ export class PresentComponent {
 		canvas.width = e.clientWidth;
 		canvas.height = e.clientHeight;
 
+		console.log(canvas);
 		canvas.getContext("2d")?.drawImage(e, 0, 0, canvas.width, canvas.height);
 		const dataURL = canvas.toDataURL("image/png");
 		const a = document.createElement("a");
