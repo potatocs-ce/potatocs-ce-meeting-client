@@ -111,24 +111,33 @@ export class AddSurveyComponent {
 
 	// 제출
 	submit() {
-		// console.log({ title: this.title, description: this.description, cards: this.cards })
+		// 설문 제출 함수.
+
+		// 설문 제목이 비어 있는 경우 에러 메시지 다이얼로그를 표시.
 		if (this.title == "") {
-			this.dialogService.openDialogNegative("Title is required");
+			this.dialogService.openDialogNegative("Title is required"); // 제목이 필수임을 알림.
 		} else {
+			// 설문 데이터를 서버에 전송.
 			this.surveyApiService
 				.addSurvey({
-					title: this.title,
-					description: this.description,
-					cards: this.cards,
-					meetingId: this.meetingService.meeting_room_id(),
+					title: this.title, // 설문 제목.
+					description: this.description, // 설문 설명.
+					cards: this.cards, // 설문 카드 배열.
+					meetingId: this.meetingService.meeting_room_id(), // 현재 회의 ID.
 				})
 				.subscribe((res: any) => {
+					// 서버 응답 상태 확인.
 					if (res.status) {
+						// 성공 시 성공 메시지 다이얼로그를 표시.
 						this.dialogService.openDialogPositive("Success to add a survey");
-						// 다른 사람들에게 리스트 업데이트 알림
+
+						// 다른 사용자에게 설문 리스트 업데이트 알림.
 						this.surveySocketService.updateSurvey();
+
+						// 설문 추가 완료 후 창 닫기.
 						this.onNoClick();
 					} else {
+						// 실패 시 실패 메시지 다이얼로그를 표시.
 						this.dialogService.openDialogNegative("Failed to add a survey...");
 					}
 				});
