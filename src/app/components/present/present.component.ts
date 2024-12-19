@@ -106,37 +106,42 @@ export class PresentComponent {
 	 * @param target 비디오 태그
 	 */
 	videoResize(target: any) {
+		// 'present' ID를 가진 DOM 요소를 가져옴.
 		const present: any = document.getElementById("present");
-		// const present_section: any = document.getElementById('present_section');
 
-		// canvas
+		// const present_section: any = document.getElementById('present_section'); // (미사용 주석)
+
+		// canvas 요소의 크기를 100%로 설정하여 부모 요소에 맞춤.
 		present.style.width = "100%";
 		present.style.height = "100%";
 
+		// 비디오 크기가 이전 크기와 다르면 새 크기를 저장하고, 첫 렌더링 여부를 true로 설정.
 		if (this.videoWidth !== target?.videoWidth && this.videoHeight !== target?.videoHeight) {
-			this.videoWidth = target?.videoWidth;
-			this.videoHeight = target?.videoHeight;
-			this.firstRender = true;
+			this.videoWidth = target?.videoWidth; // 비디오의 새로운 너비 저장.
+			this.videoHeight = target?.videoHeight; // 비디오의 새로운 높이 저장.
+			this.firstRender = true; // 첫 렌더링 플래그 설정.
 		}
 
+		// 현재 비디오와 부모 컨테이너 크기의 상태 초기화.
 		this.isWidth = undefined;
 
-		const pw = present.clientWidth;
-		const ph = present.clientHeight;
+		// 'present' 컨테이너와 비디오의 현재 너비 및 높이를 계산.
+		const pw = present.clientWidth; // 부모 컨테이너 너비.
+		const ph = present.clientHeight; // 부모 컨테이너 높이.
+		const vw = target.clientWidth; // 비디오 너비.
+		const vh = target.clientHeight; // 비디오 높이.
 
-		const vw = target.clientWidth;
-		const vh = target.clientHeight;
-
+		// 컨테이너와 비디오의 크기를 비교하여 적절히 조정.
 		if (ph < vh + (pw - vw)) {
-			// 세로가 길면
+			// 세로가 더 긴 경우: 비디오 높이를 컨테이너 높이에 맞추고, 너비는 자동 조정.
 			target.style.height = `${ph}px`;
 			target.style.width = "auto";
-			present.style.width = "fit-content";
+			present.style.width = "fit-content"; // 컨테이너 너비를 콘텐츠에 맞춤.
 		} else {
-			// 가로가 길면
+			// 가로가 더 긴 경우: 비디오 너비를 컨테이너 너비에 맞추고, 높이는 자동 조정.
 			target.style.width = `${pw}px`;
 			target.style.height = "auto";
-			present.style.height = "fit-content";
+			present.style.height = "fit-content"; // 컨테이너 높이를 콘텐츠에 맞춤.
 		}
 	}
 
