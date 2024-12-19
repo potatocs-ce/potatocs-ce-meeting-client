@@ -140,29 +140,35 @@ export class MainComponent {
 			});
 		});
 
-		// if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-		//   navigator.mediaDevices.enumerateDevices().then((devices: any) => {
-		//     devices.forEach(async (device: any) => {
-		//       // 오디오 타입인 경우
-		//       if ('audioinput' === device.kind) {
-		//         // 만약 첫 값이면
-		//         if (this.videoService.audioDevices().length == 0) {
-		//           this.videoService.nowAudioId.set(device.deviceId);
-		//         }
-		//         this.videoService.audioDevices.set([...this.videoService.audioDevices(), { label: device.label, deviceId: device.deviceId }])
-		//       }
-		//       // 비디오 타입인 경우
-		//       else if ('videoinput' === device.kind) {
-		//         // 만약 첫 값이면
-		//         if (this.videoService.videoDeivces().length == 0) {
-		//           // 현재 디바이스 넣기
-		//           this.videoService.nowVideoId.set(device.deviceId);
-		//         }
-		//         this.videoService.videoDeivces.set([...this.videoService.videoDeivces(), { label: device.label, deviceId: device.deviceId }])
-		//       }
-		//     })
-		//   })
-		// }
+		if (isPlatformBrowser(this._platform) && "mediaDevices" in navigator) {
+			navigator.mediaDevices.enumerateDevices().then((devices: any) => {
+				devices.forEach(async (device: any) => {
+					// 오디오 타입인 경우
+					if ("audioinput" === device.kind) {
+						// 만약 첫 값이면
+						if (this.videoService.audioDevices().length == 0) {
+							this.videoService.nowAudioId.set(device.deviceId);
+						}
+						this.videoService.audioDevices.set([
+							...this.videoService.audioDevices(),
+							{ label: device.label, deviceId: device.deviceId },
+						]);
+					}
+					// 비디오 타입인 경우
+					else if ("videoinput" === device.kind) {
+						// 만약 첫 값이면
+						if (this.videoService.videoDeivces().length == 0) {
+							// 현재 디바이스 넣기
+							this.videoService.nowVideoId.set(device.deviceId);
+						}
+						this.videoService.videoDeivces.set([
+							...this.videoService.videoDeivces(),
+							{ label: device.label, deviceId: device.deviceId },
+						]);
+					}
+				});
+			});
+		}
 	}
 
 	//청중 모드에 동영상 추가
