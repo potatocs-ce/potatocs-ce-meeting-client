@@ -196,12 +196,15 @@ export class WhiteboardComponent {
 	 * Scroll 발생 시
 	 */
 	onScroll() {
+		// 현재 문서가 비어있는 경우 아무 작업도 하지 않음.
 		if (this.docService._doc().length == 0) return;
 
+		// 스크롤 이벤트 발생 시 썸네일 데이터 업데이트.
+		// 현재 컨테이너의 스크롤 위치 (왼쪽, 위쪽 좌표)를 저장.
 		this.docService.thumbData.update((data: any) => {
-			data.left = this.canvasContainer.scrollLeft;
-			data.top = this.canvasContainer.scrollTop;
-			return { ...data };
+			data.left = this.canvasContainer.scrollLeft; // 현재 스크롤의 왼쪽 위치.
+			data.top = this.canvasContainer.scrollTop; // 현재 스크롤의 위쪽 위치.
+			return { ...data }; // 기존 데이터를 보존하며 새로운 데이터를 반환.
 		});
 	}
 
