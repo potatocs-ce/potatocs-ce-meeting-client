@@ -163,6 +163,7 @@ export class WhiteboardComponent {
 		CANVAS_CONFIG.maxContainerWidth = this.whiteboardSection.clientWidth;
 
 		console.log(this.whiteboardSection);
+		console.log(this.rxCanvasCover);
 	}
 
 	// @HostListener('window:resize') resize() {
