@@ -31,8 +31,13 @@ export class SurveyComponent {
 
 		this.user_id = authService.getTokenInfo()._id;
 	}
+
 	addSurvey() {
-		this.survayService.openAddSurveyDialog().subscribe((result: any) => {});
+		// 새로운 설문을 추가하는 함수.
+		// survayService를 사용하여 설문 추가 다이얼로그를 엶.
+		this.survayService.openAddSurveyDialog().subscribe((result: any) => {
+			// 다이얼로그에서의 작업 결과를 처리할 수 있는 콜백 (현재는 빈 처리).
+		});
 	}
 
 	startSurvey(_id: string, participant: boolean) {
