@@ -143,18 +143,20 @@ export class DeviceCheckComponent {
 					id: device.deviceId,
 				};
 			});
-
+		// 입력된 devices 배열에서 비디오 입력 장치만 필터링합니다.
 		this.videoDevices = devices
-			.filter((device) => device.kind === "videoinput")
+			.filter((device) => device.kind === "videoinput") // 장치 유형이 "videoinput"인지 확인
 			.map((device) => {
+				// videoService의 videoDevices 상태에 새 장치를 추가합니다.
 				this.videoService.videoDeivces.set([
-					...this.videoService.videoDeivces(),
-					{ kind: device.kind, label: device.label, deviceId: device.deviceId },
+					...this.videoService.videoDeivces(), // 현재 videoDevices 리스트를 가져옴
+					{ kind: device.kind, label: device.label, deviceId: device.deviceId }, // 새 장치 정보를 리스트에 추가
 				]);
+				// 간단한 장치 객체를 반환합니다.
 				return {
-					kind: device.kind,
-					label: device.label,
-					id: device.deviceId,
+					kind: device.kind, // 장치 유형 (예: "videoinput")
+					label: device.label, // 장치 이름/레이블
+					id: device.deviceId, // 장치 고유 ID
 				};
 			});
 
