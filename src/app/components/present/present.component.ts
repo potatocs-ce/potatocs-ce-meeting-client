@@ -165,6 +165,7 @@ export class PresentComponent {
 		const a = document.createElement("a");
 		a.href = dataURL;
 		a.download = "capture.png";
+		console.log(canvas);
 		a.click();
 	}
 }
