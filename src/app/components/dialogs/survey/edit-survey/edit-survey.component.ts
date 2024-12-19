@@ -106,13 +106,23 @@ export class EditSurveyComponent {
 
 	// 항목 추가
 	addItem(idx: number) {
-		let next_index = 0;
+		// 특정 카드에 새로운 옵션을 추가하는 함수.
+		// idx: 추가할 옵션이 속한 카드의 인덱스.
+
+		let next_index = 0; // 새로운 옵션의 index 값을 계산하기 위한 변수 초기화.
+
+		// 현재 카드의 item_options 배열에서 가장 높은 index 값을 계산.
 		this.cards[idx].item_options.map((item: any) => {
+			// 각 옵션의 index 값을 확인하여 next_index를 업데이트.
 			next_index < item.index ? (next_index = item.index) : "";
 		});
-		this.cards[idx].item_options.push({ index: next_index + 1, option: `option ${next_index + 1}` });
-	}
 
+		// 새로운 옵션을 item_options 배열에 추가.
+		this.cards[idx].item_options.push({
+			index: next_index + 1, // 새로운 옵션의 index는 가장 높은 index 값 + 1.
+			option: `option ${next_index + 1}`, // 옵션 이름은 'option N' 형식으로 설정.
+		});
+	}
 	// 항목 삭제
 	removeItem(idx: number, item_idx: number) {
 		this.cards[idx].item_options.splice(item_idx, 1);
