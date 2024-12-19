@@ -210,7 +210,6 @@ export class DeviceCheckComponent {
 
 	private handlePermissionDenied(error?: any): void {
 		let message = "Media device permissions denied.";
-
 		if (error instanceof DOMException) {
 			switch (error.name) {
 				case "NotAllowedError":
