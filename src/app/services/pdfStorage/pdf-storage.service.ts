@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: "root",
 })
 export class PdfStorageService {
+	constructor() {}
 
-  constructor() { }
-
-  getPdfPage(pdfNum: any, pageNum: any) {
-    // return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
-  }
+	getPdfPage(pdfNum: any, pageNum: any) {
+		// return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
+	}
 }
