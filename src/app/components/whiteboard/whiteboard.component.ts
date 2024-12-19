@@ -161,6 +161,8 @@ export class WhiteboardComponent {
 
 		CANVAS_CONFIG.maxContainerHeight = this.whiteboardSection.clientHeight;
 		CANVAS_CONFIG.maxContainerWidth = this.whiteboardSection.clientWidth;
+
+		console.log(this.whiteboardSection);
 	}
 
 	// @HostListener('window:resize') resize() {
