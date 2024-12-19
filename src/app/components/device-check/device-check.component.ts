@@ -98,7 +98,7 @@ export class DeviceCheckComponent {
 
 		this.initializeDeviceMonitoring();
 		this.initializeDevices();
-
+		console.log(this.video);
 		// // 컴퓨터에 연결된 장치 추가/제거 시 실시간으로 목록 수정
 		// this.deviceChangeCheck();
 	}
