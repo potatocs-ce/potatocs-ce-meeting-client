@@ -178,17 +178,20 @@ export class WhiteboardComponent {
 	//   CANVAS_CONFIG.maxContainerHeight = newHeight;
 	//   this.onResize();
 	// }
-
 	onResize() {
+		// 현재 문서가 비어있는 경우 아무 작업도 하지 않음.
 		if (this.docService._doc().length == 0) return;
 
-		// Resize시 container size 조절.
+		// 브라우저 창 크기가 변경되었을 때, container의 크기를 조정.
+		// canvas와 container의 크기 비율(ratio)을 계산하여 반환.
 		const ratio = this.canvasService.setContainerSize(this.coverCanvas, this.canvasContainer);
 
+		// 썸네일 데이터 업데이트: ratio와 coverCanvas의 폭(너비)을 업데이트.
+		// 기존 데이터를 유지하며, 새로운 데이터를 병합.
 		this.docService.thumbData.update((data: any) => {
-			data.ratio = ratio;
-			data.coverWidth = this.coverCanvas.width;
-			return { ...data };
+			data.ratio = ratio; // Canvas와 Container 간의 크기 비율.
+			data.coverWidth = this.coverCanvas.width; // Canvas의 너비 설정.
+			return { ...data }; // 기존 데이터를 보존하며 새로운 데이터를 반환.
 		});
 	}
 
