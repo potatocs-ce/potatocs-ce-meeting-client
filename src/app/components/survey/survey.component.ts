@@ -44,7 +44,11 @@ export class SurveyComponent {
 	}
 
 	editSurvey(_id: string) {
-		this.survayService.openEditSurveyDialog(_id).subscribe((result: any) => {});
+		// 특정 설문을 수정하는 함수.
+		// survayService를 사용하여 설문 편집 다이얼로그를 엶.
+		this.survayService.openEditSurveyDialog(_id).subscribe((result: any) => {
+			// 다이얼로그에서의 작업 결과를 처리할 수 있는 콜백 (현재는 빈 처리).
+		});
 	}
 
 	removeSurvey(_id: string) {
