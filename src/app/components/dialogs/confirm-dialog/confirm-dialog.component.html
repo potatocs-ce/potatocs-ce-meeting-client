@@ -1,14 +1,14 @@
 <div class="confirm-dialog">
-    <mat-icon fontSet="material-symbols-outlined" color="primary" class='mat_icon'> help</mat-icon>
+	<mat-icon fontSet="material-symbols-outlined" color="primary" class="mat_icon"> help</mat-icon>
 
-    <p class="confirm-title">Are you sure?</p>
+	<p class="confirm-title">Are you sure?</p>
 
-    <p class="confirm-content" [innerHTML]="data.content">
-        <!-- {{ data.content }} -->
-    </p>
+	<p class="confirm-content" [innerHTML]="data.content">
+		<!-- {{ data.content }} -->
+	</p>
 
-    <div class="confirm-between-btn">
-        <button mat-flat-button color="primary" [mat-dialog-close]="true">Confirm</button>
-        <button mat-flat-button [mat-dialog-close]="false">Cancel</button>
-    </div>
+	<div class="confirm-between-btn">
+		<button mat-flat-button color="primary" [mat-dialog-close]="true">Confirm</button>
+		<button mat-flat-button [mat-dialog-close]="false">Cancel</button>
+	</div>
 </div>
