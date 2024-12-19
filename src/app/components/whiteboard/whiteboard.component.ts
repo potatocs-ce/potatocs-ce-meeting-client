@@ -142,9 +142,9 @@ export class WhiteboardComponent {
 		this.observer.observe(this.observer_target);
 	}
 
-	// ngOnDestroy() {
-	// 	this.observer.unobserve(this.observer_target);
-	// }
+	ngOnDestroy() {
+		this.observer.unobserve(this.observer_target);
+	}
 
 	/**
 	 * 초기 canvas 변수, container size 설정
