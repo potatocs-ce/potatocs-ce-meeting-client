@@ -82,16 +82,20 @@ export class EditSurveyComponent {
 
 	// 카드 추가
 	addCard() {
+		// 현재 카드 배열에서 가장 높은 index 값을 계산.
 		let next_index = 0;
 		this.cards.map((card) => {
+			// 각 카드의 index 값을 확인하여 next_index를 업데이트.
 			next_index < card.index ? (next_index = card.index) : "";
 		});
+
+		// 새로운 카드를 cards 배열에 추가.
 		this.cards.push({
-			index: next_index + 1,
-			item_title: "",
-			num_of_answer: 1,
-			item_options: [{ index: 1, option: "option 1" }],
-			required: false,
+			index: next_index + 1, // 새로운 카드의 index는 가장 높은 index 값 + 1.
+			item_title: "", // 카드 제목 초기화 (빈 문자열).
+			num_of_answer: 1, // 답변 개수 초기화 (1개).
+			item_options: [{ index: 1, option: "option 1" }], // 기본 옵션 추가.
+			required: false, // 필수 여부 초기화 (false).
 		});
 	}
 
