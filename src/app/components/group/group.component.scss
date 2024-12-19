@@ -1,170 +1,154 @@
-@import '../../setting.scss';
+@import "../../setting.scss";
 
 .group_container {
-    color: white;
-    font-size: 11pt;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+	color: white;
+	font-size: 11pt;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 
-    ul {
-        padding: 0;
-        margin: 0;
-        position: absolute;
-        width: 100%;
-    }
+	ul {
+		padding: 0;
+		margin: 0;
+		position: absolute;
+		width: 100%;
+	}
 
-    .group_list_container {
-        display: flex;
-        position: relative;
-        overflow: auto;
-        flex: 1;
-    }
+	.group_list_container {
+		display: flex;
+		position: relative;
+		overflow: auto;
+		flex: 1;
+	}
 
-    .group_count {
-        font-size: 10pt;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+	.group_count {
+		font-size: 10pt;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 
-        margin-bottom: 5px;
-        margin-top: 4px;
-        margin-left: 10px;
-        margin-right: 10px;
+		margin-bottom: 5px;
+		margin-top: 4px;
+		margin-left: 10px;
+		margin-right: 10px;
 
-        padding-bottom: 5px;
+		padding-bottom: 5px;
 
-        border-bottom: 1px solid rgba(48, 51, 56, 255);
+		border-bottom: 1px solid rgba(48, 51, 56, 255);
 
-        .my_icon {
-            color: rgb(114, 118, 125);
-        }
-    }
+		.my_icon {
+			color: rgb(114, 118, 125);
+		}
+	}
 
-    .group_list {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
+	.group_list {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 8px;
 
-        .member_info {
-            padding-left: 10px;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
+		.member_info {
+			padding-left: 10px;
+			display: flex;
+			gap: 0.5rem;
+			align-items: center;
 
-            color: $icon_button_color;
+			color: $icon_button_color;
 
+			.name {
+				font-weight: bold;
+				display: flex;
+			}
 
+			.active {
+				color: $main_logo_color;
+			}
+		}
 
+		.button_container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 5px;
+			padding-right: 10px;
 
-            .name {
-                font-weight: bold;
-                display: flex;
+			.menu_button {
+				width: 30px;
+				height: 30px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 
-            }
-
-            .active {
-                color: $main_logo_color;
-            }
-
-
-        }
-
-
-        .button_container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            padding-right: 10px;
-
-
-
-
-            .menu_button {
-                width: 30px;
-                height: 30px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                .mat-icon {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 20px;
-                    height: 20px;
-                    font-size: 14pt;
-                }
-            }
-        }
-
-
-    }
+				.mat-icon {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 20px;
+					height: 20px;
+					font-size: 14pt;
+				}
+			}
+		}
+	}
 }
-
-
 
 .dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 1rem;
-    background-color: green;
+	width: 5px;
+	height: 5px;
+	border-radius: 1rem;
+	background-color: green;
 }
 
-
 .visibility_button {
-    background-color: transparent;
-    color: rgb(184, 184, 184);
-    border: none;
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    cursor: pointer;
-    overflow: hidden;
+	background-color: transparent;
+	color: rgb(184, 184, 184);
+	border: none;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0px;
+	cursor: pointer;
+	overflow: hidden;
 
-    // .mat-icon {
-    //     display: flex;
-    //     align-items: center;
-    //     justify-content: center;
-    //     width: 24px;
-    //     height: 24px;
-    //     font-size: 14pt;
-    // }
+	// .mat-icon {
+	//     display: flex;
+	//     align-items: center;
+	//     justify-content: center;
+	//     width: 24px;
+	//     height: 24px;
+	//     font-size: 14pt;
+	// }
 
-    &:disabled {
-        color: $icon_button_color
-    }
+	&:disabled {
+		color: $icon_button_color;
+	}
 }
 
 .role {
-    font-size: 8pt;
-    border: 1px solid $icon_button_color;
-    display: block;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 0.4rem;
-    border-radius: 0.4rem;
-    color: $icon_button_color;
+	font-size: 8pt;
+	border: 1px solid $icon_button_color;
+	display: block;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 0.4rem;
+	border-radius: 0.4rem;
+	color: $icon_button_color;
 }
 
 .active_role {
-    background-color: $icon_button_color;
-    color: white;
+	background-color: $icon_button_color;
+	color: white;
 }
 
-
 ::ng-deep .mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
