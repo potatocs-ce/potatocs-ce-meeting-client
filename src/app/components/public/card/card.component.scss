@@ -1,16 +1,14 @@
 .card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 0.3rem;
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
+	background-color: white;
+	padding: 1.5rem;
+	border-radius: 0.3rem;
+	box-sizing: border-box;
+	position: relative;
+	overflow: hidden;
 }
 
-
-
 .hover {
-    &:hover {
-        background-color: rgb(247, 247, 247);
-    }
+	&:hover {
+		background-color: rgb(247, 247, 247);
+	}
 }
