@@ -1,91 +1,100 @@
 <form class="add_container" (ngSubmit)="submit()">
+	<section class="input_section">
+		<app-card>
+			<div class="line"></div>
+			<section class="input_title_section">
+				<input class="title" placeholder="Title of survey" [(ngModel)]="title" name="title" required />
+				<input
+					class="description"
+					placeholder="Description of survey contents"
+					[(ngModel)]="description"
+					name="description"
+				/>
+			</section>
+		</app-card>
 
+		<section cdkDropList class="boundary" (cdkDropListDropped)="cardDrop($event)">
+			@for(card of cards; track card; let idx = $index) {
+			<div [id]="idx" cdkDrag class="element_class">
+				<!-- 본문 -->
+				<div class="card_drag_handle"><mat-icon cdkDragHandle>more_horiz</mat-icon></div>
 
-    <section class="input_section">
-        <app-card>
-            <div class='line'></div>
-            <section class="input_title_section">
-                <input class="title" placeholder="Title of survey" [(ngModel)]="title" name="title" required />
-                <input class="description" placeholder="Description of survey contents" [(ngModel)]="description"
-                    name="description" />
-            </section>
+				<div class="card_container">
+					<!-- 제목 항목 영역 -->
+					<section class="card_title_section">
+						<!-- 설문 항목 제목 -->
+						<input
+							class="item_title_input"
+							placeholder="Please enter a question"
+							[(ngModel)]="card.item_title"
+							[ngModelOptions]="{standalone: true}"
+						/>
+						<!-- 응답 받을 항목 수 입력 -->
+						<input
+							class="item_number_input"
+							placeholder="num"
+							type="number"
+							min="1"
+							[max]="card.item_options.length"
+							[(ngModel)]="card.num_of_answer"
+							[ngModelOptions]="{standalone: true}"
+						/>
+					</section>
 
-        </app-card>
+					<!-- 항목 내용 영역 -->
+					<section cdkDropList class="card_items_section" (cdkDropListDropped)="itemDrop($event, idx)">
+						@for(item of card.item_options; track item; let item_idx = $index) {
+						<div class="item" cdkDrag>
+							<div class="item_input_container">
+								<mat-icon>drag_indicator</mat-icon>
+								<input
+									class="item_input"
+									[(ngModel)]="item.option"
+									[ngModelOptions]="{standalone: true}"
+								/>
+							</div>
 
-        <section cdkDropList class="boundary" (cdkDropListDropped)="cardDrop($event)">
-            @for(card of cards; track card; let idx = $index) {
-            <div [id]="idx" cdkDrag class="element_class">
+							<button mat-icon-button (click)="removeItem(idx, item_idx)">
+								<mat-icon>close</mat-icon>
+							</button>
+						</div>
+						}
 
-                <!-- 본문 -->
-                <div class='card_drag_handle'><mat-icon cdkDragHandle>more_horiz</mat-icon></div>
+						<!-- 항목 추가 버튼 -->
+						<div>
+							<button class="add_item_button" (click)="addItem(idx); $event.preventDefault()">
+								add items...
+							</button>
+						</div>
+					</section>
+					<div class="hoz_line"></div>
+					<!-- 버튼 영역 -->
+					<section class="card_button_section">
+						<button mat-icon-button (click)="removeCard(idx)"><mat-icon>delete</mat-icon></button>
+						<div class="b_line"></div>
+						<mat-slide-toggle color="primary" [(ngModel)]="card.required" [name]="'req'+idx"
+							>required</mat-slide-toggle
+						>
+					</section>
+				</div>
+			</div>
+			}
+		</section>
+	</section>
 
-                <div class="card_container">
-                    <!-- 제목 항목 영역 -->
-                    <section class="card_title_section">
-                        <!-- 설문 항목 제목 -->
-                        <input class="item_title_input" placeholder="Please enter a question"
-                            [(ngModel)]="card.item_title" [ngModelOptions]="{standalone: true}" />
-                        <!-- 응답 받을 항목 수 입력 -->
-                        <input class="item_number_input" placeholder="num" type="number" min="1"
-                            [max]="card.item_options.length" [(ngModel)]="card.num_of_answer"
-                            [ngModelOptions]="{standalone: true}" />
-                    </section>
+	<section class=" button_section">
+		@if(loading) {
+		<div class="spinner_container">
+			<mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
+		</div>
+		}
+		<button mat-flat-button (click)="addCard();$event.preventDefault()">
+			<mat-icon style="color: black; font-size: 24px; width: 24px; height: 24px; margin-right: 4px;">add</mat-icon
+			>add question
+		</button>
 
-                    <!-- 항목 내용 영역 -->
-                    <section cdkDropList class="card_items_section" (cdkDropListDropped)="itemDrop($event, idx)">
-                        @for(item of card.item_options; track item; let item_idx = $index) {
-                        <div class="item" cdkDrag>
-                            <div class="item_input_container">
-                                <mat-icon>drag_indicator</mat-icon>
-                                <input class="item_input" [(ngModel)]="item.option"
-                                    [ngModelOptions]="{standalone: true}" />
-                            </div>
-
-                            <button mat-icon-button (click)="removeItem(idx, item_idx)">
-                                <mat-icon>close</mat-icon>
-                            </button>
-
-                        </div>
-                        }
-
-                        <!-- 항목 추가 버튼 -->
-                        <div>
-                            <button class="add_item_button" (click)="addItem(idx); $event.preventDefault()">add
-                                items...</button>
-                        </div>
-
-                    </section>
-                    <div class="hoz_line"></div>
-                    <!-- 버튼 영역 -->
-                    <section class="card_button_section">
-                        <button mat-icon-button (click)="removeCard(idx)"><mat-icon>delete</mat-icon></button>
-                        <div class="b_line"></div>
-                        <mat-slide-toggle color="primary" [(ngModel)]="card.required"
-                            [name]="'req'+idx">required</mat-slide-toggle>
-                    </section>
-                </div>
-
-            </div>
-            }
-        </section>
-
-
-    </section>
-
-
-    <section class=" button_section">
-        @if(loading) {
-        <div class="spinner_container">
-            <mat-spinner diameter="25" strokeWidth="3" color="warn"></mat-spinner>
-        </div>}
-        <button mat-flat-button (click)="addCard();$event.preventDefault()">
-            <mat-icon
-                style="color: black; font-size: 24px; width: 24px; height: 24px; margin-right: 4px;">add</mat-icon>add
-            question
-        </button>
-
-        <button class="add_button" mat-flat-button type="submit">
-            <mat-icon style="color: white;">send</mat-icon>edit
-        </button>
-    </section>
+		<button class="add_button" mat-flat-button type="submit">
+			<mat-icon style="color: white;">send</mat-icon>edit
+		</button>
+	</section>
 </form>
